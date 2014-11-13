@@ -48,6 +48,8 @@ namespace MyTcpClient
                         btnConnect.Text = "Disconnect";
                         Thread ServerListen = new Thread(RecvThread);
                         ServerListen.Start();
+                        Thread HeartBeat = new Thread(HeartBeatThread);
+                        HeartBeat.Start();
                     }
                 }
             }
@@ -64,23 +66,18 @@ namespace MyTcpClient
             int numberOfBytesRead = 0;
 
             NetworkStream stream = m_Client.GetStream();
+            stream.ReadTimeout = 5000;
 
             try
             {
                 while (m_Client.Connected)
-                {
-
-                    // Loop to receive all the data sent by the client.
-                    //while ((charData = stream.ReadByte()) != -1)
-                    while ((numberOfBytesRead = stream.Read(ReadBuffer, 0, ReadBuffer.Length)) != 0)
+                {                    
+                    if ((numberOfBytesRead = stream.Read(ReadBuffer, 0, ReadBuffer.Length)) != 0)
                     {
                         DealWithNetData(m_Client.Client.RemoteEndPoint.ToString(), ReadBuffer, numberOfBytesRead);
                     }
 
-                    if (m_Client.Available == 0)
-                        throw new System.Exception("socket close");
-
-                    Thread.Sleep(1);
+                    Thread.Sleep(10);
                 }
                                 
             }
@@ -89,6 +86,38 @@ namespace MyTcpClient
                 Trace.WriteLine(ex.Message);
                 Disconnect();
             }
+        }
+
+        private void HeartBeatThread()
+        {
+            byte[] Buffer = new byte[]{ 0x49, 0x44, 0x4C, 0x45, 0x0A }; //"idle\n"
+
+            NetworkStream stream = m_Client.GetStream();
+            stream.WriteTimeout = 500;
+
+            int nCount = 0;
+
+            try
+            {
+                //1ÃëÒ»´Î
+                while (m_Client.Connected)
+                {
+                    if (nCount > 1)
+                    {
+                        stream.Write(Buffer, 0, Buffer.Length);
+                        nCount = 0;
+                    }
+                    nCount++;
+                    Thread.Sleep(500);
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+                Disconnect();
+            }
+
         }
 
         private void Disconnect()
@@ -107,9 +136,16 @@ namespace MyTcpClient
 
         private void DealWithNetData(string strIP, byte[] bytes, int nlen)
         {
+            byte[] Buffer = new byte[5] { 0x49, 0x44, 0x4C, 0x45, 0x0A }; //"IDLE\n"
+            string strRecv = System.Text.Encoding.ASCII.GetString(bytes,0,5);
+
             if (nlen == 1 && bytes[0] == '\0')
             {
                 m_BufferLen = 0;
+            }
+            else if (nlen == 5 && System.Text.Encoding.ASCII.GetString(Buffer) == strRecv)
+            {
+                //ÐÄÌø
             }
             else
             {

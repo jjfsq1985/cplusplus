@@ -118,14 +118,7 @@ namespace TCPServer
                     // Perform a blocking call to accept requests.
                     // You could also user server.AcceptSocket() here.
                     TcpClient client = m_Server.AcceptTcpClient();
-
-                    Byte[] inOptionVal = new Byte[Marshal.SizeOf(typeof(uint)) * 3];
-                    BitConverter.GetBytes((uint)1).CopyTo(inOptionVal, 0);
-                    BitConverter.GetBytes((uint)2000).CopyTo(inOptionVal, Marshal.SizeOf(typeof(uint)));
-                    BitConverter.GetBytes((uint)1000).CopyTo(inOptionVal, Marshal.SizeOf(typeof(uint)) * 2);
                     
-                    client.Client.IOControl(IOControlCode.KeepAliveValues, inOptionVal, null);
-
                     m_ArrayClient.Add(client);
                     ListClientAdd(client.Client.RemoteEndPoint.ToString());
                     Thread DataRecv = new Thread(new ParameterizedThreadStart(DataRecvThread));
@@ -149,7 +142,8 @@ namespace TCPServer
                 if (bytes[i] == '\n' && m_BufferLen > 0)
                 {
                     string data = System.Text.Encoding.ASCII.GetString(m_DataBuffer, 0, m_BufferLen);
-                    UpdateTextRecv(strIP + "----" + data);
+                    if (data != "IDLE\n")
+                        UpdateTextRecv(strIP + "----" + data);
                     strResponse = data;
                     m_BufferLen = 0;
                     bRet = true;
@@ -173,12 +167,15 @@ namespace TCPServer
             NetworkStream stream = client.GetStream();            
             stream.Write(new byte[1], 0, 1);//Ð´Ò»¸ö¡®\0¡¯
 
+            stream.ReadTimeout = 5000;
+
             try
             {
                 while (client.Connected)
                 {
-                    while ((numberOfBytesRead = stream.Read(ReadBuffer, 0, ReadBuffer.Length)) != 0)
+                    if ((numberOfBytesRead = stream.Read(ReadBuffer, 0, ReadBuffer.Length)) != 0)
                     {
+                        Trace.WriteLine("Read Len " + numberOfBytesRead + "\n");
                         bool bDataFull = DealWithNetData(client.Client.RemoteEndPoint.ToString(), ReadBuffer, numberOfBytesRead, out data);
 
                         if (bDataFull && !m_bMaster)
@@ -187,12 +184,10 @@ namespace TCPServer
 
                             stream.Write(response, 0, response.Length);
                             m_bMaster = false;
-                        }
+                        }                        
                     }
-                    Trace.WriteLine("Read Len" + numberOfBytesRead + "\n");
-                    if (client.Available == 0)
-                        throw new System.Exception("socket close");
-                    Thread.Sleep(1);
+ 
+                    Thread.Sleep(10);
                 }
             }
             catch (System.Exception ex)
