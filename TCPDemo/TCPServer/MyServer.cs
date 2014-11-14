@@ -21,8 +21,7 @@ namespace TCPServer
 
         private ArrayList m_ArrayClient = new ArrayList();
         private Byte[] m_DataBuffer = new Byte[32768];
-        private int m_BufferLen = 0;
-        private bool m_bMaster = false;//Server 主动发送
+        private int m_BufferLen = 0;       
 
         public delegate void UpdateListClient(string strIP);
         public delegate void UpdateRecvCtrl(string strText);
@@ -136,17 +135,36 @@ namespace TCPServer
         {
             bool bRet = false;
             strResponse = "";
-            for (int i = 0; i < nlen; i++)
+            const string strIdle = "<IDLE>";
+
+            if (nlen == 6 && System.Text.Encoding.UTF8.GetString(bytes, 0, 6) == strIdle)
             {
-                m_DataBuffer[m_BufferLen++] = bytes[i];
-                if (bytes[i] == '\n' && m_BufferLen > 0)
+                //心跳
+                strResponse = strIdle;
+                m_BufferLen = 0;
+                bRet = true;
+            }
+            else
+            {
+                for (int i = 0; i < nlen; i++)
                 {
-                    string data = System.Text.Encoding.ASCII.GetString(m_DataBuffer, 0, m_BufferLen);
-                    if (data != "IDLE\n")
-                        UpdateTextRecv(strIP + "----" + data);
-                    strResponse = data;
-                    m_BufferLen = 0;
-                    bRet = true;
+                    if (bytes[i] == '\0')
+                        continue;
+                    m_DataBuffer[m_BufferLen++] = bytes[i]; //m_BufferLen已+1
+
+                    if (m_DataBuffer[m_BufferLen-1] == '>' && m_DataBuffer[m_BufferLen-5] == '<' && m_BufferLen > 5)
+                    {
+                        string data = System.Text.Encoding.UTF8.GetString(m_DataBuffer, 0, m_BufferLen);
+                        int nEnd = data.LastIndexOf("<END>");
+                        if (nEnd != -1)
+                        {
+                            data = data.Substring(0, nEnd);
+                            UpdateTextRecv(strIP + "----" + data);
+                            strResponse = data;
+                            m_BufferLen = 0;
+                            bRet = true;
+                        }
+                    }                    
                 }
             }
 
@@ -164,9 +182,7 @@ namespace TCPServer
            
             String data = null;
             // Get a stream object for reading and writing
-            NetworkStream stream = client.GetStream();            
-            stream.Write(new byte[1], 0, 1);//写一个‘\0’
-
+            NetworkStream stream = client.GetStream();
             stream.ReadTimeout = 5000;
 
             try
@@ -174,16 +190,16 @@ namespace TCPServer
                 while (client.Connected)
                 {
                     if ((numberOfBytesRead = stream.Read(ReadBuffer, 0, ReadBuffer.Length)) != 0)
-                    {
-                        Trace.WriteLine("Read Len " + numberOfBytesRead + "\n");
+                    {                        
                         bool bDataFull = DealWithNetData(client.Client.RemoteEndPoint.ToString(), ReadBuffer, numberOfBytesRead, out data);
+                        Trace.WriteLine("Read:  " + data + "\n");
 
-                        if (bDataFull && !m_bMaster)
+                        if (bDataFull)
                         {
-                            byte[] response = System.Text.Encoding.ASCII.GetBytes(data);
+                            byte[] response = System.Text.Encoding.UTF8.GetBytes(data);
 
                             stream.Write(response, 0, response.Length);
-                            m_bMaster = false;
+                            
                         }                        
                     }
  
@@ -202,12 +218,11 @@ namespace TCPServer
         {
             if(listClient.SelectedIndex == -1)
                 return;
-            string strSend = textSend.Text + "\n";
+            string strSend = textSend.Text + "<END>";
             TcpClient client = m_ArrayClient[listClient.SelectedIndex] as TcpClient;
             NetworkStream stream = client.GetStream();
-            byte[] byteSend = System.Text.Encoding.ASCII.GetBytes(strSend);
-            m_bMaster = true;
-            stream.Write(byteSend, 0, byteSend.Length);
+            byte[] byteSend = System.Text.Encoding.UTF8.GetBytes(strSend);            
+            stream.Write(byteSend, 0, byteSend.Length);            
         }
     }
 }

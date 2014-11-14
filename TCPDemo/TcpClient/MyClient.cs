@@ -90,7 +90,8 @@ namespace MyTcpClient
 
         private void HeartBeatThread()
         {
-            byte[] Buffer = new byte[]{ 0x49, 0x44, 0x4C, 0x45, 0x0A }; //"idle\n"
+            const string strIdle = "<IDLE>";
+            byte[] Buffer = Encoding.UTF8.GetBytes(strIdle);            
 
             NetworkStream stream = m_Client.GetStream();
             stream.WriteTimeout = 500;
@@ -128,7 +129,7 @@ namespace MyTcpClient
                 this.Invoke(_myInvoke);
             }
             else
-            {   
+            {                
                 m_Client.Close();
                 this.btnConnect.Text = "Connect";
             }
@@ -136,28 +137,32 @@ namespace MyTcpClient
 
         private void DealWithNetData(string strIP, byte[] bytes, int nlen)
         {
-            byte[] Buffer = new byte[5] { 0x49, 0x44, 0x4C, 0x45, 0x0A }; //"IDLE\n"
-            string strRecv = System.Text.Encoding.ASCII.GetString(bytes,0,5);
+            const string strIdle = "<IDLE>";            
 
-            if (nlen == 1 && bytes[0] == '\0')
-            {
-                m_BufferLen = 0;
-            }
-            else if (nlen == 5 && System.Text.Encoding.ASCII.GetString(Buffer) == strRecv)
+            if (nlen == 6 && System.Text.Encoding.UTF8.GetString(bytes, 0, 6) == strIdle)
             {
                 //ÐÄÌø
+                m_BufferLen = 0;
             }
             else
-            {
+            {                
                 for (int i = 0; i < nlen; i++)
                 {
-                    m_DataBuffer[m_BufferLen++] = bytes[i];
-                    if (bytes[i] == '\n' && m_BufferLen > 0)
+                    if (bytes[i] == '\0')
+                        continue;
+                    m_DataBuffer[m_BufferLen++] = bytes[i];//m_BufferLenÒÑ+1
+
+                    if (m_DataBuffer[m_BufferLen-1] == '>' && m_DataBuffer[m_BufferLen-5] == '<' && m_BufferLen > 5)
                     {
-                        string data = System.Text.Encoding.ASCII.GetString(m_DataBuffer, 0, m_BufferLen);
-                        UpdateTextRecv(strIP + "----" + data);                        
-                        m_BufferLen = 0;
-                    }
+                        string data = System.Text.Encoding.UTF8.GetString(m_DataBuffer, 0, m_BufferLen);
+                        int nEnd = data.LastIndexOf("<END>");
+                        if (nEnd != -1)
+                        {
+                            data = data.Substring(0, nEnd);
+                            UpdateTextRecv(strIP + "----" + data);
+                            m_BufferLen = 0;
+                        }
+                    }                    
                 }
             }
         }
@@ -166,10 +171,10 @@ namespace MyTcpClient
         {
             if (!m_Client.Connected)
                 return;
-            string strSend = textSend.Text + "\n";            
+            string strSend = textSend.Text + "<END>";            
             NetworkStream stream = m_Client.GetStream();
-            byte[] byteSend = System.Text.Encoding.ASCII.GetBytes(strSend);            
-            stream.Write(byteSend, 0, byteSend.Length);
+            byte[] byteSend = System.Text.Encoding.UTF8.GetBytes(strSend);            
+            stream.Write(byteSend, 0, byteSend.Length);            
         }
 
         private void UpdateTextRecv(string strText)
