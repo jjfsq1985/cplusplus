@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cplus", "log4cplus.vcproj", "{6819CBEA-A0CB-40AC-B029-E329962DAE7B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cplus_wapper", "log4cplus_wapper\log4cplus_wapper.vcproj", "{14F65916-C357-4168-B014-737689EA5522}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6819CBEA-A0CB-40AC-B029-E329962DAE7B} = {6819CBEA-A0CB-40AC-B029-E329962DAE7B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cplus_demo", "demos\log4cplus_demo.vcproj", "{760B4A63-6C84-40BC-B28D-10A67101A1B7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6819CBEA-A0CB-40AC-B029-E329962DAE7B} = {6819CBEA-A0CB-40AC-B029-E329962DAE7B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cpluswapper_demo", "demos\log4cpluswapper_demo.vcproj", "{F9265E16-9B1B-4AA5-98D6-251225D4325F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{14F65916-C357-4168-B014-737689EA5522} = {14F65916-C357-4168-B014-737689EA5522}
+		{6819CBEA-A0CB-40AC-B029-E329962DAE7B} = {6819CBEA-A0CB-40AC-B029-E329962DAE7B}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6819CBEA-A0CB-40AC-B029-E329962DAE7B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6819CBEA-A0CB-40AC-B029-E329962DAE7B}.Debug|Win32.Build.0 = Debug|Win32
+		{6819CBEA-A0CB-40AC-B029-E329962DAE7B}.Release|Win32.ActiveCfg = Release|Win32
+		{6819CBEA-A0CB-40AC-B029-E329962DAE7B}.Release|Win32.Build.0 = Release|Win32
+		{14F65916-C357-4168-B014-737689EA5522}.Debug|Win32.ActiveCfg = Debug|Win32
+		{14F65916-C357-4168-B014-737689EA5522}.Debug|Win32.Build.0 = Debug|Win32
+		{14F65916-C357-4168-B014-737689EA5522}.Release|Win32.ActiveCfg = Release|Win32
+		{14F65916-C357-4168-B014-737689EA5522}.Release|Win32.Build.0 = Release|Win32
+		{760B4A63-6C84-40BC-B28D-10A67101A1B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{760B4A63-6C84-40BC-B28D-10A67101A1B7}.Debug|Win32.Build.0 = Debug|Win32
+		{760B4A63-6C84-40BC-B28D-10A67101A1B7}.Release|Win32.ActiveCfg = Release|Win32
+		{760B4A63-6C84-40BC-B28D-10A67101A1B7}.Release|Win32.Build.0 = Release|Win32
+		{F9265E16-9B1B-4AA5-98D6-251225D4325F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F9265E16-9B1B-4AA5-98D6-251225D4325F}.Debug|Win32.Build.0 = Debug|Win32
+		{F9265E16-9B1B-4AA5-98D6-251225D4325F}.Release|Win32.ActiveCfg = Release|Win32
+		{F9265E16-9B1B-4AA5-98D6-251225D4325F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
