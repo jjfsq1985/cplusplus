@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1425273950 source:/home/MyCode/SortList/main.cpp
+	<iostream>
+	"SwapObject.h"
+	"SList.h"
+
+1425187210 source:/home/MyCode/SortList/src/SwapObject.cpp
+	"SwapObject.h"
+
+1425187201 /home/MyCode/SortList/include/SwapObject.h
+	<string>
+	<stddef.h>
+	<stdio.h>
+
+1425275510 source:/home/MyCode/SortList/src/SList.cpp
+	"SList.h"
+
+1425275586 /home/MyCode/SortList/include/SList.h
+	"SwapObject.h"
+
