@@ -799,7 +799,7 @@ namespace CardOperating
             return MAC2;
         }
 
-        public bool InitSamGrayLock(byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData, byte[] outPsamMAC1)
+        public bool InitSamGrayLock(byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData)
         {
             byte[] SysTime = GetBCDTime();
             byte[] byteData = new byte[28];
@@ -836,7 +836,8 @@ namespace CardOperating
                 Buffer.BlockCopy(m_RecvData, 4, outData, 4, 4);
                 Buffer.BlockCopy(m_RecvData, 8, outData, 15, 4);                
                 //PSAM卡计算的MAC1
-                Buffer.BlockCopy(m_RecvData, 8, outPsamMAC1, 0, 4);
+                byte[] PSAM_MAC1 = new byte[4];
+                Buffer.BlockCopy(m_RecvData, 8, PSAM_MAC1, 0, 4);
 
                  //加气专用过程密钥 计算
                 byte[] TermialSn = new byte[4];                
@@ -850,8 +851,14 @@ namespace CardOperating
                 byte[] MAC1 = calcUserCardMAC1(ASN, random, BusinessSn, TermialSn, TermialRandom, srcData);                      
                 Buffer.BlockCopy(SysTime, 0, outData, 8, 7);
                 Buffer.BlockCopy(MAC1, 0, outData, 15, 4);//MAC1
-                string strInfo = string.Format("PSAM卡MAC1计算初始化 MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(outPsamMAC1), BitConverter.ToString(MAC1));
+                string strInfo = string.Format("PSAM卡MAC1计算初始化 MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(PSAM_MAC1), BitConverter.ToString(MAC1));
                 System.Diagnostics.Trace.WriteLine(strInfo);
+                if(!APDUBase.ByteDataEquals(MAC1,PSAM_MAC1))
+                {
+                    string strMessage = string.Format("MAC1计算验证失败：终端机编号{0}，用户卡号{1}", BitConverter.ToString(TermialID), BitConverter.ToString(ASN));
+                    base.OnTextOutput(new MsgOutEvent(0, strMessage));
+                    return false;
+                }
             }
             return true;
         }

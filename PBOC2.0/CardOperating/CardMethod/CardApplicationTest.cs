@@ -235,8 +235,7 @@ namespace CardOperating
             //灰锁
             const byte BusinessType = 0x91;//交易类型
             byte[] GrayLockData = new byte[19]; //从PSAM卡获得顺序为终端交易序号，终端随机数，BCD时间，MAC1
-            byte[] PSAM_MAC1 = new byte[4];
-            if (!m_IccCardCtrl.InitSamGrayLock(m_TermialId, rand, OfflineSn, byteBalance, BusinessType, m_ASN, GrayLockData, PSAM_MAC1))
+            if (!m_IccCardCtrl.InitSamGrayLock(m_TermialId, rand, OfflineSn, byteBalance, BusinessType, m_ASN, GrayLockData))
                 return;
             byte[] GTAC = new byte[4];
             byte[] MAC2 =new byte[4];
