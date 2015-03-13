@@ -1,0 +1,113 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{867C4012-8C2A-44E7-BB89-BB21716884DA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CardOperating</RootNamespace>
+    <AssemblyName>CardOperating</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\Debug\plugins\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>..\bin\Release\plugins\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CardInfo\CardInfoParam.cs" />
+    <Compile Include="CardInfo\IccCardInfoParam.cs" />
+    <Compile Include="CardMethod\CardApplicationTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CardMethod\CardApplicationTest.Designer.cs">
+      <DependentUpon>CardApplicationTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CmdProvider\APDUBase.cs" />
+    <Compile Include="CardOperating.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CardOperating.Designer.cs">
+      <DependentUpon>CardOperating.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CmdProvider\CardControlBase.cs" />
+    <Compile Include="CmdProvider\PSAMCardAPDUProvider.cs" />
+    <Compile Include="CmdProvider\UserCardControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DllExportMT.cs" />
+    <Compile Include="CmdProvider\IccCardControl.cs" />
+    <Compile Include="CardInfo\IccCardInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CardInfo\IccCardInfo.Designer.cs">
+      <DependentUpon>IccCardInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MsgOutEvent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CmdProvider\UserCardAPDUProvider.cs" />
+    <Compile Include="CardInfo\UserCardInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CardInfo\UserCardInfo.Designer.cs">
+      <DependentUpon>UserCardInfo.cs</DependentUpon>
+    </Compile>
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IFuncPlugin\IFuncPlugin.csproj">
+      <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
+      <Name>IFuncPlugin</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="mt_32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CardMethod\CardApplicationTest.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CardApplicationTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CardOperating.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CardOperating.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CardInfo\IccCardInfo.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>IccCardInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CardInfo\UserCardInfo.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UserCardInfo.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
