@@ -16,7 +16,8 @@ namespace CardOperating
         private UserCardControl m_UserCardCtrl = null;
 
         private ICC_Status m_curIccStatus = ICC_Status.ICC_PowerOff;
-        private static readonly byte[] m_TermialId = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };            //终端机设备编号
+
+        private static readonly byte[] m_TermialId = new byte[] { 0x20, 0x10, 0x01, 0x01, 0x00, 0x01 };            //终端机设备编号
         private static readonly byte[] m_ASN = new byte[] { 0x06, 0x71, 0x02, 0x01, 0x00, 0x00, 0x00, 0x01 };//用户卡卡号
         private const string m_strPIN = "999999";
                 
@@ -207,6 +208,7 @@ namespace CardOperating
             {
                 const float BusinessMoney = 0.0F;//强制联机解灰 0 扣款
                 m_UserCardCtrl.UnLockGrayCard(m_ASN, m_TermialId, (int)(BusinessMoney * 100.0));
+                m_bGray = false;
             }
             CloseUserCard();  
         }
@@ -233,13 +235,14 @@ namespace CardOperating
             //灰锁
             const byte BusinessType = 0x91;//交易类型
             byte[] GrayLockData = new byte[19]; //从PSAM卡获得顺序为终端交易序号，终端随机数，BCD时间，MAC1
-            if (!m_IccCardCtrl.InitSamGrayLock(m_TermialId,rand, OfflineSn, byteBalance, BusinessType, m_ASN, GrayLockData))
+            byte[] PSAM_MAC1 = new byte[4];
+            if (!m_IccCardCtrl.InitSamGrayLock(m_TermialId, rand, OfflineSn, byteBalance, BusinessType, m_ASN, GrayLockData, PSAM_MAC1))
                 return;
             byte[] GTAC = new byte[4];
             byte[] MAC2 =new byte[4];
             if (!m_UserCardCtrl.GrayLock(GrayLockData, GTAC, MAC2))
                 return;
-            if(!m_IccCardCtrl.VerifyMAC2(MAC2))//验证MAC2
+            if (!m_IccCardCtrl.VerifyMAC2(MAC2))//验证MAC2
                 return;
             m_nBusinessSn = (int)((OfflineSn[0] << 8) | OfflineSn[1]);
             m_nTermialSn = (int)((GrayLockData[0] << 24) | (GrayLockData[1] << 16) | (GrayLockData[2] << 8) | GrayLockData[3]);

@@ -1123,8 +1123,8 @@ namespace CardOperating
 
         //圈存功能
         public bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue)
-        {            
-            const byte BusinessType = 0x02; //交易类型标识：圈存 
+        {
+            const byte BusinessType = 0x01; //交易类型标识：圈存存折0x01 圈存钱包0x02
             byte[] outData = new byte[16];
             byte[] SysTime = GetBCDTime();
             if (!InitializeForLoad(nMoneyValue, TermId, outData))

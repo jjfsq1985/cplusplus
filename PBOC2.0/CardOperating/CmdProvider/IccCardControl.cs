@@ -779,13 +779,33 @@ namespace CardOperating
             return true;
         }
 
-        public bool InitSamGrayLock(byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData)
+        private byte[] calcUserCardMAC1(byte[] ASN, byte[] rand, byte[] BusinessSn, byte[] TermialSn, byte[] TermialRand, byte[] srcData)
+        {
+            byte[] MAC1 = new byte[4];
+            byte[] sespk = GetPrivateProcessKey(ASN, m_MPK1, rand, BusinessSn, TermialSn, TermialRand);
+            if (sespk == null)
+                return MAC1;
+             MAC1 = m_ctrlApdu.CalcMacVal(srcData, sespk);
+             return MAC1;
+        }
+
+        public byte[] calcPsamCardMAC2(byte[] ASN, byte[] rand, byte[] BusinessSn, byte[] srcData)
+        {
+            byte[] MAC2 = new byte[4];
+            byte[] sespk = GetProcessKey(ASN, m_MPK1, rand, BusinessSn);
+            if (sespk == null)
+                return MAC2;
+            MAC2 = m_ctrlApdu.CalcMacVal(srcData, sespk);
+            return MAC2;
+        }
+
+        public bool InitSamGrayLock(byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData, byte[] outPsamMAC1)
         {
             byte[] SysTime = GetBCDTime();
             byte[] byteData = new byte[28];
             Buffer.BlockCopy(random, 0, byteData, 0, 4);
             Buffer.BlockCopy(BusinessSn, 0, byteData, 4, 2);
-            //Buffer.BlockCopy(byteBalance, 0, byteData, 6, 4);
+            Buffer.BlockCopy(byteBalance, 0, byteData, 6, 4);
             byteData[10] = BusinessType;
             Buffer.BlockCopy(SysTime, 0, byteData, 11, 7);
             byteData[18] = 0x01;//Key Ver
@@ -814,31 +834,24 @@ namespace CardOperating
                 //输出数据按灰锁命令数据域排列:终端交易序号，终端随机数，BCD时间，MAC1
                 Buffer.BlockCopy(m_RecvData, 0, outData, 0, 4);
                 Buffer.BlockCopy(m_RecvData, 4, outData, 4, 4);
-                Buffer.BlockCopy(m_RecvData, 8, outData, 15, 4);
-   
-                byte[] MAC1_Psam = new byte[4];
-                Buffer.BlockCopy(m_RecvData, 8, MAC1_Psam, 0, 4);
+                Buffer.BlockCopy(m_RecvData, 8, outData, 15, 4);                
+                //PSAM卡计算的MAC1
+                Buffer.BlockCopy(m_RecvData, 8, outPsamMAC1, 0, 4);
 
                  //加气专用过程密钥 计算
                 byte[] TermialSn = new byte[4];                
                 byte[] TermialRandom = new byte[4];
                 Buffer.BlockCopy(m_RecvData, 0, TermialSn, 0, 4);
                 Buffer.BlockCopy(m_RecvData, 4, TermialRandom, 0, 4);
-                byte[] sespk = GetPrivateProcessKey(ASN, m_MPK1, random, BusinessSn,TermialSn,TermialRandom);
-                if (sespk == null)
-                    return false;
                 byte[] srcData = new byte[14];//用于计算MAC1的原始数据                                
                 srcData[0] = BusinessType;
                 Buffer.BlockCopy(TermialID, 0, srcData, 1, 6);
                 Buffer.BlockCopy(SysTime, 0, srcData, 7, 7);
-                byte[] MAC1 = m_ctrlApdu.CalcMacVal(srcData, sespk);
-                if (!APDUBase.ByteDataEquals(MAC1, MAC1_Psam))
-                {
-                    string strInfo = string.Format("PSAM卡MAC1计算初始化 Output MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(MAC1_Psam), BitConverter.ToString(MAC1));
-                    System.Diagnostics.Trace.WriteLine(strInfo);                    
-                }
+                byte[] MAC1 = calcUserCardMAC1(ASN, random, BusinessSn, TermialSn, TermialRandom, srcData);                      
                 Buffer.BlockCopy(SysTime, 0, outData, 8, 7);
                 Buffer.BlockCopy(MAC1, 0, outData, 15, 4);//MAC1
+                string strInfo = string.Format("PSAM卡MAC1计算初始化 MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(outPsamMAC1), BitConverter.ToString(MAC1));
+                System.Diagnostics.Trace.WriteLine(strInfo);
             }
             return true;
         }
