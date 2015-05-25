@@ -1,0 +1,136 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{92D08CBB-2D18-45CD-8F46-644A545BD4A6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PublishCardOperator</RootNamespace>
+    <AssemblyName>PublishCardOperator</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\Debug\plugins\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>..\bin\Release\plugins\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dialog\AddCpuKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\AddCpuKey.Designer.cs">
+      <DependentUpon>AddCpuKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\AddOrgKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\AddOrgKey.Designer.cs">
+      <DependentUpon>AddOrgKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\AddPsamKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\AddPsamKey.Designer.cs">
+      <DependentUpon>AddPsamKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\InsertAppKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\InsertAppKey.Designer.cs">
+      <DependentUpon>InsertAppKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="KeyManage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KeyManage.Designer.cs">
+      <DependentUpon>KeyManage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OrgKeyManage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OrgKeyManage.Designer.cs">
+      <DependentUpon>OrgKeyManage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PSAMKeyManage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PSAMKeyManage.Designer.cs">
+      <DependentUpon>PSAMKeyManage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PublishCard.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Dialog\AddCpuKey.resx">
+      <DependentUpon>AddCpuKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\AddOrgKey.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AddOrgKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\AddPsamKey.resx">
+      <DependentUpon>AddPsamKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\InsertAppKey.resx">
+      <DependentUpon>InsertAppKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KeyManage.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>KeyManage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OrgKeyManage.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>OrgKeyManage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PSAMKeyManage.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PSAMKeyManage.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IFuncPlugin\IFuncPlugin.csproj">
+      <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
+      <Name>IFuncPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlServerHelper\SqlServerHelper.csproj">
+      <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
+      <Name>SqlServerHelper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
