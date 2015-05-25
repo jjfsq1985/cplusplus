@@ -1,17 +1,32 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardOperating", "CardOperating\CardOperating.csproj", "{867C4012-8C2A-44E7-BB89-BB21716884DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{92D08CBB-2D18-45CD-8F46-644A545BD4A6} = {92D08CBB-2D18-45CD-8F46-644A545BD4A6}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountManage", "AccountManage\AccountManage.csproj", "{F02A0239-D905-4EE1-ACF0-4EE5FBB91AC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunicationManage", "CommunicationManage\CommunicationManage.csproj", "{3AA6A337-A22C-4AF0-84FE-C61918E480C9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNTMain", "FNTMain\FNTMain.csproj", "{151459CE-73F2-42CA-9E85-EA6D850A186F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GasInfoManage", "GasInfoManage\GasInfoManage.csproj", "{A5988AD9-5D5B-49D1-9D8D-1BA7AC353735}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFuncPlugin", "IFuncPlugin\IFuncPlugin.csproj", "{4EE6DABB-484E-4984-8CC4-B84CEC45A161}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlServerHelper", "SqlServerHelper\SqlServerHelper.csproj", "{F7EC1DE4-C880-4045-97E5-B811F198638D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublishCardOperator", "PublishCardOperator\PublishCardOperator.csproj", "{92D08CBB-2D18-45CD-8F46-644A545BD4A6}"
+EndProject
+Project("{4F174C21-8C12-11D0-8340-0000F80270F8}") = "SQLScript", "SQLScript\SQLScript.dbp", "{08E5AE80-4847-4D0E-BB58-20C82B938AE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientManage", "ClientManage\ClientManage.csproj", "{5060AE34-4CF4-4FA2-8F47-3212B6D1AE98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RechargeManage", "RechargeInfoManage\RechargeManage.csproj", "{A5988AD9-5D5B-49D1-9D8D-1BA7AC353735}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeTable", "CodeTable\CodeTable.csproj", "{311A7AB8-91C2-4028-99A7-DB40B0D6827B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StationManage", "StationManage\StationManage.csproj", "{6C3618DA-6A6E-4C73-83C3-6DD6B5E637BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogonForm", "LogonForm\LogonForm.csproj", "{89842A68-CBF8-413E-9ED0-F3F8A6E13DBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,22 +42,42 @@ Global
 		{F02A0239-D905-4EE1-ACF0-4EE5FBB91AC3}.Debug|x86.Build.0 = Debug|x86
 		{F02A0239-D905-4EE1-ACF0-4EE5FBB91AC3}.Release|x86.ActiveCfg = Release|x86
 		{F02A0239-D905-4EE1-ACF0-4EE5FBB91AC3}.Release|x86.Build.0 = Release|x86
-		{3AA6A337-A22C-4AF0-84FE-C61918E480C9}.Debug|x86.ActiveCfg = Debug|x86
-		{3AA6A337-A22C-4AF0-84FE-C61918E480C9}.Debug|x86.Build.0 = Debug|x86
-		{3AA6A337-A22C-4AF0-84FE-C61918E480C9}.Release|x86.ActiveCfg = Release|x86
-		{3AA6A337-A22C-4AF0-84FE-C61918E480C9}.Release|x86.Build.0 = Release|x86
 		{151459CE-73F2-42CA-9E85-EA6D850A186F}.Debug|x86.ActiveCfg = Debug|x86
 		{151459CE-73F2-42CA-9E85-EA6D850A186F}.Debug|x86.Build.0 = Debug|x86
 		{151459CE-73F2-42CA-9E85-EA6D850A186F}.Release|x86.ActiveCfg = Release|x86
 		{151459CE-73F2-42CA-9E85-EA6D850A186F}.Release|x86.Build.0 = Release|x86
-		{A5988AD9-5D5B-49D1-9D8D-1BA7AC353735}.Debug|x86.ActiveCfg = Debug|x86
-		{A5988AD9-5D5B-49D1-9D8D-1BA7AC353735}.Debug|x86.Build.0 = Debug|x86
-		{A5988AD9-5D5B-49D1-9D8D-1BA7AC353735}.Release|x86.ActiveCfg = Release|x86
-		{A5988AD9-5D5B-49D1-9D8D-1BA7AC353735}.Release|x86.Build.0 = Release|x86
 		{4EE6DABB-484E-4984-8CC4-B84CEC45A161}.Debug|x86.ActiveCfg = Debug|x86
 		{4EE6DABB-484E-4984-8CC4-B84CEC45A161}.Debug|x86.Build.0 = Debug|x86
 		{4EE6DABB-484E-4984-8CC4-B84CEC45A161}.Release|x86.ActiveCfg = Release|x86
 		{4EE6DABB-484E-4984-8CC4-B84CEC45A161}.Release|x86.Build.0 = Release|x86
+		{F7EC1DE4-C880-4045-97E5-B811F198638D}.Debug|x86.ActiveCfg = Debug|x86
+		{F7EC1DE4-C880-4045-97E5-B811F198638D}.Debug|x86.Build.0 = Debug|x86
+		{F7EC1DE4-C880-4045-97E5-B811F198638D}.Release|x86.ActiveCfg = Release|x86
+		{F7EC1DE4-C880-4045-97E5-B811F198638D}.Release|x86.Build.0 = Release|x86
+		{92D08CBB-2D18-45CD-8F46-644A545BD4A6}.Debug|x86.ActiveCfg = Debug|x86
+		{92D08CBB-2D18-45CD-8F46-644A545BD4A6}.Debug|x86.Build.0 = Debug|x86
+		{92D08CBB-2D18-45CD-8F46-644A545BD4A6}.Release|x86.ActiveCfg = Release|x86
+		{92D08CBB-2D18-45CD-8F46-644A545BD4A6}.Release|x86.Build.0 = Release|x86
+		{5060AE34-4CF4-4FA2-8F47-3212B6D1AE98}.Debug|x86.ActiveCfg = Debug|x86
+		{5060AE34-4CF4-4FA2-8F47-3212B6D1AE98}.Debug|x86.Build.0 = Debug|x86
+		{5060AE34-4CF4-4FA2-8F47-3212B6D1AE98}.Release|x86.ActiveCfg = Release|x86
+		{5060AE34-4CF4-4FA2-8F47-3212B6D1AE98}.Release|x86.Build.0 = Release|x86
+		{A5988AD9-5D5B-49D1-9D8D-1BA7AC353735}.Debug|x86.ActiveCfg = Debug|x86
+		{A5988AD9-5D5B-49D1-9D8D-1BA7AC353735}.Debug|x86.Build.0 = Debug|x86
+		{A5988AD9-5D5B-49D1-9D8D-1BA7AC353735}.Release|x86.ActiveCfg = Release|x86
+		{A5988AD9-5D5B-49D1-9D8D-1BA7AC353735}.Release|x86.Build.0 = Release|x86
+		{311A7AB8-91C2-4028-99A7-DB40B0D6827B}.Debug|x86.ActiveCfg = Debug|x86
+		{311A7AB8-91C2-4028-99A7-DB40B0D6827B}.Debug|x86.Build.0 = Debug|x86
+		{311A7AB8-91C2-4028-99A7-DB40B0D6827B}.Release|x86.ActiveCfg = Release|x86
+		{311A7AB8-91C2-4028-99A7-DB40B0D6827B}.Release|x86.Build.0 = Release|x86
+		{6C3618DA-6A6E-4C73-83C3-6DD6B5E637BE}.Debug|x86.ActiveCfg = Debug|x86
+		{6C3618DA-6A6E-4C73-83C3-6DD6B5E637BE}.Debug|x86.Build.0 = Debug|x86
+		{6C3618DA-6A6E-4C73-83C3-6DD6B5E637BE}.Release|x86.ActiveCfg = Release|x86
+		{6C3618DA-6A6E-4C73-83C3-6DD6B5E637BE}.Release|x86.Build.0 = Release|x86
+		{89842A68-CBF8-413E-9ED0-F3F8A6E13DBD}.Debug|x86.ActiveCfg = Debug|x86
+		{89842A68-CBF8-413E-9ED0-F3F8A6E13DBD}.Debug|x86.Build.0 = Debug|x86
+		{89842A68-CBF8-413E-9ED0-F3F8A6E13DBD}.Release|x86.ActiveCfg = Release|x86
+		{89842A68-CBF8-413E-9ED0-F3F8A6E13DBD}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

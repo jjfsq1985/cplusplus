@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             this.groupIccCardInfo = new System.Windows.Forms.GroupBox();
+            this.textRemark = new System.Windows.Forms.TextBox();
+            this.Remark = new System.Windows.Forms.Label();
+            this.cmbClientName = new System.Windows.Forms.ComboBox();
+            this.ClientName = new System.Windows.Forms.Label();
             this.AppValidDateTo = new System.Windows.Forms.DateTimePicker();
             this.AppDateFlag = new System.Windows.Forms.Label();
             this.AppValidDateFrom = new System.Windows.Forms.DateTimePicker();
@@ -47,6 +51,10 @@
             // 
             // groupIccCardInfo
             // 
+            this.groupIccCardInfo.Controls.Add(this.textRemark);
+            this.groupIccCardInfo.Controls.Add(this.Remark);
+            this.groupIccCardInfo.Controls.Add(this.cmbClientName);
+            this.groupIccCardInfo.Controls.Add(this.ClientName);
             this.groupIccCardInfo.Controls.Add(this.AppValidDateTo);
             this.groupIccCardInfo.Controls.Add(this.AppDateFlag);
             this.groupIccCardInfo.Controls.Add(this.AppValidDateFrom);
@@ -60,16 +68,51 @@
             this.groupIccCardInfo.Controls.Add(this.textPSAMNo);
             this.groupIccCardInfo.Controls.Add(this.IccCardNo);
             this.groupIccCardInfo.Controls.Add(this.SaveClose);
-            this.groupIccCardInfo.Location = new System.Drawing.Point(2, 1);
+            this.groupIccCardInfo.Location = new System.Drawing.Point(2, -1);
             this.groupIccCardInfo.Name = "groupIccCardInfo";
-            this.groupIccCardInfo.Size = new System.Drawing.Size(395, 495);
+            this.groupIccCardInfo.Size = new System.Drawing.Size(438, 604);
             this.groupIccCardInfo.TabIndex = 0;
             this.groupIccCardInfo.TabStop = false;
             this.groupIccCardInfo.Text = "接触式卡信息";
             // 
+            // textRemark
+            // 
+            this.textRemark.Location = new System.Drawing.Point(119, 230);
+            this.textRemark.MaxLength = 50;
+            this.textRemark.Name = "textRemark";
+            this.textRemark.Size = new System.Drawing.Size(246, 21);
+            this.textRemark.TabIndex = 52;
+            // 
+            // Remark
+            // 
+            this.Remark.AutoSize = true;
+            this.Remark.Location = new System.Drawing.Point(71, 233);
+            this.Remark.Name = "Remark";
+            this.Remark.Size = new System.Drawing.Size(29, 12);
+            this.Remark.TabIndex = 51;
+            this.Remark.Text = "备注";
+            // 
+            // cmbClientName
+            // 
+            this.cmbClientName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbClientName.FormattingEnabled = true;
+            this.cmbClientName.Location = new System.Drawing.Point(119, 30);
+            this.cmbClientName.Name = "cmbClientName";
+            this.cmbClientName.Size = new System.Drawing.Size(169, 20);
+            this.cmbClientName.TabIndex = 15;
+            // 
+            // ClientName
+            // 
+            this.ClientName.AutoSize = true;
+            this.ClientName.Location = new System.Drawing.Point(47, 33);
+            this.ClientName.Name = "ClientName";
+            this.ClientName.Size = new System.Drawing.Size(53, 12);
+            this.ClientName.TabIndex = 14;
+            this.ClientName.Text = "所属单位";
+            // 
             // AppValidDateTo
             // 
-            this.AppValidDateTo.Location = new System.Drawing.Point(229, 161);
+            this.AppValidDateTo.Location = new System.Drawing.Point(249, 193);
             this.AppValidDateTo.Name = "AppValidDateTo";
             this.AppValidDateTo.Size = new System.Drawing.Size(123, 21);
             this.AppValidDateTo.TabIndex = 13;
@@ -77,7 +120,7 @@
             // AppDateFlag
             // 
             this.AppDateFlag.AutoSize = true;
-            this.AppDateFlag.Location = new System.Drawing.Point(212, 167);
+            this.AppDateFlag.Location = new System.Drawing.Point(232, 199);
             this.AppDateFlag.Name = "AppDateFlag";
             this.AppDateFlag.Size = new System.Drawing.Size(11, 12);
             this.AppDateFlag.TabIndex = 12;
@@ -85,7 +128,7 @@
             // 
             // AppValidDateFrom
             // 
-            this.AppValidDateFrom.Location = new System.Drawing.Point(88, 162);
+            this.AppValidDateFrom.Location = new System.Drawing.Point(108, 194);
             this.AppValidDateFrom.Name = "AppValidDateFrom";
             this.AppValidDateFrom.Size = new System.Drawing.Size(122, 21);
             this.AppValidDateFrom.TabIndex = 11;
@@ -93,7 +136,7 @@
             // AppValid
             // 
             this.AppValid.AutoSize = true;
-            this.AppValid.Location = new System.Drawing.Point(17, 166);
+            this.AppValid.Location = new System.Drawing.Point(35, 198);
             this.AppValid.Name = "AppValid";
             this.AppValid.Size = new System.Drawing.Size(65, 12);
             this.AppValid.TabIndex = 10;
@@ -101,7 +144,7 @@
             // 
             // textCompanyTo
             // 
-            this.textCompanyTo.Location = new System.Drawing.Point(119, 129);
+            this.textCompanyTo.Location = new System.Drawing.Point(119, 161);
             this.textCompanyTo.MaxLength = 16;
             this.textCompanyTo.Name = "textCompanyTo";
             this.textCompanyTo.ReadOnly = true;
@@ -111,7 +154,7 @@
             // 
             // textCompanyFrom
             // 
-            this.textCompanyFrom.Location = new System.Drawing.Point(119, 96);
+            this.textCompanyFrom.Location = new System.Drawing.Point(119, 128);
             this.textCompanyFrom.MaxLength = 16;
             this.textCompanyFrom.Name = "textCompanyFrom";
             this.textCompanyFrom.ReadOnly = true;
@@ -122,7 +165,7 @@
             // CompanyTo
             // 
             this.CompanyTo.AutoSize = true;
-            this.CompanyTo.Location = new System.Drawing.Point(17, 133);
+            this.CompanyTo.Location = new System.Drawing.Point(11, 165);
             this.CompanyTo.Name = "CompanyTo";
             this.CompanyTo.Size = new System.Drawing.Size(89, 12);
             this.CompanyTo.TabIndex = 7;
@@ -131,7 +174,7 @@
             // CompanyFrom
             // 
             this.CompanyFrom.AutoSize = true;
-            this.CompanyFrom.Location = new System.Drawing.Point(17, 100);
+            this.CompanyFrom.Location = new System.Drawing.Point(11, 132);
             this.CompanyFrom.Name = "CompanyFrom";
             this.CompanyFrom.Size = new System.Drawing.Size(89, 12);
             this.CompanyFrom.TabIndex = 6;
@@ -139,7 +182,7 @@
             // 
             // textTermialID
             // 
-            this.textTermialID.Location = new System.Drawing.Point(119, 63);
+            this.textTermialID.Location = new System.Drawing.Point(119, 95);
             this.textTermialID.MaxLength = 12;
             this.textTermialID.Name = "textTermialID";
             this.textTermialID.Size = new System.Drawing.Size(126, 21);
@@ -149,7 +192,7 @@
             // TermialID
             // 
             this.TermialID.AutoSize = true;
-            this.TermialID.Location = new System.Drawing.Point(17, 67);
+            this.TermialID.Location = new System.Drawing.Point(35, 99);
             this.TermialID.Name = "TermialID";
             this.TermialID.Size = new System.Drawing.Size(65, 12);
             this.TermialID.TabIndex = 3;
@@ -157,7 +200,7 @@
             // 
             // textPSAMNo
             // 
-            this.textPSAMNo.Location = new System.Drawing.Point(119, 30);
+            this.textPSAMNo.Location = new System.Drawing.Point(119, 62);
             this.textPSAMNo.MaxLength = 16;
             this.textPSAMNo.Name = "textPSAMNo";
             this.textPSAMNo.Size = new System.Drawing.Size(195, 21);
@@ -167,7 +210,7 @@
             // IccCardNo
             // 
             this.IccCardNo.AutoSize = true;
-            this.IccCardNo.Location = new System.Drawing.Point(17, 34);
+            this.IccCardNo.Location = new System.Drawing.Point(35, 66);
             this.IccCardNo.Name = "IccCardNo";
             this.IccCardNo.Size = new System.Drawing.Size(65, 12);
             this.IccCardNo.TabIndex = 1;
@@ -175,7 +218,7 @@
             // 
             // SaveClose
             // 
-            this.SaveClose.Location = new System.Drawing.Point(302, 454);
+            this.SaveClose.Location = new System.Drawing.Point(338, 415);
             this.SaveClose.Name = "SaveClose";
             this.SaveClose.Size = new System.Drawing.Size(75, 23);
             this.SaveClose.TabIndex = 0;
@@ -187,7 +230,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 500);
+            this.ClientSize = new System.Drawing.Size(440, 606);
             this.Controls.Add(this.groupIccCardInfo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
@@ -196,6 +239,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "接触式卡信息";
+            this.Load += new System.EventHandler(this.IccCardInfo_Load);
             this.groupIccCardInfo.ResumeLayout(false);
             this.groupIccCardInfo.PerformLayout();
             this.ResumeLayout(false);
@@ -218,5 +262,9 @@
         private System.Windows.Forms.DateTimePicker AppValidDateFrom;
         private System.Windows.Forms.Label AppDateFlag;
         private System.Windows.Forms.DateTimePicker AppValidDateTo;
+        private System.Windows.Forms.ComboBox cmbClientName;
+        private System.Windows.Forms.Label ClientName;
+        private System.Windows.Forms.TextBox textRemark;
+        private System.Windows.Forms.Label Remark;
     }
 }

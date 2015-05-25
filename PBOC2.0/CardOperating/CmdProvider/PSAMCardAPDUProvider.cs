@@ -303,7 +303,7 @@ namespace CardOperating
             m_P1 = 0x00;
             m_P2 = 0x00;
             m_Lc = 0x08;
-            byte[] cryptData = TripleEncryptData(RandomVal, m_KeyOrg);
+            byte[] cryptData = TripleEncryptData(RandomVal, m_PsamKeyOrg);
             m_Data = new byte[8];
             Buffer.BlockCopy(cryptData, 0, m_Data, 0, 8);
             m_le = 0;
@@ -337,7 +337,7 @@ namespace CardOperating
                 else
                     bufferData[20 + i] = 0x00;
             }
-            byte[] cryptData = TripleEncryptData(bufferData, m_KeyOrg);//用原始密钥加密
+            byte[] cryptData = TripleEncryptData(bufferData, m_PsamKeyOrg);//用原始密钥加密
             m_Data = new byte[nLen];//密文 + MAC
             Buffer.BlockCopy(cryptData, 0, m_Data, 0, 24);
             byte[] srcMacData = new byte[29]; //头5 +密文24
@@ -347,7 +347,7 @@ namespace CardOperating
             srcMacData[3] = m_P2;
             srcMacData[4] = m_Lc;
             Buffer.BlockCopy(cryptData, 0, srcMacData, 5, 24);
-            byte[] byteMAC = CalcMACValue(srcMacData, m_KeyOrg, RandomVal);//原始密钥计算MAC
+            byte[] byteMAC = CalcMACValue(srcMacData, m_PsamKeyOrg, RandomVal);//原始密钥计算MAC
             Buffer.BlockCopy(byteMAC, 0, m_Data, 24, 4);
             m_le = 0;
             m_nTotalLen = 5 + nLen;

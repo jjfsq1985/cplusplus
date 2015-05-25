@@ -10,6 +10,7 @@ namespace CardOperating
 {
     public partial class CardApplicationTest : Form
     {
+        private const Char Backspace = (Char)8;
         public event MessageOutput TextOutput = null;
         private int m_hDevHandler = 0 ;//读卡器句柄
         private IccCardControl m_IccCardCtrl = null;
@@ -17,11 +18,11 @@ namespace CardOperating
 
         private ICC_Status m_curIccStatus = ICC_Status.ICC_PowerOff;
 
-        private static readonly byte[] m_TermialId = new byte[] { 0x20, 0x10, 0x01, 0x01, 0x00, 0x01 };            //终端机设备编号
-        private static readonly byte[] m_ASN = new byte[] { 0x06, 0x71, 0x02, 0x01, 0x00, 0x00, 0x00, 0x01 };//用户卡卡号
-        private const string m_strPIN = "999999";
+        private static byte[] m_TermialId = new byte[] { 0x20, 0x10, 0x01, 0x01, 0x00, 0x01 };            //终端机设备编号
+        private static byte[] m_ASN = new byte[] { 0x06, 0x71, 0x02, 0x01, 0x00, 0x00, 0x00, 0x01 };//用户卡卡号
+        private static string m_strPIN = "999999";//由用户输入
                 
-        private bool m_bGray = false;
+        private bool m_bGray = false;   //卡已灰，不能扣款解锁
         private bool m_bTACUF = false;
 
         private int m_nBusinessSn;  //脱机交易序号
@@ -30,6 +31,7 @@ namespace CardOperating
         public CardApplicationTest()
         {
             InitializeComponent();
+            textPIN.Text = m_strPIN;
         }
 
         public void SetDeviceHandler(int hDevHandler)
@@ -75,8 +77,9 @@ namespace CardOperating
                 DllExportMT.hex_asc(sInfo, infoAsc, infoLen);
                 OnMessageOutput(new MsgOutEvent(0, "复位信息：" + Encoding.ASCII.GetString(infoAsc)));
             }
-            if (!m_IccCardCtrl.InitPsamForCalc())
-                return false;
+            byte[] TermialId = m_IccCardCtrl.GetTerminalId();
+            if(TermialId != null)
+                Buffer.BlockCopy(TermialId, 0, m_TermialId, 0, 6);
             return true;
         }
 
@@ -100,6 +103,11 @@ namespace CardOperating
                 return false;
             m_UserCardCtrl = new UserCardControl(m_hDevHandler);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
+            if (!m_UserCardCtrl.ReadKeyValueFormDb())
+            {
+                MessageBox.Show("未读到默认密钥，请检查数据库是否正常。");
+                return false;
+            }
   
             byte[] cardUid = new byte[4];
             byte[] cardInfo = new byte[64];
@@ -149,33 +157,38 @@ namespace CardOperating
         {
             if (m_hDevHandler <= 0)
                 return;
-            if (!OpenUserCard())
+            if (!OpenUserCard() || !OpenIccCard())
+                return;
+            if (!ReadUserCardAsn())
                 return;
             decimal MoneyLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
             double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
             //圈存
             string strInfo = string.Format("对卡号{0}圈存{1}元", BitConverter.ToString(m_ASN), dbMoneyLoad.ToString("F2"));
             OnMessageOutput( new MsgOutEvent(0, strInfo) );
-            if(m_UserCardCtrl.VerifyUserPin(m_strPIN))
+            if(m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
             {
                 m_UserCardCtrl.UserCardLoad(m_ASN , m_TermialId, (int)(dbMoneyLoad * 100.0));
             }
-            CloseUserCard();            
+            CloseUserCard();
+            CloseIccCard();
         }
 
-        private void btnInfo_Click(object sender, EventArgs e)
+        private void btnBalance_Click(object sender, EventArgs e)
         {
             if (m_hDevHandler <= 0)
                 return;
             if (!OpenUserCard())
                 return;
+            if (!ReadUserCardAsn())
+                return;
             string strInfo = string.Format("读取卡号{0}的余额，并检查是否灰锁。", BitConverter.ToString(m_ASN));
             OnMessageOutput(new MsgOutEvent(0, strInfo));
-            if (m_UserCardCtrl.VerifyUserPin(m_strPIN))
+            if (m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
             {
-                float fltBalance = 0.0f;                
-                if (m_UserCardCtrl.UserCardBalance(ref fltBalance))
-                    textBalance.Text = fltBalance.ToString("F2");
+                double dbBalance = 0.0f;
+                if (m_UserCardCtrl.UserCardBalance(ref dbBalance))
+                    textBalance.Text = dbBalance.ToString("F2");
                 else
                     textBalance.Text = "0.00";
                 m_bGray = false;
@@ -202,15 +215,18 @@ namespace CardOperating
             if (m_hDevHandler <= 0)
                 return;
             //未灰状态不可强制解灰
-            if (!m_bGray || !OpenUserCard())
+            if (!m_bGray || !OpenUserCard() || !OpenIccCard())
                 return;
-            if (m_UserCardCtrl.VerifyUserPin(m_strPIN))
+            if (!ReadUserCardAsn())
+                return;
+            if (m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
             {
                 const float BusinessMoney = 0.0F;//强制联机解灰 0 扣款
                 m_UserCardCtrl.UnLockGrayCard(m_ASN, m_TermialId, (int)(BusinessMoney * 100.0));
                 m_bGray = false;
             }
-            CloseUserCard();  
+            CloseUserCard();
+            CloseIccCard();
         }
 
         private void btnLockCard_Click(object sender, EventArgs e)
@@ -219,7 +235,9 @@ namespace CardOperating
                 return;
             if (!OpenUserCard() || !OpenIccCard())
                 return;
-            if (!m_UserCardCtrl.VerifyUserPin(m_strPIN))
+            if (!ReadUserCardAsn() || !m_IccCardCtrl.SelectPsamApp())
+                return;
+            if (m_UserCardCtrl.VerifyUserPin(m_strPIN) != 1)
                 return;            
             //灰锁初始化
             byte[] outData = new byte[15];
@@ -235,8 +253,7 @@ namespace CardOperating
             //灰锁
             const byte BusinessType = 0x91;//交易类型
             byte[] GrayLockData = new byte[19]; //从PSAM卡获得顺序为终端交易序号，终端随机数，BCD时间，MAC1
-            byte[] PSAM_MAC1 = new byte[4];
-            if (!m_IccCardCtrl.InitSamGrayLock(m_TermialId, rand, OfflineSn, byteBalance, BusinessType, m_ASN, GrayLockData, PSAM_MAC1))
+            if (!m_IccCardCtrl.InitSamGrayLock(m_TermialId, rand, OfflineSn, byteBalance, BusinessType, m_ASN, GrayLockData))
                 return;
             byte[] GTAC = new byte[4];
             byte[] MAC2 =new byte[4];
@@ -252,7 +269,7 @@ namespace CardOperating
         {
             byte[] DebitData = new byte[27];
              //计算GMAC
-            const byte BusinessType = 0x93;//交易类型: 解扣
+            const byte BusinessType = 0x93;//交易类型: 解0扣
             decimal Amount = decimal.Parse(textPurchase.Text, System.Globalization.NumberStyles.Number);
             double dbAmount = decimal.ToDouble(Amount);
             int nMoneyAmount = (int)(dbAmount * 100.0); ////气票消费金额
@@ -281,7 +298,7 @@ namespace CardOperating
 
         private void btnUnlockCard_Click(object sender, EventArgs e)
         {
-            if (m_bGray)
+            if (m_bGray || m_IccCardCtrl == null || m_UserCardCtrl == null)
                 return;
             byte[] UnlockData = GetDebitforUnlockData();
             if (UnlockData == null)
@@ -293,6 +310,62 @@ namespace CardOperating
             m_UserCardCtrl.ClearTACUF();            
             CloseUserCard();
             CloseIccCard();
+        }
+
+        private bool ReadUserCardAsn()
+        {
+            if (!m_UserCardCtrl.SelectCardApp())
+                return false;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN();
+            if (ASN == null)
+                return false;
+            Buffer.BlockCopy(ASN, 0, m_ASN, 0, 8);
+            return true;
+        }
+
+        private void textPIN_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
+                e.Handled = true;//不接受非数字值
+        }
+
+        private void textPIN_Validated(object sender, EventArgs e)
+        {
+            m_strPIN = textPIN.Text;
+        }
+
+        private void btnReadRecord_Click(object sender, EventArgs e)
+        {
+            if (m_hDevHandler <= 0)
+                return;
+            if (!OpenUserCard())
+                return;
+            if (!m_UserCardCtrl.SelectCardApp())
+                return;
+            if (m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
+            {                 
+                List<CardRecord> lstRecord = m_UserCardCtrl.ReadRecord();
+                if (lstRecord.Count > 0)
+                {
+                    FillListView(lstRecord);
+                }
+            }
+            CloseUserCard();            
+        }
+
+        public void FillListView(List<CardRecord> lstRecord)
+        {
+            foreach (CardRecord record in lstRecord)
+            {
+                ListViewItem item = new ListViewItem();
+                item.Text = record.BusinessSn.ToString();
+                item.SubItems.Add(record.OverdraftMoney.ToString("F2"));
+                item.SubItems.Add(record.Amount.ToString("F2"));
+                item.SubItems.Add(record.BusinessType.ToString());
+                item.SubItems.Add(record.TerminalID);
+                item.SubItems.Add(record.BusinessTime);
+                RecordInCard.Items.Add(item);
+            }
         }
     }
 }

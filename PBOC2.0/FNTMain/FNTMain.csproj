@@ -1,14 +1,19 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{151459CE-73F2-42CA-9E85-EA6D850A186F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FNTMain</RootNamespace>
     <AssemblyName>FNTMain</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FntAboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FntAboutBox.Designer.cs">
+      <DependentUpon>FntAboutBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -49,6 +60,25 @@
       <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
       <Name>IFuncPlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LogonForm\LogonForm.csproj">
+      <Project>{89842A68-CBF8-413E-9ED0-F3F8A6E13DBD}</Project>
+      <Name>LogonForm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlServerHelper\SqlServerHelper.csproj">
+      <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
+      <Name>SqlServerHelper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FntAboutBox.resx">
+      <DependentUpon>FntAboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\logoPictureBox.Image.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

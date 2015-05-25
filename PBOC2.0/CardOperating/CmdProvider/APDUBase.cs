@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Security.Cryptography;
 using System.IO;
+using System.Diagnostics;
 
 namespace CardOperating
 {
@@ -151,7 +152,11 @@ namespace CardOperating
         //卡片应用主控密钥
         protected static byte[] m_KeyAppMain = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
 
-        //PSAMk卡的主控密钥
+        //////////////////////////////////////////////////////////////////////////
+        //PSAM卡 初始密钥
+        protected static byte[] m_PsamKeyOrg = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
+
+        //PSAM卡的MF下卡片主控密钥
         protected static byte[] m_KeyPsamMain = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f };
 
         protected int m_nTotalLen = 0;        
@@ -193,14 +198,66 @@ namespace CardOperating
             return outByte;
         }
 
+        public void SetOrgKeyValue(byte[] byteKey,CardCategory eCategory)
+        {
+            if (byteKey.Length != 16)
+                return;           
+            if(eCategory == CardCategory.CpuCard)
+                Buffer.BlockCopy(byteKey, 0, m_KeyOrg, 0, 16);
+            else if(eCategory == CardCategory.PsamCard)
+                Buffer.BlockCopy(byteKey, 0, m_PsamKeyOrg, 0, 16);
+        }
+
+        public void SetMainKeyValue(byte[] byteKey, CardCategory eCategory)
+        {
+            if (byteKey.Length != 16)
+                return;
+            if (eCategory == CardCategory.CpuCard)
+                Buffer.BlockCopy(byteKey, 0, m_KeyMain, 0, 16);
+            else if (eCategory == CardCategory.PsamCard)
+                Buffer.BlockCopy(byteKey, 0, m_KeyPsamMain, 0, 16);            
+        }
+
+        public void SetUserAppKeyValue(byte[] byteKey)
+        {
+            if (byteKey.Length != 16)
+                return;
+            Buffer.BlockCopy(byteKey, 0, m_KeyAppMain, 0, 16);
+        }
+
+        public byte[] CardKeyToDb(bool bOrg, CardCategory eCategory)
+        {
+            if (bOrg)
+            {
+                if (eCategory == CardCategory.CpuCard)
+                    return m_KeyOrg;
+                else if (eCategory == CardCategory.PsamCard)
+                    return m_PsamKeyOrg;
+                else
+                    return null;
+            }
+            else
+            {
+                if (eCategory == CardCategory.CpuCard)
+                    return m_KeyMain;
+                else if (eCategory == CardCategory.PsamCard)
+                    return m_KeyPsamMain;
+                else
+                    return null;
+            }
+        }
+
         public static byte[] GetEncryptKey(bool bAppMainKey)
         {
             if (bAppMainKey)
             {
-                return m_KeyAppMain;//应用主控密钥,不是MF主控密钥
+                //计算分散密钥时使用
+                return m_KeyAppMain;//应用主控密钥
             }
             else
             {
+
+                //安装应用主控密钥时使用，安装后其他密钥安装需要分散
                 return m_KeyOrg;//卡片中初始密钥
             }
         }
@@ -337,9 +394,9 @@ namespace CardOperating
         /// 
         /// </summary>
         /// <param name="byteRandom">随机数,每个命令随机数只使用1次</param>        
-        /// <param name="bMainKey">使用的密钥:初始密钥/主控密钥</param>
+        /// <param name="KeyValue">使用的密钥:初始密钥/主控密钥</param>
         /// <returns></returns>
-        public bool createExternalAuthenticationCmd(byte[] byteRandom, bool bMainKey, CardCategory eCategory)
+        public bool createExternalAuthenticationCmd(byte[] byteRandom, byte[] KeyValue)
         {
             if (byteRandom.Length != 4 && byteRandom.Length != 8)
                 return false;
@@ -353,19 +410,7 @@ namespace CardOperating
             //byteRandom.Length==4时后4字节为0x00，加密后得到认证数据
             byte[] baseData = new byte[8];
             Buffer.BlockCopy(byteRandom, 0, baseData, 0, byteRandom.Length);
-            byte[] key = null;
-            if (bMainKey)
-            {
-                if (eCategory == CardCategory.CpuCard)
-                    key = m_KeyMain;
-                else if (eCategory == CardCategory.PsamCard)
-                    key = m_KeyPsamMain;
-            }
-            else
-            {
-                key = m_KeyOrg;
-            }
-            byte[] cryptData = TripleEncryptData(baseData, key);
+            byte[] cryptData = TripleEncryptData(baseData, KeyValue);
             
             m_Data = new byte[8];//密文
             Buffer.BlockCopy(cryptData, 0, m_Data, 0, 8);            
@@ -378,8 +423,9 @@ namespace CardOperating
         /// 删除MF
         /// </summary>
         /// <param name="byteRandom">随机数,每个命令随机数只使用1次</param>
+        /// <param name="KeyValue">使用的密钥:初始密钥/主控密钥</param>
         /// <returns></returns>
-        public bool createClearMFcmd(byte[] byteRandom, bool bMainKey, CardCategory eCategory)
+        public bool createClearMFcmd(byte[] byteRandom, byte[] KeyValue)
         {
             if (byteRandom.Length != 4 && byteRandom.Length != 8)
                 return false;
@@ -393,6 +439,17 @@ namespace CardOperating
             //byteRandom.Length==4时后4字节为0x00，加密后得到认证数据
             byte[] baseData = new byte[8];
             Buffer.BlockCopy(byteRandom, 0, baseData, 0, byteRandom.Length);
+            byte[] cryptData = TripleEncryptData(baseData, KeyValue);
+
+            m_Data = new byte[8];//密文
+            Buffer.BlockCopy(cryptData, 0, m_Data, 0, 8);
+            m_le = 0;
+            m_nTotalLen = 13;
+            return true;
+        }
+
+        public byte[] GetKeyVal(bool bMainKey, CardCategory eCategory)
+        {
             byte[] key = null;
             if (bMainKey)
             {
@@ -403,14 +460,24 @@ namespace CardOperating
             }
             else
             {
-                key = m_KeyOrg;
+                if (eCategory == CardCategory.CpuCard)
+                    key = m_KeyOrg;
+                else if (eCategory == CardCategory.PsamCard)
+                    key = m_PsamKeyOrg;
             }
-            byte[] cryptData = TripleEncryptData(baseData, key);
+            return key;
+        }
 
-            m_Data = new byte[8];//密文
-            Buffer.BlockCopy(cryptData, 0, m_Data, 0, 8);
-            m_le = 0;
-            m_nTotalLen = 13;
+        public bool createGetEFFileCmd(byte fileFlag, byte ReponseLen)
+        {
+            m_CLA = 0x00;
+            m_INS = 0xB0;
+            m_P1 = fileFlag; //短文件标识符读文件
+            m_P2 = 0x00;
+            m_Lc = 0x00;  //不存在
+            m_Data = null; //不存在
+            m_le = ReponseLen;   //返回长度
+            m_nTotalLen = 5;
             return true;
         }
 
@@ -462,7 +529,7 @@ namespace CardOperating
                 EncryptData(MacResult, KeyLeft);//用密钥的前半部来进行加密操作
                 nCalcOffset += 8;                
             }
-            //使用的是16位密钥，最后一个数据块的处理
+            //使用的是8字节密钥，最后一个数据块的处理
             DecryptData(MacResult, KeyRight);//用密钥的后半部来进行解密操作
             EncryptData(MacResult, KeyLeft);//用前半部加密
             
@@ -526,8 +593,11 @@ namespace CardOperating
         //DES加密
         private static void EncryptData(byte[] byteData, byte[] Key)
         {
-            if (byteData.Length != 8 )
+            if (byteData.Length != 8 || Key.Length != 8)
+            {
+                Trace.WriteLine("DES加密的数据长度或密钥长度不正确");
                 return;
+            }
 
             DESCryptoServiceProvider alg = new DESCryptoServiceProvider();
 
@@ -552,8 +622,11 @@ namespace CardOperating
         //DES解密
         private static void DecryptData(byte[] byteData, byte[] Key)
         {
-            if (byteData.Length != 8)
+            if (byteData.Length != 8 || Key.Length != 8)
+            {
+                Trace.WriteLine("DES解密的数据长度或密钥长度不正确");
                 return;
+            }
 
             DESCryptoServiceProvider alg = new DESCryptoServiceProvider();
             alg.Padding = PaddingMode.Zeros; //全0填充，使输入输出长度一致
@@ -585,7 +658,7 @@ namespace CardOperating
             return byteReturn;        
         }
 
-        protected byte[] StringToBCD(string strData)
+        public static byte[] StringToBCD(string strData)
         {
             if (string.IsNullOrEmpty(strData) || strData.Length % 2 != 0)
                 return null;

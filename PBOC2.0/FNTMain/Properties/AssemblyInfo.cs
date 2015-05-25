@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的常规信息通过下列属性集
 // 控制。更改这些属性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("FNTMain")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("IC卡和卡密钥管理系统")]
+[assembly: AssemblyDescription("由张家港富耐特新能源智能系统有限公司开发，用于智能IC卡的制卡、发卡、卡信息维护和制卡所用密钥的管理")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("FNTMain")]
-[assembly: AssemblyCopyright("版权所有 (C) Microsoft 2014")]
+[assembly: AssemblyCompany("张家港富耐特新能源智能系统有限公司")]
+[assembly: AssemblyProduct("IC卡和卡密钥管理系统")]
+[assembly: AssemblyCopyright("版权所有 (C) Funnett 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

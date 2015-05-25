@@ -80,5 +80,12 @@ namespace CardOperating
             byte[] byteRetKey = APDUBase.TripleEncryptData(byteData, SubKey);
             return byteRetKey;
         }
+
+        protected void StrKeyToByte(string strKey, byte[] byteKey)
+        {
+            byte[] BcdKey = APDUBase.StringToBCD(strKey);
+            if (BcdKey.Length == 16)
+                Buffer.BlockCopy(BcdKey, 0, byteKey, 0, 16);
+        }
     }
 }

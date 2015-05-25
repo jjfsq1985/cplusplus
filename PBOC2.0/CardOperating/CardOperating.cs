@@ -11,11 +11,6 @@ namespace CardOperating
 {
     public partial class CardOperating : Form, IPlugin
     {
-        private bool m_bLoad = false;
-        private int m_nFormWidth = 0;
-        private int m_nFormHeight = 0;
-
-
         private int m_MTDevHandler = 0;  //读卡器
         private short m_nRetValue = 0;  //返回值
 
@@ -35,6 +30,8 @@ namespace CardOperating
         public CardOperating()
         {
             InitializeComponent();
+            //CardOperatingCtrlPos();
+
             m_CardUser.TopLevel = false;
             m_CardUser.Parent = this;
             CardInfoPanel.Controls.Add(m_CardUser);
@@ -66,7 +63,7 @@ namespace CardOperating
 
         public string PluginMenu()
         {
-            return "卡操作";
+            return "制发卡操作";
         }
 
         public void ShowPluginForm(Form parent)
@@ -90,39 +87,33 @@ namespace CardOperating
             Close();
         }
 
-        private void CardOperating_Load(object sender, EventArgs e)
+        /*
+        private void CardOperatingCtrlPos()
         {
-            m_nFormWidth = this.Width;
-            m_nFormHeight = this.Height;
             foreach (Control ctrl in Controls)
             {
                 ControlPos pos = new ControlPos();
                 pos.x = ctrl.Left;
+                pos.dbRateH = (double)ctrl.Right / this.Width;
                 pos.y = ctrl.Top;
+                pos.dbRateV = (double)ctrl.Bottom / this.Height;
                 ctrl.Tag = pos;
-            }
-            m_bLoad = true;
-        }
+            }            
+        }        
 
         private void CardOperating_Resize(object sender, EventArgs e)
-        {
-            if (!m_bLoad)
-                return;
-            float NowRateW = (float)this.Width / m_nFormWidth;
-            float NowRateH = (float)this.Height / m_nFormHeight;
-
+        {           
             foreach (Control ctrl in Controls)
             {
                 ControlPos pos = (ControlPos)ctrl.Tag;
-                ctrl.Top = (int)(pos.y * NowRateH);
-                ctrl.Left = (int)(pos.x * NowRateW);
-                pos.x = ctrl.Left;
-                pos.y = ctrl.Top;
+                pos.x = (int)((this.Width * pos.dbRateH) - ctrl.Width);
+                pos.y = (int)((this.Height * pos.dbRateV) - ctrl.Height);
+                ctrl.Left = pos.x;
+                ctrl.Top = pos.y;
                 ctrl.Tag = pos;
-            }
-            m_nFormWidth = this.Width;
-            m_nFormHeight = this.Height;
+            }            
         }
+        */
 
         private void WriteMsg(short nErr, string strMsg)
         {
@@ -196,6 +187,11 @@ namespace CardOperating
                 DllExportMT.hex_asc(cardInfo, cardInfoAsc, infoLen);
                 WriteMsg(0, "卡信息：" + Encoding.ASCII.GetString(cardInfoAsc));
             }
+
+            m_UserCardCtrl = new UserCardControl(m_MTDevHandler);
+            m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
+            if (!m_UserCardCtrl.ReadKeyValueFormDb())
+                WriteMsg(0, "未读到密钥，请检查数据库是否正常。");
         }
 
         private void btnCloseCard_Click(object sender, EventArgs e)
@@ -206,7 +202,7 @@ namespace CardOperating
             if (m_nRetValue != 0)
                 WriteMsg(m_nRetValue, "关闭卡片失败");
             else
-                WriteMsg(0, "关闭卡片成功");
+                WriteMsg(0, "关闭卡片成功");            
             m_UserCardCtrl = null;
         }
 
@@ -218,11 +214,8 @@ namespace CardOperating
         //删除白卡MF中的文件，只保留MF
         private void btnInitCard_Click(object sender, EventArgs e)
         {
-            if (m_MTDevHandler <= 0)
+            if (m_MTDevHandler <= 0 || m_UserCardCtrl == null)
                 return;
-            m_UserCardCtrl = new UserCardControl(m_MTDevHandler);
-            m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
-
             //动作
             if (m_UserCardCtrl.InitCard(false) != 0)
                 MessageBox.Show("当前卡片内主控密钥不匹配，初始化失败。\r\n请确认卡商然后重置。", "警告", MessageBoxButtons.OK);
@@ -230,10 +223,8 @@ namespace CardOperating
 
         private void btnUserCardReset_Click(object sender, EventArgs e)
         {
-            if (m_MTDevHandler <= 0)
+            if (m_MTDevHandler <= 0 || m_UserCardCtrl == null)
                 return;
-            m_UserCardCtrl = new UserCardControl(m_MTDevHandler);
-            m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
             //动作
             if (m_UserCardCtrl.InitCard(true) != 0)
                 MessageBox.Show("当前卡片内主控密钥不匹配，重置失败。\r\n请确认卡商然后初始化。", "警告", MessageBoxButtons.OK);
@@ -256,17 +247,15 @@ namespace CardOperating
                 if (m_bShowPanel)
                 {
                     CardInfoPanel.Visible = true;
-                    m_nFormWidth += CardInfoPanel.Width;
+                    this.Width += CardInfoPanel.Width;
                     m_CardUser.Show();
                 }
                 else
                 {
-                    m_nFormWidth -= CardInfoPanel.Width;
+                    this.Width -= CardInfoPanel.Width;
                     CardInfoPanel.Visible = false;
                     m_CardUser.Hide();
                 }
-
-                this.Width = m_nFormWidth;
             }
         }
 
@@ -298,7 +287,11 @@ namespace CardOperating
             //生成加气数据文件
             if (!m_UserCardCtrl.CreateApplication(m_UserCardId, cardInfo.DefaultPwdFlag, cardInfo.CustomPassword))
                 return;
-            m_UserCardCtrl.UpdateApplicationFile(cardInfo);
+            m_UserCardCtrl.UpdateApplicationFile(cardInfo,null);
+
+            //保存至数据库            
+            string strSuccess = m_UserCardCtrl.SaveCpuCardInfoToDb(cardInfo) ? "成功" : "失败";
+            WriteMsg(0, "卡信息写入数据库，结果：" + strSuccess);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -341,6 +334,12 @@ namespace CardOperating
             }
             m_IccCardId = new byte[infoLen];
             Buffer.BlockCopy(sInfo, 0, m_IccCardId, 0, (int)infoLen);
+
+            m_IccCardCtrl = new IccCardControl(m_MTDevHandler);
+            m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
+
+            if (!m_IccCardCtrl.ReadKeyValueFormDb())
+                WriteMsg(0, "未读到密钥，请检查数据库是否正常。");
         }
 
         private void btnCloseIccCard_Click(object sender, EventArgs e)
@@ -359,11 +358,8 @@ namespace CardOperating
         //删除白卡MF中的文件，只保留MF
         private void btnInitIccCard_Click(object sender, EventArgs e)
         {
-            if (m_MTDevHandler <= 0)
+            if (m_MTDevHandler <= 0 || m_IccCardCtrl == null)
                 return;
-            m_IccCardCtrl = new IccCardControl(m_MTDevHandler);
-            m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
-
             //动作            
             if (m_IccCardCtrl.InitIccCard(false) != 0)
                 MessageBox.Show("当前PSAM卡内主控密钥不匹配，初始化失败。\r\n请确认卡商然后重置。", "警告", MessageBoxButtons.OK);
@@ -371,11 +367,8 @@ namespace CardOperating
 
         private void btnIccCardReset_Click(object sender, EventArgs e)
         {
-            if (m_MTDevHandler <= 0)
+            if (m_MTDevHandler <= 0 || m_IccCardCtrl == null)
                 return;
-            m_IccCardCtrl = new IccCardControl(m_MTDevHandler);
-            m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
-
             //动作            
             if (m_IccCardCtrl.InitIccCard(true) != 0)
                 MessageBox.Show("当前PSAM卡内主控密钥不匹配，重置失败。\r\n请确认卡商然后初始化。", "警告", MessageBoxButtons.OK);
@@ -397,16 +390,15 @@ namespace CardOperating
                 if (m_bShowPanel)
                 {
                     CardInfoPanel.Visible = true;
-                    m_nFormWidth += CardInfoPanel.Width;
+                    this.Width += CardInfoPanel.Width;
                     m_CardPSAM.Show();
                 }
                 else
                 {
-                    m_nFormWidth -= CardInfoPanel.Width;
+                    this.Width -= CardInfoPanel.Width;
                     CardInfoPanel.Visible = false;
                     m_CardPSAM.Hide();
-                }
-                this.Width = m_nFormWidth;
+                }                
             }
 
         }
@@ -444,6 +436,10 @@ namespace CardOperating
             if (!m_IccCardCtrl.SetupIccKey())
                 return;
             m_IccCardCtrl.SetupMainKey();
+            //保存至数据库
+            string strSuccess = m_IccCardCtrl.SavePsamCardInfoToDb(m_CardPSAM.GetPSAMCardParam()) ? "成功" : "失败";
+            WriteMsg(0, "卡信息写入数据库，结果：" + strSuccess);
+
         }
 
         private void btnMethod_Click(object sender, EventArgs e)
@@ -463,17 +459,16 @@ namespace CardOperating
                 if (m_bShowPanel)
                 {
                     CardInfoPanel.Visible = true;
-                    m_nFormWidth += CardInfoPanel.Width;
                     m_CardMethod.Show();
                     m_CardMethod.SetDeviceHandler(m_MTDevHandler);
+                    this.Width += CardInfoPanel.Width;                                        
                 }
                 else
-                {
-                    m_nFormWidth -= CardInfoPanel.Width;
+                {                    
                     CardInfoPanel.Visible = false;
                     m_CardMethod.Hide();
-                }
-                this.Width = m_nFormWidth;
+                    this.Width -= CardInfoPanel.Width;
+                }                
             }
         }
 

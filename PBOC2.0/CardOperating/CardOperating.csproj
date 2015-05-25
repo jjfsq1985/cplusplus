@@ -1,14 +1,19 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{867C4012-8C2A-44E7-BB89-BB21716884DA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CardOperating</RootNamespace>
     <AssemblyName>CardOperating</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,7 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppUserOperator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppUserOperator.Designer.cs">
+      <DependentUpon>AppUserOperator.cs</DependentUpon>
+    </Compile>
     <Compile Include="CardInfo\CardInfoParam.cs" />
+    <Compile Include="CardInfo\DbInfo.cs" />
     <Compile Include="CardInfo\IccCardInfoParam.cs" />
     <Compile Include="CardMethod\CardApplicationTest.cs">
       <SubType>Form</SubType>
@@ -78,6 +90,10 @@
       <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
       <Name>IFuncPlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SqlServerHelper\SqlServerHelper.csproj">
+      <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
+      <Name>SqlServerHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="mt_32.dll">
@@ -85,6 +101,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AppUserOperator.resx">
+      <DependentUpon>AppUserOperator.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CardMethod\CardApplicationTest.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CardApplicationTest.cs</DependentUpon>

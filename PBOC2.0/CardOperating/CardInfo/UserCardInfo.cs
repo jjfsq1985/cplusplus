@@ -5,6 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Data.SqlClient;
+using SqlServerHelper;
 
 namespace CardOperating
 {
@@ -20,17 +22,64 @@ namespace CardOperating
         private const Char Key_E = (Char)69;
         private const Char Key_F = (Char)70;
         private const Char Key_X = (Char)88;
+
+        private List<ClientInfo> m_ListClientInfo = new List<ClientInfo>();//单位信息
+        private List<ProvinceInfo> m_ListProvinceInfo = new List<ProvinceInfo>(); //省
+        private List<CityInfo> m_ListCityInfo = new List<CityInfo>();   //地市
+        private List<SuperiorInfo> m_ListSuperiorInfo = new List<SuperiorInfo>(); //上级单位（公司）
+        private List<StationInfo> m_ListStationInfo = new List<StationInfo>(); //上级单位（公司）
+
         public UserCardInfo()
         {
             InitializeComponent();
+        }
 
-            InitData();
+        private int GetClientIdIndex(int nClientID)
+        {
+            int nIndex = 0;
+            foreach (ClientInfo info in m_ListClientInfo)
+            {
+                if (info.ClientId == nClientID)
+                {
+                    break;
+                }
+                nIndex++;
+            }
+            return nIndex;
+        }
+
+        private int GetCarCategoryIndex(string strCarType)
+        {
+            int nRet = 0;
+            switch (strCarType)
+            {
+                case "不限":
+                    nRet = 0;
+                    break;
+                case "私家车":
+                    nRet = 1;
+                    break;
+                case "单位车":
+                    nRet = 2;
+                    break;
+                case "出租车":
+                    nRet = 3;
+                    break;
+                case "公交车":
+                    nRet = 4;
+                    break;
+            }
+            return nRet;
         }
 
         private void InitData()
         {
+            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb();//从数据库读出
+            if (cmbClientName.Items.Count > 0)
+                cmbClientName.SelectedIndex = GetClientIdIndex(m_CardInfoPar.ClientID);
             textCompanyId.Text = m_CardInfoPar.CompanyID;
-            textUserCardId.Text = m_CardInfoPar.CardOrderNo;
+            byte nCardType = (byte)m_CardInfoPar.UserCardType;
+            textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
             DateFrom.Value = m_CardInfoPar.ValidCardBegin;
             DateTo.Value = m_CardInfoPar.ValidCardEnd;
             cmbUserCardType.SelectedIndex = GetCardTypeIndex(m_CardInfoPar.UserCardType);
@@ -40,33 +89,180 @@ namespace CardOperating
             textUserName.Text = m_CardInfoPar.UserName;
             textPriceLevel.Text = m_CardInfoPar.PriceLevel.ToString();
             textUserIdentity.Text = m_CardInfoPar.UserIdentity;
-            textUserAccount.Text = m_CardInfoPar.UserAccount;
             double dbRate = m_CardInfoPar.DiscountRate * 1.0 / 100.0;
             textDiscountRate.Text = dbRate.ToString("F2");
             DiscountRateExprieValid.Value = m_CardInfoPar.DiscountRateEnd;
-            textGasType.Text = m_CardInfoPar.LimitGasType.ToString("X4");            
-            textCarNo.Text = m_CardInfoPar.LimtCarNo;
-            cmbAreaLimit.SelectedIndex = GetAreaLimitIndex(m_CardInfoPar.LimitArea);
-            textLimitAreaCode.Text = m_CardInfoPar.LimitAreaCode;
-            if (m_CardInfoPar.LimitFixDepartment != 0xFFFFFFFF)
-            {
-                textFixDepartment.Text = m_CardInfoPar.LimitFixDepartment.ToString("X8");
-            }
+            cmbCarCategory.SelectedIndex = GetCarCategoryIndex(m_CardInfoPar.CarType);
+            if (!string.IsNullOrEmpty(m_CardInfoPar.CarNo))
+                textCarNo.Text = m_CardInfoPar.CarNo;
+            textTelephone.Text = m_CardInfoPar.TelePhone;
+            if (!string.IsNullOrEmpty(m_CardInfoPar.SelfId))
+                textSelfId.Text = m_CardInfoPar.SelfId;
 
+            LimitCarNo.Checked = m_CardInfoPar.LimitCarNo;
+            cmbLimitGasType.SelectedIndex = GetLimitGasTypeIndex(m_CardInfoPar.LimitGasType);
+            cmbAreaLimit.SelectedIndex = GetAreaLimitIndex(m_CardInfoPar.LimitArea);
+            FillListAreaCode(m_CardInfoPar.LimitArea);
+            SetListAreaCodeChecked(m_CardInfoPar.LimitAreaCode, m_CardInfoPar.LimitArea);
             if (m_CardInfoPar.LimitGasFillCount != 0xFF)
             {
                 textGasCount.Text = m_CardInfoPar.LimitGasFillCount.ToString();
             }
-            
+
             if (m_CardInfoPar.LimitGasFillAmount != 0xFFFFFFFF)
             {
                 double dbVal = m_CardInfoPar.LimitGasFillAmount * 1.0 / 100.0;
                 textGasAmount.Text = dbVal.ToString();
             }
-            
+
             textBoalNo.Text = m_CardInfoPar.BoalId;
+            textBoalCount.Text = m_CardInfoPar.CylinderNum.ToString();
+            textBoalVol.Text = m_CardInfoPar.CylinderVolume.ToString();
             BoalExprieValid.Value = m_CardInfoPar.BoalExprie;
             textBoalFactoryNo.Text = m_CardInfoPar.BoalFactoryID;
+            textBusDistance.Text = m_CardInfoPar.BusDistance;
+            textRemark.Text = m_CardInfoPar.Remark;
+
+            this.textCompanyId.Validated += new System.EventHandler(this.textCompanyId_Validated);
+            this.CustomPassword.CheckedChanged += new System.EventHandler(this.CustomPassword_CheckedChanged);
+            this.cmbUserCardType.SelectedIndexChanged += new System.EventHandler(this.cmbUserCardType_SelectedIndexChanged);
+            this.LimitCarNo.CheckedChanged += new System.EventHandler(this.LimitCarNo_CheckedChanged);
+            this.cmbAreaLimit.SelectedIndexChanged += new System.EventHandler(this.cmbAreaLimit_SelectedIndexChanged);
+        }
+
+        private void GetClientInfo(SqlHelper ObjSql)
+        {
+            SqlDataReader dataReader = null;
+            ObjSql.ExecuteCommand("select ClientId,ClientName from Base_Client", out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        ClientInfo info = new ClientInfo();
+                        info.ClientId = (int)dataReader["ClientId"];
+                        info.strClientName = (string)dataReader["ClientName"];
+                        m_ListClientInfo.Add(info);
+                    }
+                }
+                dataReader.Close();
+            }
+        }
+
+        private void GetProvinceInfo(SqlHelper ObjSql)
+        {
+            string strCode = "";
+            SqlDataReader dataReader = null;
+            ObjSql.ExecuteCommand("select * from Data_Province", out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        ProvinceInfo info = new ProvinceInfo();
+                        strCode = (string)dataReader["ProvinceCode"];
+                        info.ProvinceCode[0] = Convert.ToByte(strCode, 16);
+                        info.strProvinceName = (string)dataReader["ProvinceName"];
+                        m_ListProvinceInfo.Add(info);
+                    }
+                }
+                dataReader.Close();
+            }
+        }
+
+        private void GetCityInfo(SqlHelper ObjSql)
+        {
+            string strCode = "";
+            SqlDataReader dataReader = null;
+            ObjSql.ExecuteCommand("select * from Data_City", out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        CityInfo info = new CityInfo();
+                        strCode = (string)dataReader["CityCode"];
+                        for (int i = 0; i < 2; i++)
+                        {
+                            info.CityCode[i] = Convert.ToByte(strCode.Substring(i * 2, 2), 16);
+                        }
+                        info.strCityName = (string)dataReader["CityName"];
+                        m_ListCityInfo.Add(info);
+                    }
+                }
+                dataReader.Close();
+            }
+        }
+
+        private void GetSuperiorInfo(SqlHelper ObjSql)
+        {
+            string strCode = "";
+            SqlDataReader dataReader = null;
+            ObjSql.ExecuteCommand("select * from Data_Superior", out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        SuperiorInfo info = new SuperiorInfo();
+                        strCode = (string)dataReader["CompanyCode"];
+                        for (int i = 0; i < 2; i++)
+                        {
+                            info.SuperiorCode[i] = Convert.ToByte(strCode.Substring(i * 2, 2), 16);
+                        }
+                        info.strSuperiorName = (string)dataReader["CompanyName"];
+                        m_ListSuperiorInfo.Add(info);
+                    }
+                }
+                dataReader.Close();
+            }
+        }
+
+        private void GetStationInfo(SqlHelper ObjSql)
+        {
+            string strCode = "";
+            SqlDataReader dataReader = null;
+            ObjSql.ExecuteCommand("select * from Base_Station", out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        StationInfo info = new StationInfo();
+                        strCode = (string)dataReader["StationId"];
+                        for (int i = 0; i < 2; i++)
+                        {
+                            info.StationCode[i] = Convert.ToByte(strCode.Substring(i * 2, 2), 16);
+                        }
+                        info.strStationName = (string)dataReader["StationName"];
+                        m_ListStationInfo.Add(info);
+                    }
+                }
+                dataReader.Close();
+            }
+        }
+
+        private void ReadInfoFromDb()
+        {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            {
+                ObjSql = null;
+                return;
+            }
+            GetClientInfo(ObjSql);
+            GetProvinceInfo(ObjSql);
+            GetCityInfo(ObjSql);
+            GetSuperiorInfo(ObjSql);
+            GetStationInfo(ObjSql);
+
+            ObjSql.CloseConnection();
+            ObjSql = null;
         }
 
         public UserCardInfoParam GetUserCardParam()
@@ -125,17 +321,43 @@ namespace CardOperating
             return nSel;
         }
 
+        private string GetCarCateGory(int nIndex)
+        {
+            string strRet = "不限";
+            switch (nIndex)
+            {
+                case 0:
+                    strRet = "不限";
+                    break;
+                case 1:
+                    strRet = "私家车";
+                    break;
+                case 2:
+                    strRet = "单位车";
+                    break;
+                case 3:
+                    strRet = "出租车";
+                    break;
+                case 4:
+                    strRet = "公交车";
+                    break;
+            }
+            return strRet;
+        }
+
         private void SaveClose_Click(object sender, EventArgs e)
         {
             //保存数据
-            m_CardInfoPar.setCardBaseInfo(textCompanyId.Text, GetCardType(cmbUserCardType.SelectedIndex), textUserCardId.Text);
+            if (cmbClientName.SelectedIndex >= 0 && cmbClientName.SelectedIndex < m_ListClientInfo.Count)
+                m_CardInfoPar.ClientID = m_ListClientInfo[cmbClientName.SelectedIndex].ClientId;
+            m_CardInfoPar.SetCardId(textCompanyId.Text);
             if (DateFrom.Value < DateTo.Value)
             {
                 m_CardInfoPar.ValidCardBegin = DateFrom.Value;
                 m_CardInfoPar.ValidCardEnd = DateTo.Value;
             }
             m_CardInfoPar.DefaultPwdFlag = CustomPassword.Checked ? false : true;
-            
+
             if (!m_CardInfoPar.DefaultPwdFlag && string.IsNullOrEmpty(textPassword.Text))
             {
                 m_CardInfoPar.CustomPassword = textPassword.Text;
@@ -144,14 +366,14 @@ namespace CardOperating
             {
                 m_CardInfoPar.CustomPassword = "999999";
             }
-                
+
             m_CardInfoPar.UserName = textUserName.Text;
 
             double dbRate = 0;
             double.TryParse(textDiscountRate.Text, out dbRate);
             if (dbRate >= 1 && dbRate <= 99)
             {
-                m_CardInfoPar.setDiscountRate(dbRate,DiscountRateExprieValid.Value);                
+                m_CardInfoPar.setDiscountRate(dbRate, DiscountRateExprieValid.Value);
             }
 
             if (string.IsNullOrEmpty(textPriceLevel.Text))
@@ -160,26 +382,23 @@ namespace CardOperating
             }
 
             m_CardInfoPar.UserIdentity = textUserIdentity.Text;
-            m_CardInfoPar.UserAccount = textUserAccount.Text;
 
-            if (string.IsNullOrEmpty(textGasType.Text))
-            {
-                m_CardInfoPar.LimitGasType = Convert.ToUInt16(textGasType.Text, 16);
-            }
+            m_CardInfoPar.CarType = GetCarCateGory(cmbCarCategory.SelectedIndex);
+            m_CardInfoPar.CarNo = textCarNo.Text;
+            m_CardInfoPar.TelePhone = textTelephone.Text;
+            m_CardInfoPar.SelfId = textCarNo.Text;
 
-            m_CardInfoPar.LimtCarNo = textCarNo.Text;
+            m_CardInfoPar.LimitCarNo = LimitCarNo.Checked;
+            m_CardInfoPar.LimitGasType = GetLimitGasType(cmbLimitGasType.SelectedIndex);
 
-            m_CardInfoPar.setLimitArea(GetAreaLimit(cmbAreaLimit.SelectedIndex),textLimitAreaCode.Text);
-            
-            if (!string.IsNullOrEmpty(textFixDepartment.Text))
-            {
-                m_CardInfoPar.LimitFixDepartment = Convert.ToUInt32(textFixDepartment.Text, 16);
-            }
+            byte AreaLimit = GetAreaLimit(cmbAreaLimit.SelectedIndex);
+            string strLimitAreaCode = GetListAreaCode(AreaLimit);
+            m_CardInfoPar.setLimitArea(AreaLimit, strLimitAreaCode);
 
             byte LimitGasCount = 0;
             byte.TryParse(textGasCount.Text, out LimitGasCount);
             m_CardInfoPar.LimitGasFillCount = LimitGasCount;
-            
+
             double dbAmount = 0;
             double.TryParse(textGasAmount.Text, out dbAmount);
             if (dbAmount > 0 && dbAmount < 1000000.0)
@@ -192,8 +411,12 @@ namespace CardOperating
             }
 
             m_CardInfoPar.BoalId = textBoalNo.Text;
+            m_CardInfoPar.CylinderNum = Convert.ToInt32(textBoalCount.Text);
+            m_CardInfoPar.CylinderVolume = Convert.ToUInt16(textBoalVol.Text);
             m_CardInfoPar.BoalExprie = BoalExprieValid.Value;
             m_CardInfoPar.BoalFactoryID = textBoalFactoryNo.Text;
+            m_CardInfoPar.BusDistance = textBusDistance.Text;
+            m_CardInfoPar.Remark = textRemark.Text;
         }
 
         private byte GetAreaLimit(int nSelectIndex)
@@ -260,9 +483,9 @@ namespace CardOperating
                 case Key_E:
                 case Key_F:
                     bRet = true;
-                    break;                    
+                    break;
                 default:
-                    break;                    
+                    break;
             }
             return bRet;
         }
@@ -343,5 +566,282 @@ namespace CardOperating
             if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace && e.KeyChar != Key_X)
                 e.Handled = true;
         }
+
+        private void cmbAreaLimit_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //修改地域限制代码内容
+            byte byteLimit = GetAreaLimit(cmbAreaLimit.SelectedIndex);
+            FillListAreaCode(byteLimit);
+        }
+
+        private void cmbUserCardType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            m_CardInfoPar.UserCardType = GetCardType(cmbUserCardType.SelectedIndex);
+            if (m_CardInfoPar.UserCardType != UserCardInfoParam.CardType.PersonalCard && m_CardInfoPar.UserCardType != UserCardInfoParam.CardType.CompanySubCard)
+            {
+                LimitCarNo.Checked = false;
+                LimitCarNo.Enabled = false;
+                CarNo.Text = "";
+                CarNo.Enabled = false;
+                SelfId.Text = "";
+                SelfId.Enabled = false;
+            }
+            else
+            {
+                LimitCarNo.Enabled = true;
+                CarNo.Enabled = true;
+                SelfId.Enabled = true;
+            }
+            byte nCardType = (byte)m_CardInfoPar.UserCardType;
+            textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
+        }
+
+        private void LimitCarNo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (LimitCarNo.Checked && string.IsNullOrEmpty(textCarNo.Text))
+            {
+                MessageBox.Show("请输入车牌号");
+                LimitCarNo.Checked = false;
+            }
+        }
+
+        private string GetCardOrderNoFromDb()
+        {
+            int nOrderNo = 1;
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            {
+                ObjSql = null;
+                return nOrderNo.ToString().PadLeft(6, '0');
+            }
+            SqlDataReader dataReader = null;
+            ObjSql.ExecuteCommand("select MAX(CardNum) as OrderNo from Base_Card", out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows && dataReader.Read())
+                {
+                    if (!dataReader.IsDBNull(dataReader.GetOrdinal("OrderNo")))
+                    {
+                        string strVal = (string)dataReader["OrderNo"];
+                        nOrderNo = Convert.ToInt32(strVal.Substring(10, 6)) + 1;
+                    }
+                }
+                dataReader.Close();
+            }
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return nOrderNo.ToString().PadLeft(6, '0');
+        }
+
+        private void textCompanyId_Validated(object sender, EventArgs e)
+        {
+            m_CardInfoPar.CompanyID = textCompanyId.Text.PadLeft(4, '0');
+            byte nCardType = (byte)m_CardInfoPar.UserCardType;
+            textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
+        }
+
+        private void FillListAreaCode(byte byteLimitArea)
+        {
+            listLimitArea.Items.Clear();
+            listLimitArea.Enabled = true;
+            switch (byteLimitArea)
+            {
+                case 0xFF:
+                    listLimitArea.Enabled = false;
+                    break;
+                case 0x01://限省
+                    listLimitArea.Items.Add("北京市");
+                    listLimitArea.Items.Add("江苏省");
+                    listLimitArea.Items.Add("广东省");
+                    break;
+                case 0x02://限地市
+                    listLimitArea.Items.Add("南京市");
+                    listLimitArea.Items.Add("东莞市");
+                    break;
+                case 0x03://限上级单位
+                    listLimitArea.Items.Add("新奥");
+                    listLimitArea.Items.Add("华润");
+                    break;
+                case 0x04://限站点                    
+                    listLimitArea.Items.Add("燃料公司");
+                    listLimitArea.Items.Add("市政管理");
+                    break;
+
+            }
+        }
+
+        private string GetListAreaCode(byte byteAreaLimit)
+        {
+            string strLimitAreaCode = "";
+            int nCount = listLimitArea.CheckedItems.Count;
+            //检查listLimitArea中的选中项
+            if (nCount > 0)
+            {
+                switch (byteAreaLimit)
+                {
+                    case 0x01://限省                           
+                        foreach (ProvinceInfo info in m_ListProvinceInfo)
+                        {
+                            if (listLimitArea.CheckedItems.Contains(info.strProvinceName))
+                            {
+                                strLimitAreaCode = BitConverter.ToString(info.ProvinceCode);
+                                break;
+                            }
+                        }
+                        break;
+                    case 0x02://限地市
+                        foreach (CityInfo info in m_ListCityInfo)
+                        {
+                            if (listLimitArea.CheckedItems.Contains(info.strCityName))
+                            {
+                                strLimitAreaCode = BitConverter.ToString(info.CityCode).Replace("-", "");
+                                break;
+                            }
+                        }
+                        break;
+                    case 0x03://限上级单位（公司）
+                        foreach (SuperiorInfo info in m_ListSuperiorInfo)
+                        {
+                            if (listLimitArea.CheckedItems.Contains(info.strSuperiorName))
+                            {
+                                strLimitAreaCode = BitConverter.ToString(info.SuperiorCode).Replace("-", "");
+                                break;
+                            }
+                        }
+                        break;
+                    case 0x04://限站（最多20个）
+                        foreach (StationInfo info in m_ListStationInfo)
+                        {
+                            if (listLimitArea.CheckedItems.Contains(info.strStationName))
+                            {
+                                strLimitAreaCode += BitConverter.ToString(info.StationCode).Replace("-", "");
+                            }
+                        }
+                        break;
+                }
+            }
+            return strLimitAreaCode;
+        }
+
+        private void SetListAreaCodeChecked(string strLimitAreaCode, byte byteLimit)
+        {
+            if (byteLimit == 0xFF || strLimitAreaCode.Length % 2 != 0)
+                return;
+            byte[] AreaCode = APDUBase.StringToBCD(strLimitAreaCode);
+            if (AreaCode == null)
+                return;
+            switch (byteLimit)
+            {
+                case 0x01:
+                    {
+                        int i = 0;
+                        foreach (ProvinceInfo info in m_ListProvinceInfo)
+                        {
+                            if (info.ProvinceCode[0] == AreaCode[0])
+                            {
+                                listLimitArea.SetItemChecked(i, true);
+                                break;
+                            }
+                            i++;
+                        }
+                    }
+                    break;
+                case 0x02:
+                    {
+                        int i = 0;
+                        foreach (CityInfo info in m_ListCityInfo)
+                        {
+                            if ((info.CityCode[0] == AreaCode[0]) && (info.CityCode[1] == AreaCode[1]))
+                            {
+                                listLimitArea.SetItemChecked(i, true);
+                                break;
+                            }
+                            i++;
+                        }
+                    }
+                    break;
+                case 0x03:
+                    {
+                        int i = 0;
+                        foreach (SuperiorInfo info in m_ListSuperiorInfo)
+                        {
+                            if ((info.SuperiorCode[0] == AreaCode[0]) && (info.SuperiorCode[1] == AreaCode[1]))
+                            {
+                                listLimitArea.SetItemChecked(i, true);
+                                break;
+                            }
+                            i++;
+                        }
+                    }
+                    break;
+                case 0x04:
+                    {
+                        for (int nLimitIndex = 0; nLimitIndex < AreaCode.Length; nLimitIndex += 2)
+                        {
+                            int i = 0;
+                            foreach (StationInfo info in m_ListStationInfo)
+                            {
+                                if ((info.StationCode[0] == AreaCode[nLimitIndex]) && (info.StationCode[1] == AreaCode[nLimitIndex + 1]))
+                                {
+                                    listLimitArea.SetItemChecked(i, true);
+                                    break;
+                                }
+                                i++;
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private void UserCardInfo_Load(object sender, EventArgs e)
+        {
+            ReadInfoFromDb();
+
+            cmbClientName.Items.Clear();
+            foreach (ClientInfo info in m_ListClientInfo)
+            {
+                cmbClientName.Items.Add(info.strClientName);
+            }
+
+            InitData();
+        }
+
+        private int GetLimitGasTypeIndex(ushort LimitGasType)
+        {
+            int nSelectedIndex = 0;
+            switch (LimitGasType)
+            {
+                case 0xFFFF:
+                    nSelectedIndex = 0;
+                    break;
+                case 0x0001:
+                    nSelectedIndex = 1;
+                    break;
+                case 0x0002:
+                    nSelectedIndex = 2;
+                    break;
+            }
+            return nSelectedIndex;
+        }
+
+        private ushort GetLimitGasType(int nIndex)
+        {
+            ushort LimitGasType = 0xFFFF;
+            switch (nIndex)
+            {
+                case 0:
+                    LimitGasType = 0xFFFF;
+                    break;
+                case 1:
+                    LimitGasType = 0x0001;
+                    break;
+                case 2:
+                    LimitGasType = 0x0002;
+                    break;
+            }
+            return LimitGasType;
+        }
+
     }
 }

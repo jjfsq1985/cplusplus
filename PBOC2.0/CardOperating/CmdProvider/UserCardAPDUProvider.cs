@@ -617,13 +617,6 @@ namespace CardOperating
                     m_Data[nOffset + i] = byteName[i];
                 }
             }
-            else
-            {
-                for (int i = 0; i < 20; i++)
-                {
-                    m_Data[nOffset + i] = 0x11; //默认值
-                }
-            }
             nOffset += 20;
             //身份证号
             byte[] byteIdentity = null;
@@ -637,7 +630,7 @@ namespace CardOperating
             }            
             nOffset += 18;
             //nOffset = 40
-            m_Data[nOffset] = 0x01;
+            m_Data[nOffset] = 0x01;//证件类型：身份证号
             nOffset += 1;
             if (!string.IsNullOrEmpty(cardInfo.UserAccount))
             {
@@ -647,16 +640,15 @@ namespace CardOperating
                     m_Data[nOffset + i] = byteAccount[i];
                 }
             }
-            nOffset += 10;
-            byte[] byteRate = BitConverter.GetBytes(cardInfo.DiscountRate);            
-            //折扣率,,高位在前
-            m_Data[52] = byteRate[1];
-            m_Data[53] = byteRate[0];
+            nOffset += 10;            
+            //折扣率
+            m_Data[51] = Convert.ToByte(cardInfo.DiscountRate.ToString(), 16);
+            m_Data[52] = 0;
             byte[] bcdDate = GetBCDDate(cardInfo.DiscountRateEnd);//启用日期
             //折扣有效期,BCD码
-            Buffer.BlockCopy(bcdDate, 0, m_Data, 54, 4);
+            Buffer.BlockCopy(bcdDate, 0, m_Data, 53, 4);
 
-            m_Data[62] = cardInfo.PriceLevel;
+            m_Data[61] = cardInfo.PriceLevel;
             
             byte[] srcMacData = new byte[75]; //头5 +Data70
             srcMacData[0] = m_CLA;//不需要后半字节为4
@@ -734,13 +726,13 @@ namespace CardOperating
             m_Data[2] = cardInfo.LimitArea;
             if (cardInfo.LimitArea != 0xFF)
             {
-                byte[] byteLimitAreaCode = StringToBCD(cardInfo.LimitAreaCode);
+                byte[] byteLimitAreaCode = APDUBase.StringToBCD(cardInfo.LimitAreaCode);
                 if (byteLimitAreaCode != null)
                     Buffer.BlockCopy(byteLimitAreaCode, 0, m_Data, 3, byteLimitAreaCode.Length);
             }
-            if (!string.IsNullOrEmpty(cardInfo.LimtCarNo))
+            if (!string.IsNullOrEmpty(cardInfo.CarNo))
             {
-                byte[] carNo = Encoding.Unicode.GetBytes(cardInfo.LimtCarNo);
+                byte[] carNo = Encoding.Unicode.GetBytes(cardInfo.CarNo);
                 for (int i = 0; i < 16; i++)
                 {
                     if (i < carNo.Length)
@@ -792,17 +784,35 @@ namespace CardOperating
                 m_Data[i] = 0xFF;
             byte[] BoalExprie = GetBCDDate(cardInfo.BoalExprie);
             Buffer.BlockCopy(BoalExprie, 0, m_Data, 0, 4);
+            if (!string.IsNullOrEmpty(cardInfo.CarNo))
+            {
+                byte[] CarNo = Encoding.ASCII.GetBytes(cardInfo.CarNo);
+                if (CarNo.Length <= 16)
+                    Buffer.BlockCopy(CarNo, 0, m_Data, 4, CarNo.Length);
+            }
             if (!string.IsNullOrEmpty(cardInfo.BoalId))
             {
                 byte[] BoalId = Encoding.ASCII.GetBytes(cardInfo.BoalId);
-                Buffer.BlockCopy(BoalId, 0, m_Data, 20, BoalId.Length);
+                if (BoalId.Length <= 16)
+                    Buffer.BlockCopy(BoalId, 0, m_Data, 20, BoalId.Length);
             }
-            m_Data[36] = 0x01; //钢瓶数量
+            m_Data[36] = (byte)cardInfo.CylinderNum; //钢瓶数量
             if (!string.IsNullOrEmpty(cardInfo.BoalFactoryID))
             {
                 byte[] BoalFactoryId = Encoding.ASCII.GetBytes(cardInfo.BoalFactoryID);
-                Buffer.BlockCopy(BoalFactoryId, 0, m_Data, 37, BoalFactoryId.Length);
+                if (BoalFactoryId.Length <= 7)
+                    Buffer.BlockCopy(BoalFactoryId, 0, m_Data, 37, BoalFactoryId.Length);
+            }            
+            m_Data[44] = (byte)(cardInfo.CylinderVolume & 0xFF); //钢瓶容积
+            m_Data[45] = (byte)((cardInfo.CylinderVolume>>8) & 0xFF); //钢瓶容积
+            m_Data[46] = cardInfo.GetByteCarType();//车类型
+            if (!string.IsNullOrEmpty(cardInfo.BusDistance))
+            {
+                byte[] BusDistance = Encoding.ASCII.GetBytes(cardInfo.BusDistance);
+                if (BusDistance.Length <= 5)
+                    Buffer.BlockCopy(BusDistance, 0, m_Data, 47, BusDistance.Length);
             }
+
             byte[] srcMacData = new byte[69]; //头5 +Data64
             srcMacData[0] = m_CLA;//不需要后半字节为4
             srcMacData[1] = m_INS;
@@ -1006,5 +1016,114 @@ namespace CardOperating
             return true;
         }
 
+        //加气交易明细记录文件
+        public bool createReadRecordCmd(byte ResponseLen)
+        {
+            m_CLA = 0x00;
+            m_INS = 0xB2;
+            m_P1 = 0x98; //短文件标识符读文件100+11000-----（二进制11000即18文件）
+            m_P2 = 0x00;
+            m_Lc = 0x00;  //不存在
+            m_Data = null; //不存在
+            m_le = ResponseLen;   //公共应用基本数据文件EF15长度
+            m_nTotalLen = 5;
+            return true;
+        }
+
+        public bool createPINResetCmd(byte[] key, byte[] bytePIN)
+        {
+            if (key.Length != 16 || bytePIN.Length != 6)
+                return false;
+            byte[] PinVal = new byte[3];
+            for (int i = 0; i < 3; i++)
+            {
+                PinVal[i] = (byte)((bytePIN[i * 2] << 4) | bytePIN[i * 2 + 1]);
+            }
+            m_CLA = 0x80;
+            m_INS = 0x5E;
+            m_P1 = 0x00;
+            m_P2 = 0x00;
+            int nLen = 7;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+
+            Buffer.BlockCopy(PinVal, 0, m_Data, 0, 3);
+            byte[] macKey = new byte[8];
+            for (int i = 0; i < 8; i++)
+            {
+                macKey[i] = (byte)(key[i] ^ key[8 + i]);
+            }
+            byte[] mac = CalcMacVal(PinVal, macKey);
+            Buffer.BlockCopy(mac, 0, m_Data, 3, 4);
+            m_le = 0;
+            m_nTotalLen = 12;
+            return true;
+        }
+
+        public bool createChangePINCmd(byte[] oldPwd, byte[] newPwd)
+        {
+            if (oldPwd.Length != 6 || newPwd.Length != 6)
+                return false;
+            byte[] oldPinVal = new byte[3];
+            byte[] newPinVal = new byte[3];
+            for (int i = 0; i < 3; i++)
+            {
+                oldPinVal[i] = (byte)((oldPwd[i * 2] << 4) | oldPwd[i * 2 + 1]);
+                newPinVal[i] = (byte)((newPwd[i * 2] << 4) | newPwd[i * 2 + 1]);
+            }
+            
+            m_CLA = 0x80;
+            m_INS = 0x5E;
+            m_P1 = 0x01;
+            m_P2 = 0x00;
+            int nLen = 7;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            Buffer.BlockCopy(oldPinVal, 0, m_Data, 0, 3);            
+            m_Data[3] = 0xFF;
+            Buffer.BlockCopy(newPinVal, 0, m_Data, 4, 3);
+            m_le = 0;
+            m_nTotalLen = 12;
+            return true;
+        }
+
+        public bool createPINUnLockCmd(byte[] randval, byte[] key, byte[] bytePIN)
+        {
+            if (key.Length != 16 || bytePIN.Length != 6)
+                return false;
+                
+            byte[] PINVal = new byte[8];
+            PINVal[0] = 0x03;
+            PINVal[1] = (byte)((bytePIN[0] << 4) | bytePIN[1]);
+            PINVal[2] = (byte)((bytePIN[2] << 4) | bytePIN[3]);
+            PINVal[3] = (byte)((bytePIN[4] << 4) | bytePIN[5]);
+            PINVal[4] = 0x80;
+            PINVal[5] = 0x00;
+            PINVal[6] = 0x00;
+            PINVal[7] = 0x00;
+
+            
+            m_CLA = 0x84;
+            m_INS = 0x24;
+            m_P1 = 0x00;
+            m_P2 = 0x00;            
+            int nLen = 12;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            byte[] EncryptPinVal = APDUBase.TripleEncryptData(PINVal, key);
+            byte[] srcData = new byte[13];//用于计算MAC的原始数据
+            srcData[0] = m_CLA;
+            srcData[1] = m_INS;
+            srcData[2] = m_P1;
+            srcData[3] = m_P2;
+            srcData[4] = m_Lc;
+            Buffer.BlockCopy(EncryptPinVal, 0, srcData, 5, 8);
+            byte[] mac = CalcMACValue(srcData, key, randval);
+            Buffer.BlockCopy(EncryptPinVal, 0, m_Data, 0, 8);
+            Buffer.BlockCopy(mac, 0, m_Data, 8, 4);
+            m_le = 0;
+            m_nTotalLen = 17;
+            return true;
+        }
     }
 }

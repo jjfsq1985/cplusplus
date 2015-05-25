@@ -7,57 +7,71 @@ namespace CardOperating
     public class IccCardInfoParam
     {
         private string m_strIccCardID;
-
         public string PSAMCardID
         {
             get { return m_strIccCardID; }
             set { m_strIccCardID = value; }
         }
 
-        private DateTime m_ValidAppForm;
+        private int m_nClientId;
+        public int ClientID
+        {
+            get { return m_nClientId; }
+            set { m_nClientId = value; }
+        }
 
+        private DateTime m_ValidAppForm;
         public DateTime ValidAppForm
         {
             get { return m_ValidAppForm; }
             set { m_ValidAppForm = value; }
         }
-        private DateTime m_ValidAppTo;
 
+        private DateTime m_ValidAppTo;
         public DateTime ValidAppTo
         {
             get { return m_ValidAppTo; }
             set { m_ValidAppTo = value; }
         }
-        private string m_strTermialID;
 
+        private string m_strTermialID;
         public string TermialID
         {
             get { return m_strTermialID; }
             set { m_strTermialID = value; }
         }
-        private string m_strCompanyIssue;
 
+        private string m_strCompanyIssue;
         public string CompanyIssue
         {
             get { return m_strCompanyIssue; }
             set { m_strCompanyIssue = value; }
         }
-        private string m_strCompanyRecv;
 
+        private string m_strCompanyRecv;
         public string CompanyRecv
         {
             get { return m_strCompanyRecv; }
             set { m_strCompanyRecv = value; }
         }
 
+        private string m_strRemark;
+        public string Remark
+        {
+            get { return m_strRemark; }
+            set { m_strRemark = value; }
+        }
+
         public IccCardInfoParam()
         {
+            m_nClientId = 1;
             m_strIccCardID = "2010010100000001";
             m_ValidAppForm = new DateTime(2010, 1, 1);
             m_ValidAppTo = new DateTime(2020, 12, 31);
             m_strTermialID = "201001010001";
             m_strCompanyIssue = "10FFFFFFFFFFFFFF";
             m_strCompanyRecv = "35FFFFFFFFFFFFFF";
+            m_strRemark = "";
         }
 
         public byte[] GetBytePsamId()

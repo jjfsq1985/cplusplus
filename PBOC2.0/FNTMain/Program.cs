@@ -14,7 +14,12 @@ namespace FNTMain
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+
+            LoginMain logonMain = new LoginMain();            
+            if (logonMain.ShowDialog() == DialogResult.OK)
+                Application.Run(new Main(logonMain.UserLoginId, logonMain.UserLogin));
+            else
+                return;            
         }
     }
 }

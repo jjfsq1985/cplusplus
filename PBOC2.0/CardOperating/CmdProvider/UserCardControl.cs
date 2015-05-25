@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SqlServerHelper;
+using System.Data.SqlClient;
+using System.Data;
+using System.Diagnostics;
 
 namespace CardOperating
 {
@@ -14,29 +18,29 @@ namespace CardOperating
         private const string m_strDIR3 = "ENN SV";    //监管应用
 
         //加气消费密钥MPK1
-        private readonly byte[] m_MPK1 = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
+        private static byte[] m_MPK1 = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
         //加气应用主控密钥MCMK
-        private readonly byte[] m_MCMK = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
+        private static byte[] m_MCMK = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
         //加气消费密钥MPK2
-        private readonly byte[] m_MPK2 = new byte[] { 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22 };
+        private static byte[] m_MPK2 = new byte[] { 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22 };
         //圈存主密钥MLK1
-        private readonly byte[] m_MLK1 = new byte[] { 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66 };
+        private static byte[] m_MLK1 = new byte[] { 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66 };
         //圈存主密钥MLK2
-        private readonly byte[] m_MLK2 = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
+        private static byte[] m_MLK2 = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
         //TAC主密钥MTK
-        private readonly byte[] m_MTK = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
+        private static byte[] m_MTK = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
         //联机解扣主密钥 / 圈提主密钥MULK
-        private readonly byte[] m_MULK = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
+        private static byte[] m_MULK = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
         //透支限额主密钥MUK
-        private readonly byte[] m_MUK = new byte[] { 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC };
+        private static byte[] m_MUK = new byte[] { 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC };
         //PIN解锁主密钥MPUK
-        private readonly byte[] m_MPUK = new byte[] { 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88 };
+        private static byte[] m_MPUK = new byte[] { 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88 };
         //密码重装主密钥MRPK
-        private readonly byte[] m_MRPK = new byte[] { 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99 };
+        private static byte[] m_MRPK = new byte[] { 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99 };
         //应用维护主密钥MAMK
-        private readonly byte[] m_MAMK = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
+        private static byte[] m_MAMK = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
         //内部认证主密钥MIAK
-        private readonly byte[] m_MIAK = new byte[] { 0xF2, 0x11, 0x20, 0x6C, 0x05, 0x68, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xBB };
+        private static byte[] m_MIAK = new byte[] { 0xF2, 0x11, 0x20, 0x6C, 0x05, 0x68, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xBB };
 
         public UserCardControl(int icdev)
         {
@@ -100,13 +104,9 @@ namespace CardOperating
             return RandomValue;
         }
 
-        private bool ExternalAuthentication(bool bMainKey)
+        private bool ExternalAuthenticate(byte[] randByte, byte[] KeyVal)
         {
-            byte[] randByte = GetRandomValue(m_ctrlApdu,8);
-            if (randByte == null || randByte.Length != 8)
-                return false;
-
-            m_ctrlApdu.createExternalAuthenticationCmd(randByte, bMainKey, APDUBase.CardCategory.CpuCard);
+            m_ctrlApdu.createExternalAuthenticationCmd(randByte, KeyVal);
             byte[] data = m_ctrlApdu.GetOutputCmd();
             short datalen = (short)data.Length;
             Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
@@ -122,12 +122,12 @@ namespace CardOperating
                 uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
                 uint nAscLen = nRecvLen * 2;
                 byte[] ExAuthAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, ExAuthAsc, nRecvLen); 
+                DllExportMT.hex_asc(m_RecvData, ExAuthAsc, nRecvLen);
                 string strErrAsc = Encoding.ASCII.GetString(ExAuthAsc);
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                 {
-                    string strErr = GetErrString(m_RecvData[nRecvLen - 2], m_RecvData[nRecvLen - 1],strErrAsc);
-                    base.OnTextOutput(new MsgOutEvent(0, "外部认证错误：" + strErr));
+                    string strErr = GetErrString(m_RecvData[nRecvLen - 2], m_RecvData[nRecvLen - 1], strErrAsc);
+                    base.OnTextOutput(new MsgOutEvent(0, " 外部认证错误：" + strErr));
                     return false;
                 }
                 else
@@ -138,13 +138,31 @@ namespace CardOperating
             return true;
         }
 
-        private bool DeleteMF(bool bMainKey)
+        private bool ExternalAuthentication(bool bMainKey)
+        {
+            byte[] randByte = GetRandomValue(m_ctrlApdu,8);
+            if (randByte == null || randByte.Length != 8)
+                return false;
+
+            byte[] KeyVal = m_ctrlApdu.GetKeyVal(bMainKey, APDUBase.CardCategory.CpuCard);
+
+            return ExternalAuthenticate(randByte, KeyVal);
+        }
+
+        private bool ExternalAuthWithKey(byte[] KeyVal)
         {
             byte[] randByte = GetRandomValue(m_ctrlApdu, 8);
             if (randByte == null || randByte.Length != 8)
                 return false;
 
-            m_ctrlApdu.createClearMFcmd(randByte, bMainKey, APDUBase.CardCategory.CpuCard);
+            base.OnTextOutput(new MsgOutEvent(0, "使用密钥：" + BitConverter.ToString(KeyVal) + "进行外部认证"));
+
+            return ExternalAuthenticate(randByte, KeyVal);
+        }
+
+        private bool ClearMF(byte[] randByte, byte[] KeyVal)
+        {
+            m_ctrlApdu.createClearMFcmd(randByte, KeyVal);
             byte[] data = m_ctrlApdu.GetOutputCmd();
             short datalen = (short)data.Length;
             Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
@@ -168,6 +186,28 @@ namespace CardOperating
             return true;
         }
 
+        private bool DeleteMFWithKey(byte[] KeyVal)
+        {
+            byte[] randByte = GetRandomValue(m_ctrlApdu, 8);
+            if (randByte == null || randByte.Length != 8)
+                return false;
+
+            base.OnTextOutput(new MsgOutEvent(0, "使用密钥：" + BitConverter.ToString(KeyVal) + "初始化"));
+
+            return ClearMF(randByte, KeyVal);
+        }
+
+        private bool DeleteMF(bool bMainKey)
+        {
+            byte[] randByte = GetRandomValue(m_ctrlApdu, 8);
+            if (randByte == null || randByte.Length != 8)
+                return false;
+
+            byte[] KeyVal = m_ctrlApdu.GetKeyVal(bMainKey, APDUBase.CardCategory.CpuCard);
+            
+            return ClearMF(randByte, KeyVal);
+        }
+
         private string GetFileDescribe(string strName)
         {
             if (strName == m_strPSE)
@@ -179,12 +219,25 @@ namespace CardOperating
 
         public int InitCard(bool bMainKey)
         {
+            byte[] KeyInit = new byte[16];
+            bool bPublished = CheckPublishedCard(bMainKey, KeyInit); 
+            //在应用内获取卡号后回到MF下   
             if (!SelectFile(m_strPSE, null))
                 return 1;
-            if (!ExternalAuthentication(bMainKey))
-                return 2;
-            if (!DeleteMF(bMainKey))
-                return 3;
+            if (bPublished)
+            {
+                if (!ExternalAuthWithKey(KeyInit))
+                    return 2;
+                if (!DeleteMFWithKey(KeyInit))
+                    return 3;
+            }
+            else
+            {
+                if (!ExternalAuthentication(bMainKey))
+                    return 2;
+                if (!DeleteMF(bMainKey))
+                    return 3;
+            }
             return 0;
         }
 
@@ -851,10 +904,10 @@ namespace CardOperating
             return true;
         }
 
-        private bool VerifyPIN(bool bDefaultPwd, string strCustomPwd)
+        private int VerifyPIN(bool bDefaultPwd, string strCustomPwd)
         {
             byte[] PwdData = new byte[6];
-            if (strCustomPwd.Length == 6)
+            if (!bDefaultPwd &&　strCustomPwd.Length == 6)
             {
                 for (int i = 0; i < 6; i++)
                     PwdData[i] = Convert.ToByte(strCustomPwd.Substring(i, 1), 10);
@@ -873,7 +926,7 @@ namespace CardOperating
             if (m_RetVal != 0)
             {
                 base.OnTextOutput(new MsgOutEvent(m_RetVal, "验证PIN失败"));
-                return false;
+                return 0;
             }
             else
             {
@@ -883,9 +936,14 @@ namespace CardOperating
                 DllExportMT.hex_asc(m_RecvData, UpdateFileAsc, nRecvLen);
                 base.OnTextOutput(new MsgOutEvent(0, "验证PIN应答：" + Encoding.ASCII.GetString(UpdateFileAsc)));
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
-                    return false;
+                {
+                    if (nRecvLen == 2 && m_RecvData[nRecvLen - 2] == 0x69 && m_RecvData[nRecvLen - 1] == 0x83)
+                        return 2;//PIN已锁
+                    else
+                        return 0;                    
+                }
             }
-            return true;
+            return 1;
         }
 
         private bool UpdateEF0BFile(bool bDefaultPwd)
@@ -1002,14 +1060,19 @@ namespace CardOperating
         }
 
         //更新加气应用文件
-        public bool UpdateApplicationFile(UserCardInfoParam UserCardInfoPar)
+        public bool UpdateApplicationFile(UserCardInfoParam UserCardInfoPar, byte[] AppTendingKey)
         {
             //选择ADF01
             byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
             if (!SelectFile(m_strDIR1, prefix))
                 return false;
             byte[] byteCardId = UserCardInfoPar.GetUserCardID();
-            byte[] keyUpdate = StorageKeyParam.GetUpdateEFKey(m_MAMK, byteCardId);
+            byte[] keyUpdate = null;
+            //卡信息更新时使用外部提供的密钥
+            if(AppTendingKey == null)
+                keyUpdate = StorageKeyParam.GetUpdateEFKey(m_MAMK, byteCardId);
+            else
+                keyUpdate = StorageKeyParam.GetUpdateEFKey(AppTendingKey, byteCardId);
             if (keyUpdate == null)
                 return false;
             //更新公共应用基本数据文件EF15
@@ -1019,7 +1082,7 @@ namespace CardOperating
             if (!UpdateEF16File(keyUpdate, UserCardInfoPar))
                 return false;
             //验证PIN
-            if (!VerifyPIN(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.CustomPassword))
+            if (VerifyPIN(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.CustomPassword) != 1)
                 return false;
             //更新普通信息数据文件EF0B
             if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag))
@@ -1109,21 +1172,30 @@ namespace CardOperating
             return true;
         }
 
-        public bool VerifyUserPin(string strPIN)
+        public bool SelectCardApp()
         {
             if (!SelectFile(m_strPSE, null))
                 return false;
             byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
             if (!SelectFile(m_strDIR1, prefix))
                 return false;
-            if (!VerifyPIN(false, strPIN))
-                return false;
             return true;
+        }
+
+        public int VerifyUserPin(string strPIN)
+        {
+            return VerifyPIN(false, strPIN);
         }
 
         //圈存功能
         public bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue)
         {
+            //获取已发卡的圈存密钥,没有就用数据库的默认密钥
+            byte[] keyLoad = GetApplicationKeyVal(ASN, "AppLoadKey", 1);
+            if (keyLoad != null)
+            {
+                Buffer.BlockCopy(keyLoad, 0, m_MLK1, 0, 16);
+            }
             const byte BusinessType = 0x01; //交易类型标识：圈存存折0x01 圈存钱包0x02
             byte[] outData = new byte[16];
             byte[] SysTime = GetBCDTime();
@@ -1166,7 +1238,7 @@ namespace CardOperating
 
 
 
-        public bool UserCardBalance(ref float fltBalance)
+        public bool UserCardBalance(ref double dbBalance)
         {
             m_ctrlApdu.createCardBalanceCmd();
             byte[] data = m_ctrlApdu.GetOutputCmd();
@@ -1193,7 +1265,7 @@ namespace CardOperating
                 byteBalance[1] = m_RecvData[2];
                 byteBalance[2] = m_RecvData[1];
                 byteBalance[3] = m_RecvData[0];
-                fltBalance = (float)(BitConverter.ToInt32(byteBalance, 0) / 100.0);                
+                dbBalance = (double)(BitConverter.ToInt32(byteBalance, 0) / 100.0);                
             }
             return true;
         }
@@ -1304,7 +1376,7 @@ namespace CardOperating
                 uint nAscLen = nRecvLen * 2;
                 byte[] InitAsc = new byte[nAscLen];
                 DllExportMT.hex_asc(m_RecvData, InitAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "联机解扣初始化应答：" + Encoding.ASCII.GetString(InitAsc)));
+                base.OnTextOutput(new MsgOutEvent(0, "联机解扣初始化应答：" + Encoding.ASCII.GetString(InitAsc)));//0
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                     return false;
                 Buffer.BlockCopy(m_RecvData, 0, outData, 0, 18);
@@ -1315,7 +1387,13 @@ namespace CardOperating
         //联机解扣
         public bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney)
         {
-            const byte BusinessType = 0x95; //交易类型标识：联机解扣
+            //获取已发卡的圈存密钥,没有就用数据库的默认密钥
+            byte[] keyUnlockGray = GetApplicationKeyVal(ASN, "AppUnlockKey", 1);
+            if (keyUnlockGray != null)
+            {
+                Buffer.BlockCopy(keyUnlockGray, 0, m_MULK, 0, 16);
+            }
+            const byte BusinessType = 0x95; //交易类型标识：联机解0扣
             byte[] outData = new byte[18];
             if (!InitForUnlockGreyCard(TermialID, outData))
                 return false;
@@ -1372,7 +1450,7 @@ namespace CardOperating
                 uint nAscLen = nRecvLen * 2;
                 byte[] UnlockAsc = new byte[nAscLen];
                 DllExportMT.hex_asc(m_RecvData, UnlockAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "联机解扣应答：" + Encoding.ASCII.GetString(UnlockAsc)));
+                base.OnTextOutput(new MsgOutEvent(0, "联机解扣应答：" + Encoding.ASCII.GetString(UnlockAsc)));//显示0调试信息
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                     return false;
                 base.OnTextOutput(new MsgOutEvent(0, "联机解扣MAC3:" + BitConverter.ToString(m_RecvData, 0, 4)));
@@ -1399,7 +1477,7 @@ namespace CardOperating
                 uint nAscLen = nRecvLen * 2;
                 byte[] UnlockAsc = new byte[nAscLen];
                 DllExportMT.hex_asc(m_RecvData, UnlockAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "卡解扣应答：" + Encoding.ASCII.GetString(UnlockAsc)));
+                base.OnTextOutput(new MsgOutEvent(0, "卡解扣应答：" + Encoding.ASCII.GetString(UnlockAsc)));//显示0调试信息
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                     return false;
                 base.OnTextOutput(new MsgOutEvent(0, "解扣TAC:" + BitConverter.ToString(m_RecvData, 0, 4)));
@@ -1433,5 +1511,726 @@ namespace CardOperating
             return true;
         }
 
+        private bool GetConfigKeyIdValid(ref int nOrgkeyId, ref int nUserKeyID, SqlHelper sqlHelp)
+        {
+            SqlDataReader dataReader = null;
+            sqlHelp.ExecuteCommand("select OrgKeyId,UseKeyID from Config_SysParams", out dataReader);
+            if (dataReader != null)
+            {
+                if (!dataReader.HasRows)
+                {
+                    dataReader.Close();
+                    return false;
+                }
+                else
+                {
+                    if (dataReader.Read())
+                    {
+                        nOrgkeyId = (int)dataReader["OrgKeyId"];
+                        nUserKeyID = (int)dataReader["UseKeyID"];
+                    }
+                    dataReader.Close();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool ReadKeyValueFormDb()
+        {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            {
+                ObjSql = null;
+                return false;
+            }
+
+            if (!GetOrgKeyValue(ObjSql))
+            {
+                ObjSql.CloseConnection();
+                ObjSql = null;
+                return false;
+            }
+            
+            if(!GetUserKeyValue(ObjSql))
+            {
+                ObjSql.CloseConnection();
+                ObjSql = null;
+                return false;
+            }
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return true;
+        }
+
+        //还用不上的密钥没有读出
+        private bool GetUserKeyValue(SqlHelper sqlHelp)
+        {
+            //读卡密钥和加气应用密钥
+            SqlDataReader dataReader = null;
+            SqlParameter[] sqlparam = new SqlParameter[1];
+            sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex",SqlDbType.Int,4,ParameterDirection.Input,1);                           
+            sqlHelp.ExecuteProc("PROC_GetCpuKey",sqlparam, out dataReader);
+            if (dataReader == null)
+                return false;
+
+            if (!dataReader.HasRows)
+            {
+                dataReader.Close();
+                return false;
+            }
+            if (dataReader.Read())
+            {
+                string strKey = (string)dataReader["MasterKey"];
+                byte[] byteKey = APDUBase.StringToBCD(strKey);
+                m_ctrlApdu.SetMainKeyValue(byteKey, APDUBase.CardCategory.CpuCard);//卡片主控密钥
+                strKey = (string)dataReader["ApplicatonMasterKey"];
+                StrKeyToByte(strKey, m_MCMK);
+                strKey = (string)dataReader["ApplicationTendingKey"];
+                StrKeyToByte(strKey, m_MAMK);
+                strKey = (string)dataReader["AppInternalAuthKey"];
+                StrKeyToByte(strKey, m_MIAK);
+                strKey = (string)dataReader["PINResetKey"];
+                StrKeyToByte(strKey, m_MRPK);
+                strKey = (string)dataReader["PINUnlockKey"];
+                StrKeyToByte(strKey, m_MPUK);
+                strKey = (string)dataReader["ConsumerMasterKey"];
+                StrKeyToByte(strKey, m_MPK1);
+                strKey = (string)dataReader["LoadMasterKey"];
+                StrKeyToByte(strKey, m_MLK1);
+                strKey = (string)dataReader["TacMasterKey"];
+                StrKeyToByte(strKey, m_MTK);
+                strKey = (string)dataReader["UnlockUnloadKey"];
+                StrKeyToByte(strKey, m_MULK);
+                strKey = (string)dataReader["OverdraftKey"];
+                StrKeyToByte(strKey, m_MUK);
+                m_ctrlApdu.SetUserAppKeyValue(m_MCMK);
+            }
+            dataReader.Close();
+            dataReader = null;
+            return true;
+        }
+
+        private bool GetOrgKeyValue(SqlHelper sqlHelp)
+        {
+            SqlDataReader dataReader = null;
+            //OrgKeyType 0-CPU卡，1-PSAM卡
+            SqlParameter[] sqlparams = new SqlParameter[1];
+            sqlparams[0] = sqlHelp.MakeParam("OrgKeyType", SqlDbType.Int, 4, ParameterDirection.Input, 0);            
+            sqlHelp.ExecuteProc("PROC_GetOrgKey",sqlparams, out dataReader);
+            if (dataReader != null)
+            {
+                if (!dataReader.HasRows)
+                {
+                    dataReader.Close();
+                    return false;
+                }
+                else
+                {
+                    if (dataReader.Read())
+                    {
+                        string strKey = (string)dataReader["OrgKey"];
+                        byte[] byteKey = APDUBase.StringToBCD(strKey);
+                        m_ctrlApdu.SetOrgKeyValue(byteKey, APDUBase.CardCategory.CpuCard);
+                    }
+                    dataReader.Close();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool GetSqlParam(SqlHelper ObjSql, SqlParameter[] sqlparams, UserCardInfoParam UserCardInfoPar)
+        {
+            string strDbVal = null;
+            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            {
+                ObjSql = null;
+                return false;
+            }            
+
+            strDbVal = BitConverter.ToString(UserCardInfoPar.GetUserCardID()).Replace("-", "");
+            sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strDbVal);
+            byte nCardType = (byte)UserCardInfoPar.UserCardType;
+            sqlparams[1] = ObjSql.MakeParam("CardType", SqlDbType.VarChar, 2, ParameterDirection.Input, nCardType);
+            sqlparams[2] = ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, UserCardInfoPar.ClientID);
+            sqlparams[3] = ObjSql.MakeParam("UseValidateDate", SqlDbType.DateTime, 8, ParameterDirection.Input, UserCardInfoPar.ValidCardBegin);
+            sqlparams[4] = ObjSql.MakeParam("UseInvalidateDate", SqlDbType.DateTime, 8, ParameterDirection.Input, UserCardInfoPar.ValidCardEnd);
+
+            sqlparams[5] = ObjSql.MakeParam("Plate", SqlDbType.NVarChar, 16, ParameterDirection.Input, UserCardInfoPar.CarNo);
+            sqlparams[6] = ObjSql.MakeParam("SelfId", SqlDbType.VarChar, 50, ParameterDirection.Input, UserCardInfoPar.SelfId);
+            sqlparams[7] = ObjSql.MakeParam("CertificatesType", SqlDbType.VarChar, 2, ParameterDirection.Input, 0x01);//证件类型:身份证
+            sqlparams[8] = ObjSql.MakeParam("PersonalId", SqlDbType.VarChar, 32, ParameterDirection.Input, UserCardInfoPar.UserIdentity);
+            sqlparams[9] = ObjSql.MakeParam("DriverName", SqlDbType.NVarChar, 50, ParameterDirection.Input, UserCardInfoPar.UserName);
+            sqlparams[10] = ObjSql.MakeParam("DriverTel", SqlDbType.VarChar, 32, ParameterDirection.Input, UserCardInfoPar.TelePhone);
+            sqlparams[11] = ObjSql.MakeParam("VechileCategory", SqlDbType.NVarChar, 8, ParameterDirection.Input, UserCardInfoPar.CarType);
+
+            sqlparams[12] = ObjSql.MakeParam("SteelCylinderId", SqlDbType.VarChar, 32, ParameterDirection.Input, UserCardInfoPar.BoalId);
+            sqlparams[13] = ObjSql.MakeParam("CylinderTestDate", SqlDbType.DateTime, 8, ParameterDirection.Input, UserCardInfoPar.BoalExprie);
+            sqlparams[14] = ObjSql.MakeParam("Remark", SqlDbType.NVarChar, 50, ParameterDirection.Input, UserCardInfoPar.Remark);
+
+            if (UserCardInfoPar.LimitGasFillCount > 0)
+            {
+                sqlparams[15] = ObjSql.MakeParam("R_OilTimesADay", SqlDbType.Int, 4, ParameterDirection.Input, UserCardInfoPar.LimitGasFillCount);//
+                sqlparams[16] = ObjSql.MakeParam("R_OilVolATime", SqlDbType.Decimal, 18, ParameterDirection.Input, UserCardInfoPar.LimitGasFillAmount / UserCardInfoPar.LimitGasFillCount);//
+            }
+            else
+            {
+                sqlparams[15] = ObjSql.MakeParam("R_OilTimesADay", SqlDbType.Int, 4, ParameterDirection.Input, 0);//
+                sqlparams[16] = ObjSql.MakeParam("R_OilVolATime", SqlDbType.Decimal, 18, ParameterDirection.Input, 0);//
+            }
+            sqlparams[17] = ObjSql.MakeParam("R_OilVolTotal", SqlDbType.Decimal, 18, ParameterDirection.Input, UserCardInfoPar.LimitGasFillAmount);//
+            sqlparams[18] = ObjSql.MakeParam("R_OilEndDate", SqlDbType.DateTime, 8, ParameterDirection.Input, UserCardInfoPar.ValidCardEnd);//
+            sqlparams[19] = ObjSql.MakeParam("R_Plate", SqlDbType.Bit, 1, ParameterDirection.Input, UserCardInfoPar.LimitCarNo);//
+            sqlparams[20] = ObjSql.MakeParam("R_Oil", SqlDbType.VarChar, 4, ParameterDirection.Input, UserCardInfoPar.LimitGasType);//
+            sqlparams[21] = ObjSql.MakeParam("R_RFID", SqlDbType.Bit, 1, ParameterDirection.Input, false);//
+            sqlparams[22] = ObjSql.MakeParam("CylinderNum", SqlDbType.Int, 4, ParameterDirection.Input, UserCardInfoPar.CylinderNum);//
+            sqlparams[23] = ObjSql.MakeParam("FactoryNum", SqlDbType.Char, 7, ParameterDirection.Input, UserCardInfoPar.BoalFactoryID);//
+            sqlparams[24] = ObjSql.MakeParam("CylinderVolume", SqlDbType.Int, 4, ParameterDirection.Input, UserCardInfoPar.CylinderVolume);//
+            sqlparams[25] = ObjSql.MakeParam("BusDistance", SqlDbType.VarChar, 10, ParameterDirection.Input, UserCardInfoPar.BusDistance);//
+            return true;
+        }
+
+        public bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar)
+        {
+            bool bSuccess = false;
+            SqlHelper ObjSql = new SqlHelper();
+            SqlParameter[] sqlparams = new SqlParameter[26];
+            if (!GetSqlParam(ObjSql, sqlparams,UserCardInfoPar))
+                return false;
+            if (ObjSql.ExecuteProc("PROC_PublishCpuCard", sqlparams) == 0)
+                bSuccess = true;
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return bSuccess;
+        }
+
+        public bool UpdateCardInfoToDb(UserCardInfoParam UserCardInfoPar)
+        {
+            bool bSuccess = false;
+            SqlHelper ObjSql = new SqlHelper();
+            SqlParameter[] sqlparams = new SqlParameter[26];
+            if (!GetSqlParam(ObjSql, sqlparams, UserCardInfoPar))
+                return false;
+            if (ObjSql.ExecuteProc("PROC_RewriteCpuCard", sqlparams) == 0)
+                bSuccess = true;
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return bSuccess;
+        }
+
+        public void GetUserCardInfo(UserCardInfoParam CardInfo)
+        {
+            byte[] byteAsn = GetUserCardASN();
+            if (byteAsn != null)
+            {                
+                CardInfo.CardOrderNo = BitConverter.ToString(byteAsn, 5, 3).Replace("-", "");
+                CardInfo.UserCardType = (UserCardInfoParam.CardType)byteAsn[3];
+                Trace.Assert(byteAsn[2] == 0x02);
+                CardInfo.SetCardId(BitConverter.ToString(byteAsn, 0, 2).Replace("-", ""));
+            }
+            GetBaseInfo(CardInfo);
+            GetLimitInfo(CardInfo);
+            GetCylinderInfo(CardInfo);
+        }
+
+        public byte[] GetUserCardASN()
+        {
+            m_ctrlApdu.createGetEFFileCmd(0x95, 0x1C);//公共应用基本数据(100+10101)0x15文件长度0x1C
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取卡号失败"));
+                return null;
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] ASNAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, ASNAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "读取卡号应答：" + Encoding.ASCII.GetString(ASNAsc)));
+                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                    return null;
+                byte[] UserCardASN = new byte[8];
+                Buffer.BlockCopy(m_RecvData, 10, UserCardASN, 0, 8);
+                return UserCardASN;
+            }
+        }
+
+        private void GetBaseInfo(UserCardInfoParam CardInfo)
+        {
+            m_ctrlApdu.createGetEFFileCmd(0x96, 0x46);//基本数据(100+10110)0x16文件长度70
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+                return;
+            uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+            if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                return;
+            Trace.Assert(CardInfo.UserCardType == (UserCardInfoParam.CardType)m_RecvData[0]);
+            int nCount = 0;
+            for (int i = 0; i < 20; i++)
+            {
+                if (m_RecvData[2 + i] != 0xFF)
+                    nCount++;
+                else
+                    break;
+            }
+            if (nCount > 0)
+                CardInfo.UserName = Encoding.Unicode.GetString(m_RecvData, 2, nCount);
+            CardInfo.UserIdentity = Encoding.ASCII.GetString(m_RecvData, 22, 18);
+            string strValue = BitConverter.ToString(m_RecvData, 51, 2).Replace("-", "");
+            int nDiscountRate = Convert.ToInt32(strValue);            
+            DateTime RateExprieValid = DateTime.ParseExact(BitConverter.ToString(m_RecvData,53,4).Replace("-",""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+            CardInfo.setDiscountRate(nDiscountRate * 1.0 / 100.0, RateExprieValid);
+            CardInfo.PriceLevel = m_RecvData[61];            
+        }
+
+        private void GetLimitInfo(UserCardInfoParam CardInfo)
+        {
+            m_ctrlApdu.createGetEFFileCmd(0x9C, 0x60);//基本数据(100+11100)0x01C文件长度64
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+                return;
+            uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+            if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                return;
+            CardInfo.LimitGasType = (ushort)((m_RecvData[0] << 8) + m_RecvData[1]);
+            CardInfo.setLimitArea(m_RecvData[2],BitConverter.ToString(m_RecvData,3,40));
+            int nCount = 0;
+            for (int i = 0; i < 16; i++)
+            {
+                if (m_RecvData[43 + i] != 0xFF)
+                    nCount++;
+                else
+                    break;
+            }
+            if (nCount > 0)
+            {
+                CardInfo.LimitCarNo = true;
+                CardInfo.CarNo = Encoding.Unicode.GetString(m_RecvData, 43, nCount);
+            }
+            else
+            {
+                CardInfo.LimitCarNo = false;
+                CardInfo.CarNo = "";
+            }
+            CardInfo.LimitGasFillCount = m_RecvData[63];
+            CardInfo.LimitGasFillAmount = (uint)((m_RecvData[64]<<24) + (m_RecvData[65]<<16) + (m_RecvData[66]<<8) + m_RecvData[67]);            
+        }
+
+        private void GetCylinderInfo(UserCardInfoParam CardInfo)
+        {
+            m_ctrlApdu.createGetEFFileCmd(0x8D, 0x40);//基本数据(100+01101)0x0D文件长度64
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+                return;
+            uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+            if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                return;
+            CardInfo.BoalExprie = DateTime.ParseExact(BitConverter.ToString(m_RecvData, 0, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+            int nCount = 0;
+            for (int i = 0; i < 16; i++)
+            {
+                if (m_RecvData[20 + i] != 0xFF)
+                    nCount++;
+                else
+                    break;
+            }
+            if (nCount > 0)
+                CardInfo.BoalId = Encoding.ASCII.GetString(m_RecvData, 20, nCount);
+            CardInfo.CylinderNum = (int)m_RecvData[36];
+            nCount = 0;
+            for (int i = 0; i < 7; i++)
+            {
+                if (m_RecvData[37 + i] != 0xFF)
+                    nCount++;
+                else
+                    break;
+            }
+            if (nCount > 0)
+                CardInfo.BoalFactoryID = Encoding.ASCII.GetString(m_RecvData, 37, nCount);
+            CardInfo.CylinderVolume = (ushort)((m_RecvData[45] << 8) + m_RecvData[44]);
+            CardInfo.CarType = GetCarCateGorybyByte(m_RecvData[46]);
+            nCount = 0;
+            for (int i = 0; i < 5; i++)
+            {
+                if (m_RecvData[47 + i] != 0xFF)
+                    nCount++;
+                else
+                    break;
+            }
+            if (nCount > 0)
+                CardInfo.BusDistance = Encoding.ASCII.GetString(m_RecvData, 47, nCount);            
+        }
+
+        private string GetCarCateGorybyByte(byte carType)
+        {
+            string strRet = "不限";
+            switch (carType)
+            {
+                case 0xFF:
+                    strRet = "不限";
+                    break;
+                case 0x01:
+                    strRet = "私家车";
+                    break;
+                case 0x02:
+                    strRet = "单位车";
+                    break;
+                case 0x03:
+                    strRet = "出租车";
+                    break;
+                case 0x04:
+                    strRet = "公交车";
+                    break;
+            }
+            return strRet;
+        }
+
+        //读卡片中的加气记录
+        public List<CardRecord> ReadRecord()
+        {
+            List<CardRecord> lstRet = new List<CardRecord>();
+
+            m_ctrlApdu.createReadRecordCmd(0xE6);//获取10条加气记录
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取加气记录失败"));
+                return lstRet;
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] ASNAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, ASNAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "读取加气记录应答：" + Encoding.ASCII.GetString(ASNAsc)));
+                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                    return lstRet;
+                const uint LenPerRecord = 23;
+                uint nCount = (nRecvLen - 2) / LenPerRecord;
+                for (int i = 0; i < nCount; i++)
+                {
+                    int nOffset = (int)(i * LenPerRecord);
+                    CardRecord record = new CardRecord();
+                    record.BusinessSn = (m_RecvData[nOffset + 0] << 8) + m_RecvData[nOffset+1];
+                    record.OverdraftMoney = ((m_RecvData[nOffset + 2] << 16) + (m_RecvData[nOffset + 3] << 8) + m_RecvData[nOffset + 4])/100.0f;
+                    record.Amount = ((m_RecvData[nOffset + 5] << 24) + (m_RecvData[nOffset + 6] << 16) + (m_RecvData[nOffset + 7] << 8) + m_RecvData[nOffset + 8]) / 100.0f;
+                    record.BusinessType = m_RecvData[nOffset + 9];
+                    record.TerminalID = BitConverter.ToString(m_RecvData, nOffset + 10, 6).Replace("-","");
+                    record.BusinessTime = BitConverter.ToString(m_RecvData, nOffset + 16, 7).Replace("-", "");
+                    lstRet.Add(record);
+                }
+                
+                return lstRet;
+            }
+        }
+
+        //检查数据库中是否有该卡的发卡记录,用于卡片重发
+        public bool CheckPublishedCard(bool bMainKey, byte[] KeyInit)
+        {
+            if (!SelectCardApp())//用户卡需要进应用后才能获取卡号
+                return false;
+            byte[] CardAsn = GetUserCardASN();
+            if (CardAsn == null || CardAsn.Length != 8)
+                return false;
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            {
+                ObjSql = null;
+                return false;
+            }
+            string strDbAsn = BitConverter.ToString(CardAsn).Replace("-", "");
+
+            SqlDataReader dataReader = null;
+            SqlParameter[] sqlparam = new SqlParameter[2];
+            sqlparam[0] = ObjSql.MakeParam("CardNum", SqlDbType.Char, 16, ParameterDirection.Input, strDbAsn);
+            sqlparam[1] = ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, 1);
+            ObjSql.ExecuteProc("PROC_GetPublishedCard", sqlparam, out dataReader);
+            bool bRet = false;
+            if (dataReader != null)
+            {
+                if (!dataReader.HasRows)
+                    dataReader.Close();
+                else
+                {
+                    if (dataReader.Read())
+                    {
+                        string strKeyUsed = "";
+                        if (bMainKey)
+                        {
+                            strKeyUsed = (string)dataReader["MasterKey"];
+                            byte[] byteKey = APDUBase.StringToBCD(strKeyUsed);
+                            Buffer.BlockCopy(byteKey, 0, KeyInit, 0, 16);
+                        }
+                        else
+                        {
+                            strKeyUsed = (string)dataReader["OrgKey"];
+                            byte[] byteKey = APDUBase.StringToBCD(strKeyUsed);
+                            Buffer.BlockCopy(byteKey, 0, KeyInit, 0, 16);
+                        }
+                        bRet = true;
+                    }
+                    dataReader.Close();
+                }
+            }
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return bRet;
+        }
+
+        public bool UpdateCardInfo(UserCardInfoParam CardInfo)
+        {
+            if (!SelectCardApp())
+                return false;
+            byte[] AppTendingKey = GetApplicationKeyVal(CardInfo.GetUserCardID(),"AppTendingKey",1);
+            if(AppTendingKey == null)
+                return false;
+            return UpdateApplicationFile(CardInfo, AppTendingKey);
+        }
+
+        private byte[] GetApplicationKeyVal(byte[] CardId,string strKeyName, int nAppIndex)
+        {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            {
+                ObjSql = null;
+                return null;
+            }
+            string strDbAsn = BitConverter.ToString(CardId).Replace("-", "");
+
+            SqlDataReader dataReader = null;
+            SqlParameter[] sqlparam = new SqlParameter[2];
+            sqlparam[0] = ObjSql.MakeParam("CardNum", SqlDbType.Char, 16, ParameterDirection.Input, strDbAsn);
+            sqlparam[1] = ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, 1);
+            ObjSql.ExecuteProc("PROC_GetPublishedCard", sqlparam, out dataReader);
+            string strKeyUsed = "";
+            byte[] KeyValue = null;
+            if (dataReader != null)
+            {
+                if (!dataReader.HasRows)
+                    dataReader.Close();
+                else
+                {
+                    if (dataReader.Read())
+                    {                        
+                        strKeyUsed = (string)dataReader[strKeyName];
+                        byte[] byteKey = APDUBase.StringToBCD(strKeyUsed);
+                        KeyValue = new byte[16];
+                        Buffer.BlockCopy(byteKey, 0, KeyValue, 0, 16);                        
+                    }
+                    dataReader.Close();
+                }
+            }
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return KeyValue;
+        }
+
+        public bool GetLockCardFromDb(byte[] CardId, ref double dbLockMoney, byte[] TerminalID)
+        {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            {
+                ObjSql = null;
+                return false;
+            }
+            string strDbAsn = BitConverter.ToString(CardId).Replace("-", "");
+
+            SqlDataReader dataReader = null;
+            SqlParameter[] sqlparam = new SqlParameter[1];
+            sqlparam[0] = ObjSql.MakeParam("CardNum", SqlDbType.Char, 16, ParameterDirection.Input, strDbAsn);
+            ObjSql.ExecuteCommand("select top 1 * from Data_LockGrayRecord where CardNum=@CardNum and IsLock=1 order by GrayTime desc", sqlparam, out dataReader);
+            bool bRet = false;
+            if (dataReader != null)
+            {
+                if (!dataReader.HasRows)
+                    dataReader.Close();
+                else
+                {
+                    if (dataReader.Read())
+                    {
+                        bRet = true;                        
+                        dbLockMoney = Convert.ToDouble((decimal)dataReader["LockMoney"]);
+                        string strTerminalID = (string)dataReader["TerminalId"];
+                        byte[] byteKey = APDUBase.StringToBCD(strTerminalID);                        
+                        Buffer.BlockCopy(byteKey, 0, TerminalID, 0, 6);
+                    }
+                    dataReader.Close();
+                }
+            }
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return bRet;
+        }
+
+        public bool ChangePIN(string strOldPin, string strNewPin)
+        {
+            byte[] OldPwdData = new byte[6];
+            if (strOldPin.Length == 6)
+            {
+                for (int i = 0; i < 6; i++)
+                    OldPwdData[i] = Convert.ToByte(strOldPin.Substring(i, 1), 10);
+            }
+            else
+            {
+                return false;
+            }
+            byte[] NewPwdData = new byte[6];
+            if (strNewPin.Length == 6)
+            {
+                for (int i = 0; i < 6; i++)
+                    NewPwdData[i] = Convert.ToByte(strNewPin.Substring(i, 1), 10);
+            }
+            else
+            {
+                return false;
+            }
+
+            m_ctrlApdu.createChangePINCmd(OldPwdData, NewPwdData);
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "修改PIN码失败"));
+                return false;
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] ChangePINAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, ChangePINAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "修改PIN码应答：" + Encoding.ASCII.GetString(ChangePINAsc)));
+                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+            }
+            return true;
+        }
+
+        public bool PINReset(byte[] ASN, string strPin)
+        {
+            if (ASN.Length != 8 || strPin.Length != 6)
+                return false;
+
+            byte[] PwdData = new byte[6];
+            for (int i = 0; i < 6; i++)
+                PwdData[i] = Convert.ToByte(strPin.Substring(i, 1), 10);
+            //获取PIN重装密钥,没有就用数据库的默认密钥
+            byte[] keyReset = GetApplicationKeyVal(ASN, "AppPinResetKey", 1);
+            if (keyReset != null)
+            {
+                Buffer.BlockCopy(keyReset, 0, m_MRPK, 0, 16);
+            }
+
+            byte[] SubKey = new byte[16];
+            byte[] encryptAsn = APDUBase.TripleEncryptData(ASN, m_MRPK);
+            byte[] XorASN = new byte[8];
+            for (int i = 0; i < 8; i++)
+                XorASN[i] = (byte)(ASN[i] ^ 0xFF);
+            byte[] encryptXorAsn = APDUBase.TripleEncryptData(XorASN, m_MRPK);
+            Buffer.BlockCopy(encryptAsn, 0, SubKey, 0, 8);
+            Buffer.BlockCopy(encryptXorAsn, 0, SubKey, 8, 8);
+            //发命令
+            m_ctrlApdu.createPINResetCmd(SubKey, PwdData);
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "重装PIN码失败"));
+                return false;
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] ResetPINAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, ResetPINAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "重装PIN码应答：" + Encoding.ASCII.GetString(ResetPINAsc)));//0
+                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+            }
+            return true;
+        }
+
+        public bool PINUnLock(byte[] ASN, string strPIN)
+        {
+            if (ASN.Length != 8 || strPIN.Length != 6)
+                return false;
+            byte[] randomVal = GetRandomValue(m_ctrlApdu, 8);
+            if (randomVal == null || randomVal.Length != 8)
+                return false;
+
+            byte[] PwdData = new byte[6];
+            for (int i = 0; i < 6; i++)
+                PwdData[i] = Convert.ToByte(strPIN.Substring(i, 1), 10);
+            //获取PIN解锁密钥,没有就用数据库的默认密钥
+            byte[] keyUnlock = GetApplicationKeyVal(ASN, "AppPinUnlockKey", 1);
+            if (keyUnlock != null)
+            {
+                Buffer.BlockCopy(keyUnlock, 0, m_MPUK, 0, 16);
+            }
+
+            byte[] SubKey = new byte[16];
+            byte[] encryptAsn = APDUBase.TripleEncryptData(ASN, m_MPUK);
+            byte[] XorASN = new byte[8];
+            for (int i = 0; i < 8; i++)
+                XorASN[i] = (byte)(ASN[i] ^ 0xFF);
+            byte[] encryptXorAsn = APDUBase.TripleEncryptData(XorASN, m_MPUK);
+            Buffer.BlockCopy(encryptAsn, 0, SubKey, 0, 8);
+            Buffer.BlockCopy(encryptXorAsn, 0, SubKey, 8, 8);
+            //发命令
+            m_ctrlApdu.createPINUnLockCmd(randomVal,SubKey, PwdData);
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "解锁PIN码失败"));
+                return false;
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] UnLockPINAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, UnLockPINAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "解锁PIN码应答：" + Encoding.ASCII.GetString(UnLockPINAsc)));//0
+                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+            }
+            return true;
+
+        }
     }
 }

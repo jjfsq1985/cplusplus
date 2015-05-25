@@ -57,7 +57,7 @@
             // 
             // CardOprQuit
             // 
-            this.CardOprQuit.Location = new System.Drawing.Point(431, 501);
+            this.CardOprQuit.Location = new System.Drawing.Point(401, 595);
             this.CardOprQuit.Name = "CardOprQuit";
             this.CardOprQuit.Size = new System.Drawing.Size(75, 23);
             this.CardOprQuit.TabIndex = 0;
@@ -67,7 +67,7 @@
             // 
             // btnInitCard
             // 
-            this.btnInitCard.Location = new System.Drawing.Point(17, 50);
+            this.btnInitCard.Location = new System.Drawing.Point(17, 55);
             this.btnInitCard.Name = "btnInitCard";
             this.btnInitCard.Size = new System.Drawing.Size(75, 23);
             this.btnInitCard.TabIndex = 1;
@@ -88,7 +88,7 @@
             // btnDisconnect
             // 
             this.btnDisconnect.Enabled = false;
-            this.btnDisconnect.Location = new System.Drawing.Point(151, 12);
+            this.btnDisconnect.Location = new System.Drawing.Point(253, 12);
             this.btnDisconnect.Name = "btnDisconnect";
             this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
             this.btnDisconnect.TabIndex = 3;
@@ -98,11 +98,11 @@
             // 
             // OutputText
             // 
-            this.OutputText.Location = new System.Drawing.Point(136, 45);
+            this.OutputText.Location = new System.Drawing.Point(125, 45);
             this.OutputText.Multiline = true;
             this.OutputText.Name = "OutputText";
             this.OutputText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.OutputText.Size = new System.Drawing.Size(370, 439);
+            this.OutputText.Size = new System.Drawing.Size(381, 536);
             this.OutputText.TabIndex = 4;
             // 
             // Card
@@ -117,14 +117,14 @@
             this.Card.Controls.Add(this.btnInitCard);
             this.Card.Location = new System.Drawing.Point(4, 45);
             this.Card.Name = "Card";
-            this.Card.Size = new System.Drawing.Size(108, 220);
+            this.Card.Size = new System.Drawing.Size(108, 253);
             this.Card.TabIndex = 5;
             this.Card.TabStop = false;
             this.Card.Text = "非接触式卡";
             // 
             // btnUserCardReset
             // 
-            this.btnUserCardReset.Location = new System.Drawing.Point(17, 78);
+            this.btnUserCardReset.Location = new System.Drawing.Point(17, 88);
             this.btnUserCardReset.Name = "btnUserCardReset";
             this.btnUserCardReset.Size = new System.Drawing.Size(75, 23);
             this.btnUserCardReset.TabIndex = 2;
@@ -134,7 +134,7 @@
             // 
             // UserCardSetting
             // 
-            this.UserCardSetting.Location = new System.Drawing.Point(17, 134);
+            this.UserCardSetting.Location = new System.Drawing.Point(17, 154);
             this.UserCardSetting.Name = "UserCardSetting";
             this.UserCardSetting.Size = new System.Drawing.Size(75, 23);
             this.UserCardSetting.TabIndex = 4;
@@ -144,7 +144,7 @@
             // 
             // btnApplication
             // 
-            this.btnApplication.Location = new System.Drawing.Point(17, 162);
+            this.btnApplication.Location = new System.Drawing.Point(17, 187);
             this.btnApplication.Name = "btnApplication";
             this.btnApplication.Size = new System.Drawing.Size(75, 23);
             this.btnApplication.TabIndex = 5;
@@ -154,7 +154,7 @@
             // 
             // btnCreate
             // 
-            this.btnCreate.Location = new System.Drawing.Point(17, 106);
+            this.btnCreate.Location = new System.Drawing.Point(17, 121);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(75, 23);
             this.btnCreate.TabIndex = 3;
@@ -164,7 +164,7 @@
             // 
             // btnCloseCard
             // 
-            this.btnCloseCard.Location = new System.Drawing.Point(17, 190);
+            this.btnCloseCard.Location = new System.Drawing.Point(17, 220);
             this.btnCloseCard.Name = "btnCloseCard";
             this.btnCloseCard.Size = new System.Drawing.Size(75, 23);
             this.btnCloseCard.TabIndex = 6;
@@ -191,16 +191,16 @@
             this.ICC_Card.Controls.Add(this.btnCloseIccCard);
             this.ICC_Card.Controls.Add(this.btnOpenIccCard);
             this.ICC_Card.Controls.Add(this.btnInitIccCard);
-            this.ICC_Card.Location = new System.Drawing.Point(4, 271);
+            this.ICC_Card.Location = new System.Drawing.Point(4, 323);
             this.ICC_Card.Name = "ICC_Card";
-            this.ICC_Card.Size = new System.Drawing.Size(108, 223);
+            this.ICC_Card.Size = new System.Drawing.Size(108, 258);
             this.ICC_Card.TabIndex = 6;
             this.ICC_Card.TabStop = false;
             this.ICC_Card.Text = "接触式卡";
             // 
             // btnIccCardReset
             // 
-            this.btnIccCardReset.Location = new System.Drawing.Point(17, 78);
+            this.btnIccCardReset.Location = new System.Drawing.Point(12, 92);
             this.btnIccCardReset.Name = "btnIccCardReset";
             this.btnIccCardReset.Size = new System.Drawing.Size(75, 23);
             this.btnIccCardReset.TabIndex = 6;
@@ -210,7 +210,7 @@
             // 
             // IccCardSetting
             // 
-            this.IccCardSetting.Location = new System.Drawing.Point(17, 106);
+            this.IccCardSetting.Location = new System.Drawing.Point(12, 126);
             this.IccCardSetting.Name = "IccCardSetting";
             this.IccCardSetting.Size = new System.Drawing.Size(75, 23);
             this.IccCardSetting.TabIndex = 2;
@@ -220,7 +220,7 @@
             // 
             // btnIccAppKey
             // 
-            this.btnIccAppKey.Location = new System.Drawing.Point(17, 162);
+            this.btnIccAppKey.Location = new System.Drawing.Point(12, 194);
             this.btnIccAppKey.Name = "btnIccAppKey";
             this.btnIccAppKey.Size = new System.Drawing.Size(75, 23);
             this.btnIccAppKey.TabIndex = 4;
@@ -230,7 +230,7 @@
             // 
             // btnIccCreate
             // 
-            this.btnIccCreate.Location = new System.Drawing.Point(17, 134);
+            this.btnIccCreate.Location = new System.Drawing.Point(12, 160);
             this.btnIccCreate.Name = "btnIccCreate";
             this.btnIccCreate.Size = new System.Drawing.Size(75, 23);
             this.btnIccCreate.TabIndex = 3;
@@ -240,7 +240,7 @@
             // 
             // btnCloseIccCard
             // 
-            this.btnCloseIccCard.Location = new System.Drawing.Point(17, 190);
+            this.btnCloseIccCard.Location = new System.Drawing.Point(12, 228);
             this.btnCloseIccCard.Name = "btnCloseIccCard";
             this.btnCloseIccCard.Size = new System.Drawing.Size(75, 23);
             this.btnCloseIccCard.TabIndex = 5;
@@ -250,7 +250,7 @@
             // 
             // btnOpenIccCard
             // 
-            this.btnOpenIccCard.Location = new System.Drawing.Point(17, 22);
+            this.btnOpenIccCard.Location = new System.Drawing.Point(12, 24);
             this.btnOpenIccCard.Name = "btnOpenIccCard";
             this.btnOpenIccCard.Size = new System.Drawing.Size(75, 23);
             this.btnOpenIccCard.TabIndex = 0;
@@ -260,7 +260,7 @@
             // 
             // btnInitIccCard
             // 
-            this.btnInitIccCard.Location = new System.Drawing.Point(17, 50);
+            this.btnInitIccCard.Location = new System.Drawing.Point(12, 58);
             this.btnInitIccCard.Name = "btnInitIccCard";
             this.btnInitIccCard.Size = new System.Drawing.Size(75, 23);
             this.btnInitIccCard.TabIndex = 1;
@@ -270,7 +270,7 @@
             // 
             // btnCleanInfo
             // 
-            this.btnCleanInfo.Location = new System.Drawing.Point(136, 501);
+            this.btnCleanInfo.Location = new System.Drawing.Point(125, 586);
             this.btnCleanInfo.Name = "btnCleanInfo";
             this.btnCleanInfo.Size = new System.Drawing.Size(91, 23);
             this.btnCleanInfo.TabIndex = 7;
@@ -280,26 +280,27 @@
             // 
             // CardInfoPanel
             // 
-            this.CardInfoPanel.Location = new System.Drawing.Point(518, 20);
+            this.CardInfoPanel.Location = new System.Drawing.Point(518, 10);
             this.CardInfoPanel.Name = "CardInfoPanel";
-            this.CardInfoPanel.Size = new System.Drawing.Size(400, 500);
+            this.CardInfoPanel.Size = new System.Drawing.Size(442, 610);
             this.CardInfoPanel.TabIndex = 8;
             this.CardInfoPanel.Visible = false;
             // 
             // btnMethod
             // 
-            this.btnMethod.Location = new System.Drawing.Point(290, 12);
+            this.btnMethod.Location = new System.Drawing.Point(384, 12);
             this.btnMethod.Name = "btnMethod";
             this.btnMethod.Size = new System.Drawing.Size(75, 23);
             this.btnMethod.TabIndex = 13;
-            this.btnMethod.Text = "卡应用";
+            this.btnMethod.Text = "卡应用测试";
             this.btnMethod.UseVisualStyleBackColor = true;
+            this.btnMethod.Visible = false;
             this.btnMethod.Click += new System.EventHandler(this.btnMethod_Click);
             // 
             // CardOperating
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(514, 527);
+            this.ClientSize = new System.Drawing.Size(517, 628);
             this.Controls.Add(this.btnMethod);
             this.Controls.Add(this.CardInfoPanel);
             this.Controls.Add(this.btnCleanInfo);
@@ -314,10 +315,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "CardOperating";
-            this.Text = "卡操作";
-            this.Load += new System.EventHandler(this.CardOperating_Load);
+            this.Text = "制发卡操作";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CardOperating_FormClosing);
-            this.Resize += new System.EventHandler(this.CardOperating_Resize);
             this.Card.ResumeLayout(false);
             this.ICC_Card.ResumeLayout(false);
             this.ResumeLayout(false);

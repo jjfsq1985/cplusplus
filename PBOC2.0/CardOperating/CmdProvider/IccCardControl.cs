@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Data.SqlClient;
+using SqlServerHelper;
+using System.Data;
 
 namespace CardOperating
 {
@@ -15,27 +18,29 @@ namespace CardOperating
 
 
         //卡片主控密钥
-        private readonly byte[] m_MCMK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        private static byte[] m_MCMK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
         //卡片维护密钥
-        private readonly byte[] m_CCMK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        private static byte[] m_CCMK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        //应用主控密钥
+        private static byte[] m_MAMK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
         //应用维护密钥
-        private readonly byte[] m_MAMK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        private static byte[] m_MAMTK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
         //消费主密钥1
-        private readonly byte[] m_MPK1 = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
+        private static byte[] m_MPK1 = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
         //消费主密钥2
-        private readonly byte[] m_MPK2 = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        private static byte[] m_MPK2 = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
         //消费主密钥3
-        private readonly byte[] m_MPK3 = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        private static byte[] m_MPK3 = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
         //灰锁主密钥1
-        private readonly byte[] m_MDK1 = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
+        private static byte[] m_MDK1 = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
         //灰锁主密钥2
-        private readonly byte[] m_MDK2 = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        private static byte[] m_MDK2 = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
         //灰锁主密钥3
-        private readonly byte[] m_MDK3 = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        private static byte[] m_MDK3 = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
         //DTK 
-        private readonly byte[] m_DTK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        private static byte[] m_DTK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
         //密钥（MAC加密等）
-        private readonly byte[] m_MADK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
+        private static byte[] m_MADK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
 
 
         public IccCardControl(int icdev)
@@ -97,13 +102,31 @@ namespace CardOperating
             return RandomValue;
         }
 
+        private bool ExternalAuthWithKey(byte[] KeyVal)
+        {
+            byte[] randByte = GetRandomValue(m_ctrlApdu, 8);
+            if (randByte == null || randByte.Length != 8)
+                return false;
+
+            base.OnTextOutput(new MsgOutEvent(0, "使用密钥：" + BitConverter.ToString(KeyVal) + "进行外部认证"));
+
+            return ExternalAuthenticate(randByte, KeyVal);
+        }
+
         private bool ExternalAuthentication(bool bMainKey)
         {
             byte[] randByte = GetRandomValue(m_ctrlApdu, 8);
             if (randByte == null || randByte.Length != 8)
                 return false;
 
-            m_ctrlApdu.createExternalAuthenticationCmd(randByte, bMainKey, APDUBase.CardCategory.PsamCard);
+            byte[] KeyVal = m_ctrlApdu.GetKeyVal(bMainKey, APDUBase.CardCategory.PsamCard);
+
+            return ExternalAuthenticate(randByte, KeyVal);
+        }
+
+        private bool ExternalAuthenticate(byte[] randByte, byte[] KeyVal)
+        {
+            m_ctrlApdu.createExternalAuthenticationCmd(randByte, KeyVal);
             byte[] data = m_ctrlApdu.GetOutputCmd();
             short datalen = (short)data.Length;
             Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
@@ -133,7 +156,25 @@ namespace CardOperating
             if (randByte == null || randByte.Length != 8)
                 return false;
 
-            m_ctrlApdu.createClearMFcmd(randByte, bMainKey, APDUBase.CardCategory.PsamCard);
+            byte[] KeyVal = m_ctrlApdu.GetKeyVal(bMainKey, APDUBase.CardCategory.PsamCard);
+
+            return ClearMF(randByte, KeyVal);
+        }
+
+        private bool DeleteMFWithKey(byte[] KeyVal)
+        {
+            byte[] randByte = GetRandomValue(m_ctrlApdu, 8);
+            if (randByte == null || randByte.Length != 8)
+                return false;
+
+            base.OnTextOutput(new MsgOutEvent(0, "使用密钥：" + BitConverter.ToString(KeyVal) + "初始化"));
+
+            return ClearMF(randByte, KeyVal);
+        }
+
+        private bool ClearMF(byte[] randByte, byte[] KeyVal)
+        {
+            m_ctrlApdu.createClearMFcmd(randByte, KeyVal);
             byte[] data = m_ctrlApdu.GetOutputCmd();
             short datalen = (short)data.Length;
             Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
@@ -175,14 +216,26 @@ namespace CardOperating
         {
             if (!SelectFile(m_PSE, null))
                 return 1;
-            if (!ExternalAuthentication(bMainKey))
-                return 2;
-          if (!DeleteMF(bMainKey))
-                return 3;
+            byte[] KeyInit = new byte[16];
+            bool bPublished = CheckPublishedCard(bMainKey, KeyInit);
+            if (bPublished)
+            {
+                if (!ExternalAuthWithKey(KeyInit))
+                    return 2;
+                if (!DeleteMFWithKey(KeyInit))
+                    return 3;
+            }
+            else
+            {
+                if (!ExternalAuthentication(bMainKey))
+                    return 2;
+                if (!DeleteMF(bMainKey))
+                    return 3;
+            }
             return 0;
         }
 
-        public bool InitPsamForCalc()
+        public bool SelectPsamApp()
         {
             if (!SelectFile(m_PSE, null))
                 return false;
@@ -723,7 +776,7 @@ namespace CardOperating
             if (!ExternalAuthentication(false))
                 return false;
             //应用维护密钥
-            if (!StoragePsamKey(m_MAMK, 0x82, 0x02, false))
+            if (!StoragePsamKey(m_MAMTK, 0x82, 0x02, false))
                 return false;
             //消费主密钥1
             if (!StoragePsamKey(m_MPK1, 0x80, 0x01, false))
@@ -789,17 +842,7 @@ namespace CardOperating
              return MAC1;
         }
 
-        public byte[] calcPsamCardMAC2(byte[] ASN, byte[] rand, byte[] BusinessSn, byte[] srcData)
-        {
-            byte[] MAC2 = new byte[4];
-            byte[] sespk = GetProcessKey(ASN, m_MPK1, rand, BusinessSn);
-            if (sespk == null)
-                return MAC2;
-            MAC2 = m_ctrlApdu.CalcMacVal(srcData, sespk);
-            return MAC2;
-        }
-
-        public bool InitSamGrayLock(byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData, byte[] outPsamMAC1)
+        public bool InitSamGrayLock(byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData)
         {
             byte[] SysTime = GetBCDTime();
             byte[] byteData = new byte[28];
@@ -836,7 +879,8 @@ namespace CardOperating
                 Buffer.BlockCopy(m_RecvData, 4, outData, 4, 4);
                 Buffer.BlockCopy(m_RecvData, 8, outData, 15, 4);                
                 //PSAM卡计算的MAC1
-                Buffer.BlockCopy(m_RecvData, 8, outPsamMAC1, 0, 4);
+                byte[] PSAM_MAC1 = new byte[4];
+                Buffer.BlockCopy(m_RecvData, 8, PSAM_MAC1, 0, 4);
 
                  //加气专用过程密钥 计算
                 byte[] TermialSn = new byte[4];                
@@ -850,8 +894,14 @@ namespace CardOperating
                 byte[] MAC1 = calcUserCardMAC1(ASN, random, BusinessSn, TermialSn, TermialRandom, srcData);                      
                 Buffer.BlockCopy(SysTime, 0, outData, 8, 7);
                 Buffer.BlockCopy(MAC1, 0, outData, 15, 4);//MAC1
-                string strInfo = string.Format("PSAM卡MAC1计算初始化 MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(outPsamMAC1), BitConverter.ToString(MAC1));
+                string strInfo = string.Format("PSAM卡MAC1计算初始化 MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(PSAM_MAC1), BitConverter.ToString(MAC1));
                 System.Diagnostics.Trace.WriteLine(strInfo);
+                if(!APDUBase.ByteDataEquals(MAC1,PSAM_MAC1))
+                {
+                    string strMessage = string.Format("MAC1计算验证失败：终端机编号{0}，用户卡号{1}", BitConverter.ToString(TermialID), BitConverter.ToString(ASN));
+                    base.OnTextOutput(new MsgOutEvent(0, strMessage));
+                    return false;
+                }
             }
             return true;
         }
@@ -941,6 +991,275 @@ namespace CardOperating
             }
             return true;
 
+        }
+
+        private bool GetConfigKeyIdValid(ref int nOrgPsamkeyId, ref int nUserPsamKeyID, SqlHelper sqlHelp)
+        {
+            SqlDataReader dataReader = null;
+            sqlHelp.ExecuteCommand("select OrgPsamKeyId,UsePsamKeyID from Config_SysParams", out dataReader);
+            if (dataReader != null)
+            {
+                if (!dataReader.HasRows)
+                {
+                    dataReader.Close();
+                    return false;
+                }
+                else
+                {
+                    if (dataReader.Read())
+                    {
+                        nOrgPsamkeyId = (int)dataReader["OrgPsamKeyId"];
+                        nUserPsamKeyID = (int)dataReader["UsePsamKeyID"];
+                    }
+                    dataReader.Close();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool ReadKeyValueFormDb()
+        {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            {
+                ObjSql = null;
+                return false;
+            }
+
+            if (!GetOrgKeyValue(ObjSql))
+            {
+                ObjSql.CloseConnection();
+                ObjSql = null;
+                return false;
+            }
+            if (!GetPsamKeyValue(ObjSql))
+            {
+                ObjSql.CloseConnection();
+                ObjSql = null;
+                return false;
+            }
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return true;
+        }
+
+        private bool GetOrgKeyValue(SqlHelper sqlHelp)
+        {
+            SqlDataReader dataReader = null;
+            //OrgKeyType 0-CPU卡，1-PSAM卡
+            SqlParameter[] sqlparams = new SqlParameter[1];
+            sqlparams[0] = sqlHelp.MakeParam("OrgKeyType", SqlDbType.Int, 4, ParameterDirection.Input, 1);
+            sqlHelp.ExecuteProc("PROC_GetOrgKey", sqlparams, out dataReader);
+            if (dataReader != null)
+            {
+                if (!dataReader.HasRows)
+                {
+                    dataReader.Close();
+                    return false;
+                }
+                else
+                {
+                    if (dataReader.Read())
+                    {
+                        string strKey = (string)dataReader["OrgKey"];
+                        byte[] byteKey = APDUBase.StringToBCD(strKey);
+                        m_ctrlApdu.SetOrgKeyValue(byteKey, APDUBase.CardCategory.PsamCard);
+                    }
+                    dataReader.Close();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //还用不上的密钥没有读出
+        private bool GetPsamKeyValue(SqlHelper sqlHelp)
+        {
+            SqlDataReader dataReader = null;
+            sqlHelp.ExecuteProc("PROC_GetPsamKey", out dataReader);
+            if (dataReader != null)
+            {
+                if (!dataReader.HasRows)
+                {
+                    dataReader.Close();
+                    return false;
+                }
+                else
+                {
+                    if (dataReader.Read())
+                    {
+                        string strKey = (string)dataReader["MasterKey"];
+                        StrKeyToByte(strKey, m_MCMK);
+                        strKey = (string)dataReader["MasterTendingKey"];
+                        StrKeyToByte(strKey, m_CCMK);
+                        strKey = (string)dataReader["ApplicatonMasterKey"];
+                        StrKeyToByte(strKey, m_MAMK);//未用,psam卡无应用主控密钥安装
+                        strKey = (string)dataReader["ApplicationTendingKey"];
+                        StrKeyToByte(strKey, m_MAMTK);
+                        strKey = (string)dataReader["ConsumerMasterKey"];
+                        StrKeyToByte(strKey, m_MPK1);
+                        strKey = (string)dataReader["GrayCardKey"];
+                        StrKeyToByte(strKey, m_MDK1);
+                        strKey = (string)dataReader["MacEncryptKey"];
+                        StrKeyToByte(strKey, m_MADK);
+                        m_ctrlApdu.SetMainKeyValue(m_MCMK, APDUBase.CardCategory.PsamCard);//卡片主控密钥
+
+                    }
+                    dataReader.Close();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        //PSAM发卡后存入数据库
+        public bool SavePsamCardInfoToDb(IccCardInfoParam PsamInfoPar)
+        {
+            string strDbVal = null;
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            {
+                ObjSql = null;
+                return false;
+            }
+
+            bool bSuccess = false;
+            SqlParameter[] sqlparams = new SqlParameter[10];
+            strDbVal = BitConverter.ToString(PsamInfoPar.GetBytePsamId()).Replace("-", "");
+            sqlparams[0] = ObjSql.MakeParam("PsamCardId", SqlDbType.Char, 16, ParameterDirection.Input, strDbVal);
+            strDbVal = BitConverter.ToString(PsamInfoPar.GetByteTermId()).Replace("-", "");
+            sqlparams[1] = ObjSql.MakeParam("TerminalId", SqlDbType.VarChar, 6, ParameterDirection.Input, strDbVal);
+            sqlparams[2] = ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, PsamInfoPar.ClientID);            
+            sqlparams[3] = ObjSql.MakeParam("UseValidateDate", SqlDbType.DateTime, 8, ParameterDirection.Input, PsamInfoPar.ValidAppForm);
+            sqlparams[4] = ObjSql.MakeParam("UseInvalidateDate", SqlDbType.DateTime, 8, ParameterDirection.Input, PsamInfoPar.ValidAppTo);
+
+            strDbVal = BitConverter.ToString(PsamInfoPar.GetByteCompanyIssue()).Replace("-", "");
+            sqlparams[5] = ObjSql.MakeParam("CompanyFrom", SqlDbType.VarChar, 8, ParameterDirection.Input, strDbVal);
+            strDbVal = BitConverter.ToString(PsamInfoPar.GetByteCompanyRecv()).Replace("-", "");
+            sqlparams[6] = ObjSql.MakeParam("CompanyTo", SqlDbType.VarChar, 8, ParameterDirection.Input, strDbVal);
+            sqlparams[7] = ObjSql.MakeParam("Remark", SqlDbType.NVarChar, 50, ParameterDirection.Input, PsamInfoPar.Remark);
+            //密钥
+            strDbVal = BitConverter.ToString(m_ctrlApdu.CardKeyToDb(true, APDUBase.CardCategory.PsamCard)).Replace("-", "");
+            sqlparams[8] = ObjSql.MakeParam("OrgKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
+            strDbVal = BitConverter.ToString(m_ctrlApdu.CardKeyToDb(false, APDUBase.CardCategory.PsamCard)).Replace("-", "");
+            sqlparams[9] = ObjSql.MakeParam("PsamMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
+            if (ObjSql.ExecuteProc("PROC_PublishPsamCard", sqlparams) == 0)
+                bSuccess = true;
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return bSuccess;
+        }
+
+        //检查数据库中是否有该卡的发卡记录
+        public bool CheckPublishedCard(bool bMainKey, byte[] KeyInit)
+        {
+            //PSAM卡获取卡号不用进业务应用
+            byte[] PsamAsn = GetPsamASN();
+            if (PsamAsn == null || PsamAsn.Length != 8)
+                return false;
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            {
+                ObjSql = null;
+                return false;
+            }
+            string strDbAsn = BitConverter.ToString(PsamAsn).Replace("-", "");
+            SqlDataReader dataReader = null;
+            SqlParameter[] sqlparam = new SqlParameter[1];
+            sqlparam[0] = ObjSql.MakeParam("PsamId", SqlDbType.Char, 16, ParameterDirection.Input, strDbAsn);            
+            ObjSql.ExecuteCommand("select * from Psam_Card where PsamId = @PsamId", sqlparam, out dataReader);
+            bool bRet = false;
+            if (dataReader != null)
+            {
+                if (!dataReader.HasRows)
+                    dataReader.Close();
+                else
+                {
+                    if (dataReader.Read())
+                    {
+                        if (bMainKey)
+                        {
+                            string strMasterKey = (string)dataReader["PsamMasterKey"];
+                            byte[] byteKey = APDUBase.StringToBCD(strMasterKey);
+                            Buffer.BlockCopy(byteKey, 0, KeyInit, 0, 16);
+                        }
+                        else
+                        {
+                            string strOrgKey = (string)dataReader["OrgKey"];
+                            byte[] byteKey = APDUBase.StringToBCD(strOrgKey);
+                            Buffer.BlockCopy(byteKey, 0, KeyInit, 0, 16);
+                        }
+                        bRet = true;
+                    }
+                    dataReader.Close();
+                }
+            }
+
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return bRet;
+        }
+
+        //获取终端机编号
+        public byte[] GetTerminalId()
+        {
+            if (!SelectFile(m_PSE, null))
+                return null;
+            m_ctrlApdu.createGetEFFileCmd(0x96, 0x06);//文件标识(100+10110)0x16,终端机编号长度6
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "PSAM卡读取终端机编号失败"));
+                return null;
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] TIDAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, TIDAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "PSAM卡读取终端机编号应答：" + Encoding.ASCII.GetString(TIDAsc)));
+                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                    return null;
+                byte[] TerminalID = new byte[6];
+                Buffer.BlockCopy(m_RecvData, 0, TerminalID, 0, 6);
+                return TerminalID;
+            }
+        }
+
+        //获取PSAM序列号
+        public byte[] GetPsamASN()
+        {
+            m_ctrlApdu.createGetEFFileCmd(0x95, 0x0E);//公共信息(100+10101)0x15文件长度0x0E
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取卡号失败"));
+                return null;
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] ASNAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, ASNAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "读取卡号应答：" + Encoding.ASCII.GetString(ASNAsc)));
+                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                    return null;
+                byte[] PsamAsn = new byte[8];
+                Buffer.BlockCopy(m_RecvData, 2, PsamAsn, 0, 8);//实际10个字节，前两个字节为0，跳过
+                return PsamAsn;
+            }
         }
 
     }
