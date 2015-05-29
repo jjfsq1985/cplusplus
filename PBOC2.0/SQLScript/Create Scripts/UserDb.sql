@@ -36,3 +36,4 @@ GO
 
 --增加初始账户admin,密码admin(MD5格式)
 insert into UserDb values('admin','21232F297A57A5A743894A0E4A801FC3',0x7FFFFFFF,0);
+GO

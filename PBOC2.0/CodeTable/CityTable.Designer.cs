@@ -31,9 +31,9 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.DataViewPanel = new System.Windows.Forms.Panel();
             this.CityView = new System.Windows.Forms.DataGridView();
-            this.btnDel = new System.Windows.Forms.Button();
             this.CityName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CityCodeValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnDel = new System.Windows.Forms.Button();
             this.DataViewPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CityView)).BeginInit();
             this.SuspendLayout();
@@ -74,17 +74,8 @@
             this.CityView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.CityView.Size = new System.Drawing.Size(256, 311);
             this.CityView.TabIndex = 0;
+            this.CityView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.CityView_CellBeginEdit);
             this.CityView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.CityView_CellValidated);
-            // 
-            // btnDel
-            // 
-            this.btnDel.Location = new System.Drawing.Point(262, 154);
-            this.btnDel.Name = "btnDel";
-            this.btnDel.Size = new System.Drawing.Size(31, 23);
-            this.btnDel.TabIndex = 6;
-            this.btnDel.Text = "-";
-            this.btnDel.UseVisualStyleBackColor = true;
-            this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
             // 
             // CityName
             // 
@@ -100,6 +91,16 @@
             this.CityCodeValue.MaxInputLength = 4;
             this.CityCodeValue.Name = "CityCodeValue";
             this.CityCodeValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // btnDel
+            // 
+            this.btnDel.Location = new System.Drawing.Point(262, 154);
+            this.btnDel.Name = "btnDel";
+            this.btnDel.Size = new System.Drawing.Size(31, 23);
+            this.btnDel.TabIndex = 6;
+            this.btnDel.Text = "-";
+            this.btnDel.UseVisualStyleBackColor = true;
+            this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
             // 
             // CityCode
             // 

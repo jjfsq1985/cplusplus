@@ -14,8 +14,16 @@ namespace SqlServerHelper
         {
             string strConnection= "Persist Security Info=False;Integrated Security=sspi;server=" + strServerName +
                                                 ";Initial Catalog=" + strDbName + ";User ID=" + strUser + ";Password=" + strPwd;
-            m_Conn = new SqlConnection(strConnection);
-            m_Conn.Open();
+            try
+            {
+                m_Conn = new SqlConnection(strConnection);
+                m_Conn.Open();
+            }
+            catch
+            {
+                m_Conn = null;
+            }
+
             return m_Conn == null ? false: true;
         }
 

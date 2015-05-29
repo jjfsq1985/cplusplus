@@ -26,6 +26,8 @@ namespace CardOperating
         private UserCardInfo m_CardUser = new UserCardInfo();
         private CardApplicationTest m_CardMethod = new CardApplicationTest();
 
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+        private int m_nCardOperatorAuthority = 0;
 
         public CardOperating()
         {
@@ -66,12 +68,28 @@ namespace CardOperating
             return "制发卡操作";
         }
 
-        public void ShowPluginForm(Form parent)
+        public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
         {
+            m_DBInfo = DbInfo;
+            m_CardPSAM.SetDbInfo(m_DBInfo);
+            m_CardUser.SetDbInfo(m_DBInfo);
+            m_CardMethod.SetDbInfo(m_DBInfo);
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
-            this.MdiParent = parent;
+            this.Parent = parent;
             this.Show();
+            this.BringToFront();
+            if (m_nCardOperatorAuthority != GrobalVariable.CardOperating_Authority)
+            {
+                Card.Enabled = false;
+                ICC_Card.Enabled = false;
+                MessageBox.Show("当前用户无制卡权限");
+            }
+        }
+
+        public void SetAuthority(int nLoginUserId, int nAuthority)
+        {
+            m_nCardOperatorAuthority = nAuthority;
         }
 
         private void CardOperating_FormClosing(object sender, FormClosingEventArgs e)
@@ -188,7 +206,7 @@ namespace CardOperating
                 WriteMsg(0, "卡信息：" + Encoding.ASCII.GetString(cardInfoAsc));
             }
 
-            m_UserCardCtrl = new UserCardControl(m_MTDevHandler);
+            m_UserCardCtrl = new UserCardControl(m_MTDevHandler, m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
             if (!m_UserCardCtrl.ReadKeyValueFormDb())
                 WriteMsg(0, "未读到密钥，请检查数据库是否正常。");
@@ -335,7 +353,7 @@ namespace CardOperating
             m_IccCardId = new byte[infoLen];
             Buffer.BlockCopy(sInfo, 0, m_IccCardId, 0, (int)infoLen);
 
-            m_IccCardCtrl = new IccCardControl(m_MTDevHandler);
+            m_IccCardCtrl = new IccCardControl(m_MTDevHandler, m_DBInfo);
             m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
 
             if (!m_IccCardCtrl.ReadKeyValueFormDb())

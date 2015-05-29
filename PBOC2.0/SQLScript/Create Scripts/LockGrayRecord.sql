@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[Data_LockGrayRecord](
 	[CardNum] [char](16) NOT NULL,
 	[GrayTime] datetime NOT NULL,
 	[LockMoney] [decimal](18, 2) NOT NULL,
-	[TerminalId] [varchar](6) NOT NULL,
+	[TerminalId] [varchar](12) NOT NULL,
 	[IsLock] [bit] NULL,
  CONSTRAINT [PK_LockGrayRecord] PRIMARY KEY CLUSTERED 
 (
@@ -34,7 +34,7 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'灰卡时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_LockGrayRecord', @level2type=N'COLUMN',@level2name=N'GrayTime'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'灰卡金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_LockGrayRecord', @level2type=N'COLUMN',@level2name=N'LockMoney'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'解灰交易金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_LockGrayRecord', @level2type=N'COLUMN',@level2name=N'LockMoney'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'终端机编号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_LockGrayRecord', @level2type=N'COLUMN',@level2name=N'TerminalId'

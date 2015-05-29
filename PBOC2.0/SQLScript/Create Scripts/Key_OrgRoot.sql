@@ -38,3 +38,6 @@ GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'密钥信息(客户名称等便于查看)' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_OrgRoot', @level2type=N'COLUMN',@level2name=N'InfoRemark'
 GO
+
+insert into Key_OrgRoot values('404142434445464748494A4B4C4D4E4F',2,N'测试密钥');
+GO

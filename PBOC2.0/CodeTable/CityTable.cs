@@ -17,6 +17,9 @@ namespace CodeTable
     {
         private SqlHelper m_ObjSql = new SqlHelper();
         private List<CityCodeTable> m_lstCityCode = new List<CityCodeTable>();
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+        private int m_nAuthority = 0;
+
 
         public CityCode()
         {
@@ -43,12 +46,24 @@ namespace CodeTable
             return "地市代码";
         }
 
-        public void ShowPluginForm(Form parent)
+        public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
         {
+            m_DBInfo = DbInfo;
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
-            this.MdiParent = parent;
+            this.Parent = parent;
             this.Show();
+            this.BringToFront();
+            if (m_nAuthority != GrobalVariable.CodeTable_Authority)
+            {
+                btnAdd.Enabled = false;
+                btnDel.Enabled = false;
+            }
+        }
+
+        public void SetAuthority(int nLoginUserId, int nAuthority)
+        {
+            m_nAuthority = nAuthority;
         }
 
         private void CityCode_FormClosed(object sender, FormClosedEventArgs e)
@@ -83,7 +98,7 @@ namespace CodeTable
         private void CityCode_Load(object sender, EventArgs e)
         {
             //显示所有地市代码
-            if (!m_ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!m_ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 m_ObjSql = null;
                 return;
@@ -296,6 +311,12 @@ namespace CodeTable
                 m_lstCityCode.Remove(temp);
             }
             deleteLst.Clear();
+        }
+
+        private void CityView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (m_nAuthority != GrobalVariable.CodeTable_Authority)
+                e.Cancel = true;
         }
 
     }

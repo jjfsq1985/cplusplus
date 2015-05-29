@@ -74,6 +74,7 @@
             this.SuperiorView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.SuperiorView.Size = new System.Drawing.Size(256, 311);
             this.SuperiorView.TabIndex = 0;
+            this.SuperiorView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.SuperiorView_CellBeginEdit);
             this.SuperiorView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.SuperiorView_CellValidated);
             // 
             // SuperiorName

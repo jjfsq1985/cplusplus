@@ -22,6 +22,9 @@ namespace StationManage
         private List<CityCode> m_lstCityCode = new List<CityCode>();
         private List<SuperiorCode> m_lstSuperiorCode = new List<SuperiorCode>();
         private List<ClientParam> m_lstClient = new List<ClientParam>();
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+        private int m_nStationAuthority = 0;
+
 
         public StationManage()
         {
@@ -48,18 +51,30 @@ namespace StationManage
             return "站点信息管理";
         }
 
-        public void ShowPluginForm(Form parent)
+        public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
         {
+            m_DBInfo = DbInfo;
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
-            this.MdiParent = parent;
+            this.Parent = parent;
             this.Show();
+            this.BringToFront();
+            if (m_nStationAuthority != GrobalVariable.StationInfo_Authority)
+            {
+                btnAdd.Enabled = false;
+                btnDel.Enabled = false;
+            }
+        }
+
+        public void SetAuthority(int nLoginUserId, int nAuthority)
+        {
+            m_nStationAuthority = nAuthority;
         }
 
         private void StationManage_Load(object sender, EventArgs e)
         {
             //显示所有站点
-            if (!m_ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!m_ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 m_ObjSql = null;
                 return;
@@ -573,14 +588,22 @@ namespace StationManage
 
         private void StationView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
+            if (m_nStationAuthority != GrobalVariable.StationInfo_Authority)
+            {
+                e.Cancel = true;
+                return;
+            }
+                     
             int nColumnIndex = StationView.CurrentCell.ColumnIndex;
             int nRowIndex = StationView.CurrentCell.RowIndex;
             if (nColumnIndex >= 2 && nColumnIndex <= 5)
             {
                 //站点编号和名称必须先填
-                if(string.IsNullOrEmpty((string)StationView.Rows[nRowIndex].Cells[0].Value)
-                || string.IsNullOrEmpty((string)StationView.Rows[nRowIndex].Cells[1].Value) )
-                e.Cancel = true;
+                if (string.IsNullOrEmpty((string)StationView.Rows[nRowIndex].Cells[0].Value)
+                || string.IsNullOrEmpty((string)StationView.Rows[nRowIndex].Cells[1].Value))
+                {
+                    e.Cancel = true;
+                }
             }
         }
 

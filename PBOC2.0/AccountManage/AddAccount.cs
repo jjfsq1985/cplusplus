@@ -19,10 +19,17 @@ namespace AccountManage
 
         private AccountInfo m_AccountInfo = new AccountInfo();
 
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+
         public AddAccount()
         {
             InitializeComponent();
             FillListAuthority();
+        }
+
+        public void SetDbInfo(SqlConnectInfo DbInfo)
+        {
+            m_DBInfo = DbInfo;
         }
 
         public AccountInfo GetAccountInfo()
@@ -102,7 +109,7 @@ namespace AccountManage
         private bool IsExistUserName(string strName)
         {
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return false;

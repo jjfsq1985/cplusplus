@@ -4,6 +4,7 @@ using System.Text;
 using System.Data.SqlClient;
 using SqlServerHelper;
 using System.Data;
+using IFuncPlugin;
 
 namespace CardOperating
 {
@@ -43,9 +44,10 @@ namespace CardOperating
         private static byte[] m_MADK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
 
 
-        public IccCardControl(int icdev)
+        public IccCardControl(int icdev, SqlConnectInfo DbInfo)
         {
             m_MtDevHandler = icdev;
+            m_DBInfo = DbInfo;
         } 
 
         private bool SelectFile(byte[] byteArray, byte[] prefixData)
@@ -1021,7 +1023,7 @@ namespace CardOperating
         public bool ReadKeyValueFormDb()
         {
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return false;
@@ -1119,7 +1121,7 @@ namespace CardOperating
         {
             string strDbVal = null;
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return false;
@@ -1130,15 +1132,15 @@ namespace CardOperating
             strDbVal = BitConverter.ToString(PsamInfoPar.GetBytePsamId()).Replace("-", "");
             sqlparams[0] = ObjSql.MakeParam("PsamCardId", SqlDbType.Char, 16, ParameterDirection.Input, strDbVal);
             strDbVal = BitConverter.ToString(PsamInfoPar.GetByteTermId()).Replace("-", "");
-            sqlparams[1] = ObjSql.MakeParam("TerminalId", SqlDbType.VarChar, 6, ParameterDirection.Input, strDbVal);
+            sqlparams[1] = ObjSql.MakeParam("TerminalId", SqlDbType.VarChar, 12, ParameterDirection.Input, strDbVal);
             sqlparams[2] = ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, PsamInfoPar.ClientID);            
             sqlparams[3] = ObjSql.MakeParam("UseValidateDate", SqlDbType.DateTime, 8, ParameterDirection.Input, PsamInfoPar.ValidAppForm);
             sqlparams[4] = ObjSql.MakeParam("UseInvalidateDate", SqlDbType.DateTime, 8, ParameterDirection.Input, PsamInfoPar.ValidAppTo);
 
             strDbVal = BitConverter.ToString(PsamInfoPar.GetByteCompanyIssue()).Replace("-", "");
-            sqlparams[5] = ObjSql.MakeParam("CompanyFrom", SqlDbType.VarChar, 8, ParameterDirection.Input, strDbVal);
+            sqlparams[5] = ObjSql.MakeParam("CompanyFrom", SqlDbType.VarChar, 16, ParameterDirection.Input, strDbVal);
             strDbVal = BitConverter.ToString(PsamInfoPar.GetByteCompanyRecv()).Replace("-", "");
-            sqlparams[6] = ObjSql.MakeParam("CompanyTo", SqlDbType.VarChar, 8, ParameterDirection.Input, strDbVal);
+            sqlparams[6] = ObjSql.MakeParam("CompanyTo", SqlDbType.VarChar, 16, ParameterDirection.Input, strDbVal);
             sqlparams[7] = ObjSql.MakeParam("Remark", SqlDbType.NVarChar, 50, ParameterDirection.Input, PsamInfoPar.Remark);
             //密钥
             strDbVal = BitConverter.ToString(m_ctrlApdu.CardKeyToDb(true, APDUBase.CardCategory.PsamCard)).Replace("-", "");
@@ -1156,11 +1158,11 @@ namespace CardOperating
         public bool CheckPublishedCard(bool bMainKey, byte[] KeyInit)
         {
             //PSAM卡获取卡号不用进业务应用
-            byte[] PsamAsn = GetPsamASN();
+            byte[] PsamAsn = GetPsamASN(false);
             if (PsamAsn == null || PsamAsn.Length != 8)
                 return false;
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return false;
@@ -1234,7 +1236,10 @@ namespace CardOperating
         }
 
         //获取PSAM序列号
-        public byte[] GetPsamASN()
+        /// <summary>
+        /// 原始卡无卡号，检查数据库记录时不提示错误
+        /// </summary>
+        public byte[] GetPsamASN(bool bMessage)
         {
             m_ctrlApdu.createGetEFFileCmd(0x95, 0x0E);//公共信息(100+10101)0x15文件长度0x0E
             byte[] data = m_ctrlApdu.GetOutputCmd();
@@ -1244,7 +1249,8 @@ namespace CardOperating
             m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
             if (m_RetVal != 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取卡号失败"));
+                if (bMessage)
+                    base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取卡号失败"));
                 return null;
             }
             else
@@ -1253,7 +1259,8 @@ namespace CardOperating
                 uint nAscLen = nRecvLen * 2;
                 byte[] ASNAsc = new byte[nAscLen];
                 DllExportMT.hex_asc(m_RecvData, ASNAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "读取卡号应答：" + Encoding.ASCII.GetString(ASNAsc)));
+                if (bMessage)
+                    base.OnTextOutput(new MsgOutEvent(0, "读取卡号应答：" + Encoding.ASCII.GetString(ASNAsc)));
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                     return null;
                 byte[] PsamAsn = new byte[8];

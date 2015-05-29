@@ -24,6 +24,10 @@ namespace PublishCardOperator
             eKeyState   //状态
         }
 
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+        private int m_nKeyManageAuthority = 0;
+
+
         public OrgKeyManage()
         {
             InitializeComponent();
@@ -49,12 +53,26 @@ namespace PublishCardOperator
             return "初始密钥管理";
         }
 
-        public void ShowPluginForm(Form parent)
+        public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
         {
+            m_DBInfo = DbInfo;
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
-            this.MdiParent = parent;
+            this.Parent = parent;
             this.Show();
+            this.BringToFront();
+            if (m_nKeyManageAuthority != GrobalVariable.KeyManage_Authority)
+            {
+                btnAddOrgKey.Enabled = false;
+                btnDelOrgKey.Enabled = false;
+                btnModifyOrgKey.Enabled = false;
+                btnSaveEdit.Enabled = false;
+            }
+        }
+
+        public void SetAuthority(int nLoginUserId, int nAuthority)
+        {
+            m_nKeyManageAuthority = nAuthority;
         }
 
         private int GetOrgKeyTypeIndex(string strText)
@@ -162,7 +180,7 @@ namespace PublishCardOperator
 
         private void OrgKeyManage_Load(object sender, EventArgs e)
         {
-            if (!m_ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!m_ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 m_ObjSql = null;
                 return;

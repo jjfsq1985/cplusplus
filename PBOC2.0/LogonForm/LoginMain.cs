@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using SqlServerHelper;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
+using IFuncPlugin;
+using System.Xml;
 
 namespace FNTMain
 {
@@ -22,15 +24,18 @@ namespace FNTMain
             get { return m_UserSignInId; }
         }
 
-        private string m_UserNameSignIn = "";
-        public string UserLogin
-        {
-            get { return m_UserNameSignIn; }            
-        }
+        SqlConnectInfo m_DbInfo = new SqlConnectInfo();
 
         public LoginMain()
         {
             InitializeComponent();
+
+            ReadDbInfo();
+        }
+
+        public SqlConnectInfo GetDbInfo()
+        {
+            return m_DbInfo;
         }
 
         private void btnOut_Click(object sender, EventArgs e)
@@ -40,6 +45,12 @@ namespace FNTMain
 
         private void CheckEnterMainForm()
         {
+            if (!m_DbInfo.m_bConfig)
+            {
+                MessageBox.Show("数据库尚未配置，请先设置数据库。");
+                return;
+            }
+
             if (textUser.Text.Length < 2 || textUser.Text.Length > 32)
                 return;
             if (textPwd.Text.Length < 4 || textPwd.Text.Length > 32)
@@ -92,7 +103,7 @@ namespace FNTMain
         private void UpdateUserDb()
         {
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DbInfo.strServerName, m_DbInfo.strDbName, m_DbInfo.strUser, m_DbInfo.strUserPwd))
             {
                 ObjSql = null;
                 return;
@@ -108,7 +119,7 @@ namespace FNTMain
         private bool CheckUserAndPwd(string strUser, string strPwd)
         {
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DbInfo.strServerName, m_DbInfo.strDbName, m_DbInfo.strUser, m_DbInfo.strUserPwd))
             {
                 ObjSql = null;
                 return false;
@@ -136,8 +147,6 @@ namespace FNTMain
                         {
                             bCheckPass = true;
                             m_UserSignInId = (int)dataReader["UserId"];
-                            m_UserNameSignIn = (string)dataReader["UserName"];
-
                         }
                     }
                 }
@@ -154,6 +163,60 @@ namespace FNTMain
             if (e.KeyChar == EnterKey && !string.IsNullOrEmpty(textUser.Text) && !string.IsNullOrEmpty(textPwd.Text))
             {
                 CheckEnterMainForm();
+            }
+        }
+
+        private void btnDbSetting_Click(object sender, EventArgs e)
+        {
+            DbSetting setting = new DbSetting();
+            setting.SetDbInfo(m_DbInfo);
+            if (setting.ShowDialog(this) != DialogResult.OK)
+                return;
+            m_DbInfo = setting.GetDbInfo();
+            SaveDbInfo();
+        }
+
+        private void SaveDbInfo()
+        {
+            XmlNode node = null;
+            XmlDocument xml = new XmlDocument();
+            string strXmlPath = Application.StartupPath + @"\DbConfig.xml";
+            xml.Load(strXmlPath);//按路径读xml文件
+            XmlNode root = xml.SelectSingleNode("DBConfig");//指向根节点
+            root.Attributes["Connect"].InnerText = "true";
+            node = root.SelectSingleNode("Server");
+            node.InnerText = m_DbInfo.strServerName;             
+            node = root.SelectSingleNode("DbName");
+            node.InnerText = m_DbInfo.strDbName;
+            node = root.SelectSingleNode("User");
+            node.InnerText = m_DbInfo.strUser;
+            node = root.SelectSingleNode("Pwd");
+            if (!string.IsNullOrEmpty(m_DbInfo.strUserPwd))
+            {
+                node.InnerText = Convert.ToBase64String(Encoding.ASCII.GetBytes(m_DbInfo.strUserPwd));                
+            }
+            xml.Save(strXmlPath);
+        }
+
+        private void ReadDbInfo()
+        {
+            XmlNode node = null;
+            XmlDocument xml = new XmlDocument();
+            string strXmlPath = Application.StartupPath + @"\DbConfig.xml";
+            xml.Load(strXmlPath);//按路径读xml文件
+            XmlNode root = xml.SelectSingleNode("DBConfig");//指向根节点
+            if (root.Attributes["Connect"].InnerText == "true")
+                m_DbInfo.m_bConfig = true;
+            node = root.SelectSingleNode("Server");
+            m_DbInfo.strServerName = node.InnerText;
+            node = root.SelectSingleNode("DbName");
+            m_DbInfo.strDbName = node.InnerText;
+            node = root.SelectSingleNode("User");
+            m_DbInfo.strUser = node.InnerText;
+            node = root.SelectSingleNode("Pwd");
+            if (!string.IsNullOrEmpty(node.InnerText))
+            {
+                m_DbInfo.strUserPwd = Encoding.ASCII.GetString(Convert.FromBase64String(node.InnerText));
             }
         }
 

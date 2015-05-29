@@ -19,6 +19,9 @@ namespace ClientManage
 
         private ClientInfo m_SelectedClient = null;
         private ContextMenuStrip m_treeMenu = new ContextMenuStrip();
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+        private int m_nClientInfoAuthority = 0;
+
 
         public ClientInfoManage()
         {
@@ -48,18 +51,31 @@ namespace ClientManage
             return "单位信息管理";
         }
 
-        public void ShowPluginForm(Form parent)
+        public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
         {
+            m_DBInfo = DbInfo;
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
-            this.MdiParent = parent;
+            this.Parent = parent;
             this.Show();
+            this.BringToFront();
+            if (m_nClientInfoAuthority != GrobalVariable.ClientInfo_Authority)
+            {
+                btnAdd.Enabled = false;
+                btnDel.Enabled = false;
+                btnModify.Enabled = false;
+            }
+        }
+
+        public void SetAuthority(int nLoginUserId, int nAuthority)
+        {
+            m_nClientInfoAuthority = nAuthority;
         }
 
         //加载单位信息数据库
         private void ClientInfoManage_Load(object sender, EventArgs e)
         {
-            if (!m_ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!m_ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 m_ObjSql = null;
                 return;
@@ -186,7 +202,7 @@ namespace ClientManage
         //显示右键菜单
         private void treeClient_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if (e.Button != MouseButtons.Right)
+            if (m_nClientInfoAuthority != GrobalVariable.ClientInfo_Authority || e.Button != MouseButtons.Right)
                 return;
             if (e.Node.Parent == null || e.Node == null)
                 return;
@@ -323,43 +339,48 @@ namespace ClientManage
             }
         }
 
-        private void AddClientNode(object sender, EventArgs e)
+        private void AddNextClientNode()
         {
             ClientInfo NodeClient = new ClientInfo();
-            if(m_SelectedClient != null)
+            NodeClient.ParentId = 0;
+            NodeClient.ParentName = "";
+            NodeClient.ClientId = m_lstClientInfo.Count+1;
+            NodeClient.ClientName = "新单位";
+            m_lstClientInfo.Add(NodeClient);
+            m_SelectedClient = NodeClient;
+            //TreeView更新
+            TreeNode childNode = new TreeNode(NodeClient.ClientName);
+            childNode.Tag = NodeClient.ClientId;
+            treeClient.Nodes.Add(childNode);
+            treeClient.SelectedNode = childNode;
+            SaveToDb(NodeClient, DbStateFlag.eDbAdd);
+        }
+
+        private void AddClientNode(object sender, EventArgs e)
+        {
+            if (m_SelectedClient == null)
+                return;
+            ClientInfo NodeClient = new ClientInfo();
+            NodeClient.ParentId = m_SelectedClient.ClientId;
+            NodeClient.ParentName = m_SelectedClient.ClientName;
+            int nClientId = 1;
+            for (int i = 0; i < m_lstClientInfo.Count; i++)
             {
-                NodeClient.ParentId = m_SelectedClient.ClientId;
-                NodeClient.ParentName = m_SelectedClient.ClientName;
-                int nClientId = 1;
-                for(int i=0; i< m_lstClientInfo.Count; i++)
-                {
-                    if (m_lstClientInfo[i].ClientId >= nClientId)
-                        nClientId = m_lstClientInfo[i].ClientId + 1;
-                }
-                NodeClient.ClientId = nClientId;
-                NodeClient.ClientName = "新单位";
-                m_lstClientInfo.Add(NodeClient);
-                m_SelectedClient = NodeClient;
-                //TreeView更新
-                TreeNode childNode = new TreeNode(NodeClient.ClientName);
-                childNode.Tag = NodeClient.ClientId;
-                treeClient.SelectedNode.Nodes.Add(childNode);
-                treeClient.SelectedNode = childNode;
+                if (m_lstClientInfo[i].ClientId >= nClientId)
+                    nClientId = m_lstClientInfo[i].ClientId + 1;
             }
-            else if (m_lstClientInfo.Count == 0)
-            {
-                NodeClient.ParentId = 0;
-                NodeClient.ParentName = "";
-                NodeClient.ClientId = 1;
-                NodeClient.ClientName = "新单位";
-                m_lstClientInfo.Add(NodeClient);
-                m_SelectedClient = NodeClient;
-                //TreeView更新
-                TreeNode childNode = new TreeNode(NodeClient.ClientName);
-                childNode.Tag = NodeClient.ClientId;
-                treeClient.Nodes.Add(childNode);
-                treeClient.SelectedNode = childNode;
-            }
+            NodeClient.ClientId = nClientId;
+            NodeClient.ClientName = "新单位";
+            m_lstClientInfo.Add(NodeClient);
+            m_SelectedClient = NodeClient;
+            //TreeView更新
+            TreeNode childNode = new TreeNode(NodeClient.ClientName);
+            childNode.Tag = NodeClient.ClientId;
+            treeClient.SelectedNode.Nodes.Add(childNode);
+            treeClient.SelectedNode = childNode;
+
+
+
             SaveToDb(NodeClient, DbStateFlag.eDbAdd);
         }
 
@@ -370,7 +391,13 @@ namespace ClientManage
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            AddClientNode(this, EventArgs.Empty);
+            AddNextClientNode();
+        }
+
+        private void treeClient_BeforeLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            if (m_nClientInfoAuthority != GrobalVariable.ClientInfo_Authority)
+                e.CancelEdit = true;
         }
 
     }

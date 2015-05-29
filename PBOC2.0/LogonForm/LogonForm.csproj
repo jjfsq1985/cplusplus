@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DbSetting.Designer.cs">
+      <DependentUpon>DbSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoginMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -53,6 +59,9 @@
       <DependentUpon>LoginMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DbSetting.resx">
+      <DependentUpon>DbSetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoginMain.resx">
       <DependentUpon>LoginMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -77,10 +86,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IFuncPlugin\IFuncPlugin.csproj">
+      <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
+      <Name>IFuncPlugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SqlServerHelper\SqlServerHelper.csproj">
       <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
       <Name>SqlServerHelper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DbConfig.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

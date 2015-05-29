@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.treeClient = new System.Windows.Forms.TreeView();
             this.ClientLabel = new System.Windows.Forms.Label();
             this.DetailInfo = new System.Windows.Forms.GroupBox();
             this.btnModify = new System.Windows.Forms.Button();
@@ -56,20 +55,9 @@
             this.textClientId = new System.Windows.Forms.TextBox();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnDel = new System.Windows.Forms.Button();
+            this.treeClient = new System.Windows.Forms.TreeView();
             this.DetailInfo.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // treeClient
-            // 
-            this.treeClient.HideSelection = false;
-            this.treeClient.LabelEdit = true;
-            this.treeClient.Location = new System.Drawing.Point(25, 31);
-            this.treeClient.Name = "treeClient";
-            this.treeClient.Size = new System.Drawing.Size(237, 514);
-            this.treeClient.TabIndex = 0;
-            this.treeClient.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeClient_AfterLabelEdit);
-            this.treeClient.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeClient_AfterSelect);
-            this.treeClient.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeClient_NodeMouseClick);
             // 
             // ClientLabel
             // 
@@ -322,6 +310,19 @@
             this.btnDel.UseVisualStyleBackColor = true;
             this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
             // 
+            // treeClient
+            // 
+            this.treeClient.HideSelection = false;
+            this.treeClient.LabelEdit = true;
+            this.treeClient.Location = new System.Drawing.Point(25, 31);
+            this.treeClient.Name = "treeClient";
+            this.treeClient.Size = new System.Drawing.Size(237, 514);
+            this.treeClient.TabIndex = 0;
+            this.treeClient.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeClient_AfterLabelEdit);
+            this.treeClient.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeClient_AfterSelect);
+            this.treeClient.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeClient_NodeMouseClick);
+            this.treeClient.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeClient_BeforeLabelEdit);
+            // 
             // ClientInfoManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -350,7 +351,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeClient;
         private System.Windows.Forms.Label ClientLabel;
         private System.Windows.Forms.GroupBox DetailInfo;
         private System.Windows.Forms.Label ClientId;
@@ -378,6 +378,7 @@
         private System.Windows.Forms.Button btnModify;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnDel;
+        private System.Windows.Forms.TreeView treeClient;
     }
 }
 

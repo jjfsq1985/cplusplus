@@ -18,7 +18,10 @@ namespace AccountManage
         private int m_nRowsPerPage = 50;  //每页显示记录数
         private int m_nTotalPage = 1;  //总页数
         private List<AccountInfo> m_lstUser = new List<AccountInfo>();
-        private bool m_bEditData = false;        
+        private bool m_bEditData = false;
+
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+        private int m_nAccountAuthority = 0;
 
         public Account()
         {
@@ -45,13 +48,28 @@ namespace AccountManage
             return "账户管理";
         }
 
-        public void ShowPluginForm(Form parent)
+        public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
         {
+            m_DBInfo = DbInfo;
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
-            this.MdiParent = parent;
+            this.Parent = parent;
             this.Show();
+            this.BringToFront();
+            if (m_nAccountAuthority != GrobalVariable.Account_Authority)
+            {
+                btnAdd.Enabled = false;
+                btnDel.Enabled = false;
+                btnEdit.Enabled = false;
+                btnSave.Enabled = false;
+            }
         }
+
+        public void SetAuthority(int nLoginUserId, int nAuthority)
+        {
+            m_nAccountAuthority = nAuthority;
+        }
+
 
         private void AccountQuit_Click(object sender, EventArgs e)
         {
@@ -61,7 +79,7 @@ namespace AccountManage
         private void Account_Load(object sender, EventArgs e)
         {
             //加载用户名列表
-            if (!m_ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!m_ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 m_ObjSql = null;
                 return;
@@ -191,6 +209,7 @@ namespace AccountManage
         private void btnAdd_Click(object sender, EventArgs e)
         {
             AddAccount AddForm = new AddAccount();
+            AddForm.SetDbInfo(m_DBInfo);
             if (AddForm.ShowDialog(this) != DialogResult.OK)
                 return;
             AccountInfo newAccount = AddForm.GetAccountInfo();

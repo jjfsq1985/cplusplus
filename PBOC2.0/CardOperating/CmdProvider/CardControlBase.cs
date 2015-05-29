@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using IFuncPlugin;
 
 namespace CardOperating
 {
@@ -15,6 +16,7 @@ namespace CardOperating
         protected byte[] m_RecvDataLen = new byte[4];
         //用于接收数值初始化
         protected readonly byte[] m_InitByte = new byte[128];
+        protected SqlConnectInfo m_DBInfo = new SqlConnectInfo();
 
         public CardControlBase()
         {

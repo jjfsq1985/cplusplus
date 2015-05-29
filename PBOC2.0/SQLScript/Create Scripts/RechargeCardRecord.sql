@@ -13,7 +13,7 @@ GO
 
 CREATE TABLE [dbo].[Data_RechargeCardRecord](
 	[RunningNum] [int] IDENTITY(1,1) NOT NULL,
-	[CardNum] [char](20) NULL,
+	[CardNum] [char](16) NULL,
 	[OperateType] [nvarchar](2) NULL,
 	[ForwardBalance] [decimal](18, 2) NULL,
 	[RechargeValue] [decimal](18, 2) NULL,
@@ -21,7 +21,7 @@ CREATE TABLE [dbo].[Data_RechargeCardRecord](
 	[ReceivedVal] [decimal](18, 2) NULL,
 	[CurrentBalance] [decimal](18, 2) NULL,
 	[RechargeDateTime] [datetime] NULL,
-	[OperatorId] [varchar](3) NULL,
+	[OperatorId] [int] NULL,
 	[PaymentMethod] [nvarchar](50) NULL,
 	[ShiftNum] [varchar](10) NULL,
 	[UpLoadStatus] [int] NOT NULL,
@@ -42,7 +42,7 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'卡号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'CardNum'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作类型：新卡、充值、充正、退卡、换卡、转账' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'OperateType'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作类型：充值、转账' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'OperateType'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'充值前余额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'ForwardBalance'
@@ -66,10 +66,10 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作员编号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'OperatorId'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'付款方式' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'PaymentMethod'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'付款方式(现金、银行卡)' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'PaymentMethod'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'yyyyMMddnn' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'ShiftNum'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'yyyyMMddnn(nn为班次)' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'ShiftNum'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否已经上传' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'UpLoadStatus'

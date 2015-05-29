@@ -35,6 +35,7 @@
             this.btnIn = new System.Windows.Forms.Button();
             this.btnOut = new System.Windows.Forms.Button();
             this.Info = new System.Windows.Forms.Label();
+            this.btnDbSetting = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // labelUser
@@ -76,9 +77,9 @@
             // 
             // btnIn
             // 
-            this.btnIn.Location = new System.Drawing.Point(57, 124);
+            this.btnIn.Location = new System.Drawing.Point(132, 124);
             this.btnIn.Name = "btnIn";
-            this.btnIn.Size = new System.Drawing.Size(87, 27);
+            this.btnIn.Size = new System.Drawing.Size(91, 25);
             this.btnIn.TabIndex = 5;
             this.btnIn.Text = "登录";
             this.btnIn.UseVisualStyleBackColor = true;
@@ -86,9 +87,9 @@
             // 
             // btnOut
             // 
-            this.btnOut.Location = new System.Drawing.Point(225, 124);
+            this.btnOut.Location = new System.Drawing.Point(237, 124);
             this.btnOut.Name = "btnOut";
-            this.btnOut.Size = new System.Drawing.Size(87, 27);
+            this.btnOut.Size = new System.Drawing.Size(91, 25);
             this.btnOut.TabIndex = 6;
             this.btnOut.Text = "取消";
             this.btnOut.UseVisualStyleBackColor = true;
@@ -103,11 +104,22 @@
             this.Info.TabIndex = 4;
             this.Info.Text = "(4-32个字符)";
             // 
+            // btnDbSetting
+            // 
+            this.btnDbSetting.Location = new System.Drawing.Point(27, 124);
+            this.btnDbSetting.Name = "btnDbSetting";
+            this.btnDbSetting.Size = new System.Drawing.Size(91, 25);
+            this.btnDbSetting.TabIndex = 7;
+            this.btnDbSetting.Text = "数据库配置";
+            this.btnDbSetting.UseVisualStyleBackColor = true;
+            this.btnDbSetting.Click += new System.EventHandler(this.btnDbSetting_Click);
+            // 
             // LoginMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(362, 170);
+            this.Controls.Add(this.btnDbSetting);
             this.Controls.Add(this.Info);
             this.Controls.Add(this.btnOut);
             this.Controls.Add(this.btnIn);
@@ -136,6 +148,7 @@
         private System.Windows.Forms.Button btnIn;
         private System.Windows.Forms.Button btnOut;
         private System.Windows.Forms.Label Info;
+        private System.Windows.Forms.Button btnDbSetting;
     }
 }
 

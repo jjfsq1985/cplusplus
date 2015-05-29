@@ -31,7 +31,7 @@ CREATE PROCEDURE PROC_GetPsamKey With Encryption
 	--开始事务
 	begin tran maintran
 	select @PsamKeyId = UsePsamKeyID from Config_SysParams;
-	select * from Key_PsamCard where PsamId=@PsamKeyId;
+	select * from Key_PsamCard where KeyId=@PsamKeyId;
 	if(@@ERROR <> 0)
 		begin
 		rollback tran maintran

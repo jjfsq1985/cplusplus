@@ -29,6 +29,10 @@ namespace PublishCardOperator
         private int m_nEnteredCpuGrid = -1; //相同行列的DataGridView CellEnter重复调用问题
         private int m_nEnteredAppGrid = -1;
 
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+        private int m_nKeyManageAuthority = 0;
+
+
         public KeyManage()
         {
             InitializeComponent();
@@ -54,12 +58,26 @@ namespace PublishCardOperator
             return "CPU卡密钥管理";
         }
 
-        public void ShowPluginForm(Form parent)
+        public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
         {
+            m_DBInfo = DbInfo;
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
-            this.MdiParent = parent;
+            this.Parent = parent;
             this.Show();
+            this.BringToFront();
+            if (m_nKeyManageAuthority != GrobalVariable.KeyManage_Authority)
+            {
+                btnAdd.Enabled = false;
+                btnDelete.Enabled = false;
+                btnEditKey.Enabled = false;
+                btnSaveEdit.Enabled = false;
+            }
+        }
+
+        public void SetAuthority(int nLoginUserId, int nAuthority)
+        {
+            m_nKeyManageAuthority = nAuthority;
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -69,7 +87,7 @@ namespace PublishCardOperator
 
         private void KeyManage_Load(object sender, EventArgs e)
         {
-            if (!m_ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!m_ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 m_ObjSql = null;
                 return;

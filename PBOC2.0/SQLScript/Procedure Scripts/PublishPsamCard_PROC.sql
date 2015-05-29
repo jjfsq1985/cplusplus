@@ -23,12 +23,12 @@ GO
 
 CREATE PROCEDURE PROC_PublishPsamCard(
 	@PsamCardId char(16),--PSAM卡号
-	@TerminalId varchar(6),--终端机编号
+	@TerminalId varchar(12),--终端机编号
 	@ClientId int,--所属单位ID
 	@UseValidateDate datetime,--卡生效日期
 	@UseInvalidateDate datetime,--卡失效日期
-	@CompanyFrom varchar(8), --发行方
-	@CompanyTo varchar(8), --接收方
+	@CompanyFrom varchar(16), --发行方
+	@CompanyTo varchar(16), --接收方
 	@Remark nvarchar(50), --备注
 	@OrgKey char(32),    --卡片原始密钥
 	@PsamMasterKey char(32) --主控密钥

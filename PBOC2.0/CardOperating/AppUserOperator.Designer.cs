@@ -86,6 +86,14 @@
             this.CardInfoPanel = new System.Windows.Forms.SplitContainer();
             this.CardInfo = new System.Windows.Forms.GroupBox();
             this.CardApp = new System.Windows.Forms.GroupBox();
+            this.PINOperate = new System.Windows.Forms.GroupBox();
+            this.btnPinChange = new System.Windows.Forms.Button();
+            this.btnPinReset = new System.Windows.Forms.Button();
+            this.textNewPIN = new System.Windows.Forms.TextBox();
+            this.textOldPIN = new System.Windows.Forms.TextBox();
+            this.OldPIN = new System.Windows.Forms.Label();
+            this.NewPIN = new System.Windows.Forms.Label();
+            this.btnPinUnlock = new System.Windows.Forms.Button();
             this.textPIN = new System.Windows.Forms.TextBox();
             this.LabelPIN = new System.Windows.Forms.Label();
             this.Balance = new System.Windows.Forms.Label();
@@ -98,14 +106,6 @@
             this.Money = new System.Windows.Forms.Label();
             this.textMoney = new System.Windows.Forms.TextBox();
             this.btnCardLoad = new System.Windows.Forms.Button();
-            this.btnPinUnlock = new System.Windows.Forms.Button();
-            this.NewPIN = new System.Windows.Forms.Label();
-            this.OldPIN = new System.Windows.Forms.Label();
-            this.textOldPIN = new System.Windows.Forms.TextBox();
-            this.textNewPIN = new System.Windows.Forms.TextBox();
-            this.btnReset = new System.Windows.Forms.Button();
-            this.PINOperate = new System.Windows.Forms.GroupBox();
-            this.btnPINChange = new System.Windows.Forms.Button();
             this.groupLimit.SuspendLayout();
             this.CardInfoPanel.Panel1.SuspendLayout();
             this.CardInfoPanel.Panel2.SuspendLayout();
@@ -710,6 +710,88 @@
             this.CardApp.TabStop = false;
             this.CardApp.Text = "卡应用";
             // 
+            // PINOperate
+            // 
+            this.PINOperate.Controls.Add(this.btnPinChange);
+            this.PINOperate.Controls.Add(this.btnPinReset);
+            this.PINOperate.Controls.Add(this.textNewPIN);
+            this.PINOperate.Controls.Add(this.textOldPIN);
+            this.PINOperate.Controls.Add(this.OldPIN);
+            this.PINOperate.Controls.Add(this.NewPIN);
+            this.PINOperate.Controls.Add(this.btnPinUnlock);
+            this.PINOperate.Location = new System.Drawing.Point(27, 330);
+            this.PINOperate.Name = "PINOperate";
+            this.PINOperate.Size = new System.Drawing.Size(247, 150);
+            this.PINOperate.TabIndex = 53;
+            this.PINOperate.TabStop = false;
+            this.PINOperate.Text = "PIN码";
+            // 
+            // btnPinChange
+            // 
+            this.btnPinChange.Location = new System.Drawing.Point(62, 113);
+            this.btnPinChange.Name = "btnPinChange";
+            this.btnPinChange.Size = new System.Drawing.Size(75, 23);
+            this.btnPinChange.TabIndex = 53;
+            this.btnPinChange.Text = "修改PIN";
+            this.btnPinChange.UseVisualStyleBackColor = true;
+            this.btnPinChange.Click += new System.EventHandler(this.btnPinChange_Click);
+            // 
+            // btnPinReset
+            // 
+            this.btnPinReset.Location = new System.Drawing.Point(172, 77);
+            this.btnPinReset.Name = "btnPinReset";
+            this.btnPinReset.Size = new System.Drawing.Size(59, 23);
+            this.btnPinReset.TabIndex = 52;
+            this.btnPinReset.Text = "PIN重装";
+            this.btnPinReset.UseVisualStyleBackColor = true;
+            this.btnPinReset.Click += new System.EventHandler(this.btnPinReset_Click);
+            // 
+            // textNewPIN
+            // 
+            this.textNewPIN.Location = new System.Drawing.Point(80, 79);
+            this.textNewPIN.MaxLength = 6;
+            this.textNewPIN.Name = "textNewPIN";
+            this.textNewPIN.Size = new System.Drawing.Size(83, 21);
+            this.textNewPIN.TabIndex = 51;
+            this.textNewPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNewPIN_KeyPress);
+            // 
+            // textOldPIN
+            // 
+            this.textOldPIN.Location = new System.Drawing.Point(80, 27);
+            this.textOldPIN.MaxLength = 6;
+            this.textOldPIN.Name = "textOldPIN";
+            this.textOldPIN.Size = new System.Drawing.Size(83, 21);
+            this.textOldPIN.TabIndex = 50;
+            this.textOldPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textOldPIN_KeyPress);
+            // 
+            // OldPIN
+            // 
+            this.OldPIN.AutoSize = true;
+            this.OldPIN.Location = new System.Drawing.Point(25, 30);
+            this.OldPIN.Name = "OldPIN";
+            this.OldPIN.Size = new System.Drawing.Size(47, 12);
+            this.OldPIN.TabIndex = 49;
+            this.OldPIN.Text = "原PIN码";
+            // 
+            // NewPIN
+            // 
+            this.NewPIN.AutoSize = true;
+            this.NewPIN.Location = new System.Drawing.Point(25, 82);
+            this.NewPIN.Name = "NewPIN";
+            this.NewPIN.Size = new System.Drawing.Size(47, 12);
+            this.NewPIN.TabIndex = 48;
+            this.NewPIN.Text = "新PIN码";
+            // 
+            // btnPinUnlock
+            // 
+            this.btnPinUnlock.Location = new System.Drawing.Point(172, 25);
+            this.btnPinUnlock.Name = "btnPinUnlock";
+            this.btnPinUnlock.Size = new System.Drawing.Size(59, 23);
+            this.btnPinUnlock.TabIndex = 47;
+            this.btnPinUnlock.Text = "PIN解锁";
+            this.btnPinUnlock.UseVisualStyleBackColor = true;
+            this.btnPinUnlock.Click += new System.EventHandler(this.btnPinUnlock_Click);
+            // 
             // textPIN
             // 
             this.textPIN.Location = new System.Drawing.Point(116, 37);
@@ -824,88 +906,6 @@
             this.btnCardLoad.UseVisualStyleBackColor = true;
             this.btnCardLoad.Click += new System.EventHandler(this.btnCardLoad_Click);
             // 
-            // btnPinUnlock
-            // 
-            this.btnPinUnlock.Location = new System.Drawing.Point(172, 25);
-            this.btnPinUnlock.Name = "btnPinUnlock";
-            this.btnPinUnlock.Size = new System.Drawing.Size(59, 23);
-            this.btnPinUnlock.TabIndex = 47;
-            this.btnPinUnlock.Text = "PIN解锁";
-            this.btnPinUnlock.UseVisualStyleBackColor = true;
-            this.btnPinUnlock.Click += new System.EventHandler(this.btnPinUnlock_Click);
-            // 
-            // NewPIN
-            // 
-            this.NewPIN.AutoSize = true;
-            this.NewPIN.Location = new System.Drawing.Point(25, 82);
-            this.NewPIN.Name = "NewPIN";
-            this.NewPIN.Size = new System.Drawing.Size(47, 12);
-            this.NewPIN.TabIndex = 48;
-            this.NewPIN.Text = "新PIN码";
-            // 
-            // OldPIN
-            // 
-            this.OldPIN.AutoSize = true;
-            this.OldPIN.Location = new System.Drawing.Point(25, 30);
-            this.OldPIN.Name = "OldPIN";
-            this.OldPIN.Size = new System.Drawing.Size(47, 12);
-            this.OldPIN.TabIndex = 49;
-            this.OldPIN.Text = "原PIN码";
-            // 
-            // textOldPIN
-            // 
-            this.textOldPIN.Location = new System.Drawing.Point(80, 27);
-            this.textOldPIN.MaxLength = 6;
-            this.textOldPIN.Name = "textOldPIN";
-            this.textOldPIN.Size = new System.Drawing.Size(83, 21);
-            this.textOldPIN.TabIndex = 50;
-            this.textOldPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textOldPIN_KeyPress);
-            // 
-            // textNewPIN
-            // 
-            this.textNewPIN.Location = new System.Drawing.Point(80, 79);
-            this.textNewPIN.MaxLength = 6;
-            this.textNewPIN.Name = "textNewPIN";
-            this.textNewPIN.Size = new System.Drawing.Size(83, 21);
-            this.textNewPIN.TabIndex = 51;
-            this.textNewPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNewPIN_KeyPress);
-            // 
-            // btnReset
-            // 
-            this.btnReset.Location = new System.Drawing.Point(172, 77);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(59, 23);
-            this.btnReset.TabIndex = 52;
-            this.btnReset.Text = "PIN重装";
-            this.btnReset.UseVisualStyleBackColor = true;
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
-            // 
-            // PINOperate
-            // 
-            this.PINOperate.Controls.Add(this.btnPINChange);
-            this.PINOperate.Controls.Add(this.btnReset);
-            this.PINOperate.Controls.Add(this.textNewPIN);
-            this.PINOperate.Controls.Add(this.textOldPIN);
-            this.PINOperate.Controls.Add(this.OldPIN);
-            this.PINOperate.Controls.Add(this.NewPIN);
-            this.PINOperate.Controls.Add(this.btnPinUnlock);
-            this.PINOperate.Location = new System.Drawing.Point(27, 330);
-            this.PINOperate.Name = "PINOperate";
-            this.PINOperate.Size = new System.Drawing.Size(247, 150);
-            this.PINOperate.TabIndex = 53;
-            this.PINOperate.TabStop = false;
-            this.PINOperate.Text = "PIN码";
-            // 
-            // btnPINChange
-            // 
-            this.btnPINChange.Location = new System.Drawing.Point(62, 113);
-            this.btnPINChange.Name = "btnPINChange";
-            this.btnPINChange.Size = new System.Drawing.Size(75, 23);
-            this.btnPINChange.TabIndex = 53;
-            this.btnPINChange.Text = "修改PIN";
-            this.btnPINChange.UseVisualStyleBackColor = true;
-            this.btnPINChange.Click += new System.EventHandler(this.btnPINChange_Click);
-            // 
             // AppUserOperator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1011,8 +1011,8 @@
         private System.Windows.Forms.Label OldPIN;
         private System.Windows.Forms.Label NewPIN;
         private System.Windows.Forms.GroupBox PINOperate;
-        private System.Windows.Forms.Button btnReset;
-        private System.Windows.Forms.Button btnPINChange;
+        private System.Windows.Forms.Button btnPinReset;
+        private System.Windows.Forms.Button btnPinChange;
 
     }
 }

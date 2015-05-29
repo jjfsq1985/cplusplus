@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using IFuncPlugin;
 
 namespace CardOperating
 {
@@ -18,7 +19,9 @@ namespace CardOperating
 
         private ICC_Status m_curIccStatus = ICC_Status.ICC_PowerOff;
 
-        private static byte[] m_TermialId = new byte[] { 0x20, 0x10, 0x01, 0x01, 0x00, 0x01 };            //终端机设备编号
+        private readonly byte[] m_FixedTermialId = new byte[] { 0x20, 0x10, 0x01, 0x01, 0x00, 0x01 };  //固定的终端机设备编号
+
+        private static byte[] m_TermialId = new byte[6];      //终端机设备编号
         private static byte[] m_ASN = new byte[] { 0x06, 0x71, 0x02, 0x01, 0x00, 0x00, 0x00, 0x01 };//用户卡卡号
         private static string m_strPIN = "999999";//由用户输入
                 
@@ -26,12 +29,19 @@ namespace CardOperating
         private bool m_bTACUF = false;
 
         private int m_nBusinessSn;  //脱机交易序号
-        private int m_nTermialSn;  //终端交易序号        
+        private int m_nTermialSn;  //终端交易序号 
+
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
 
         public CardApplicationTest()
         {
             InitializeComponent();
             textPIN.Text = m_strPIN;
+        }
+
+        public void SetDbInfo(SqlConnectInfo DbInfo)
+        {
+            m_DBInfo = DbInfo;
         }
 
         public void SetDeviceHandler(int hDevHandler)
@@ -43,7 +53,7 @@ namespace CardOperating
         {
             if (m_hDevHandler <= 0)
                 return false;
-            m_IccCardCtrl = new IccCardControl(m_hDevHandler);
+            m_IccCardCtrl = new IccCardControl(m_hDevHandler,m_DBInfo);
             m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
  
             byte[] sInfo = new byte[64];
@@ -101,7 +111,7 @@ namespace CardOperating
         {
             if (m_hDevHandler <= 0)
                 return false;
-            m_UserCardCtrl = new UserCardControl(m_hDevHandler);
+            m_UserCardCtrl = new UserCardControl(m_hDevHandler, m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
             if (!m_UserCardCtrl.ReadKeyValueFormDb())
             {
@@ -157,9 +167,7 @@ namespace CardOperating
         {
             if (m_hDevHandler <= 0)
                 return;
-            if (!OpenUserCard() || !OpenIccCard())
-                return;
-            if (!ReadUserCardAsn())
+            if (!OpenUserCard() || !ReadUserCardAsn())
                 return;
             decimal MoneyLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
             double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
@@ -168,7 +176,12 @@ namespace CardOperating
             OnMessageOutput( new MsgOutEvent(0, strInfo) );
             if(m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
             {
-                m_UserCardCtrl.UserCardLoad(m_ASN , m_TermialId, (int)(dbMoneyLoad * 100.0));
+                byte[] TerminalId = new byte[6];
+                if (APDUBase.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                    Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
+                else
+                    Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
+                m_UserCardCtrl.UserCardLoad(m_ASN, TerminalId, (int)(dbMoneyLoad * 100.0));
             }
             CloseUserCard();
             CloseIccCard();
@@ -178,9 +191,7 @@ namespace CardOperating
         {
             if (m_hDevHandler <= 0)
                 return;
-            if (!OpenUserCard())
-                return;
-            if (!ReadUserCardAsn())
+            if (!OpenUserCard() || !ReadUserCardAsn())
                 return;
             string strInfo = string.Format("读取卡号{0}的余额，并检查是否灰锁。", BitConverter.ToString(m_ASN));
             OnMessageOutput(new MsgOutEvent(0, strInfo));
@@ -193,7 +204,8 @@ namespace CardOperating
                     textBalance.Text = "0.00";
                 m_bGray = false;
                 m_bTACUF = false;
-                if (m_UserCardCtrl.UserCardGray(ref m_bGray, ref m_bTACUF))
+                //未灰锁时终端机编号输出为0
+                if (m_UserCardCtrl.UserCardGray(ref m_bGray, ref m_bTACUF, m_TermialId))
                 {
                     GrayFlag.CheckState = m_bGray ? CheckState.Checked : CheckState.Unchecked;
                     GrayFlag.Checked = m_bGray;
@@ -215,14 +227,17 @@ namespace CardOperating
             if (m_hDevHandler <= 0)
                 return;
             //未灰状态不可强制解灰
-            if (!m_bGray || !OpenUserCard() || !OpenIccCard())
-                return;
-            if (!ReadUserCardAsn())
+            if (!m_bGray || !OpenUserCard() || !ReadUserCardAsn())
                 return;
             if (m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
             {
                 const float BusinessMoney = 0.0F;//强制联机解灰 0 扣款
-                m_UserCardCtrl.UnLockGrayCard(m_ASN, m_TermialId, (int)(BusinessMoney * 100.0));
+                byte[] TerminalId = new byte[6];
+                if (APDUBase.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                    Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
+                else
+                    Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
+                m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0));
                 m_bGray = false;
             }
             CloseUserCard();
@@ -316,7 +331,7 @@ namespace CardOperating
         {
             if (!m_UserCardCtrl.SelectCardApp())
                 return false;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN();
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(true);
             if (ASN == null)
                 return false;
             Buffer.BlockCopy(ASN, 0, m_ASN, 0, 8);

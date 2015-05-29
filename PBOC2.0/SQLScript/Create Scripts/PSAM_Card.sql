@@ -13,13 +13,13 @@ GO
 
 CREATE TABLE [dbo].[Psam_Card](
 	[PsamId] [char](16) NOT NULL,	
-	[TerminalId] [varchar](6) NOT NULL,
+	[TerminalId] [varchar](12) NOT NULL,
 	[ClientId] int NOT NULL,
 	[CardState] [int] NOT NULL,		
 	[UseValidateDate] [datetime] NULL,
 	[UseInvalidateDate] [datetime] NULL,
-	[IssueCode] [varchar](8) NULL,
-	[RecvCode] [varchar](8) NULL,
+	[IssueCode] [varchar](16) NULL,
+	[RecvCode] [varchar](16) NULL,
 	[Remark] [nvarchar](50) NULL,
 	[OperateDateTime] [datetime] NULL,	
 	[OrgKey]       [char](32) NOT NULL,

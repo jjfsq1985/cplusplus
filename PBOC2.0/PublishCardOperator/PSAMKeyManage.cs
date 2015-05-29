@@ -24,6 +24,10 @@ namespace PublishCardOperator
         private bool m_bEditData = false;
         private int m_nEntered = -1; //相同行列的DataGridView CellEnter重复调用问题
 
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+        private int m_nKeyManageAuthority = 0;
+
+
         public PSAMKeyManage()
         {
             InitializeComponent();
@@ -50,12 +54,26 @@ namespace PublishCardOperator
             return "PSAM卡密钥管理";
         }
 
-        public void ShowPluginForm(Form parent)
+        public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
         {
+            m_DBInfo = DbInfo;
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
-            this.MdiParent = parent;
+            this.Parent = parent;
             this.Show();
+            this.BringToFront();
+            if (m_nKeyManageAuthority != GrobalVariable.KeyManage_Authority)
+            {
+                btnAdd.Enabled = false;
+                btnDelete.Enabled = false;
+                btnEditKey.Enabled = false;
+                btnSaveEdit.Enabled = false;
+            }
+        }
+
+        public void SetAuthority(int nLoginUserId, int nAuthority)
+        {
+            m_nKeyManageAuthority = nAuthority;
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -65,7 +83,7 @@ namespace PublishCardOperator
 
         private void PSAMKeyManage_Load(object sender, EventArgs e)
         {
-            if (!m_ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!m_ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 m_ObjSql = null;
                 return;
@@ -179,6 +197,7 @@ namespace PublishCardOperator
                         keyval.nKeyId = nId;
                         keyval.bValid = false;
                         PsamKeyView.Rows[index].Cells[0].Value = m_nCurPage * m_nRowsPerPage + nCount + 1;
+                        keyval.KeyDetail = (string)dataReader["InfoRemark"];
                         PsamKeyView.Rows[index].Cells[1].Value = keyval.KeyDetail;
                         strKey = FillKeyValue(dataReader, keyval.MasterKey, "MasterKey");
                         PsamKeyView.Rows[index].Cells[2].Value = strKey;

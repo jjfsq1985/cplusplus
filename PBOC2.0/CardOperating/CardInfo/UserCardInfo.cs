@@ -7,12 +7,14 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using SqlServerHelper;
+using IFuncPlugin;
 
 namespace CardOperating
 {
     public partial class UserCardInfo : Form
     {
         private UserCardInfoParam m_CardInfoPar = new UserCardInfoParam();
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
         private const Char Value_Dot = (Char)46;
         private const Char Backspace = (Char)8;
         private const Char Key_A = (Char)65;
@@ -32,6 +34,12 @@ namespace CardOperating
         public UserCardInfo()
         {
             InitializeComponent();
+        }
+
+
+        public void SetDbInfo(SqlConnectInfo DbInfo)
+        {
+            m_DBInfo = DbInfo;
         }
 
         private int GetClientIdIndex(int nClientID)
@@ -250,7 +258,7 @@ namespace CardOperating
         private void ReadInfoFromDb()
         {
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return;
@@ -609,7 +617,7 @@ namespace CardOperating
         {
             int nOrderNo = 1;
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return nOrderNo.ToString().PadLeft(6, '0');

@@ -39,6 +39,15 @@ namespace IFuncPlugin
         public static readonly int CodeTable_Authority = 1 << 7;
     }
 
+    public class SqlConnectInfo
+    {
+        public bool m_bConfig = false;
+        public string strServerName = "(local)";
+        public string strDbName = "FunnettStation";
+        public string strUser = "sa";
+        public string strUserPwd = "";
+    }
+
     public enum MenuType
     {
         eSystemAccount, //账户管理
@@ -70,6 +79,7 @@ namespace IFuncPlugin
         string PluginName();  //插件名称
         Guid PluginGuid();  //插件唯一标识（GUID）
         string PluginMenu(); //插件对应菜单名称
-        void ShowPluginForm(Form parent); //显示插件界面  
+        void SetAuthority(int nLoginUserId, int nAuthority);//该插件的权限
+        void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo); //显示插件界面  
     }
 }

@@ -5,6 +5,7 @@ using SqlServerHelper;
 using System.Data.SqlClient;
 using System.Data;
 using System.Diagnostics;
+using IFuncPlugin;
 
 namespace CardOperating
 {
@@ -42,9 +43,10 @@ namespace CardOperating
         //内部认证主密钥MIAK
         private static byte[] m_MIAK = new byte[] { 0xF2, 0x11, 0x20, 0x6C, 0x05, 0x68, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xBB };
 
-        public UserCardControl(int icdev)
+        public UserCardControl(int icdev, SqlConnectInfo DbInfo)
         {
             m_MtDevHandler = icdev;
+            m_DBInfo = DbInfo;
         }
 
         private bool SelectFile(string strName, byte[] prefixData)
@@ -1270,7 +1272,7 @@ namespace CardOperating
             return true;
         }
 
-        public bool UserCardGray(ref bool bGray, ref bool bTACUF)
+        public bool UserCardGray(ref bool bGray, ref bool bTACUF, byte[] TerminalId)
         {
             m_ctrlApdu.createrCardGrayCmd(false);
             byte[] data = m_ctrlApdu.GetOutputCmd();
@@ -1294,6 +1296,8 @@ namespace CardOperating
                     return false;               
                 bGray = m_RecvData[0] == 0x01 ? true : false;
                 bTACUF = m_RecvData[0] == 0x10 ? true : false;
+                //未灰锁时终端机编号为0
+                Buffer.BlockCopy(m_RecvData, 9, TerminalId, 0, 6);
             }
             return true;
         }
@@ -1539,7 +1543,7 @@ namespace CardOperating
         public bool ReadKeyValueFormDb()
         {
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return false;
@@ -1643,7 +1647,7 @@ namespace CardOperating
         private bool GetSqlParam(SqlHelper ObjSql, SqlParameter[] sqlparams, UserCardInfoParam UserCardInfoPar)
         {
             string strDbVal = null;
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return false;
@@ -1652,14 +1656,15 @@ namespace CardOperating
             strDbVal = BitConverter.ToString(UserCardInfoPar.GetUserCardID()).Replace("-", "");
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strDbVal);
             byte nCardType = (byte)UserCardInfoPar.UserCardType;
-            sqlparams[1] = ObjSql.MakeParam("CardType", SqlDbType.VarChar, 2, ParameterDirection.Input, nCardType);
+            sqlparams[1] = ObjSql.MakeParam("CardType", SqlDbType.VarChar, 2, ParameterDirection.Input, nCardType.ToString("X2"));
             sqlparams[2] = ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, UserCardInfoPar.ClientID);
             sqlparams[3] = ObjSql.MakeParam("UseValidateDate", SqlDbType.DateTime, 8, ParameterDirection.Input, UserCardInfoPar.ValidCardBegin);
             sqlparams[4] = ObjSql.MakeParam("UseInvalidateDate", SqlDbType.DateTime, 8, ParameterDirection.Input, UserCardInfoPar.ValidCardEnd);
 
             sqlparams[5] = ObjSql.MakeParam("Plate", SqlDbType.NVarChar, 16, ParameterDirection.Input, UserCardInfoPar.CarNo);
             sqlparams[6] = ObjSql.MakeParam("SelfId", SqlDbType.VarChar, 50, ParameterDirection.Input, UserCardInfoPar.SelfId);
-            sqlparams[7] = ObjSql.MakeParam("CertificatesType", SqlDbType.VarChar, 2, ParameterDirection.Input, 0x01);//证件类型:身份证
+            byte nCertificatesType = 0x01;
+            sqlparams[7] = ObjSql.MakeParam("CertificatesType", SqlDbType.VarChar, 2, ParameterDirection.Input, nCertificatesType.ToString("X2"));//证件类型:身份证
             sqlparams[8] = ObjSql.MakeParam("PersonalId", SqlDbType.VarChar, 32, ParameterDirection.Input, UserCardInfoPar.UserIdentity);
             sqlparams[9] = ObjSql.MakeParam("DriverName", SqlDbType.NVarChar, 50, ParameterDirection.Input, UserCardInfoPar.UserName);
             sqlparams[10] = ObjSql.MakeParam("DriverTel", SqlDbType.VarChar, 32, ParameterDirection.Input, UserCardInfoPar.TelePhone);
@@ -1672,17 +1677,17 @@ namespace CardOperating
             if (UserCardInfoPar.LimitGasFillCount > 0)
             {
                 sqlparams[15] = ObjSql.MakeParam("R_OilTimesADay", SqlDbType.Int, 4, ParameterDirection.Input, UserCardInfoPar.LimitGasFillCount);//
-                sqlparams[16] = ObjSql.MakeParam("R_OilVolATime", SqlDbType.Decimal, 18, ParameterDirection.Input, UserCardInfoPar.LimitGasFillAmount / UserCardInfoPar.LimitGasFillCount);//
+                sqlparams[16] = ObjSql.MakeParam("R_OilVolATime", SqlDbType.Decimal, 16, ParameterDirection.Input, UserCardInfoPar.LimitGasFillAmount / UserCardInfoPar.LimitGasFillCount);//
             }
             else
             {
                 sqlparams[15] = ObjSql.MakeParam("R_OilTimesADay", SqlDbType.Int, 4, ParameterDirection.Input, 0);//
-                sqlparams[16] = ObjSql.MakeParam("R_OilVolATime", SqlDbType.Decimal, 18, ParameterDirection.Input, 0);//
+                sqlparams[16] = ObjSql.MakeParam("R_OilVolATime", SqlDbType.Decimal, 16, ParameterDirection.Input, 0);//
             }
-            sqlparams[17] = ObjSql.MakeParam("R_OilVolTotal", SqlDbType.Decimal, 18, ParameterDirection.Input, UserCardInfoPar.LimitGasFillAmount);//
+            sqlparams[17] = ObjSql.MakeParam("R_OilVolTotal", SqlDbType.Decimal, 16, ParameterDirection.Input, UserCardInfoPar.LimitGasFillAmount);//
             sqlparams[18] = ObjSql.MakeParam("R_OilEndDate", SqlDbType.DateTime, 8, ParameterDirection.Input, UserCardInfoPar.ValidCardEnd);//
             sqlparams[19] = ObjSql.MakeParam("R_Plate", SqlDbType.Bit, 1, ParameterDirection.Input, UserCardInfoPar.LimitCarNo);//
-            sqlparams[20] = ObjSql.MakeParam("R_Oil", SqlDbType.VarChar, 4, ParameterDirection.Input, UserCardInfoPar.LimitGasType);//
+            sqlparams[20] = ObjSql.MakeParam("R_Oil", SqlDbType.VarChar, 4, ParameterDirection.Input, UserCardInfoPar.LimitGasType.ToString("X4"));//
             sqlparams[21] = ObjSql.MakeParam("R_RFID", SqlDbType.Bit, 1, ParameterDirection.Input, false);//
             sqlparams[22] = ObjSql.MakeParam("CylinderNum", SqlDbType.Int, 4, ParameterDirection.Input, UserCardInfoPar.CylinderNum);//
             sqlparams[23] = ObjSql.MakeParam("FactoryNum", SqlDbType.Char, 7, ParameterDirection.Input, UserCardInfoPar.BoalFactoryID);//
@@ -1721,7 +1726,7 @@ namespace CardOperating
 
         public void GetUserCardInfo(UserCardInfoParam CardInfo)
         {
-            byte[] byteAsn = GetUserCardASN();
+            byte[] byteAsn = GetUserCardASN(false);
             if (byteAsn != null)
             {                
                 CardInfo.CardOrderNo = BitConverter.ToString(byteAsn, 5, 3).Replace("-", "");
@@ -1734,7 +1739,10 @@ namespace CardOperating
             GetCylinderInfo(CardInfo);
         }
 
-        public byte[] GetUserCardASN()
+        /// <summary>
+        /// 原始卡无卡号，检查数据库记录时不提示错误
+        /// </summary>
+        public byte[] GetUserCardASN(bool bMessage)
         {
             m_ctrlApdu.createGetEFFileCmd(0x95, 0x1C);//公共应用基本数据(100+10101)0x15文件长度0x1C
             byte[] data = m_ctrlApdu.GetOutputCmd();
@@ -1744,7 +1752,8 @@ namespace CardOperating
             m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
             if (m_RetVal != 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取卡号失败"));
+                if (bMessage)
+                    base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取卡号失败"));
                 return null;
             }
             else
@@ -1753,7 +1762,8 @@ namespace CardOperating
                 uint nAscLen = nRecvLen * 2;
                 byte[] ASNAsc = new byte[nAscLen];
                 DllExportMT.hex_asc(m_RecvData, ASNAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "读取卡号应答：" + Encoding.ASCII.GetString(ASNAsc)));
+                if (bMessage)
+                    base.OnTextOutput(new MsgOutEvent(0, "读取卡号应答：" + Encoding.ASCII.GetString(ASNAsc)));
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                     return null;
                 byte[] UserCardASN = new byte[8];
@@ -1953,11 +1963,11 @@ namespace CardOperating
         {
             if (!SelectCardApp())//用户卡需要进应用后才能获取卡号
                 return false;
-            byte[] CardAsn = GetUserCardASN();
+            byte[] CardAsn = GetUserCardASN(false);
             if (CardAsn == null || CardAsn.Length != 8)
                 return false;
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return false;
@@ -2014,7 +2024,7 @@ namespace CardOperating
         private byte[] GetApplicationKeyVal(byte[] CardId,string strKeyName, int nAppIndex)
         {
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return null;
@@ -2047,43 +2057,6 @@ namespace CardOperating
             ObjSql.CloseConnection();
             ObjSql = null;
             return KeyValue;
-        }
-
-        public bool GetLockCardFromDb(byte[] CardId, ref double dbLockMoney, byte[] TerminalID)
-        {
-            SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
-            {
-                ObjSql = null;
-                return false;
-            }
-            string strDbAsn = BitConverter.ToString(CardId).Replace("-", "");
-
-            SqlDataReader dataReader = null;
-            SqlParameter[] sqlparam = new SqlParameter[1];
-            sqlparam[0] = ObjSql.MakeParam("CardNum", SqlDbType.Char, 16, ParameterDirection.Input, strDbAsn);
-            ObjSql.ExecuteCommand("select top 1 * from Data_LockGrayRecord where CardNum=@CardNum and IsLock=1 order by GrayTime desc", sqlparam, out dataReader);
-            bool bRet = false;
-            if (dataReader != null)
-            {
-                if (!dataReader.HasRows)
-                    dataReader.Close();
-                else
-                {
-                    if (dataReader.Read())
-                    {
-                        bRet = true;                        
-                        dbLockMoney = Convert.ToDouble((decimal)dataReader["LockMoney"]);
-                        string strTerminalID = (string)dataReader["TerminalId"];
-                        byte[] byteKey = APDUBase.StringToBCD(strTerminalID);                        
-                        Buffer.BlockCopy(byteKey, 0, TerminalID, 0, 6);
-                    }
-                    dataReader.Close();
-                }
-            }
-            ObjSql.CloseConnection();
-            ObjSql = null;
-            return bRet;
         }
 
         public bool ChangePIN(string strOldPin, string strNewPin)

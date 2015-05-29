@@ -17,6 +17,9 @@ namespace CodeTable
     {
         private SqlHelper m_ObjSql = new SqlHelper();
         private List<SuperiorCodeTable> m_lstSuperiorCode = new List<SuperiorCodeTable>();
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+        private int m_nAuthority = 0;
+
 
         public CompanyCode()
         {
@@ -43,18 +46,30 @@ namespace CodeTable
             return "公司代码";
         }
 
-        public void ShowPluginForm(Form parent)
+        public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
         {
+            m_DBInfo = DbInfo;
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
-            this.MdiParent = parent;
+            this.Parent = parent;
             this.Show();
+            this.BringToFront();
+            if (m_nAuthority != GrobalVariable.CodeTable_Authority)
+            {
+                btnAdd.Enabled = false;
+                btnDel.Enabled = false;
+            }
+        }
+
+        public void SetAuthority(int nLoginUserId, int nAuthority)
+        {
+            m_nAuthority = nAuthority;
         }
 
         private void CompanyCode_Load(object sender, EventArgs e)
         {
             //显示所有上级单位代码
-            if (!m_ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!m_ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 m_ObjSql = null;
                 return;
@@ -296,6 +311,12 @@ namespace CodeTable
                 m_lstSuperiorCode.Remove(temp);
             }
             deleteLst.Clear();
+        }
+
+        private void SuperiorView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (m_nAuthority != GrobalVariable.CodeTable_Authority)
+                e.Cancel = true;
         }
 
     }

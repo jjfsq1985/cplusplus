@@ -17,7 +17,7 @@ namespace FNTMain
 
             LoginMain logonMain = new LoginMain();            
             if (logonMain.ShowDialog() == DialogResult.OK)
-                Application.Run(new Main(logonMain.UserLoginId, logonMain.UserLogin));
+                Application.Run(new Main(logonMain.UserLoginId, logonMain.GetDbInfo()));
             else
                 return;            
         }

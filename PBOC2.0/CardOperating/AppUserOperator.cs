@@ -13,6 +13,10 @@ namespace CardOperating
 {
     public partial class AppUserOperator : Form , IPlugin
     {
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+        private int m_nAppOperatorAuthority = 0;
+        private int m_nLoginUserId = 0;
+
         private const Char Backspace = (Char)8;
         private UserCardInfoParam m_CardInfoPar = new UserCardInfoParam();
         private UserCardControl m_UserCardCtrl = null;
@@ -23,7 +27,7 @@ namespace CardOperating
         private static string m_strPIN = "999999";//由用户输入
 
         private bool m_bGray = false;   //卡已灰，不能扣款解锁
-        private bool m_bTACUF = false;
+        private bool m_bTACUF = false;        
 
         //一个公司可以有多个单位（分公司），一个单位下可以有多个站点。
         private List<ClientInfo> m_ListClientInfo = new List<ClientInfo>();//单位信息
@@ -58,12 +62,29 @@ namespace CardOperating
             return "卡信息维护";
         }
 
-        public void ShowPluginForm(Form parent)
+        public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
         {
+            m_DBInfo = DbInfo;
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
-            this.MdiParent = parent;
+            this.Parent = parent;
             this.Show();
+            this.BringToFront();
+            if (m_nAppOperatorAuthority != GrobalVariable.CardPublish_Authority)
+            {
+                btnModifyCard.Enabled = false;
+                btnUnlockGrayCard.Enabled = false;
+                btnCardLoad.Enabled = false;
+                btnPinUnlock.Enabled = false;
+                btnPinReset.Enabled = false;
+                btnPinChange.Enabled = false;
+            }
+        }
+
+        public void SetAuthority(int nLoginUserId,int nAuthority)
+        {
+            m_nLoginUserId = nLoginUserId;
+            m_nAppOperatorAuthority = nAuthority;
         }
 
         private void AppUserOperator_Load(object sender, EventArgs e)
@@ -211,7 +232,7 @@ namespace CardOperating
         private void ReadInfoFromDb()
         {
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName,m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return;
@@ -370,7 +391,7 @@ namespace CardOperating
             m_hDevHandler = DllExportMT.open_device(0, 9600);
             if (m_hDevHandler <= 0)
                 return false;
-            m_UserCardCtrl = new UserCardControl(m_hDevHandler);
+            m_UserCardCtrl = new UserCardControl(m_hDevHandler, m_DBInfo);
 
             byte[] cardUid = new byte[4];
             byte[] cardInfo = new byte[64];
@@ -421,7 +442,7 @@ namespace CardOperating
             string strCardId = BitConverter.ToString(CardId).Replace("-", "");
 
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return;
@@ -586,7 +607,7 @@ namespace CardOperating
             listLimitArea.Enabled = true;
 
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return;
@@ -800,14 +821,14 @@ namespace CardOperating
             m_strPIN = textPIN.Text;
         }
 
-        //卡片圈存
+        //卡片圈存,未灰锁的卡读终端机编号为0，使用固定终端机编号
         private void btnCardLoad_Click(object sender, EventArgs e)
         {
             if (!OpenUserCard())
                 return;
             if (!m_UserCardCtrl.SelectCardApp())
                 return;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN();
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
@@ -819,16 +840,32 @@ namespace CardOperating
             int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
             if (nRet == 1)
             {
-                if (m_UserCardCtrl.UserCardLoad(m_ASN, m_FixedTermialId, (int)(dbMoneyLoad * 100.0)))
+                byte[] TerminalId = new byte[6];
+                if (APDUBase.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                    Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
+                else
+                    Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
+
+                double dbBalance = 0.0;
+                if (m_UserCardCtrl.UserCardBalance(ref dbBalance))//圈存前读余额
                 {
-                    //写圈存数据库记录
-                    string strInfo = string.Format("对卡号{0}圈存{1}元成功", BitConverter.ToString(m_ASN), dbMoneyLoad.ToString("F2"));
-                    MessageBox.Show(strInfo);
+                    if (m_UserCardCtrl.UserCardLoad(m_ASN, TerminalId, (int)(dbMoneyLoad * 100.0)))
+                    {
+                        //写圈存数据库记录
+                        SaveLoadRecord(dbMoneyLoad, dbBalance);
+                        string strInfo = string.Format("对卡号{0}圈存{1}元成功", BitConverter.ToString(m_ASN), dbMoneyLoad.ToString("F2"));
+                        MessageBox.Show(strInfo);
+                    }
+                    else
+                    {
+                        MessageBox.Show("圈存失败");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("圈存失败");
+                    MessageBox.Show("读取余额失败");
                 }
+                
             }
             else if (nRet == 2)
             {
@@ -849,7 +886,7 @@ namespace CardOperating
                 return;
             if (!m_UserCardCtrl.SelectCardApp())
                 return;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN();
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
@@ -866,7 +903,8 @@ namespace CardOperating
                     textBalance.Text = "0.00";
                 m_bGray = false;
                 m_bTACUF = false;
-                if (m_UserCardCtrl.UserCardGray(ref m_bGray, ref m_bTACUF))
+                //未灰锁时终端机编号输出为0
+                if (m_UserCardCtrl.UserCardGray(ref m_bGray, ref m_bTACUF, m_TermialId))
                 {
                     GrayFlag.CheckState = m_bGray ? CheckState.Checked : CheckState.Unchecked;
                     GrayFlag.Checked = m_bGray;
@@ -878,6 +916,8 @@ namespace CardOperating
                 }
                 if (m_bTACUF)
                     m_UserCardCtrl.ClearTACUF();
+
+                SaveCardMoneyToDb(dbBalance);
             }
             else if (nRet == 2)
             {
@@ -890,16 +930,15 @@ namespace CardOperating
             CloseUserCard();
         }
 
-        //解灰/强制解灰
+        //解灰,未灰锁的卡读终端机编号为0，使用固定终端机编号
         private void btnUnlockGrayCard_Click(object sender, EventArgs e)
         {
-            //检查数据库灰卡记录，没有就提示和使用强制解灰
             //未灰状态不可强制解灰
             if (!m_bGray || !OpenUserCard())
                 return;
             if (!m_UserCardCtrl.SelectCardApp())
                 return;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN();
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
@@ -909,21 +948,13 @@ namespace CardOperating
             int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
             if (nRet == 1)
             {
-                double dbLockMoney = 0.0;
-
-                if (!m_UserCardCtrl.GetLockCardFromDb(m_ASN,ref dbLockMoney,m_TermialId))
-                {
-                    string strInfomation = string.Format("未找到卡号{0}的灰卡记录,是否强制解灰？", BitConverter.ToString(m_ASN));//0
-                    if (MessageBox.Show(strInfomation, "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        const double BusinessMoney = 0.0;//强制联机解灰 0 扣款
-                        m_UserCardCtrl.UnLockGrayCard(m_ASN, m_FixedTermialId, (int)(BusinessMoney * 100.0));
-                    }                    
-                }
+                byte[] TerminalId = new byte[6];
+                if (APDUBase.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                    Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
-                {                    
-                    m_UserCardCtrl.UnLockGrayCard(m_ASN, m_TermialId, (int)(dbLockMoney * 100.0));
-                }
+                    Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
+                const double BusinessMoney = 0.0;//强制联机解灰 0 扣款
+                m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0));
                 m_bGray = false;
             }
             else if (nRet == 2)
@@ -948,7 +979,7 @@ namespace CardOperating
 
             if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp())
                 return;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN();
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
@@ -967,7 +998,7 @@ namespace CardOperating
         }
 
         //只要新ＰＩＮ
-        private void btnReset_Click(object sender, EventArgs e)
+        private void btnPinReset_Click(object sender, EventArgs e)
         {
             if (textNewPIN.Text.Length != 6)
             {
@@ -976,7 +1007,7 @@ namespace CardOperating
             }
             if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp())
                 return;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN();
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
@@ -995,7 +1026,7 @@ namespace CardOperating
         }
 
         //修改ＰＩＮ码
-        private void btnPINChange_Click(object sender, EventArgs e)
+        private void btnPinChange_Click(object sender, EventArgs e)
         {
             if(textOldPIN.Text.Length != 6 || textNewPIN.Text.Length != 6)
                 return;
@@ -1026,6 +1057,88 @@ namespace CardOperating
         {
             if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
                 e.Handled = true;//不接受非数字值
+        }
+
+        /// <summary>
+        /// 圈存记录
+        /// </summary>
+        /// <param name="dbLoadMoney">圈存金额</param>
+        /// <param name="dbBalance">卡余额</param>
+        private void SaveLoadRecord(double dbLoadMoney,double dbBalance)
+        {
+            string strCardId = BitConverter.ToString(m_ASN).Replace("-", "");
+
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
+
+            double dblTotal = dbBalance + dbLoadMoney;
+
+            SqlParameter[] sqlparams = new SqlParameter[7];
+            sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
+            sqlparams[1] = ObjSql.MakeParam("Balance", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbBalance));
+            sqlparams[2] = ObjSql.MakeParam("Recharge", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbLoadMoney));
+            sqlparams[3] = ObjSql.MakeParam("Total", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dblTotal));
+            sqlparams[4] = ObjSql.MakeParam("Time", SqlDbType.DateTime, 8, ParameterDirection.Input, DateTime.Now);
+            sqlparams[5] = ObjSql.MakeParam("OperatorId", SqlDbType.Int, 4, ParameterDirection.Input, m_nLoginUserId);            
+            sqlparams[6] = ObjSql.MakeParam("TimeStr", SqlDbType.VarChar, 10, ParameterDirection.Input, DateTime.Now.ToString("yyyyMMdd") + "01");
+
+
+            ObjSql.ExecuteCommand("insert into Data_RechargeCardRecord values(@CardId,N'充值',@Balance,@Recharge,0,@Recharge,@Total,@Time,@OperatorId,N'现金支付',@TimeStr,0)", sqlparams);
+
+            //更新Base_Card充值总额和当前卡余额
+            double dbRechargeTotal = GetBaseCardMoneyValue(ObjSql, strCardId, "RechargeTotal") + dbLoadMoney;
+            UpdateBaseCardMoneyValue(ObjSql, strCardId, "RechargeTotal", dbRechargeTotal);
+            UpdateBaseCardMoneyValue(ObjSql, strCardId, "CardBalance", dblTotal);
+
+            ObjSql.CloseConnection();
+            ObjSql = null;
+        }
+
+        private void UpdateBaseCardMoneyValue(SqlHelper ObjSql, string strCardId, string strFieldName, double dbValue)
+        {
+            SqlParameter[] sqlparams = new SqlParameter[2];
+            sqlparams[0] = ObjSql.MakeParam(strFieldName, SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbValue));
+            sqlparams[1] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
+            ObjSql.ExecuteCommand("update Base_Card set " + strFieldName + "=@" + strFieldName + " where CardNum=@CardId", sqlparams);
+        }
+
+        private double GetBaseCardMoneyValue(SqlHelper ObjSql, string strCardId, string strFieldName)
+        {
+            double dbValue = 0.0;
+            SqlParameter[] sqlparams = new SqlParameter[1];            
+            sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
+            
+            SqlDataReader dataReader = null;
+            ObjSql.ExecuteCommand("select " + strFieldName + " form Base_Card where CardNum=@CardId", sqlparams, out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows && dataReader.Read())
+                {
+                    dbValue = (double)dataReader[strFieldName];
+                }
+                dataReader.Close();
+            }
+            return dbValue;
+        }
+
+        private void SaveCardMoneyToDb(double dbBalance)
+        {
+            string strCardId = BitConverter.ToString(m_ASN).Replace("-", "");
+
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
+            UpdateBaseCardMoneyValue(ObjSql, strCardId, "CardBalance", dbBalance);
+
+            ObjSql.CloseConnection();
+            ObjSql = null;
         }
     }
 }

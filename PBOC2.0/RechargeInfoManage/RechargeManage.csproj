@@ -52,6 +52,10 @@
       <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
       <Name>IFuncPlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SqlServerHelper\SqlServerHelper.csproj">
+      <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
+      <Name>SqlServerHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="RechargeInfo.resx">

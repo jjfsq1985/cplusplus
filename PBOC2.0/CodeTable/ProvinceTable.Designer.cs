@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.ProvinceView = new System.Windows.Forms.DataGridView();
+            this.ProvinceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProvinceCodeValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DataViewPanel = new System.Windows.Forms.Panel();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnDel = new System.Windows.Forms.Button();
-            this.ProvinceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ProvinceCodeValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.ProvinceView)).BeginInit();
             this.DataViewPanel.SuspendLayout();
             this.SuspendLayout();
@@ -56,7 +56,23 @@
             this.ProvinceView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.ProvinceView.Size = new System.Drawing.Size(256, 311);
             this.ProvinceView.TabIndex = 0;
+            this.ProvinceView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.ProvinceView_CellBeginEdit);
             this.ProvinceView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProvinceView_CellValidated);
+            // 
+            // ProvinceName
+            // 
+            this.ProvinceName.HeaderText = "省名称";
+            this.ProvinceName.MaxInputLength = 50;
+            this.ProvinceName.Name = "ProvinceName";
+            this.ProvinceName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ProvinceName.Width = 150;
+            // 
+            // ProvinceCodeValue
+            // 
+            this.ProvinceCodeValue.HeaderText = "省代码";
+            this.ProvinceCodeValue.MaxInputLength = 2;
+            this.ProvinceCodeValue.Name = "ProvinceCodeValue";
+            this.ProvinceCodeValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // DataViewPanel
             // 
@@ -85,21 +101,6 @@
             this.btnDel.Text = "-";
             this.btnDel.UseVisualStyleBackColor = true;
             this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
-            // 
-            // ProvinceName
-            // 
-            this.ProvinceName.HeaderText = "省名称";
-            this.ProvinceName.MaxInputLength = 50;
-            this.ProvinceName.Name = "ProvinceName";
-            this.ProvinceName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ProvinceName.Width = 150;
-            // 
-            // ProvinceCodeValue
-            // 
-            this.ProvinceCodeValue.HeaderText = "省代码";
-            this.ProvinceCodeValue.MaxInputLength = 2;
-            this.ProvinceCodeValue.Name = "ProvinceCodeValue";
-            this.ProvinceCodeValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // ProvinceCode
             // 

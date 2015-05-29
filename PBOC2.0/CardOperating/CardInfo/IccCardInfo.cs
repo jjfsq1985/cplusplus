@@ -7,18 +7,25 @@ using System.Text;
 using System.Windows.Forms;
 using SqlServerHelper;
 using System.Data.SqlClient;
+using IFuncPlugin;
 
 namespace CardOperating
 {
     public partial class IccCardInfo : Form
     {
         private IccCardInfoParam m_IccCardInfoPar = new IccCardInfoParam();
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
         private const Char Backspace = (Char)8;
         private List<ClientInfo> m_ListClientInfo = new List<ClientInfo>();
 
         public IccCardInfo()
         {
             InitializeComponent();
+        }
+
+        public void SetDbInfo(SqlConnectInfo DbInfo)
+        {
+            m_DBInfo = DbInfo;
         }
 
         private int GetClientIdIndex(int nClientID)
@@ -39,7 +46,7 @@ namespace CardOperating
         {
             cmbClientName.Items.Clear();
             SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection("(local)", "FunnettStation", "sa", "sasoft"))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
                 ObjSql = null;
                 return;
