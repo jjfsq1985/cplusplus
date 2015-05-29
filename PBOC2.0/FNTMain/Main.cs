@@ -741,10 +741,5 @@ namespace FNTMain
             SearchCommon("CardNum", strCardId);
         }
 
-        private void listSearchResult_DoubleClick(object sender, EventArgs e)
-        {
-
-        }
-
     }
 }

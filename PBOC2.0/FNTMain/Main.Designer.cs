@@ -213,8 +213,7 @@
             this.listSearchResult.Size = new System.Drawing.Size(865, 519);
             this.listSearchResult.TabIndex = 5;
             this.listSearchResult.UseCompatibleStateImageBehavior = false;
-            this.listSearchResult.View = System.Windows.Forms.View.Details;
-            this.listSearchResult.DoubleClick += new System.EventHandler(this.listSearchResult_DoubleClick);
+            this.listSearchResult.View = System.Windows.Forms.View.Details;            
             // 
             // btnSearch
             // 
