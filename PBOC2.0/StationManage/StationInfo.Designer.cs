@@ -71,10 +71,10 @@
             // StationId
             // 
             this.StationId.HeaderText = "站点编号";
-            this.StationId.MaxInputLength = 4;
+            this.StationId.MaxInputLength = 8;
             this.StationId.Name = "StationId";
             this.StationId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.StationId.Width = 80;
+            this.StationId.Width = 100;
             // 
             // StationName
             // 

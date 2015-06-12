@@ -30,16 +30,18 @@ namespace CardOperating
 
         private int GetClientIdIndex(int nClientID)
         {
+            int nSel = -1;
             int nIndex = 0;
             foreach (ClientInfo info in m_ListClientInfo)
             {
                 if (info.ClientId == nClientID)
                 {
+                    nSel = nIndex;
                     break;
                 }
                 nIndex++;
             }
-            return nIndex;
+            return nSel;
         }
 
         private void ReadInfoFromDb()
@@ -95,6 +97,7 @@ namespace CardOperating
         {
             if (cmbClientName.SelectedIndex >= 0 && cmbClientName.SelectedIndex < m_ListClientInfo.Count)
                 m_IccCardInfoPar.ClientID = m_ListClientInfo[cmbClientName.SelectedIndex].ClientId;
+
             m_IccCardInfoPar.PSAMCardID = textPSAMNo.Text;
             m_IccCardInfoPar.TermialID = textTermialID.Text;
             if (AppValidDateFrom.Value < AppValidDateTo.Value)

@@ -186,6 +186,7 @@ namespace CodeTable
                     {
                         SuperiorCodeTable newVal = new SuperiorCodeTable();
                         newVal.eDbState = DbStateFlag.eDbAdd;
+                        newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strSuperiorName = strInput;
                         newVal.SuperiorCode[0] = 0;
                         newVal.SuperiorCode[1] = 0;
@@ -226,7 +227,7 @@ namespace CodeTable
                         {
                             bAdd = false;
                             SuperiorView.CurrentCell.Value = "";
-                            MessageBox.Show("省代码已存在");
+                            MessageBox.Show("公司代码已存在");
                             break;
                         }
                     }
@@ -234,6 +235,7 @@ namespace CodeTable
                     {
                         SuperiorCodeTable newVal = new SuperiorCodeTable();
                         newVal.eDbState = DbStateFlag.eDbAdd;
+                        newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strSuperiorName = "";
                         newVal.SuperiorCode[0] = codebyte[0];
                         newVal.SuperiorCode[1] = codebyte[1];
@@ -252,7 +254,7 @@ namespace CodeTable
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (SuperiorView.Rows.Count > m_lstSuperiorCode.Count)
+            if (SuperiorView.Rows.Count > m_lstSuperiorCode.Count || !CodeTable.IsSuperiorListCompleted(m_lstSuperiorCode))
             {
                 MessageBox.Show("请先将空行填完整");
                 return;

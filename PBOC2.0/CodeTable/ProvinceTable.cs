@@ -182,6 +182,7 @@ namespace CodeTable
                     {
                         ProvinceCodeTable newVal = new ProvinceCodeTable();
                         newVal.eDbState = DbStateFlag.eDbAdd;
+                        newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strProvinceName = strInput;
                         newVal.ProvinceCode = 0;
                         m_lstProvCode.Add(newVal);
@@ -231,6 +232,7 @@ namespace CodeTable
                     {
                         ProvinceCodeTable newVal = new ProvinceCodeTable();
                         newVal.eDbState = DbStateFlag.eDbAdd;
+                        newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strProvinceName = "";
                         newVal.ProvinceCode = codebyte;
                         m_lstProvCode.Add(newVal);
@@ -247,7 +249,7 @@ namespace CodeTable
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (ProvinceView.Rows.Count > m_lstProvCode.Count)
+            if (ProvinceView.Rows.Count > m_lstProvCode.Count || !CodeTable.IsProvListCompleted(m_lstProvCode))
             {
                 MessageBox.Show("请先将空行填完整");
                 return;

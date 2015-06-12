@@ -63,7 +63,7 @@ CREATE PROCEDURE PROC_PublishCpuCard(
 	if (@@trancount<>0)
 		return 1
 	set xact_abort on                                         
-	if(len(@CardId)<>16 or @ClientId <=0)
+	if(len(@CardId)<>16)
 		return 2
 	--ÅÐ¶Ï¿¨ºÅÔÚÂð
 	if exists(select * from Base_Card where CardNum=@CardId)

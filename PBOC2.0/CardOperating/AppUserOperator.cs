@@ -27,7 +27,6 @@ namespace CardOperating
         private static string m_strPIN = "999999";//由用户输入
 
         private bool m_bGray = false;   //卡已灰，不能扣款解锁
-        private bool m_bTACUF = false;        
 
         //一个公司可以有多个单位（分公司），一个单位下可以有多个站点。
         private List<ClientInfo> m_ListClientInfo = new List<ClientInfo>();//单位信息
@@ -100,16 +99,18 @@ namespace CardOperating
 
         private int GetClientIdIndex(int nClientID)
         {
+            int nSel = -1;
             int nIndex = 0;
             foreach (ClientInfo info in m_ListClientInfo)
             {
                 if (info.ClientId == nClientID)
                 {
+                    nSel = nIndex;
                     break;
                 }
                 nIndex++;
             }
-            return nIndex;
+            return nSel;
         }
 
         private void GetClientInfo(SqlHelper ObjSql)
@@ -217,7 +218,7 @@ namespace CardOperating
                     {
                         StationInfo info = new StationInfo();
                         strCode = (string)dataReader["StationId"];
-                        for (int i = 0; i < 2; i++)
+                        for (int i = 0; i < 4; i++)
                         {
                             info.StationCode[i] = Convert.ToByte(strCode.Substring(i * 2, 2), 16);
                         }
@@ -257,6 +258,7 @@ namespace CardOperating
             DateTo.Value = m_CardInfoPar.ValidCardEnd;
             textUserName.Text = m_CardInfoPar.UserName;
             textPriceLevel.Text = m_CardInfoPar.PriceLevel.ToString();
+            cmbIdType.SelectedIndex = GetIDTypeIndex(m_CardInfoPar.IdType);
             textUserIdentity.Text = m_CardInfoPar.UserIdentity;            
             double dbRate = m_CardInfoPar.DiscountRate * 1.0 / 100.0;
             textDiscountRate.Text = dbRate.ToString("F2");
@@ -358,6 +360,27 @@ namespace CardOperating
             //修改地域限制代码内容
             byte byteLimit = GetAreaLimit(cmbAreaLimit.SelectedIndex);
             FillListAreaCode(byteLimit);
+        }
+
+        private int GetIDTypeIndex(UserCardInfoParam.IdentityType eIdType)
+        {
+            int nSel = 0;
+            switch (eIdType)
+            {
+                case UserCardInfoParam.IdentityType.IdentityCard:
+                    nSel = 0;
+                    break;
+                case UserCardInfoParam.IdentityType.DriverCard:
+                    nSel = 1;
+                    break;
+                case UserCardInfoParam.IdentityType.OfficerCard:
+                    nSel = 2;
+                    break;
+                case UserCardInfoParam.IdentityType.OtherCard:
+                    nSel = 3;
+                    break;
+            }
+            return nSel;
         }
 
         private int GetCarCategoryIndex(string strCarType)
@@ -555,8 +578,9 @@ namespace CardOperating
             byte pricelevel = 1;
             byte.TryParse(textPriceLevel.Text, out pricelevel);
             m_CardInfoPar.PriceLevel = pricelevel;
-            
 
+
+            m_CardInfoPar.IdType = (UserCardInfoParam.IdentityType)(cmbIdType.SelectedIndex + 1);
             m_CardInfoPar.UserIdentity = textUserIdentity.Text;            
 
             m_CardInfoPar.CarType = GetCarCateGory(cmbCarCategory.SelectedIndex);
@@ -701,12 +725,14 @@ namespace CardOperating
                     break;
                 case 0x04:
                     {
-                        for (int nLimitIndex = 0; nLimitIndex < AreaCode.Length; nLimitIndex += 2)
+                        byte[] StationCode = new byte[4];
+                        for (int nLimitIndex = 0; nLimitIndex < AreaCode.Length; nLimitIndex += 4)
                         {
                             int i = 0;
                             foreach (StationInfo info in m_ListStationInfo)
                             {
-                                if ((info.StationCode[0] == AreaCode[nLimitIndex]) && (info.StationCode[1] == AreaCode[nLimitIndex+1]))
+                                Buffer.BlockCopy(AreaCode, nLimitIndex, StationCode, 0, 4);
+                                if (APDUBase.ByteDataEquals(info.StationCode, StationCode))
                                 {
                                     listLimitArea.SetItemChecked(i, true);
                                     break;
@@ -758,14 +784,20 @@ namespace CardOperating
                             }
                         } 
                         break;
-                    case 0x04://限站（最多20个）
-                        foreach (StationInfo info in m_ListStationInfo)
+                    case 0x04://限站（最多10个）
                         {
-                            if (listLimitArea.CheckedItems.Contains(info.strStationName))
+                            int nLimitCount = 0;
+                            foreach (StationInfo info in m_ListStationInfo)
                             {
-                                strLimitAreaCode += BitConverter.ToString(info.StationCode).Replace("-", "");                                
+                                if (nLimitCount >= 10)
+                                    break;
+                                if (listLimitArea.CheckedItems.Contains(info.strStationName))
+                                {
+                                    strLimitAreaCode += BitConverter.ToString(info.StationCode).Replace("-", "");
+                                    nLimitCount++;
+                                }
                             }
-                        } 
+                        }
                         break;
                 }
             }
@@ -849,11 +881,11 @@ namespace CardOperating
                 double dbBalance = 0.0;
                 if (m_UserCardCtrl.UserCardBalance(ref dbBalance))//圈存前读余额
                 {
-                    if (m_UserCardCtrl.UserCardLoad(m_ASN, TerminalId, (int)(dbMoneyLoad * 100.0)))
+                    if (m_UserCardCtrl.UserCardLoad(m_ASN, TerminalId, (int)(dbMoneyLoad * 100.0), true))
                     {
                         //写圈存数据库记录
                         SaveLoadRecord(dbMoneyLoad, dbBalance);
-                        string strInfo = string.Format("对卡号{0}圈存{1}元成功", BitConverter.ToString(m_ASN), dbMoneyLoad.ToString("F2"));
+                        string strInfo = string.Format("成功对卡号{0}圈存{1}元.", BitConverter.ToString(m_ASN), dbMoneyLoad.ToString("F2"));
                         MessageBox.Show(strInfo);
                     }
                     else
@@ -896,16 +928,23 @@ namespace CardOperating
             int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
             if (nRet == 1)
             {
-                double dbBalance = 0.0;
-                if (m_UserCardCtrl.UserCardBalance(ref dbBalance))
-                    textBalance.Text = dbBalance.ToString("F2");
-                else
-                    textBalance.Text = "0.00";
                 m_bGray = false;
-                m_bTACUF = false;
                 //未灰锁时终端机编号输出为0
-                if (m_UserCardCtrl.UserCardGray(ref m_bGray, ref m_bTACUF, m_TermialId))
+                int nCardStatus = 0;
+                if (m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId))
                 {
+                    if (nCardStatus == 2)
+                    {
+                        //当前TAC未读，需要清空后重读
+                        m_UserCardCtrl.ClearTACUF();
+                        nCardStatus = 0;
+                        m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId);
+                        m_bGray = nCardStatus == 1 ? true : false;
+                    }
+                    else
+                    {
+                        m_bGray = nCardStatus == 1 ? true : false;
+                    }
                     GrayFlag.CheckState = m_bGray ? CheckState.Checked : CheckState.Unchecked;
                     GrayFlag.Checked = m_bGray;
                 }
@@ -914,8 +953,12 @@ namespace CardOperating
                     GrayFlag.CheckState = CheckState.Indeterminate;
                     GrayFlag.Checked = false;
                 }
-                if (m_bTACUF)
-                    m_UserCardCtrl.ClearTACUF();
+
+                double dbBalance = 0.0;
+                if (m_UserCardCtrl.UserCardBalance(ref dbBalance))
+                    textBalance.Text = dbBalance.ToString("F2");
+                else
+                    textBalance.Text = "0.00";
 
                 SaveCardMoneyToDb(dbBalance);
             }
@@ -954,7 +997,7 @@ namespace CardOperating
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
                 const double BusinessMoney = 0.0;//强制联机解灰 0 扣款
-                m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0));
+                m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0),true);
                 m_bGray = false;
             }
             else if (nRet == 2)
@@ -1113,7 +1156,7 @@ namespace CardOperating
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
             
             SqlDataReader dataReader = null;
-            ObjSql.ExecuteCommand("select " + strFieldName + " form Base_Card where CardNum=@CardId", sqlparams, out dataReader);
+            ObjSql.ExecuteCommand("select " + strFieldName + " from Base_Card where CardNum=@CardId", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows && dataReader.Read())

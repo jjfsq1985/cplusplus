@@ -36,4 +36,43 @@ namespace CodeTable
         public DbStateFlag eDbState = DbStateFlag.eDbOK;
     }
 
+    public class CodeTable
+    {
+        public static bool IsCityListCompleted(List<CityCodeTable> list)
+        {
+            foreach (CityCodeTable value in list)
+            {
+                if ((value.strCityName == "") || (value.CityCode[0] == 0x00 && value.CityCode[1] == 0x00))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool IsSuperiorListCompleted(List<SuperiorCodeTable> list)
+        {
+            foreach (SuperiorCodeTable value in list)
+            {
+                if ((value.strSuperiorName == "") || (value.SuperiorCode[0] == 0x00 && value.SuperiorCode[1] == 0x00))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool IsProvListCompleted(List<ProvinceCodeTable> list)
+        {
+            foreach (ProvinceCodeTable value in list)
+            {
+                if ((value.strProvinceName == "") || (value.ProvinceCode == 0x00))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
 }

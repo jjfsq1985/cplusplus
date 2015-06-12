@@ -52,6 +52,7 @@
             this.LabelTextLike = new System.Windows.Forms.Label();
             this.LabelText = new System.Windows.Forms.Label();
             this.cmbCondition = new System.Windows.Forms.ComboBox();
+            this.ChkSearchPsam = new System.Windows.Forms.CheckBox();
             this.MainMenu.SuspendLayout();
             this.SystemStatus.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BackGroundPic)).BeginInit();
@@ -194,6 +195,7 @@
             // 
             // FuzzySearch
             // 
+            this.FuzzySearch.Controls.Add(this.ChkSearchPsam);
             this.FuzzySearch.Controls.Add(this.listSearchResult);
             this.FuzzySearch.Controls.Add(this.btnSearch);
             this.FuzzySearch.Controls.Add(this.textSearchContent);
@@ -213,11 +215,11 @@
             this.listSearchResult.Size = new System.Drawing.Size(865, 519);
             this.listSearchResult.TabIndex = 5;
             this.listSearchResult.UseCompatibleStateImageBehavior = false;
-            this.listSearchResult.View = System.Windows.Forms.View.Details;            
+            this.listSearchResult.View = System.Windows.Forms.View.Details;
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(567, 42);
+            this.btnSearch.Location = new System.Drawing.Point(575, 24);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 32);
             this.btnSearch.TabIndex = 4;
@@ -227,7 +229,7 @@
             // 
             // textSearchContent
             // 
-            this.textSearchContent.Location = new System.Drawing.Point(319, 49);
+            this.textSearchContent.Location = new System.Drawing.Point(319, 31);
             this.textSearchContent.Name = "textSearchContent";
             this.textSearchContent.Size = new System.Drawing.Size(209, 21);
             this.textSearchContent.TabIndex = 2;
@@ -235,7 +237,7 @@
             // LabelTextLike
             // 
             this.LabelTextLike.AutoSize = true;
-            this.LabelTextLike.Location = new System.Drawing.Point(260, 52);
+            this.LabelTextLike.Location = new System.Drawing.Point(260, 34);
             this.LabelTextLike.Name = "LabelTextLike";
             this.LabelTextLike.Size = new System.Drawing.Size(53, 12);
             this.LabelTextLike.TabIndex = 3;
@@ -244,7 +246,7 @@
             // LabelText
             // 
             this.LabelText.AutoSize = true;
-            this.LabelText.Location = new System.Drawing.Point(49, 52);
+            this.LabelText.Location = new System.Drawing.Point(49, 34);
             this.LabelText.Name = "LabelText";
             this.LabelText.Size = new System.Drawing.Size(53, 12);
             this.LabelText.TabIndex = 0;
@@ -254,11 +256,22 @@
             // 
             this.cmbCondition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCondition.FormattingEnabled = true;
-            this.cmbCondition.Location = new System.Drawing.Point(108, 49);
+            this.cmbCondition.Location = new System.Drawing.Point(108, 31);
             this.cmbCondition.Name = "cmbCondition";
             this.cmbCondition.Size = new System.Drawing.Size(121, 20);
             this.cmbCondition.TabIndex = 1;
             this.cmbCondition.SelectedIndexChanged += new System.EventHandler(this.cmbCondition_SelectedIndexChanged);
+            // 
+            // ChkSearchPsam
+            // 
+            this.ChkSearchPsam.AutoSize = true;
+            this.ChkSearchPsam.Location = new System.Drawing.Point(456, 68);
+            this.ChkSearchPsam.Name = "ChkSearchPsam";
+            this.ChkSearchPsam.Size = new System.Drawing.Size(72, 16);
+            this.ChkSearchPsam.TabIndex = 6;
+            this.ChkSearchPsam.Text = "查PSAM卡";
+            this.ChkSearchPsam.UseVisualStyleBackColor = true;
+            this.ChkSearchPsam.CheckedChanged += new System.EventHandler(this.ChkSearchPsam_CheckedChanged);
             // 
             // Main
             // 
@@ -313,6 +326,7 @@
         private System.Windows.Forms.TextBox textSearchContent;
         private System.Windows.Forms.ListView listSearchResult;
         private System.Windows.Forms.GroupBox FuzzySearch;
+        private System.Windows.Forms.CheckBox ChkSearchPsam;
     }
 }
 

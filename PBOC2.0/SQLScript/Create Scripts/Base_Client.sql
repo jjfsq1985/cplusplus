@@ -80,5 +80,5 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否已经上传' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Client', @level2type=N'COLUMN',@level2name=N'UpLoadStatus'
 GO
 
-insert into Base_Client values(1,N'测试单位',0,N'',N'admin','051288888888',null,null,'215600',N'张家港市杨舍镇晨新路19号', null,null,N'测试发卡使用',0,0);
+insert into Base_Client values(1,N'测试单位',0,N'',N'admin','051288888888',N'',N'','215600',N'张家港市杨舍镇晨新路19号', N'',N'',N'测试发卡使用',0,0);
 GO

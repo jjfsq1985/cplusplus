@@ -113,6 +113,7 @@
             this.textName.Location = new System.Drawing.Point(118, 17);
             this.textName.MaxLength = 32;
             this.textName.Name = "textName";
+            this.textName.ReadOnly = true;
             this.textName.Size = new System.Drawing.Size(164, 21);
             this.textName.TabIndex = 12;
             // 

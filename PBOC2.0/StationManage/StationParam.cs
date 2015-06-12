@@ -40,7 +40,7 @@ namespace StationManage
     {
         public int nDataGridViewRowIndex = 0;
         public string strStationName = "";  //气站名称
-        public byte[] StationId = new byte[2]; //气站编号
+        public byte[] StationId = new byte[4]; //气站编号
         public int ClientID = 0; //所属单位ID
         
         public byte ProvCode = 0;              //省代码

@@ -18,7 +18,6 @@ namespace AccountManage
         {
             InitializeComponent();
             FillListAuthority();
-            textName.Enabled = false;
         }
 
         public void SetAccountInfo(AccountInfo info)

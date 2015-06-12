@@ -44,16 +44,18 @@ namespace CardOperating
 
         private int GetClientIdIndex(int nClientID)
         {
+            int nSel = -1;
             int nIndex = 0;
             foreach (ClientInfo info in m_ListClientInfo)
             {
                 if (info.ClientId == nClientID)
                 {
+                    nSel = nIndex;
                     break;
                 }
                 nIndex++;
             }
-            return nIndex;
+            return nSel;
         }
 
         private int GetCarCategoryIndex(string strCarType)
@@ -82,10 +84,10 @@ namespace CardOperating
 
         private void InitData()
         {
-            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb();//从数据库读出
             if (cmbClientName.Items.Count > 0)
                 cmbClientName.SelectedIndex = GetClientIdIndex(m_CardInfoPar.ClientID);
             textCompanyId.Text = m_CardInfoPar.CompanyID;
+            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
             byte nCardType = (byte)m_CardInfoPar.UserCardType;
             textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
             DateFrom.Value = m_CardInfoPar.ValidCardBegin;
@@ -96,6 +98,7 @@ namespace CardOperating
             textPassword.Text = m_CardInfoPar.CustomPassword;
             textUserName.Text = m_CardInfoPar.UserName;
             textPriceLevel.Text = m_CardInfoPar.PriceLevel.ToString();
+            cmbIdType.SelectedIndex = GetIDTypeIndex(m_CardInfoPar.IdType);
             textUserIdentity.Text = m_CardInfoPar.UserIdentity;
             double dbRate = m_CardInfoPar.DiscountRate * 1.0 / 100.0;
             textDiscountRate.Text = dbRate.ToString("F2");
@@ -243,7 +246,7 @@ namespace CardOperating
                     {
                         StationInfo info = new StationInfo();
                         strCode = (string)dataReader["StationId"];
-                        for (int i = 0; i < 2; i++)
+                        for (int i = 0; i < 4; i++)
                         {
                             info.StationCode[i] = Convert.ToByte(strCode.Substring(i * 2, 2), 16);
                         }
@@ -276,6 +279,27 @@ namespace CardOperating
         public UserCardInfoParam GetUserCardParam()
         {
             return m_CardInfoPar;
+        }
+
+        private int GetIDTypeIndex(UserCardInfoParam.IdentityType eIdType)
+        {
+            int nSel = 0;
+            switch (eIdType)
+            {
+                case UserCardInfoParam.IdentityType.IdentityCard:
+                    nSel = 0;
+                    break;
+                case UserCardInfoParam.IdentityType.DriverCard:
+                    nSel = 1;
+                    break;
+                case UserCardInfoParam.IdentityType.OfficerCard:
+                    nSel = 2;
+                    break;
+                case UserCardInfoParam.IdentityType.OtherCard:
+                    nSel = 3;
+                    break;
+            }
+            return nSel;
         }
 
         private int GetCardTypeIndex(UserCardInfoParam.CardType eCardType)
@@ -389,6 +413,7 @@ namespace CardOperating
                 m_CardInfoPar.PriceLevel = Convert.ToByte(textPriceLevel.Text, 10);
             }
 
+            m_CardInfoPar.IdType = (UserCardInfoParam.IdentityType)(cmbIdType.SelectedIndex + 1);
             m_CardInfoPar.UserIdentity = textUserIdentity.Text;
 
             m_CardInfoPar.CarType = GetCarCateGory(cmbCarCategory.SelectedIndex);
@@ -589,16 +614,16 @@ namespace CardOperating
             {
                 LimitCarNo.Checked = false;
                 LimitCarNo.Enabled = false;
-                CarNo.Text = "";
-                CarNo.Enabled = false;
-                SelfId.Text = "";
-                SelfId.Enabled = false;
+                textCarNo.Text = "";
+                textCarNo.Enabled = false;
+                textSelfId.Text = "";
+                textSelfId.Enabled = false;
             }
             else
             {
                 LimitCarNo.Enabled = true;
-                CarNo.Enabled = true;
-                SelfId.Enabled = true;
+                textCarNo.Enabled = true;
+                textSelfId.Enabled = true;
             }
             byte nCardType = (byte)m_CardInfoPar.UserCardType;
             textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
@@ -613,7 +638,7 @@ namespace CardOperating
             }
         }
 
-        private string GetCardOrderNoFromDb()
+        private string GetCardOrderNoFromDb(string companyId)
         {
             int nOrderNo = 1;
             SqlHelper ObjSql = new SqlHelper();
@@ -622,17 +647,20 @@ namespace CardOperating
                 ObjSql = null;
                 return nOrderNo.ToString().PadLeft(6, '0');
             }
+
+            string CardNoMin = companyId + "020100000000";//按公司代码计算卡流水号
+            string CardNoMax = companyId + "020900999999"; //最大卡号
+            SqlParameter[] sqlparams = new SqlParameter[2];
+            sqlparams[0] = ObjSql.MakeParam("CardNoMin", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMin);
+            sqlparams[1] = ObjSql.MakeParam("CardNoMax", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMax);
+
             SqlDataReader dataReader = null;
-            ObjSql.ExecuteCommand("select MAX(CardNum) as OrderNo from Base_Card", out dataReader);
+            ObjSql.ExecuteCommand("select count(CardNum) as OrderNo from Base_Card where CardNum > @CardNoMin and CardNum < @CardNoMax", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows && dataReader.Read())
                 {
-                    if (!dataReader.IsDBNull(dataReader.GetOrdinal("OrderNo")))
-                    {
-                        string strVal = (string)dataReader["OrderNo"];
-                        nOrderNo = Convert.ToInt32(strVal.Substring(10, 6)) + 1;
-                    }
+                    nOrderNo = (int)dataReader["OrderNo"] + 1;
                 }
                 dataReader.Close();
             }
@@ -645,6 +673,7 @@ namespace CardOperating
         {
             m_CardInfoPar.CompanyID = textCompanyId.Text.PadLeft(4, '0');
             byte nCardType = (byte)m_CardInfoPar.UserCardType;
+            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
             textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
         }
 
@@ -658,21 +687,28 @@ namespace CardOperating
                     listLimitArea.Enabled = false;
                     break;
                 case 0x01://限省
-                    listLimitArea.Items.Add("北京市");
-                    listLimitArea.Items.Add("江苏省");
-                    listLimitArea.Items.Add("广东省");
+                    foreach (ProvinceInfo info in m_ListProvinceInfo)
+                    {
+                        listLimitArea.Items.Add(info.strProvinceName);
+                    }
                     break;
                 case 0x02://限地市
-                    listLimitArea.Items.Add("南京市");
-                    listLimitArea.Items.Add("东莞市");
+                    foreach (CityInfo info in m_ListCityInfo)
+                    {
+                        listLimitArea.Items.Add(info.strCityName);
+                    }
                     break;
                 case 0x03://限上级单位
-                    listLimitArea.Items.Add("新奥");
-                    listLimitArea.Items.Add("华润");
+                    foreach (SuperiorInfo info in m_ListSuperiorInfo)
+                    {
+                        listLimitArea.Items.Add(info.strSuperiorName);
+                    }
                     break;
                 case 0x04://限站点                    
-                    listLimitArea.Items.Add("燃料公司");
-                    listLimitArea.Items.Add("市政管理");
+                    foreach (StationInfo info in m_ListStationInfo)
+                    {
+                        listLimitArea.Items.Add(info.strStationName);
+                    }
                     break;
 
             }
@@ -717,12 +753,18 @@ namespace CardOperating
                             }
                         }
                         break;
-                    case 0x04://限站（最多20个）
-                        foreach (StationInfo info in m_ListStationInfo)
+                    case 0x04://限站（最多10个）
                         {
-                            if (listLimitArea.CheckedItems.Contains(info.strStationName))
+                            int nLimitCount = 0;
+                            foreach (StationInfo info in m_ListStationInfo)
                             {
-                                strLimitAreaCode += BitConverter.ToString(info.StationCode).Replace("-", "");
+                                if (nLimitCount >= 10)
+                                    break;
+                                if (listLimitArea.CheckedItems.Contains(info.strStationName))
+                                {
+                                    strLimitAreaCode += BitConverter.ToString(info.StationCode).Replace("-", "");
+                                    nLimitCount++;
+                                }
                             }
                         }
                         break;
@@ -784,12 +826,14 @@ namespace CardOperating
                     break;
                 case 0x04:
                     {
-                        for (int nLimitIndex = 0; nLimitIndex < AreaCode.Length; nLimitIndex += 2)
+                        byte[] StationCode = new byte[4];
+                        for (int nLimitIndex = 0; nLimitIndex < AreaCode.Length; nLimitIndex += 4)
                         {
                             int i = 0;
                             foreach (StationInfo info in m_ListStationInfo)
                             {
-                                if ((info.StationCode[0] == AreaCode[nLimitIndex]) && (info.StationCode[1] == AreaCode[nLimitIndex + 1]))
+                                Buffer.BlockCopy(AreaCode, nLimitIndex, StationCode, 0, 4);
+                                if (APDUBase.ByteDataEquals(info.StationCode, StationCode))
                                 {
                                     listLimitArea.SetItemChecked(i, true);
                                     break;

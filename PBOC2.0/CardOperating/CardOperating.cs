@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using IFuncPlugin;
+using SqlServerHelper;
+using System.Data.SqlClient;
 
 namespace CardOperating
 {
@@ -210,6 +212,7 @@ namespace CardOperating
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
             if (!m_UserCardCtrl.ReadKeyValueFormDb())
                 WriteMsg(0, "未读到密钥，请检查数据库是否正常。");
+            m_UserCardCtrl.GetCardCosVersion();
         }
 
         private void btnCloseCard_Click(object sender, EventArgs e)
@@ -358,6 +361,7 @@ namespace CardOperating
 
             if (!m_IccCardCtrl.ReadKeyValueFormDb())
                 WriteMsg(0, "未读到密钥，请检查数据库是否正常。");
+            m_IccCardCtrl.GetCardCosVersion();
         }
 
         private void btnCloseIccCard_Click(object sender, EventArgs e)
@@ -432,6 +436,13 @@ namespace CardOperating
                 WriteMsg(0, "PSAM卡号为空，请先进行信息设置。");
                 return;
             }
+
+            if (IsExistPsamId(m_IccCardId))
+            {
+                if (MessageBox.Show("该PSAM卡号已存在，是否要重新制作该PSAM卡？", "提示", MessageBoxButtons.YesNo) == DialogResult.No)
+                    return;                
+            }
+
             byte[] TermialId = PSAMInfo.GetByteTermId();
             if (TermialId == null)
             {
@@ -488,6 +499,36 @@ namespace CardOperating
                     this.Width -= CardInfoPanel.Width;
                 }                
             }
+        }
+
+        private bool IsExistPsamId(byte[] psamID)
+        {            
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return false;
+            }
+            bool bExist = false;
+            string strPsamId = BitConverter.ToString(psamID).Replace("-", "");
+
+
+            SqlParameter[] sqlparams = new SqlParameter[1];
+            sqlparams[0] = ObjSql.MakeParam("PsamId",SqlDbType.Char,16,ParameterDirection.Input,strPsamId);
+
+            SqlDataReader dataReader = null;
+            ObjSql.ExecuteCommand("select * from Psam_Card where PsamId=@PsamId", sqlparams, out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows && dataReader.Read())
+                {
+                    bExist = true;
+                }
+                dataReader.Close();
+            }
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return bExist;
         }
 
     }

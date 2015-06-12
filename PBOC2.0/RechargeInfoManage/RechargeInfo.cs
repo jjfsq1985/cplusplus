@@ -106,8 +106,12 @@ namespace RechargeManage
             RechargeView.Columns.Add("CurrentBalance", "充值后金额");
             RechargeView.Columns.Add("Time", "充值时间");
             RechargeView.Columns.Add("Operator", "操作员");
+            int[] ColumnWidth = new int[]{50,150,100,100,100,150,100};
             for (int i = 0; i < RechargeView.Columns.Count; i++)
+            {
                 RechargeView.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+                RechargeView.Columns[i].Width = ColumnWidth[i];
+            }
 
             GetRechargeDataTotalPage();
             //加载圈存记录

@@ -37,6 +37,15 @@ namespace CardOperating
             CompanyMotherCard = 0x21 //单位母卡
         }
 
+        //证件类型
+        public enum IdentityType
+        {
+            IdentityCard = 0x01, //身份证
+            DriverCard = 0x02,   //驾驶证
+            OfficerCard = 0x03,   //军官证
+            OtherCard = 0x04,    //其他
+        }
+
         private string m_strCardId;
 
         private string m_strCompanyId;  //发卡网点公司ID
@@ -103,15 +112,22 @@ namespace CardOperating
 
         }
 
-        private string m_UserIdentity; //身份证号   
+        private IdentityType m_IdentityType; //证件类型
+        public IdentityType IdType
+        {
+            get { return m_IdentityType; }
+            set { m_IdentityType = value; }
+        }
+
+        private string m_UserIdentity; //证件号   
         public string UserIdentity
         {
             get { return m_UserIdentity; }
             set { m_UserIdentity = value; }
         }
 
-        private int m_DiscountRate;//折扣率
-        public int DiscountRate
+        private ushort m_DiscountRate;//折扣率
+        public ushort DiscountRate
         {
             get { return m_DiscountRate; }            
         }
@@ -268,7 +284,7 @@ namespace CardOperating
 
         public UserCardInfoParam()
         {
-            m_nClientId = 1;
+            m_nClientId = 0;
             m_strCardId = "";
             m_strCompanyId = "0001";
             m_eCardType = CardType.PersonalCard;
@@ -279,6 +295,7 @@ namespace CardOperating
             m_strCustomPassword = "999999";
             m_UserName = "";
             m_strTelephone = "";
+            m_IdentityType = IdentityType.IdentityCard;
             m_UserIdentity = "";
             m_DiscountRate = 0;
             m_dtDiscountRateEnd = new DateTime(2010, 1, 1);
@@ -317,7 +334,7 @@ namespace CardOperating
         {
             if (LimitArea > 0 && LimitArea < 5 && strLimitAreaCode.Length %2 == 0)
             {
-                m_LimitArea = LimitArea;
+                m_LimitArea = LimitArea;                
                 m_LimitAreaCode = strLimitAreaCode;
             }
             else
@@ -332,7 +349,7 @@ namespace CardOperating
             if (dbDiscountRate < 1 || dbDiscountRate > 99)
                 m_DiscountRate = 0;
             else                
-                m_DiscountRate = (int)(dbDiscountRate * 100);
+                m_DiscountRate = (ushort)(dbDiscountRate * 100);
             m_dtDiscountRateEnd = dtDiscountRateEnd;
         }
 

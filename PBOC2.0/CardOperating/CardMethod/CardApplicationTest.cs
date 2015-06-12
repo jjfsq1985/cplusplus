@@ -25,8 +25,7 @@ namespace CardOperating
         private static byte[] m_ASN = new byte[] { 0x06, 0x71, 0x02, 0x01, 0x00, 0x00, 0x00, 0x01 };//用户卡卡号
         private static string m_strPIN = "999999";//由用户输入
                 
-        private bool m_bGray = false;   //卡已灰，不能扣款解锁
-        private bool m_bTACUF = false;
+        private bool m_bGray = false;   //卡已灰，不能扣款解锁        
 
         private int m_nBusinessSn;  //脱机交易序号
         private int m_nTermialSn;  //终端交易序号 
@@ -181,7 +180,7 @@ namespace CardOperating
                     Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
-                m_UserCardCtrl.UserCardLoad(m_ASN, TerminalId, (int)(dbMoneyLoad * 100.0));
+                m_UserCardCtrl.UserCardLoad(m_ASN, TerminalId, (int)(dbMoneyLoad * 100.0),false);
             }
             CloseUserCard();
             CloseIccCard();
@@ -197,16 +196,23 @@ namespace CardOperating
             OnMessageOutput(new MsgOutEvent(0, strInfo));
             if (m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
             {
-                double dbBalance = 0.0f;
-                if (m_UserCardCtrl.UserCardBalance(ref dbBalance))
-                    textBalance.Text = dbBalance.ToString("F2");
-                else
-                    textBalance.Text = "0.00";
-                m_bGray = false;
-                m_bTACUF = false;
+                m_bGray = false;                
                 //未灰锁时终端机编号输出为0
-                if (m_UserCardCtrl.UserCardGray(ref m_bGray, ref m_bTACUF, m_TermialId))
+                int nCardStatus = 0;
+                if (m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId))
                 {
+                    if (nCardStatus == 2)
+                    {
+                        //当前TAC未读，需要清空后重读
+                        m_UserCardCtrl.ClearTACUF();
+                        nCardStatus = 0;
+                        m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId);
+                        m_bGray = nCardStatus == 1 ? true : false;
+                    }
+                    else
+                    {
+                        m_bGray = nCardStatus == 1 ? true : false;
+                    }
                     GrayFlag.CheckState = m_bGray ? CheckState.Checked : CheckState.Unchecked;
                     GrayFlag.Checked = m_bGray;
                 }
@@ -215,8 +221,12 @@ namespace CardOperating
                     GrayFlag.CheckState = CheckState.Indeterminate;
                     GrayFlag.Checked = false;
                 }
-                if (m_bTACUF)
-                    m_UserCardCtrl.ClearTACUF();
+
+                double dbBalance = 0.0f;
+                if (m_UserCardCtrl.UserCardBalance(ref dbBalance))
+                    textBalance.Text = dbBalance.ToString("F2");
+                else
+                    textBalance.Text = "0.00";
             }            
             CloseUserCard();
         }
@@ -237,7 +247,7 @@ namespace CardOperating
                     Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
-                m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0));
+                m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0), false);
                 m_bGray = false;
             }
             CloseUserCard();

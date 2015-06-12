@@ -87,6 +87,7 @@
             // 
             this.textDbName.Location = new System.Drawing.Point(108, 67);
             this.textDbName.Name = "textDbName";
+            this.textDbName.ReadOnly = true;
             this.textDbName.Size = new System.Drawing.Size(100, 21);
             this.textDbName.TabIndex = 5;
             // 
@@ -123,6 +124,7 @@
             this.btnCancel.TabIndex = 9;
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // DbSetting
             // 

@@ -63,7 +63,7 @@ CREATE PROCEDURE PROC_RewriteCpuCard(
 	if (@@trancount<>0)
 		return 1
 	set xact_abort on                                         
-	if(len(@CardId)<>16 or @ClientId <=0)
+	if(len(@CardId)<>16)
 		return 2
 	--判断卡号在吗
 	if not exists(select * from Base_Card where CardNum=@CardId)
@@ -84,7 +84,7 @@ begin
 		    return 4
 		    end		
 		--插入修改卡信息的记录
-		set @LogContent = '修改卡信息：' + '所属单位' + convert(varchar(10),@SrcClientId) + '->' + convert(varchar(10),@SrcClientId) + ';';
+		set @LogContent = '修改卡信息：' + '所属单位' + convert(varchar(10),@SrcClientId) + '->' + convert(varchar(10),@ClientId) + ';';
 		set @LogContent	= 	@LogContent + '证件号' + @SrcPersonalId + '->' + @PersonalId + ';';
 		set @LogContent	= 	@LogContent + '持卡人姓名' + @SrcDriverName + '->' + @DriverName + ';';
 		set @LogContent	= 	@LogContent + '持卡人电话' + @SrcDriverTel + '->' + @DriverTel + ';';

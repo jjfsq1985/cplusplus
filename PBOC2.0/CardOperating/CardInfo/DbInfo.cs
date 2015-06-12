@@ -32,7 +32,7 @@ namespace CardOperating
 
     public class StationInfo
     {
-        public byte[] StationCode = new byte[2];
+        public byte[] StationCode = new byte[4];
         public string strStationName = "";
     }
 }

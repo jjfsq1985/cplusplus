@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Diagnostics;
 using IFuncPlugin;
+using System.Windows.Forms;
 
 namespace CardOperating
 {
@@ -76,6 +77,28 @@ namespace CardOperating
                     return false;
             }
             return true;
+        }
+
+        public void GetCardCosVersion()
+        {
+            m_ctrlApdu.createCosVersionCmd();
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取COS版本失败"));
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] VerAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, VerAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "读取COS版本应答：" + Encoding.ASCII.GetString(VerAsc)));
+            }
         }
 
         private byte[] GetRandomValue(APDUBase provider, int nRandomLen)
@@ -1068,14 +1091,12 @@ namespace CardOperating
             byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
             if (!SelectFile(m_strDIR1, prefix))
                 return false;
-            byte[] byteCardId = UserCardInfoPar.GetUserCardID();
-            byte[] keyUpdate = null;
+            byte[] byteCardId = UserCardInfoPar.GetUserCardID();            
             //卡信息更新时使用外部提供的密钥
-            if(AppTendingKey == null)
-                keyUpdate = StorageKeyParam.GetUpdateEFKey(m_MAMK, byteCardId);
-            else
-                keyUpdate = StorageKeyParam.GetUpdateEFKey(AppTendingKey, byteCardId);
-            if (keyUpdate == null)
+            if(AppTendingKey != null)
+                Buffer.BlockCopy(AppTendingKey,0,m_MAMK,0,16);
+            byte[] keyUpdate = StorageKeyParam.GetUpdateEFKey(m_MAMK, byteCardId);
+           if (keyUpdate == null)
                 return false;
             //更新公共应用基本数据文件EF15
             if (!UpdateEF15File(keyUpdate, byteCardId, UserCardInfoPar.ValidCardBegin, UserCardInfoPar.ValidCardEnd))
@@ -1190,12 +1211,17 @@ namespace CardOperating
         }
 
         //圈存功能
-        public bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue)
+        public bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKeyFromDb)
         {
-            //获取已发卡的圈存密钥,没有就用数据库的默认密钥
-            byte[] keyLoad = GetApplicationKeyVal(ASN, "AppLoadKey", 1);
-            if (keyLoad != null)
+            //获取已发卡的圈存密钥,测试时用数据库存储的默认密钥
+            if (bReadKeyFromDb)
             {
+                byte[] keyLoad = GetApplicationKeyVal(ASN, "AppLoadKey", 1);
+                if (keyLoad == null)
+                {
+                    MessageBox.Show("无此卡的记录，不能圈存。");
+                    return false;
+                }
                 Buffer.BlockCopy(keyLoad, 0, m_MLK1, 0, 16);
             }
             const byte BusinessType = 0x01; //交易类型标识：圈存存折0x01 圈存钱包0x02
@@ -1272,7 +1298,7 @@ namespace CardOperating
             return true;
         }
 
-        public bool UserCardGray(ref bool bGray, ref bool bTACUF, byte[] TerminalId)
+        public bool UserCardGray(ref int nStatus, byte[] TerminalId)
         {
             m_ctrlApdu.createrCardGrayCmd(false);
             byte[] data = m_ctrlApdu.GetOutputCmd();
@@ -1293,9 +1319,13 @@ namespace CardOperating
                 DllExportMT.hex_asc(m_RecvData, BalAsc, nRecvLen);
                 base.OnTextOutput(new MsgOutEvent(0, "读取灰锁状态应答：" + Encoding.ASCII.GetString(BalAsc)));
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
-                    return false;               
-                bGray = m_RecvData[0] == 0x01 ? true : false;
-                bTACUF = m_RecvData[0] == 0x10 ? true : false;
+                    return false;
+                if (m_RecvData[0] == 0x10)
+                    nStatus = 2;
+                else if (m_RecvData[0] == 0x01)
+                    nStatus = 1;
+                else
+                    nStatus = 0;                
                 //未灰锁时终端机编号为0
                 Buffer.BlockCopy(m_RecvData, 9, TerminalId, 0, 6);
             }
@@ -1389,12 +1419,17 @@ namespace CardOperating
         }
 
         //联机解扣
-        public bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney)
+        public bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney, bool bReadKeyFromDb)
         {
-            //获取已发卡的圈存密钥,没有就用数据库的默认密钥
-            byte[] keyUnlockGray = GetApplicationKeyVal(ASN, "AppUnlockKey", 1);
-            if (keyUnlockGray != null)
+            //获取已发卡的圈存密钥,测试时用数据库存储的默认密钥
+            if (bReadKeyFromDb)
             {
+                byte[] keyUnlockGray = GetApplicationKeyVal(ASN, "AppUnlockKey", 1);
+                if (keyUnlockGray == null)
+                {
+                    MessageBox.Show("无此卡的记录，不能解灰。");
+                    return false;
+                }
                 Buffer.BlockCopy(keyUnlockGray, 0, m_MULK, 0, 16);
             }
             const byte BusinessType = 0x95; //交易类型标识：联机解0扣
@@ -1562,6 +1597,14 @@ namespace CardOperating
                 ObjSql = null;
                 return false;
             }
+
+            byte[] ConsumerKey = GetRelatedKey(ObjSql, APDUBase.CardCategory.PsamCard);
+            if (ConsumerKey == null || !APDUBase.ByteDataEquals(ConsumerKey, m_MPK1))
+            {
+                base.OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
+                MessageBox.Show("加气消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
             ObjSql.CloseConnection();
             ObjSql = null;
             return true;
@@ -1663,7 +1706,7 @@ namespace CardOperating
 
             sqlparams[5] = ObjSql.MakeParam("Plate", SqlDbType.NVarChar, 16, ParameterDirection.Input, UserCardInfoPar.CarNo);
             sqlparams[6] = ObjSql.MakeParam("SelfId", SqlDbType.VarChar, 50, ParameterDirection.Input, UserCardInfoPar.SelfId);
-            byte nCertificatesType = 0x01;
+            byte nCertificatesType = (byte)UserCardInfoPar.IdType;
             sqlparams[7] = ObjSql.MakeParam("CertificatesType", SqlDbType.VarChar, 2, ParameterDirection.Input, nCertificatesType.ToString("X2"));//证件类型:身份证
             sqlparams[8] = ObjSql.MakeParam("PersonalId", SqlDbType.VarChar, 32, ParameterDirection.Input, UserCardInfoPar.UserIdentity);
             sqlparams[9] = ObjSql.MakeParam("DriverName", SqlDbType.NVarChar, 50, ParameterDirection.Input, UserCardInfoPar.UserName);
@@ -1797,6 +1840,7 @@ namespace CardOperating
             if (nCount > 0)
                 CardInfo.UserName = Encoding.Unicode.GetString(m_RecvData, 2, nCount);
             CardInfo.UserIdentity = Encoding.ASCII.GetString(m_RecvData, 22, 18);
+            CardInfo.IdType = (UserCardInfoParam.IdentityType)(m_RecvData[40]);//证件类型
             string strValue = BitConverter.ToString(m_RecvData, 51, 2).Replace("-", "");
             int nDiscountRate = Convert.ToInt32(strValue);            
             DateTime RateExprieValid = DateTime.ParseExact(BitConverter.ToString(m_RecvData,53,4).Replace("-",""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
@@ -1818,7 +1862,7 @@ namespace CardOperating
             if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                 return;
             CardInfo.LimitGasType = (ushort)((m_RecvData[0] << 8) + m_RecvData[1]);
-            CardInfo.setLimitArea(m_RecvData[2],BitConverter.ToString(m_RecvData,3,40));
+            CardInfo.setLimitArea(m_RecvData[2],BitConverter.ToString(m_RecvData,3,40).Replace("-",""));
             int nCount = 0;
             for (int i = 0; i < 16; i++)
             {
@@ -1855,6 +1899,18 @@ namespace CardOperating
             if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                 return;
             CardInfo.BoalExprie = DateTime.ParseExact(BitConverter.ToString(m_RecvData, 0, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+            int nCarNoCount = 0;
+            for (int i = 0; i < 16; i++)
+            {
+                if (m_RecvData[4 + i] != 0xFF)
+                    nCarNoCount++;
+                else
+                    break;
+            }
+            if (nCarNoCount > 0)
+            {
+                CardInfo.CarNo = Encoding.Unicode.GetString(m_RecvData, 4, nCarNoCount); //装配气瓶的车牌号
+            }
             int nCount = 0;
             for (int i = 0; i < 16; i++)
             {
@@ -1950,7 +2006,7 @@ namespace CardOperating
                     record.Amount = ((m_RecvData[nOffset + 5] << 24) + (m_RecvData[nOffset + 6] << 16) + (m_RecvData[nOffset + 7] << 8) + m_RecvData[nOffset + 8]) / 100.0f;
                     record.BusinessType = m_RecvData[nOffset + 9];
                     record.TerminalID = BitConverter.ToString(m_RecvData, nOffset + 10, 6).Replace("-","");
-                    record.BusinessTime = BitConverter.ToString(m_RecvData, nOffset + 16, 7).Replace("-", "");
+                    record.BusinessTime = BitConverter.ToString(m_RecvData, nOffset + 16, 7).Replace("-","");
                     lstRet.Add(record);
                 }
                 
@@ -2016,8 +2072,11 @@ namespace CardOperating
             if (!SelectCardApp())
                 return false;
             byte[] AppTendingKey = GetApplicationKeyVal(CardInfo.GetUserCardID(),"AppTendingKey",1);
-            if(AppTendingKey == null)
+            if (AppTendingKey == null)
+            {
+                MessageBox.Show("无此卡的记录，不能修改卡信息。");
                 return false;
+            }
             return UpdateApplicationFile(CardInfo, AppTendingKey);
         }
 
@@ -2114,12 +2173,14 @@ namespace CardOperating
             byte[] PwdData = new byte[6];
             for (int i = 0; i < 6; i++)
                 PwdData[i] = Convert.ToByte(strPin.Substring(i, 1), 10);
-            //获取PIN重装密钥,没有就用数据库的默认密钥
+            //获取PIN重装密钥
             byte[] keyReset = GetApplicationKeyVal(ASN, "AppPinResetKey", 1);
-            if (keyReset != null)
+            if (keyReset == null)
             {
-                Buffer.BlockCopy(keyReset, 0, m_MRPK, 0, 16);
+                MessageBox.Show("无此卡的记录，不能重装PIN。");
+                return false;
             }
+            Buffer.BlockCopy(keyReset, 0, m_MRPK, 0, 16);           
 
             byte[] SubKey = new byte[16];
             byte[] encryptAsn = APDUBase.TripleEncryptData(ASN, m_MRPK);
@@ -2165,13 +2226,15 @@ namespace CardOperating
             byte[] PwdData = new byte[6];
             for (int i = 0; i < 6; i++)
                 PwdData[i] = Convert.ToByte(strPIN.Substring(i, 1), 10);
-            //获取PIN解锁密钥,没有就用数据库的默认密钥
+            //获取PIN解锁密钥
             byte[] keyUnlock = GetApplicationKeyVal(ASN, "AppPinUnlockKey", 1);
-            if (keyUnlock != null)
+            if (keyUnlock == null)
             {
-                Buffer.BlockCopy(keyUnlock, 0, m_MPUK, 0, 16);
+                MessageBox.Show("无此卡的记录，不能解锁PIN。");
+                return false;
             }
-
+            Buffer.BlockCopy(keyUnlock, 0, m_MPUK, 0, 16);
+            
             byte[] SubKey = new byte[16];
             byte[] encryptAsn = APDUBase.TripleEncryptData(ASN, m_MPUK);
             byte[] XorASN = new byte[8];

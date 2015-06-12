@@ -630,7 +630,7 @@ namespace CardOperating
             }            
             nOffset += 18;
             //nOffset = 40
-            m_Data[nOffset] = 0x01;//证件类型：身份证号
+            m_Data[nOffset] = (byte)(cardInfo.IdType);//证件类型
             nOffset += 1;
             if (!string.IsNullOrEmpty(cardInfo.UserAccount))
             {
@@ -642,8 +642,8 @@ namespace CardOperating
             }
             nOffset += 10;            
             //折扣率
-            m_Data[51] = Convert.ToByte(cardInfo.DiscountRate.ToString(), 16);
-            m_Data[52] = 0;
+            byte[] byteRate = APDUBase.StringToBCD(cardInfo.DiscountRate.ToString("D4"));
+            Buffer.BlockCopy(byteRate, 0, m_Data, 51, 2);
             byte[] bcdDate = GetBCDDate(cardInfo.DiscountRateEnd);//启用日期
             //折扣有效期,BCD码
             Buffer.BlockCopy(bcdDate, 0, m_Data, 53, 4);
@@ -730,7 +730,7 @@ namespace CardOperating
                 if (byteLimitAreaCode != null)
                     Buffer.BlockCopy(byteLimitAreaCode, 0, m_Data, 3, byteLimitAreaCode.Length);
             }
-            if (!string.IsNullOrEmpty(cardInfo.CarNo))
+            if (cardInfo.LimitCarNo && !string.IsNullOrEmpty(cardInfo.CarNo))
             {
                 byte[] carNo = Encoding.Unicode.GetBytes(cardInfo.CarNo);
                 for (int i = 0; i < 16; i++)
@@ -786,7 +786,7 @@ namespace CardOperating
             Buffer.BlockCopy(BoalExprie, 0, m_Data, 0, 4);
             if (!string.IsNullOrEmpty(cardInfo.CarNo))
             {
-                byte[] CarNo = Encoding.ASCII.GetBytes(cardInfo.CarNo);
+                byte[] CarNo = Encoding.Unicode.GetBytes(cardInfo.CarNo);
                 if (CarNo.Length <= 16)
                     Buffer.BlockCopy(CarNo, 0, m_Data, 4, CarNo.Length);
             }

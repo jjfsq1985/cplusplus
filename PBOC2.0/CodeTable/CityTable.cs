@@ -186,6 +186,7 @@ namespace CodeTable
                     {
                         CityCodeTable newVal = new CityCodeTable();
                         newVal.eDbState = DbStateFlag.eDbAdd;
+                        newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strCityName = strInput;
                         newVal.CityCode[0] = 0;
                         newVal.CityCode[1] = 0;
@@ -234,6 +235,7 @@ namespace CodeTable
                     {
                         CityCodeTable newVal = new CityCodeTable();
                         newVal.eDbState = DbStateFlag.eDbAdd;
+                        newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strCityName = "";
                         newVal.CityCode[0] = codebyte[0];
                         newVal.CityCode[1] = codebyte[1];
@@ -252,7 +254,7 @@ namespace CodeTable
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (CityView.Rows.Count > m_lstCityCode.Count)
+            if (CityView.Rows.Count > m_lstCityCode.Count || !CodeTable.IsCityListCompleted(m_lstCityCode))
             {
                 MessageBox.Show("请先将空行填完整");
                 return;

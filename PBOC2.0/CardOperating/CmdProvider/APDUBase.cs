@@ -389,6 +389,20 @@ namespace CardOperating
             return true;
         }
 
+        //COS版本
+        public bool createCosVersionCmd()
+        {
+            m_CLA = 0x00;
+            m_INS = 0xCA;
+            m_P1 = 0x9F;
+            m_P2 = 0x80;
+            m_Lc = 0x00;  //不存在
+            m_Data = null; //不存在
+            m_le = 3;
+            m_nTotalLen = 5;
+            return true;
+        }
+
         //外部认证
         /// <summary>
         /// 
@@ -606,17 +620,10 @@ namespace CardOperating
             alg.IV = new byte[8];//初始化向量，全0
 
             ICryptoTransform ITrans = alg.CreateEncryptor(alg.Key, alg.IV);
-
-            MemoryStream ms = new MemoryStream();
-            CryptoStream cs = new CryptoStream(ms, ITrans, CryptoStreamMode.Write);
-            cs.Write(byteData, 0, byteData.Length);
-            cs.FlushFinalBlock();
-            cs.Close();
-
+            byte[] outData = ITrans.TransformFinalBlock(byteData, 0, byteData.Length);
+            Buffer.BlockCopy(outData, 0, byteData, 0, 8);
+            ITrans.Dispose();
             alg.Clear();
-
-            byte[] outData = ms.ToArray();
-            Buffer.BlockCopy(outData,0,byteData,0,8);            
         }
 
         //DES解密
@@ -634,17 +641,10 @@ namespace CardOperating
             alg.IV = new byte[8];//初始化向量，全0
 
             ICryptoTransform ITrans = alg.CreateDecryptor(alg.Key, alg.IV);
-
-            MemoryStream ms = new MemoryStream();
-            CryptoStream cs = new CryptoStream(ms, ITrans, CryptoStreamMode.Write);
-            cs.Write(byteData, 0, byteData.Length);
-            cs.FlushFinalBlock();
-            cs.Close();
-
-            alg.Clear();
-
-            byte[] outData = ms.ToArray();
+            byte[] outData = ITrans.TransformFinalBlock(byteData, 0, byteData.Length);
             Buffer.BlockCopy(outData, 0, byteData, 0, 8);
+            ITrans.Dispose();
+            alg.Clear();            
         }
 
         protected byte[] GetBCDDate(DateTime dateData)
@@ -666,7 +666,9 @@ namespace CardOperating
             byte[] byteBCD = new byte[nByteSize];
             for (int i = 0; i < nByteSize; i++)
             {
-                byteBCD[i] = Convert.ToByte(strData.Substring(i * 2, 2), 16);
+                byte bcdbyte = 0;
+                byte.TryParse(strData.Substring(i * 2, 2), System.Globalization.NumberStyles.HexNumber, null, out bcdbyte);
+                byteBCD[i] = bcdbyte;
             }
             return byteBCD;   
         }

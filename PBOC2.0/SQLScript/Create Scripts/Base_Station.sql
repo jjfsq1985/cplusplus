@@ -12,7 +12,7 @@ SET ANSI_PADDING ON
 GO
 
 CREATE TABLE [dbo].[Base_Station](
-	[StationId] [char](4) NOT NULL,
+	[StationId] [char](8) NOT NULL,
 	[StationName] [nvarchar](50) NOT NULL,
 	[Prov] [char](2) NOT NULL,
 	[City] [char](4) NOT NULL,

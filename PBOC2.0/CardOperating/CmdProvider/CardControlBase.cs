@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using IFuncPlugin;
+using System.Data.SqlClient;
+using System.Data;
+using SqlServerHelper;
 
 namespace CardOperating
 {
@@ -88,6 +91,39 @@ namespace CardOperating
             byte[] BcdKey = APDUBase.StringToBCD(strKey);
             if (BcdKey.Length == 16)
                 Buffer.BlockCopy(BcdKey, 0, byteKey, 0, 16);
+        }
+
+        protected byte[] GetRelatedKey(SqlHelper sqlHelp, APDUBase.CardCategory eCardType)
+        {
+            SqlDataReader dataReader = null;
+            if (eCardType == APDUBase.CardCategory.PsamCard)
+            {
+                sqlHelp.ExecuteProc("PROC_GetPsamKey", out dataReader);
+            }
+            else
+            {
+                SqlParameter[] sqlparam = new SqlParameter[1];
+                sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, 1);
+                sqlHelp.ExecuteProc("PROC_GetCpuKey", sqlparam, out dataReader);
+            }
+            if (dataReader == null)
+                return null;
+            if (!dataReader.HasRows)
+            {
+                dataReader.Close();
+                return null;
+            }
+            else
+            {
+                byte[] ConsumerKey = new byte[16];
+                if (dataReader.Read())
+                {
+                    string strKey = (string)dataReader["ConsumerMasterKey"];
+                    StrKeyToByte(strKey, ConsumerKey);
+                }
+                dataReader.Close();
+                return ConsumerKey;
+            }
         }
     }
 }

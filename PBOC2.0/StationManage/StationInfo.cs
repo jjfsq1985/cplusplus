@@ -173,20 +173,32 @@ namespace StationManage
                         StationVal.nDataGridViewRowIndex = index;                        
                         StationVal.strStationName = (string)dataReader["StationName"];
                         codeBcd = ConvertBCD.StringToBCD((string)dataReader["StationId"]);
-                        Trace.Assert(codeBcd != null && codeBcd.Length == 2);
-                        StationVal.StationId[0] = codeBcd[0];
-                        StationVal.StationId[1] = codeBcd[1];
+                        Trace.Assert(codeBcd != null && codeBcd.Length == 4);
+                        Buffer.BlockCopy(codeBcd, 0, StationVal.StationId,0,4);
                         StationVal.ClientID = (int)dataReader["ClientId"];
-
-                        StationVal.ProvCode = Convert.ToByte((string)dataReader["Prov"], 16);
-                        codeBcd = ConvertBCD.StringToBCD((string)dataReader["City"]);
-                        Trace.Assert(codeBcd != null && codeBcd.Length == 2);
-                        StationVal.CityCode[0] = codeBcd[0];
-                        StationVal.CityCode[1] = codeBcd[1];
-                        codeBcd = ConvertBCD.StringToBCD((string)dataReader["SuperiorId"]);
-                        Trace.Assert(codeBcd != null && codeBcd.Length == 2);
-                        StationVal.SuperiorCode[0] = codeBcd[0];
-                        StationVal.SuperiorCode[1] = codeBcd[1];
+                        
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("Prov")))
+                        {
+                            byte byteCode = 0;
+                            byte.TryParse((string)dataReader["Prov"], System.Globalization.NumberStyles.HexNumber, null, out byteCode);
+                            StationVal.ProvCode = byteCode;
+                        }
+                        
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("City")))
+                        {
+                            codeBcd = ConvertBCD.StringToBCD((string)dataReader["City"]);
+                            Trace.Assert(codeBcd != null && codeBcd.Length == 2);
+                            StationVal.CityCode[0] = codeBcd[0];
+                            StationVal.CityCode[1] = codeBcd[1];
+                        }
+                        
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("SuperiorId")))
+                        {
+                            codeBcd = ConvertBCD.StringToBCD((string)dataReader["SuperiorId"]);
+                            Trace.Assert(codeBcd != null && codeBcd.Length == 2);
+                            StationVal.SuperiorCode[0] = codeBcd[0];
+                            StationVal.SuperiorCode[1] = codeBcd[1];
+                        }
 
                         StationView.Rows[index].Cells[0].Value = BitConverter.ToString(StationVal.StationId).Replace("-", "");
                         StationView.Rows[index].Cells[1].Value = StationVal.strStationName;
@@ -243,7 +255,7 @@ namespace StationManage
 
         private string GetProvName(byte codeProv)
         {
-            string strProv = "未定义";
+            string strProv = "";
             foreach (ProvinceCode val in m_lstProvCode)
             {
                 if (val.ProvinceVal == codeProv)
@@ -270,7 +282,7 @@ namespace StationManage
 
         private string GetCityName(byte[] codeCity)
         {
-            string strCity = "未定义";
+            string strCity = "";
             foreach (CityCode val in m_lstCityCode)
             {
                 if (val.CityVal[0] == codeCity[0] && val.CityVal[1] == codeCity[1])
@@ -299,7 +311,7 @@ namespace StationManage
 
         private string GetCompanyName(byte[] codeSuperior)
         {
-            string strSuperior = "未定义";
+            string strSuperior = "";
             foreach (SuperiorCode val in m_lstSuperiorCode)
             {
                 if (val.SuperiorVal[0] == codeSuperior[0] && val.SuperiorVal[1] == codeSuperior[1])
@@ -403,13 +415,41 @@ namespace StationManage
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (StationView.Rows.Count > m_lstStationParam.Count)
+            if (StationView.Rows.Count > m_lstStationParam.Count || !IsStationListCompleted(m_lstStationParam))
             {
                 MessageBox.Show("请先将空行填完整");
                 return;
             }
             int nIndex = StationView.Rows.Add();
             StationView.Rows[nIndex].Cells[0].Selected = true;
+        }
+
+        public bool ByteDataEquals(byte[] byteL, byte[] byteR)
+        {
+            if (byteL.Length != byteR.Length)
+                return false;
+            for (int i = 0; i < byteL.Length; i++)
+            {
+                if (byteL[i] != byteR[i])
+                    return false;
+            }
+            return true;
+        }
+
+        public bool IsStationListCompleted(List<StationParam> list)
+        {
+            byte[] initByte = new byte[4];
+            foreach (StationParam value in list)
+            {
+                if ((value.strStationName == "") || (ByteDataEquals(value.StationId, initByte))
+                    || (value.ClientID == 0) || (value.ProvCode == 0x00)
+                    || (value.CityCode[0] == 0x00 && value.CityCode[1] == 0x00)
+                    || (value.SuperiorCode[0] == 0x00 && value.SuperiorCode[1] == 0x00))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private int GetIndexOfList(int nRowIndex)
@@ -457,15 +497,15 @@ namespace StationManage
             {
                 case 0:
                     {
-                        Regex reg = new Regex(@"^[0-9]{4}$");
+                        Regex reg = new Regex(@"^[0-9]{8}$");
                         if (!reg.Match(strInput).Success)
                         {
                             StationView.CurrentCell.Value = "";
-                            MessageBox.Show("站点编号只能是4位数字");
+                            MessageBox.Show("站点编号只能是8位数字");
                             return;
                         }
                         byte[] codebyte = ConvertBCD.StringToBCD(strInput);
-                        if (codebyte == null || codebyte.Length != 2)
+                        if (codebyte == null || codebyte.Length != 4)
                         {
                             StationView.CurrentCell.Value = "";
                             MessageBox.Show("站点编号无效");
@@ -477,7 +517,7 @@ namespace StationManage
                             bool bAdd = true;
                             foreach (StationParam value in m_lstStationParam)
                             {
-                                if (value.StationId[0] == codebyte[0] && value.StationId[1] == codebyte[1])
+                                if (ByteDataEquals(value.StationId, codebyte))
                                 {
                                     bAdd = false;
                                     StationView.CurrentCell.Value = "";
@@ -490,15 +530,13 @@ namespace StationManage
                                 StationParam newVal = new StationParam();
                                 newVal.eDbState = DbStateFlag.eDbAdd;
                                 newVal.strStationName = "";
-                                newVal.StationId[0] = codebyte[0];
-                                newVal.StationId[1] = codebyte[1];
+                                Buffer.BlockCopy(codebyte, 0, newVal.StationId,0,4);                                
                                 m_lstStationParam.Add(newVal);
                             }
                         }
-                        else if ((codebyte[0] != m_lstStationParam[nListIndex].StationId[0]) || (codebyte[1] != m_lstStationParam[nListIndex].StationId[1]))
+                        else if (!ByteDataEquals(m_lstStationParam[nListIndex].StationId, codebyte))
                         {
-                            m_lstStationParam[nListIndex].StationId[0] = codebyte[0];
-                            m_lstStationParam[nListIndex].StationId[1] = codebyte[1];
+                            Buffer.BlockCopy(codebyte, 0, m_lstStationParam[nListIndex].StationId, 0, 4);                            
                             if (m_lstStationParam[nListIndex].eDbState == DbStateFlag.eDbOK)
                                 m_lstStationParam[nListIndex].eDbState = DbStateFlag.eDbDirty;
                         }
@@ -615,7 +653,7 @@ namespace StationManage
             for (int i = 0; i < nCount; i++)
             {
                 StationParam value = m_lstStationParam[i];
-                sqlparams[0] = m_ObjSql.MakeParam("StationId", SqlDbType.Char, 4, ParameterDirection.Input, BitConverter.ToString(value.StationId).Replace("-", ""));
+                sqlparams[0] = m_ObjSql.MakeParam("StationId", SqlDbType.Char, 8, ParameterDirection.Input, BitConverter.ToString(value.StationId).Replace("-", ""));
                 sqlparams[1] = m_ObjSql.MakeParam("StationName", SqlDbType.NVarChar, 50, ParameterDirection.Input, value.strStationName);
                 sqlparams[2] = m_ObjSql.MakeParam("ProvCode", SqlDbType.Char, 2, ParameterDirection.Input, value.ProvCode.ToString("X2"));
                 sqlparams[3] = m_ObjSql.MakeParam("CityCode", SqlDbType.Char, 4, ParameterDirection.Input, BitConverter.ToString(value.CityCode).Replace("-", ""));

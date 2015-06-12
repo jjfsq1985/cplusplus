@@ -81,7 +81,9 @@ namespace PublishCardOperator
                 byte[] byteBCD = new byte[nByteSize];
                 for (int i = 0; i < nByteSize; i++)
                 {
-                    byteBCD[i] = Convert.ToByte(strData.Substring(i * 2, 2), 16);
+                    byte bcdbyte = 0;
+                    byte.TryParse(strData.Substring(i * 2, 2), System.Globalization.NumberStyles.HexNumber, null, out bcdbyte);
+                    byteBCD[i] = bcdbyte;
                 }
                 return byteBCD;
             }

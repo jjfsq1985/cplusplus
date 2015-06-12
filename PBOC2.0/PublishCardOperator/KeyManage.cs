@@ -282,7 +282,9 @@ namespace PublishCardOperator
         private void FillAppGridView(int nRelatedKeyId)
         {
             AppKeyGridView.Rows.Clear();
-            int nListIndex = GetFocusAppKeyIndex(nRelatedKeyId);            
+            int nListIndex = GetFocusAppKeyIndex(nRelatedKeyId);
+            if (nListIndex == -1)
+                return;
             int nCount = m_lstCpuKey[nListIndex].LstAppKeyGroup.Count;
             for (int i = 0; i < nCount; i++)
             {
@@ -325,11 +327,14 @@ namespace PublishCardOperator
             {
                 int nIndex = AppKeyGridView.CurrentCell.RowIndex;
                 AppKeyGridView.Rows.RemoveAt(nIndex);
-                int nKeyIndex = GetFocusAppKeyIndex(m_nFocusKeyId);
-                AppKeyValueGroup value = m_lstCpuKey[nKeyIndex].LstAppKeyGroup[nIndex];
-                value.eDbFlag = DbStateFlag.eDbDelete;
-                m_lstCpuKey[nKeyIndex].LstAppKeyGroup[nIndex] = value;
-                SaveLstDataToDb();
+                int nListIndex = GetFocusAppKeyIndex(m_nFocusKeyId);
+                if (nListIndex != -1)
+                {
+                    AppKeyValueGroup value = m_lstCpuKey[nListIndex].LstAppKeyGroup[nIndex];
+                    value.eDbFlag = DbStateFlag.eDbDelete;
+                    m_lstCpuKey[nListIndex].LstAppKeyGroup[nIndex] = value;
+                    SaveLstDataToDb();
+                }
             }
         }
 
@@ -356,8 +361,11 @@ namespace PublishCardOperator
                 //¿ªÊ¼±à¼­
                 int nIndex = AppKeyGridView.CurrentCell.RowIndex;
                 int nKeyIndex = GetFocusAppKeyIndex(m_nFocusKeyId);
-                GetModifyAppView(nIndex, nItem, m_lstCpuKey[nKeyIndex].LstAppKeyGroup[nIndex]);
-                AppKeyGridView.BeginEdit(true);
+                if (nKeyIndex != -1)
+                {
+                    GetModifyAppView(nIndex, nItem, m_lstCpuKey[nKeyIndex].LstAppKeyGroup[nIndex]);
+                    AppKeyGridView.BeginEdit(true);
+                }
             }
         }
 
@@ -380,8 +388,11 @@ namespace PublishCardOperator
                 //½áÊø±à¼­
                 int nIndex = AppKeyGridView.CurrentCell.RowIndex;
                 int nKeyIndex = GetFocusAppKeyIndex(m_nFocusKeyId);
-                SetModifyAppView(nIndex, nItem, m_lstCpuKey[nKeyIndex].LstAppKeyGroup[nIndex]);
-                AppKeyGridView.EndEdit();
+                if (nKeyIndex != -1)
+                {
+                    SetModifyAppView(nIndex, nItem, m_lstCpuKey[nKeyIndex].LstAppKeyGroup[nIndex]);
+                    AppKeyGridView.EndEdit();
+                }
             }
         }
 
@@ -412,16 +423,18 @@ namespace PublishCardOperator
 
         private int GetFocusAppKeyIndex(int nRelatedKeyId)
         {
+            int nSelIndex = -1;
             int nListIndex = 0;
             foreach (CpuKeyValue value in m_lstCpuKey)
             {
                 if (value.nKeyId == nRelatedKeyId)
                 {
+                    nSelIndex = nListIndex;
                     break;
                 }
                 nListIndex++;
             }
-            return nListIndex;
+            return nSelIndex;
         }
 
         private void AppKeyGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -436,8 +449,11 @@ namespace PublishCardOperator
                 return;
             }
             int nIndex = GetFocusAppKeyIndex(m_nFocusKeyId);
-            GetModifyAppView(e.RowIndex, e.ColumnIndex, m_lstCpuKey[nIndex].LstAppKeyGroup[e.RowIndex]);
-            AppKeyGridView.BeginEdit(true);
+            if (nIndex != -1)
+            {
+                GetModifyAppView(e.RowIndex, e.ColumnIndex, m_lstCpuKey[nIndex].LstAppKeyGroup[e.RowIndex]);
+                AppKeyGridView.BeginEdit(true);
+            }
         }
 
         private void AppKeyGridView_CellLeave(object sender, DataGridViewCellEventArgs e)
@@ -445,9 +461,12 @@ namespace PublishCardOperator
             if (!m_bEditData || e.ColumnIndex < 1 || e.ColumnIndex > 11)
                 return;
             int nIndex = GetFocusAppKeyIndex(m_nFocusKeyId);
-            SetModifyAppView(e.RowIndex, e.ColumnIndex, m_lstCpuKey[nIndex].LstAppKeyGroup[e.RowIndex]);
-            AppKeyGridView.EndEdit();
-            CpuKeyGridView.ReadOnly = false;
+            if (nIndex != -1)
+            {
+                SetModifyAppView(e.RowIndex, e.ColumnIndex, m_lstCpuKey[nIndex].LstAppKeyGroup[e.RowIndex]);
+                AppKeyGridView.EndEdit();
+                CpuKeyGridView.ReadOnly = false;
+            }
         }
 
         private void CpuKeyGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -826,7 +845,8 @@ namespace PublishCardOperator
 
                 }
                 int nKeyIndex = GetFocusAppKeyIndex(m_nFocusKeyId);
-                m_lstCpuKey[nKeyIndex].LstAppKeyGroup[nAppIndex] = AppKeyVal;
+                if (nKeyIndex != -1)
+                    m_lstCpuKey[nKeyIndex].LstAppKeyGroup[nAppIndex] = AppKeyVal;
             }
             catch
             {
@@ -1011,6 +1031,8 @@ namespace PublishCardOperator
             else if (m_nClickGridView == 2)
             {
                 int nKeyIndex = GetFocusAppKeyIndex(m_nFocusKeyId);
+                if(nKeyIndex == -1)
+                    return;
                 int nAppCount = m_lstCpuKey[nKeyIndex].LstAppKeyGroup.Count;
                 if (nAppCount >= MAX_APP_COUNT)
                 {

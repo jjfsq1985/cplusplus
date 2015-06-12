@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using SqlServerHelper;
 using System.Data;
 using IFuncPlugin;
+using System.Windows.Forms;
 
 namespace CardOperating
 {
@@ -74,6 +75,28 @@ namespace CardOperating
                     return false;
             }
             return true;
+        }
+
+        public void GetCardCosVersion()
+        {
+            m_ctrlApdu.createCosVersionCmd();
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取COS版本失败"));
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] VerAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, VerAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "读取COS版本应答：" + Encoding.ASCII.GetString(VerAsc)));
+            }
         }
 
         private byte[] GetRandomValue(APDUBase provider, int nRandomLen)
@@ -1041,6 +1064,14 @@ namespace CardOperating
                 ObjSql = null;
                 return false;
             }
+
+            byte[] ConsumerKey = GetRelatedKey(ObjSql, APDUBase.CardCategory.CpuCard);
+            if (ConsumerKey == null || !APDUBase.ByteDataEquals(ConsumerKey, m_MPK1))
+            {
+                base.OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
+                MessageBox.Show("加气消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
             ObjSql.CloseConnection();
             ObjSql = null;
             return true;

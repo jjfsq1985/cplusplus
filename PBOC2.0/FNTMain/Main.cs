@@ -453,7 +453,7 @@ namespace FNTMain
                             }
                             else
                             {
-                                SearchByClientName(strText);
+                                SearchByClientName(strText,ChkSearchPsam.Checked);
                             }                            
                         }
                         else
@@ -497,6 +497,7 @@ namespace FNTMain
 
         private void cmbCondition_SelectedIndexChanged(object sender, EventArgs e)
         {
+            listSearchResult.Columns.Clear();
             //清空textSearchContent内容，并限制输入
             textSearchContent.Text = "";
 
@@ -504,14 +505,80 @@ namespace FNTMain
             switch (nSel)
             {
                 case 0:
+                    textSearchContent.MaxLength = 16;
+                    ChkSearchPsam.Visible = true;
+                    ChkSearchPsam.Enabled = true;
+                    if (ChkSearchPsam.Checked)
+                    {
+                        listSearchResult.Columns.Add("卡号", 120);
+                        listSearchResult.Columns.Add("终端机编号", 60);
+                        listSearchResult.Columns.Add("所属单位", 150);
+                        listSearchResult.Columns.Add("有效期", 150);
+                        listSearchResult.Columns.Add("发行者标识", 150);
+                        listSearchResult.Columns.Add("接收者标识", 150);
+                    }
+                    else
+                    {
+                        listSearchResult.Columns.Add("卡号", 120);
+                        listSearchResult.Columns.Add("卡类型", 60);
+                        listSearchResult.Columns.Add("所属单位", 150);
+                        listSearchResult.Columns.Add("有效期", 150);
+                        listSearchResult.Columns.Add("身份证号", 120);
+                        listSearchResult.Columns.Add("用户姓名", 100);
+                        listSearchResult.Columns.Add("联系电话", 100);
+                        listSearchResult.Columns.Add("卡余额", 60);
+                    }
+                    break;
                 case 1: 
                     textSearchContent.MaxLength = 16;
+                    ChkSearchPsam.Visible = false;
+                    ChkSearchPsam.Enabled = false;
+                    listSearchResult.Columns.Add("卡号", 120);
+                    listSearchResult.Columns.Add("卡类型", 60);
+                    listSearchResult.Columns.Add("所属单位", 150);
+                    listSearchResult.Columns.Add("有效期", 150);
+                    listSearchResult.Columns.Add("身份证号", 120);
+                    listSearchResult.Columns.Add("用户姓名", 100);
+                    listSearchResult.Columns.Add("联系电话", 100);
+                    listSearchResult.Columns.Add("卡余额", 60);
                     break;
                 case 2:
                     textSearchContent.MaxLength = 18;
+                    ChkSearchPsam.Visible = false;
+                    ChkSearchPsam.Enabled = false;
+                    listSearchResult.Columns.Add("卡号", 120);
+                    listSearchResult.Columns.Add("卡类型", 60);
+                    listSearchResult.Columns.Add("所属单位", 150);
+                    listSearchResult.Columns.Add("有效期", 150);
+                    listSearchResult.Columns.Add("身份证号", 120);
+                    listSearchResult.Columns.Add("用户姓名", 100);
+                    listSearchResult.Columns.Add("联系电话", 100);
+                    listSearchResult.Columns.Add("卡余额", 60);
                     break;
                 case 3:
                     textSearchContent.MaxLength = 50;
+                    ChkSearchPsam.Visible = true;
+                    ChkSearchPsam.Enabled = true;
+                    if (ChkSearchPsam.Checked)
+                    {
+                        listSearchResult.Columns.Add("卡号", 120);
+                        listSearchResult.Columns.Add("终端机编号", 60);
+                        listSearchResult.Columns.Add("所属单位", 150);
+                        listSearchResult.Columns.Add("有效期", 150);
+                        listSearchResult.Columns.Add("发行者标识", 150);
+                        listSearchResult.Columns.Add("接收者标识", 150);
+                    }
+                    else
+                    {
+                        listSearchResult.Columns.Add("卡号", 120);
+                        listSearchResult.Columns.Add("卡类型", 60);
+                        listSearchResult.Columns.Add("所属单位", 150);
+                        listSearchResult.Columns.Add("有效期", 150);
+                        listSearchResult.Columns.Add("身份证号", 120);
+                        listSearchResult.Columns.Add("用户姓名", 100);
+                        listSearchResult.Columns.Add("联系电话", 100);
+                        listSearchResult.Columns.Add("卡余额", 60);
+                    }
                     break;
             }
         }
@@ -569,6 +636,38 @@ namespace FNTMain
             return strRet;
         }
 
+        private void SearchPsam(string strParamName, string strParamVal)
+        {
+            SqlParameter[] sqlparams = new SqlParameter[1];
+            sqlparams[0] = m_ObjSql.MakeParam("Search", SqlDbType.VarChar, 32, ParameterDirection.Input, "%" + strParamVal + "%");
+            SqlDataReader dataReader = null;
+            m_ObjSql.ExecuteCommand("select * from Psam_Card where " + strParamName + " like @Search", sqlparams, out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        ListViewItem ItemCard = new ListViewItem();
+                        ItemCard.SubItems.Add((string)dataReader["TerminalId"]);
+                        string strClientName = GetClientName((int)dataReader["ClientId"]);
+                        ItemCard.SubItems.Add(strClientName);
+                        DateTime DateStart = (DateTime)dataReader["UseValidateDate"];
+                        DateTime DateEnd = (DateTime)dataReader["UseInvalidateDate"];
+                        ItemCard.SubItems.Add(DateStart.ToString("yyyyMMdd") + "-" + DateEnd.ToString("yyyyMMdd"));
+                        string strCompanyFrom = (string)dataReader["IssueCode"];
+                        ItemCard.SubItems.Add(strCompanyFrom);
+                        string strCompanyTo = (string)dataReader["RecvCode"];
+                        ItemCard.SubItems.Add(strCompanyTo);
+                        string strCardId = (string)dataReader["PsamId"];
+                        ItemCard.Text = strCardId;
+                        listSearchResult.Items.Add(ItemCard);
+                    }
+                }
+                dataReader.Close();
+            }
+        }
+
         //模糊查询
         private void SearchCommon(string strParamName, string strParamVal)
         {
@@ -622,6 +721,37 @@ namespace FNTMain
                         ItemCard.SubItems.Add(balance.ToString());
 
                         string strCardId = (string)dataReader["CardNum"];
+                        ItemCard.Text = strCardId;
+                        listSearchResult.Items.Add(ItemCard);
+                    }
+                }
+                dataReader.Close();
+            }
+        }
+
+        private void SearchPsamInfoByClient(int nClientID, string strClientName)
+        {
+            SqlParameter[] sqlparams = new SqlParameter[1];
+            sqlparams[0] = m_ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, nClientID);
+            SqlDataReader dataReader = null;
+            m_ObjSql.ExecuteCommand("select * from Psam_Card where ClientId = @ClientId", sqlparams, out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        ListViewItem ItemCard = new ListViewItem();
+                        ItemCard.SubItems.Add((string)dataReader["TerminalId"]);                        
+                        ItemCard.SubItems.Add(strClientName);//ID相同的名称一致
+                        DateTime DateStart = (DateTime)dataReader["UseValidateDate"];
+                        DateTime DateEnd = (DateTime)dataReader["UseInvalidateDate"];
+                        ItemCard.SubItems.Add(DateStart.ToString("yyyyMMdd") + "-" + DateEnd.ToString("yyyyMMdd"));
+                        string strCompanyFrom = (string)dataReader["IssueCode"];
+                        ItemCard.SubItems.Add(strCompanyFrom);
+                        string strCompanyTo = (string)dataReader["RecvCode"];
+                        ItemCard.SubItems.Add(strCompanyTo);
+                        string strCardId = (string)dataReader["PsamId"];
                         ItemCard.Text = strCardId;
                         listSearchResult.Items.Add(ItemCard);
                     }
@@ -692,10 +822,13 @@ namespace FNTMain
         private void SearchByClientID(int nClientId)
         {
             listSearchResult.Items.Clear();
-            SearchCommon("ClientId", nClientId.ToString());
+            if (ChkSearchPsam.Checked)
+                SearchPsam("ClientId", nClientId.ToString());
+            else
+                SearchCommon("ClientId", nClientId.ToString());
         }
 
-        private void SearchByClientName(string strClientName)
+        private void SearchByClientName(string strClientName, bool bSearchPsam)
         {
             listSearchResult.Items.Clear();
             SqlHelper ObjSql = new SqlHelper();
@@ -715,7 +848,10 @@ namespace FNTMain
                 {
                     int nClientID = (int)dataReader["ClientId"];
                     string strPreciseName = (string)dataReader["ClientName"];
-                    SearchCardInfoByClient(nClientID, strPreciseName);
+                    if (bSearchPsam)
+                        SearchPsamInfoByClient(nClientID, strPreciseName);
+                    else
+                        SearchCardInfoByClient(nClientID, strPreciseName);
                 }
                 dataReader.Close();
             }
@@ -738,7 +874,35 @@ namespace FNTMain
         private void SearchByCardNum(string strCardId)
         {
             listSearchResult.Items.Clear();
-            SearchCommon("CardNum", strCardId);
+            if (ChkSearchPsam.Checked)
+                SearchPsam("PsamId", strCardId);
+            else
+                SearchCommon("CardNum", strCardId);
+        }
+
+        private void ChkSearchPsam_CheckedChanged(object sender, EventArgs e)
+        {
+            listSearchResult.Columns.Clear();
+            if (ChkSearchPsam.Checked)
+            {
+                listSearchResult.Columns.Add("卡号", 120);
+                listSearchResult.Columns.Add("终端机编号", 60);
+                listSearchResult.Columns.Add("所属单位", 150);
+                listSearchResult.Columns.Add("有效期", 150);
+                listSearchResult.Columns.Add("发行者标识", 150);
+                listSearchResult.Columns.Add("接收者标识", 150);
+            }
+            else
+            {
+                listSearchResult.Columns.Add("卡号", 120);
+                listSearchResult.Columns.Add("卡类型", 60);
+                listSearchResult.Columns.Add("所属单位", 150);
+                listSearchResult.Columns.Add("有效期", 150);
+                listSearchResult.Columns.Add("身份证号", 120);
+                listSearchResult.Columns.Add("用户姓名", 100);
+                listSearchResult.Columns.Add("联系电话", 100);
+                listSearchResult.Columns.Add("卡余额", 60);
+            }
         }
 
     }

@@ -78,6 +78,7 @@
             this.CompanyId = new System.Windows.Forms.Label();
             this.SaveClose = new System.Windows.Forms.Button();
             this.groupLimit = new System.Windows.Forms.GroupBox();
+            this.cmbLimitGasType = new System.Windows.Forms.ComboBox();
             this.LimitCarNo = new System.Windows.Forms.CheckBox();
             this.listLimitArea = new System.Windows.Forms.CheckedListBox();
             this.textGasAmount = new System.Windows.Forms.TextBox();
@@ -88,13 +89,16 @@
             this.cmbAreaLimit = new System.Windows.Forms.ComboBox();
             this.LimitArea = new System.Windows.Forms.Label();
             this.LimitGas = new System.Windows.Forms.Label();
-            this.cmbLimitGasType = new System.Windows.Forms.ComboBox();
+            this.IdTypeLabel = new System.Windows.Forms.Label();
+            this.cmbIdType = new System.Windows.Forms.ComboBox();
             this.groupUserCardInfo.SuspendLayout();
             this.groupLimit.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupUserCardInfo
             // 
+            this.groupUserCardInfo.Controls.Add(this.cmbIdType);
+            this.groupUserCardInfo.Controls.Add(this.IdTypeLabel);
             this.groupUserCardInfo.Controls.Add(this.textRemark);
             this.groupUserCardInfo.Controls.Add(this.Remark);
             this.groupUserCardInfo.Controls.Add(this.textBusDistance);
@@ -451,21 +455,21 @@
             // 
             // textUserIdentity
             // 
-            this.textUserIdentity.Location = new System.Drawing.Point(84, 154);
+            this.textUserIdentity.Location = new System.Drawing.Point(247, 154);
             this.textUserIdentity.MaxLength = 18;
             this.textUserIdentity.Name = "textUserIdentity";
-            this.textUserIdentity.Size = new System.Drawing.Size(218, 21);
+            this.textUserIdentity.Size = new System.Drawing.Size(167, 21);
             this.textUserIdentity.TabIndex = 19;
             this.textUserIdentity.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textUserIdentity_KeyPress);
             // 
             // UserID
             // 
             this.UserID.AutoSize = true;
-            this.UserID.Location = new System.Drawing.Point(13, 158);
+            this.UserID.Location = new System.Drawing.Point(191, 158);
             this.UserID.Name = "UserID";
-            this.UserID.Size = new System.Drawing.Size(65, 12);
+            this.UserID.Size = new System.Drawing.Size(53, 12);
             this.UserID.TabIndex = 18;
-            this.UserID.Text = "身份证号码";
+            this.UserID.Text = "证件号码";
             // 
             // textUserName
             // 
@@ -564,11 +568,11 @@
             // CompanyId
             // 
             this.CompanyId.AutoSize = true;
-            this.CompanyId.Location = new System.Drawing.Point(19, 51);
+            this.CompanyId.Location = new System.Drawing.Point(18, 50);
             this.CompanyId.Name = "CompanyId";
             this.CompanyId.Size = new System.Drawing.Size(53, 12);
             this.CompanyId.TabIndex = 2;
-            this.CompanyId.Text = "厂家编号";
+            this.CompanyId.Text = "公司代码";
             // 
             // SaveClose
             // 
@@ -599,6 +603,19 @@
             this.groupLimit.TabIndex = 35;
             this.groupLimit.TabStop = false;
             this.groupLimit.Text = "支付限制信息";
+            // 
+            // cmbLimitGasType
+            // 
+            this.cmbLimitGasType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLimitGasType.FormattingEnabled = true;
+            this.cmbLimitGasType.Items.AddRange(new object[] {
+            "不限",
+            "CNG",
+            "LNG"});
+            this.cmbLimitGasType.Location = new System.Drawing.Point(86, 51);
+            this.cmbLimitGasType.Name = "cmbLimitGasType";
+            this.cmbLimitGasType.Size = new System.Drawing.Size(70, 20);
+            this.cmbLimitGasType.TabIndex = 12;
             // 
             // LimitCarNo
             // 
@@ -696,18 +713,28 @@
             this.LimitGas.TabIndex = 3;
             this.LimitGas.Text = "油气限制";
             // 
-            // cmbLimitGasType
+            // IdTypeLabel
             // 
-            this.cmbLimitGasType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLimitGasType.FormattingEnabled = true;
-            this.cmbLimitGasType.Items.AddRange(new object[] {
-            "不限",
-            "CNG",
-            "LNG"});
-            this.cmbLimitGasType.Location = new System.Drawing.Point(86, 51);
-            this.cmbLimitGasType.Name = "cmbLimitGasType";
-            this.cmbLimitGasType.Size = new System.Drawing.Size(70, 20);
-            this.cmbLimitGasType.TabIndex = 12;
+            this.IdTypeLabel.AutoSize = true;
+            this.IdTypeLabel.Location = new System.Drawing.Point(25, 158);
+            this.IdTypeLabel.Name = "IdTypeLabel";
+            this.IdTypeLabel.Size = new System.Drawing.Size(53, 12);
+            this.IdTypeLabel.TabIndex = 51;
+            this.IdTypeLabel.Text = "证件类型";
+            // 
+            // cmbIdType
+            // 
+            this.cmbIdType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbIdType.FormattingEnabled = true;
+            this.cmbIdType.Items.AddRange(new object[] {
+            "身份证",
+            "驾驶证",
+            "军官证",
+            "其他证"});
+            this.cmbIdType.Location = new System.Drawing.Point(82, 154);
+            this.cmbIdType.Name = "cmbIdType";
+            this.cmbIdType.Size = new System.Drawing.Size(102, 20);
+            this.cmbIdType.TabIndex = 52;
             // 
             // UserCardInfo
             // 
@@ -794,5 +821,7 @@
         private System.Windows.Forms.TextBox textRemark;
         private System.Windows.Forms.Label Remark;
         private System.Windows.Forms.ComboBox cmbLimitGasType;
+        private System.Windows.Forms.ComboBox cmbIdType;
+        private System.Windows.Forms.Label IdTypeLabel;
     }
 }
