@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using IFuncPlugin;
 using System.Windows.Forms;
+using ApduDaHua;
 
 namespace CardOperating
 {
@@ -169,7 +170,7 @@ namespace CardOperating
             if (randByte == null || randByte.Length != 8)
                 return false;
 
-            byte[] KeyVal = m_ctrlApdu.GetKeyVal(bMainKey, APDUBase.CardCategory.CpuCard);
+            byte[] KeyVal = GetKeyVal(bMainKey, CardCategory.CpuCard);
 
             return ExternalAuthenticate(randByte, KeyVal);
         }
@@ -228,7 +229,7 @@ namespace CardOperating
             if (randByte == null || randByte.Length != 8)
                 return false;
 
-            byte[] KeyVal = m_ctrlApdu.GetKeyVal(bMainKey, APDUBase.CardCategory.CpuCard);
+            byte[] KeyVal = GetKeyVal(bMainKey, CardCategory.CpuCard);
             
             return ClearMF(randByte, KeyVal);
         }
@@ -443,7 +444,7 @@ namespace CardOperating
             if (randByte == null || randByte.Length != 8)
                 return false;
             //安装Key的计算MAC需要随机数参与
-            m_ctrlApdu.createStorageKeyCmd(randByte);
+            m_ctrlApdu.createStorageKeyCmd(randByte, m_KeyMain, m_KeyOrg);
             byte[] data = m_ctrlApdu.GetOutputCmd();
             short datalen = (short)data.Length;
             Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
@@ -726,85 +727,85 @@ namespace CardOperating
         //安装各种密钥
         private bool StorageEncryptyKey(byte[] byteASN)
         {
-            StorageKeyParam KeyInfo = null;
-            byte[] keyDiversify = StorageKeyParam.GetDiversify(byteASN);
+            StorageKeyParam KeyInfo = null;            
+            byte[] keyDiversify = StorageKeyParam.GetDiversify(byteASN, m_KeyAppMain);
             if (keyDiversify == null)
-                return false;
+                return false;            
             //加气应用主控密钥MCMK
             KeyInfo = new StorageKeyParam("安装应用主控密钥", 0x02, 0x49, 0x00, 0xFF, 0x01);
-            KeyInfo.SetParam(byteASN, m_MCMK);
+            KeyInfo.SetParam(byteASN, m_MCMK, m_KeyOrg);
             if (!storageUserKey(KeyInfo))
                 return false;
             //主控密钥安装后命令的MAC需要使用主控密钥的分散密钥计算
             //加气消费密钥MPK1,并将卡号写入EF15文件
             KeyInfo = new StorageKeyParam("安装加气消费密钥1", 0x01, 0x40, 0x01, 0x33, 0x00);
-            KeyInfo.SetParam(byteASN, m_MPK1);
+            KeyInfo.SetParam(byteASN, m_MPK1, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //加气消费密钥MPK2
             KeyInfo = new StorageKeyParam("安装加气消费密钥2", 0x03, 0x40, 0x02, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MPK2);
+            KeyInfo.SetParam(byteASN, m_MPK2, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //圈存主密钥MLK1
             KeyInfo = new StorageKeyParam("安装圈存密钥1", 0x03, 0x41, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MLK1);
+            KeyInfo.SetParam(byteASN, m_MLK1, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //圈存主密钥MLK2
             KeyInfo = new StorageKeyParam("安装圈存密钥2", 0x04, 0x41, 0x02, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MLK2);
+            KeyInfo.SetParam(byteASN, m_MLK2, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //TAC主密钥MTK
             KeyInfo = new StorageKeyParam("安装TAC主密钥", 0x05, 0x42, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MTK);
+            KeyInfo.SetParam(byteASN, m_MTK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //圈提主密钥MULK
             KeyInfo = new StorageKeyParam("安装圈提主密钥", 0x06, 0x46, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MULK);
+            KeyInfo.SetParam(byteASN, m_MULK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //透支限额主密钥MUK
             KeyInfo = new StorageKeyParam("安装透支限额主密钥", 0x07, 0x47, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MUK);
+            KeyInfo.SetParam(byteASN, m_MUK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //PIN解锁主密钥MPUK
             KeyInfo = new StorageKeyParam("安装PIN解锁主密钥", 0x08, 0x43, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MPUK);
+            KeyInfo.SetParam(byteASN, m_MPUK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //密码重装主密钥MRPK
             KeyInfo = new StorageKeyParam("安装密码重装主密钥", 0x09, 0x44, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MRPK);
+            KeyInfo.SetParam(byteASN, m_MRPK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //应用维护主密钥MAMK
             KeyInfo = new StorageKeyParam("安装应用维护主密钥", 0x0A, 0x45, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MAMK);
+            KeyInfo.SetParam(byteASN, m_MAMK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //内部认证主密钥MIAK
             KeyInfo = new StorageKeyParam("安装内部认证主密钥", 0x0B, 0x48, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MIAK);
+            KeyInfo.SetParam(byteASN, m_MIAK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //内部认证加气消费密钥MPK1
             KeyInfo = new StorageKeyParam("内部认证加气消费密钥1", 0x0C, 0x4F, 0x01, 0x33, 0x00);
-            KeyInfo.SetParam(byteASN, m_MPK1);
+            KeyInfo.SetParam(byteASN, m_MPK1, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
@@ -1121,7 +1122,7 @@ namespace CardOperating
                 return false;
             //切换生命周期
             SelectFile(m_strPSE, null);
-            SetUserCardStatus(null);
+            SetUserCardStatus(m_KeyMain);
             return true;
         }
 
@@ -1598,7 +1599,7 @@ namespace CardOperating
                 return false;
             }
 
-            byte[] ConsumerKey = GetRelatedKey(ObjSql, APDUBase.CardCategory.PsamCard);
+            byte[] ConsumerKey = GetRelatedKey(ObjSql, CardCategory.PsamCard);
             if (ConsumerKey == null || !APDUBase.ByteDataEquals(ConsumerKey, m_MPK1))
             {
                 base.OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
@@ -1630,7 +1631,7 @@ namespace CardOperating
             {
                 string strKey = (string)dataReader["MasterKey"];
                 byte[] byteKey = APDUBase.StringToBCD(strKey);
-                m_ctrlApdu.SetMainKeyValue(byteKey, APDUBase.CardCategory.CpuCard);//卡片主控密钥
+                SetMainKeyValue(byteKey, CardCategory.CpuCard);//卡片主控密钥
                 strKey = (string)dataReader["ApplicatonMasterKey"];
                 StrKeyToByte(strKey, m_MCMK);
                 strKey = (string)dataReader["ApplicationTendingKey"];
@@ -1651,7 +1652,7 @@ namespace CardOperating
                 StrKeyToByte(strKey, m_MULK);
                 strKey = (string)dataReader["OverdraftKey"];
                 StrKeyToByte(strKey, m_MUK);
-                m_ctrlApdu.SetUserAppKeyValue(m_MCMK);
+                SetUserAppKeyValue(m_MCMK);
             }
             dataReader.Close();
             dataReader = null;
@@ -1678,7 +1679,7 @@ namespace CardOperating
                     {
                         string strKey = (string)dataReader["OrgKey"];
                         byte[] byteKey = APDUBase.StringToBCD(strKey);
-                        m_ctrlApdu.SetOrgKeyValue(byteKey, APDUBase.CardCategory.CpuCard);
+                        SetOrgKeyValue(byteKey, CardCategory.CpuCard);
                     }
                     dataReader.Close();
                     return true;

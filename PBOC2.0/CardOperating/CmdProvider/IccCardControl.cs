@@ -6,6 +6,7 @@ using SqlServerHelper;
 using System.Data;
 using IFuncPlugin;
 using System.Windows.Forms;
+using ApduDaHua;
 
 namespace CardOperating
 {
@@ -144,7 +145,7 @@ namespace CardOperating
             if (randByte == null || randByte.Length != 8)
                 return false;
 
-            byte[] KeyVal = m_ctrlApdu.GetKeyVal(bMainKey, APDUBase.CardCategory.PsamCard);
+            byte[] KeyVal = GetKeyVal(bMainKey, CardCategory.PsamCard);
 
             return ExternalAuthenticate(randByte, KeyVal);
         }
@@ -181,7 +182,7 @@ namespace CardOperating
             if (randByte == null || randByte.Length != 8)
                 return false;
 
-            byte[] KeyVal = m_ctrlApdu.GetKeyVal(bMainKey, APDUBase.CardCategory.PsamCard);
+            byte[] KeyVal = GetKeyVal(bMainKey, CardCategory.PsamCard);
 
             return ClearMF(randByte, KeyVal);
         }
@@ -654,7 +655,7 @@ namespace CardOperating
             byte[] randomVal = GetRandomValue(m_ctrlApdu, 8);
             if (randomVal == null || randomVal.Length != 8)
                 return false;
-            m_ctrlApdu.createSetStatusCmd(randomVal);
+            m_ctrlApdu.createSetStatusCmd(randomVal, m_PsamKeyOrg);
             byte[] data = m_ctrlApdu.GetOutputCmd();
             short datalen = (short)data.Length;
             Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
@@ -767,7 +768,7 @@ namespace CardOperating
             //PSAM¿¨Ð´ÈëÃÜÔ¿Ëæ»úÖµ4×Ö½Ú+4×Ö½Ú0
             byte[] randomVal = new byte[8];
             Buffer.BlockCopy(randVal, 0, randomVal, 0, 4);
-            m_ctrlApdu.createStorageAppKeyCmd(randomVal, keyApp, Usage, Ver);
+            m_ctrlApdu.createStorageAppKeyCmd(randomVal, keyApp, Usage, Ver, m_PsamKeyOrg);
             byte[] data = m_ctrlApdu.GetOutputCmd();
             short datalen = (short)data.Length;
             Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
@@ -1065,7 +1066,7 @@ namespace CardOperating
                 return false;
             }
 
-            byte[] ConsumerKey = GetRelatedKey(ObjSql, APDUBase.CardCategory.CpuCard);
+            byte[] ConsumerKey = GetRelatedKey(ObjSql, CardCategory.CpuCard);
             if (ConsumerKey == null || !APDUBase.ByteDataEquals(ConsumerKey, m_MPK1))
             {
                 base.OnTextOutput(new MsgOutEvent(0, "¿¨Æ¬Ïû·ÑÃÜÔ¿²»Ò»ÖÂ"));
@@ -1097,7 +1098,7 @@ namespace CardOperating
                     {
                         string strKey = (string)dataReader["OrgKey"];
                         byte[] byteKey = APDUBase.StringToBCD(strKey);
-                        m_ctrlApdu.SetOrgKeyValue(byteKey, APDUBase.CardCategory.PsamCard);
+                        SetOrgKeyValue(byteKey, CardCategory.PsamCard);
                     }
                     dataReader.Close();
                     return true;
@@ -1136,7 +1137,7 @@ namespace CardOperating
                         StrKeyToByte(strKey, m_MDK1);
                         strKey = (string)dataReader["MacEncryptKey"];
                         StrKeyToByte(strKey, m_MADK);
-                        m_ctrlApdu.SetMainKeyValue(m_MCMK, APDUBase.CardCategory.PsamCard);//¿¨Æ¬Ö÷¿ØÃÜÔ¿
+                        SetMainKeyValue(m_MCMK, CardCategory.PsamCard);//¿¨Æ¬Ö÷¿ØÃÜÔ¿
 
                     }
                     dataReader.Close();
@@ -1174,9 +1175,9 @@ namespace CardOperating
             sqlparams[6] = ObjSql.MakeParam("CompanyTo", SqlDbType.VarChar, 16, ParameterDirection.Input, strDbVal);
             sqlparams[7] = ObjSql.MakeParam("Remark", SqlDbType.NVarChar, 50, ParameterDirection.Input, PsamInfoPar.Remark);
             //ÃÜÔ¿
-            strDbVal = BitConverter.ToString(m_ctrlApdu.CardKeyToDb(true, APDUBase.CardCategory.PsamCard)).Replace("-", "");
+            strDbVal = BitConverter.ToString(CardKeyToDb(true, CardCategory.PsamCard)).Replace("-", "");
             sqlparams[8] = ObjSql.MakeParam("OrgKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
-            strDbVal = BitConverter.ToString(m_ctrlApdu.CardKeyToDb(false, APDUBase.CardCategory.PsamCard)).Replace("-", "");
+            strDbVal = BitConverter.ToString(CardKeyToDb(false, CardCategory.PsamCard)).Replace("-", "");
             sqlparams[9] = ObjSql.MakeParam("PsamMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
             if (ObjSql.ExecuteProc("PROC_PublishPsamCard", sqlparams) == 0)
                 bSuccess = true;

@@ -45,16 +45,13 @@
     <Compile Include="AppUserOperator.Designer.cs">
       <DependentUpon>AppUserOperator.cs</DependentUpon>
     </Compile>
-    <Compile Include="CardInfo\CardInfoParam.cs" />
     <Compile Include="CardInfo\DbInfo.cs" />
-    <Compile Include="CardInfo\IccCardInfoParam.cs" />
     <Compile Include="CardMethod\CardApplicationTest.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CardMethod\CardApplicationTest.Designer.cs">
       <DependentUpon>CardApplicationTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="CmdProvider\APDUBase.cs" />
     <Compile Include="CardOperating.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,7 +59,6 @@
       <DependentUpon>CardOperating.cs</DependentUpon>
     </Compile>
     <Compile Include="CmdProvider\CardControlBase.cs" />
-    <Compile Include="CmdProvider\PSAMCardAPDUProvider.cs" />
     <Compile Include="CmdProvider\UserCardControl.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -76,7 +72,6 @@
     </Compile>
     <Compile Include="MsgOutEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CmdProvider\UserCardAPDUProvider.cs" />
     <Compile Include="CardInfo\UserCardInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +81,10 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ApduDaHua\ApduDaHua.csproj">
+      <Project>{27EAC653-4040-412A-A2F9-4B3C7BD6DFB5}</Project>
+      <Name>ApduDaHua</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IFuncPlugin\IFuncPlugin.csproj">
       <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
       <Name>IFuncPlugin</Name>

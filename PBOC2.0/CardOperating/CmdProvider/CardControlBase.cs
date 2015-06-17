@@ -5,6 +5,7 @@ using IFuncPlugin;
 using System.Data.SqlClient;
 using System.Data;
 using SqlServerHelper;
+using ApduDaHua;
 
 namespace CardOperating
 {
@@ -12,11 +13,35 @@ namespace CardOperating
     {
         public event MessageOutput TextOutput = null;
 
+        //卡片种类
+        public enum CardCategory
+        {
+            CpuCard,  //CPU卡
+            PsamCard  //PSAM卡
+        }
+
+        //卡片中初始密钥
+        protected static byte[] m_KeyOrg = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
+
+        //MF下卡片主控密钥
+        protected static byte[] m_KeyMain = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0x78 };
+
+        //卡片应用主控密钥
+        protected static byte[] m_KeyAppMain = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
+
+        //////////////////////////////////////////////////////////////////////////
+        //PSAM卡 初始密钥
+        protected static byte[] m_PsamKeyOrg = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
+
+        //PSAM卡的MF下卡片主控密钥
+        protected static byte[] m_KeyPsamMain = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f };
+
         protected int m_MtDevHandler = 0;
         protected short m_RetVal = 0;  //返回值
 
         protected byte[] m_RecvData = new byte[128];
         protected byte[] m_RecvDataLen = new byte[4];
+
         //用于接收数值初始化
         protected readonly byte[] m_InitByte = new byte[128];
         protected SqlConnectInfo m_DBInfo = new SqlConnectInfo();
@@ -63,6 +88,75 @@ namespace CardOperating
             return "其他错误：" + strErrCode;
         }
 
+        protected void SetOrgKeyValue(byte[] byteKey, CardCategory eCategory)
+        {
+            if (byteKey.Length != 16)
+                return;
+            if (eCategory == CardCategory.CpuCard)
+                Buffer.BlockCopy(byteKey, 0, m_KeyOrg, 0, 16);
+            else if (eCategory == CardCategory.PsamCard)
+                Buffer.BlockCopy(byteKey, 0, m_PsamKeyOrg, 0, 16);
+        }
+
+        public void SetMainKeyValue(byte[] byteKey, CardCategory eCategory)
+        {
+            if (byteKey.Length != 16)
+                return;
+            if (eCategory == CardCategory.CpuCard)
+                Buffer.BlockCopy(byteKey, 0, m_KeyMain, 0, 16);
+            else if (eCategory == CardCategory.PsamCard)
+                Buffer.BlockCopy(byteKey, 0, m_KeyPsamMain, 0, 16);
+        }
+
+        public void SetUserAppKeyValue(byte[] byteKey)
+        {
+            if (byteKey.Length != 16)
+                return;
+            Buffer.BlockCopy(byteKey, 0, m_KeyAppMain, 0, 16);
+        }
+
+        public byte[] CardKeyToDb(bool bOrg, CardCategory eCategory)
+        {
+            if (bOrg)
+            {
+                if (eCategory == CardCategory.CpuCard)
+                    return m_KeyOrg;
+                else if (eCategory == CardCategory.PsamCard)
+                    return m_PsamKeyOrg;
+                else
+                    return null;
+            }
+            else
+            {
+                if (eCategory == CardCategory.CpuCard)
+                    return m_KeyMain;
+                else if (eCategory == CardCategory.PsamCard)
+                    return m_KeyPsamMain;
+                else
+                    return null;
+            }
+        }
+
+        public byte[] GetKeyVal(bool bMainKey, CardCategory eCategory)
+        {
+            byte[] key = null;
+            if (bMainKey)
+            {
+                if (eCategory == CardCategory.CpuCard)
+                    key = m_KeyMain;
+                else if (eCategory == CardCategory.PsamCard)
+                    key = m_KeyPsamMain;
+            }
+            else
+            {
+                if (eCategory == CardCategory.CpuCard)
+                    key = m_KeyOrg;
+                else if (eCategory == CardCategory.PsamCard)
+                    key = m_PsamKeyOrg;
+            }
+            return key;
+        }
+
         //计算过程密钥
         protected byte[] GetProcessKey(byte[] ASN, byte[] MasterKey, byte[] RandVal, byte[] byteSn)
         {
@@ -93,10 +187,10 @@ namespace CardOperating
                 Buffer.BlockCopy(BcdKey, 0, byteKey, 0, 16);
         }
 
-        protected byte[] GetRelatedKey(SqlHelper sqlHelp, APDUBase.CardCategory eCardType)
+        protected byte[] GetRelatedKey(SqlHelper sqlHelp, CardCategory eCardType)
         {
             SqlDataReader dataReader = null;
-            if (eCardType == APDUBase.CardCategory.PsamCard)
+            if (eCardType == CardCategory.PsamCard)
             {
                 sqlHelp.ExecuteProc("PROC_GetPsamKey", out dataReader);
             }
