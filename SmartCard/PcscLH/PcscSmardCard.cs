@@ -14,7 +14,7 @@ namespace PcscLH
         {
             if (hContext != UIntPtr.Zero)
                 return true;
-            int nResult = WinSCard_Dll.SCardEstablishContext(0, IntPtr.Zero, IntPtr.Zero, out hContext);
+            int nResult = WinSCard_Dll.SCardEstablishContext(WinSCard_Dll.SCARD_SCOPE_USER, IntPtr.Zero, IntPtr.Zero, ref hContext);
             if (nResult != 0)
                 return false;            
             uint mszLen = 0;
@@ -83,7 +83,7 @@ namespace PcscLH
         {
             if (hCard == UIntPtr.Zero)
                 return true;
-            WinSCard_Dll.SCardDisconnect(hCard, 2);//Power down the card
+            WinSCard_Dll.SCardDisconnect(hCard, WinSCard_Dll.SCARD_LEAVE_CARD);
             hCard = UIntPtr.Zero;
             return true;
         }
