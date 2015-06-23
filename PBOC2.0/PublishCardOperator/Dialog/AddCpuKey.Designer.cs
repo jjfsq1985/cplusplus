@@ -287,7 +287,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddCpuKey";
-            this.Text = "CPU卡密钥";
+            this.Text = "用户卡密钥";
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

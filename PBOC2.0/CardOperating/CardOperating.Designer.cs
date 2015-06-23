@@ -120,7 +120,7 @@
             this.Card.Size = new System.Drawing.Size(108, 253);
             this.Card.TabIndex = 5;
             this.Card.TabStop = false;
-            this.Card.Text = "非接触式卡";
+            this.Card.Text = "用户卡";
             // 
             // btnUserCardReset
             // 
@@ -196,7 +196,7 @@
             this.ICC_Card.Size = new System.Drawing.Size(108, 258);
             this.ICC_Card.TabIndex = 6;
             this.ICC_Card.TabStop = false;
-            this.ICC_Card.Text = "接触式卡";
+            this.ICC_Card.Text = "SAM卡";
             // 
             // btnIccCardReset
             // 

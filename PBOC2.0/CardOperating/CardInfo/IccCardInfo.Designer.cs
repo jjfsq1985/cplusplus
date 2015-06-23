@@ -214,7 +214,7 @@
             this.IccCardNo.Name = "IccCardNo";
             this.IccCardNo.Size = new System.Drawing.Size(65, 12);
             this.IccCardNo.TabIndex = 1;
-            this.IccCardNo.Text = "PSAM序列号";
+            this.IccCardNo.Text = "SAM序列号";
             // 
             // SaveClose
             // 

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using IFuncPlugin;
 using SqlServerHelper;
 using System.Data.SqlClient;
+using ApduParam;
 using ApduDaHua;
 
 namespace CardOperating
@@ -385,7 +386,7 @@ namespace CardOperating
                 return;
             //动作            
             if (m_IccCardCtrl.InitIccCard(false) != 0)
-                MessageBox.Show("当前PSAM卡内主控密钥不匹配，初始化失败。\r\n请确认卡商然后重置。", "警告", MessageBoxButtons.OK);
+                MessageBox.Show("当前SAM卡内主控密钥不匹配，初始化失败。\r\n请确认卡商然后重置。", "警告", MessageBoxButtons.OK);
         }
 
         private void btnIccCardReset_Click(object sender, EventArgs e)
@@ -394,7 +395,7 @@ namespace CardOperating
                 return;
             //动作            
             if (m_IccCardCtrl.InitIccCard(true) != 0)
-                MessageBox.Show("当前PSAM卡内主控密钥不匹配，重置失败。\r\n请确认卡商然后初始化。", "警告", MessageBoxButtons.OK);
+                MessageBox.Show("当前SAM卡内主控密钥不匹配，重置失败。\r\n请确认卡商然后初始化。", "警告", MessageBoxButtons.OK);
         }
 
         private void IccCardSetting_Click(object sender, EventArgs e)
@@ -434,13 +435,13 @@ namespace CardOperating
             m_IccCardId = PSAMInfo.GetBytePsamId();
             if (m_IccCardId == null)
             {
-                WriteMsg(0, "PSAM卡号为空，请先进行信息设置。");
+                WriteMsg(0, "SAM卡号为空，请先进行信息设置。");
                 return;
             }
 
             if (IsExistPsamId(m_IccCardId))
             {
-                if (MessageBox.Show("该PSAM卡号已存在，是否要重新制作该PSAM卡？", "提示", MessageBoxButtons.YesNo) == DialogResult.No)
+                if (MessageBox.Show("该SAM卡号已存在，是否要重新制作该SAM卡？", "提示", MessageBoxButtons.YesNo) == DialogResult.No)
                     return;                
             }
 
@@ -451,7 +452,7 @@ namespace CardOperating
                 return;
             }
 
-            WriteMsg(0, "PSAM卡号：" + BitConverter.ToString(m_IccCardId));
+            WriteMsg(0, "SAM卡号：" + BitConverter.ToString(m_IccCardId));
             WriteMsg(0, "终端机编号：" + BitConverter.ToString(TermialId));
             if (!m_IccCardCtrl.CreateIccInfo(m_IccCardId, TermialId))
                 return;

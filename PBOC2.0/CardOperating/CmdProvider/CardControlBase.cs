@@ -5,6 +5,7 @@ using IFuncPlugin;
 using System.Data.SqlClient;
 using System.Data;
 using SqlServerHelper;
+using ApduParam;
 using ApduDaHua;
 
 namespace CardOperating
@@ -164,11 +165,11 @@ namespace CardOperating
                 return null;
             //π˝≥Ã√‹‘ø
             byte[] SubKey = new byte[16];
-            byte[] encryptAsn = APDUBase.TripleEncryptData(ASN, MasterKey);
+            byte[] encryptAsn = DesCryptography.TripleEncryptData(ASN, MasterKey);
             byte[] XorASN = new byte[8];
             for (int i = 0; i < 8; i++)
                 XorASN[i] = (byte)(ASN[i] ^ 0xFF);
-            byte[] encryptXorAsn = APDUBase.TripleEncryptData(XorASN, MasterKey);
+            byte[] encryptXorAsn = DesCryptography.TripleEncryptData(XorASN, MasterKey);
             Buffer.BlockCopy(encryptAsn, 0, SubKey, 0, 8);
             Buffer.BlockCopy(encryptXorAsn, 0, SubKey, 8, 8);
             byte[] byteData = new byte[8];
@@ -176,7 +177,7 @@ namespace CardOperating
             Buffer.BlockCopy(byteSn, 0, byteData, 4, 2);
             byteData[6] = 0x80;
             byteData[7] = 0x00;
-            byte[] byteRetKey = APDUBase.TripleEncryptData(byteData, SubKey);
+            byte[] byteRetKey = DesCryptography.TripleEncryptData(byteData, SubKey);
             return byteRetKey;
         }
 

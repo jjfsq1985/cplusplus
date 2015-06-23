@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using IFuncPlugin;
 using SqlServerHelper;
 using System.Data.SqlClient;
+using ApduParam;
 using ApduDaHua;
 
 namespace CardOperating
@@ -1157,12 +1158,13 @@ namespace CardOperating
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
             
             SqlDataReader dataReader = null;
-            ObjSql.ExecuteCommand("select " + strFieldName + " from Base_Card where CardNum=@CardId", sqlparams, out dataReader);
+            ObjSql.ExecuteCommand("select " + strFieldName + " from Base_Card where CardNum = @CardId", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows && dataReader.Read())
                 {
-                    dbValue = (double)dataReader[strFieldName];
+                    decimal FieldValue = (decimal)dataReader[strFieldName];
+                    dbValue = decimal.ToDouble(FieldValue);
                 }
                 dataReader.Close();
             }

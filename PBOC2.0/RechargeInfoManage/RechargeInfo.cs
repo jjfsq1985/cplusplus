@@ -161,12 +161,18 @@ namespace RechargeManage
 
         private void ReadRechargeData()
         {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
             RechargeView.Rows.Clear();
             SqlDataReader dataReader = null;
             SqlParameter[] sqlparams = new SqlParameter[2];
-            sqlparams[0] = m_ObjSql.MakeParam("Start", SqlDbType.Int, 4, ParameterDirection.Input, m_nCurPage * m_nRowsPerPage);
-            sqlparams[1] = m_ObjSql.MakeParam("End", SqlDbType.Int, 4, ParameterDirection.Input, (m_nCurPage + 1) * m_nRowsPerPage);
-            m_ObjSql.ExecuteCommand("select * from Data_RechargeCardRecord where RunningNum > @Start and RunningNum <= @End", sqlparams, out dataReader);
+            sqlparams[0] = ObjSql.MakeParam("Start", SqlDbType.Int, 4, ParameterDirection.Input, m_nCurPage * m_nRowsPerPage);
+            sqlparams[1] = ObjSql.MakeParam("End", SqlDbType.Int, 4, ParameterDirection.Input, (m_nCurPage + 1) * m_nRowsPerPage);
+            ObjSql.ExecuteCommand("select * from Data_RechargeCardRecord where RunningNum > @Start and RunningNum <= @End", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows)
@@ -194,6 +200,7 @@ namespace RechargeManage
                 }
                 dataReader.Close();
             }
+            ObjSql.CloseConnection();
         }
 
         private void btnClose_Click(object sender, EventArgs e)

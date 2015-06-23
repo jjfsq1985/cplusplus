@@ -269,7 +269,7 @@
             this.ChkSearchPsam.Name = "ChkSearchPsam";
             this.ChkSearchPsam.Size = new System.Drawing.Size(72, 16);
             this.ChkSearchPsam.TabIndex = 6;
-            this.ChkSearchPsam.Text = "查PSAM卡";
+            this.ChkSearchPsam.Text = "查SAM卡";
             this.ChkSearchPsam.UseVisualStyleBackColor = true;
             this.ChkSearchPsam.CheckedChanged += new System.EventHandler(this.ChkSearchPsam_CheckedChanged);
             // 

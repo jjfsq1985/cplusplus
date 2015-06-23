@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using IFuncPlugin;
 using System.Windows.Forms;
+using ApduParam;
 using ApduDaHua;
 
 namespace CardOperating
@@ -1153,6 +1154,33 @@ namespace CardOperating
             return true;
         }
 
+        private bool InitializeForUnLoad(int nMoney, byte[] TermId, byte[] outData)
+        {
+            m_ctrlApdu.createInitializeUnLoadCmd(nMoney, TermId);
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "圈提初始化失败"));
+                return false;
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] InitAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, InitAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "圈提初始化应答：" + Encoding.ASCII.GetString(InitAsc)));
+                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+                Buffer.BlockCopy(m_RecvData, 0, outData, 0, 16);
+            }
+            return true;
+        }
+
         //计算MAC2
         private byte[] CalcMAC2(byte BusinessType,int nMoneyValue, byte[] TermialID, byte[] TimeBcd, byte[] byteKey)
         {   
@@ -1196,6 +1224,33 @@ namespace CardOperating
             return true;
         }
 
+        public bool DebitFoUnLoad(byte[] byteMAC2, byte[] TimeBcd)
+        {
+            m_ctrlApdu.createDebitUnLoadCmd(byteMAC2, TimeBcd);
+            byte[] data = m_ctrlApdu.GetOutputCmd();
+            short datalen = (short)data.Length;
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
+            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
+            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
+            if (m_RetVal != 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "圈提交易失败"));
+                return false;
+            }
+            else
+            {
+                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
+                uint nAscLen = nRecvLen * 2;
+                byte[] InitAsc = new byte[nAscLen];
+                DllExportMT.hex_asc(m_RecvData, InitAsc, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "圈提交易应答：" + Encoding.ASCII.GetString(InitAsc)));
+                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+                base.OnTextOutput(new MsgOutEvent(0, "圈提MAC3:" + BitConverter.ToString(m_RecvData, 0, 4)));//前4字节为MAC
+            }
+            return true;
+        }
+
         public bool SelectCardApp()
         {
             if (!SelectFile(m_strPSE, null))
@@ -1214,7 +1269,7 @@ namespace CardOperating
         //圈存功能
         public bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKeyFromDb)
         {
-            //获取已发卡的圈存密钥,测试时用数据库存储的默认密钥
+            //获取已发卡的圈存密钥
             if (bReadKeyFromDb)
             {
                 byte[] keyLoad = GetApplicationKeyVal(ASN, "AppLoadKey", 1);
@@ -1265,6 +1320,58 @@ namespace CardOperating
             return true;
         }
 
+        //圈提
+        public bool UserCardUnLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKeyFromDb)
+        {
+            if (bReadKeyFromDb)
+            {
+                byte[] keyUnLoad = GetApplicationKeyVal(ASN, "AppUnlockKey", 1);//联机解扣、圈提密钥
+                if (keyUnLoad == null)
+                {
+                    MessageBox.Show("无此卡的记录，不能圈提。");
+                    return false;
+                }
+                Buffer.BlockCopy(keyUnLoad, 0, m_MULK, 0, 16);
+            }
+            const byte BusinessType = 0x03;//圈提
+            byte[] outData = new byte[16];
+            byte[] SysTime = GetBCDTime();
+            if (!InitializeForUnLoad(nMoneyValue, TermId, outData))
+                return false;
+            byte[] byteBalance = new byte[4];
+            Buffer.BlockCopy(outData, 0, byteBalance, 0, 4);
+            byte[] OnlineSn = new byte[2];//交易序号
+            Buffer.BlockCopy(outData, 4, OnlineSn, 0, 2);
+            byte keyVer = (byte)outData[6];
+            byte keyFlag = (byte)outData[7];
+            byte[] rand = new byte[4];
+            Buffer.BlockCopy(outData, 8, rand, 0, 4);
+            byte[] MAC1 = new byte[4];
+            Buffer.BlockCopy(outData, 12, MAC1, 0, 4);
+            //判断MAC1是否正确
+            byte[] sesulk = GetProcessKey(ASN, m_MULK, rand, OnlineSn);//m_MULK 圈提密钥主密钥
+            if (sesulk == null)
+                return false;
+            byte[] srcData = new byte[15];//用于计算MAC1的原始数据
+            Buffer.BlockCopy(byteBalance, 0, srcData, 0, 4);
+            byte[] byteMoney = BitConverter.GetBytes(nMoneyValue);
+            srcData[4] = byteMoney[3];
+            srcData[5] = byteMoney[2];
+            srcData[6] = byteMoney[1];
+            srcData[7] = byteMoney[0];
+            srcData[8] = BusinessType;
+            Buffer.BlockCopy(TermId, 0, srcData, 9, 6);
+            byte[] MAC1Compare = m_ctrlApdu.CalcMacVal(srcData, sesulk);
+            if (!APDUBase.ByteDataEquals(MAC1, MAC1Compare))//MAC1检查
+            {
+                string strInfo = string.Format("圈提功能 Output MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(MAC1), BitConverter.ToString(MAC1Compare));
+                System.Diagnostics.Trace.WriteLine(strInfo);
+                return false;
+            }
+            byte[] MAC2 = CalcMAC2(BusinessType, nMoneyValue, TermId, SysTime, sesulk);
+            DebitFoUnLoad(MAC2, SysTime);
+            return true;
+        }
 
 
         public bool UserCardBalance(ref double dbBalance)
@@ -2184,11 +2291,11 @@ namespace CardOperating
             Buffer.BlockCopy(keyReset, 0, m_MRPK, 0, 16);           
 
             byte[] SubKey = new byte[16];
-            byte[] encryptAsn = APDUBase.TripleEncryptData(ASN, m_MRPK);
+            byte[] encryptAsn = DesCryptography.TripleEncryptData(ASN, m_MRPK);
             byte[] XorASN = new byte[8];
             for (int i = 0; i < 8; i++)
                 XorASN[i] = (byte)(ASN[i] ^ 0xFF);
-            byte[] encryptXorAsn = APDUBase.TripleEncryptData(XorASN, m_MRPK);
+            byte[] encryptXorAsn = DesCryptography.TripleEncryptData(XorASN, m_MRPK);
             Buffer.BlockCopy(encryptAsn, 0, SubKey, 0, 8);
             Buffer.BlockCopy(encryptXorAsn, 0, SubKey, 8, 8);
             //发命令
@@ -2237,11 +2344,11 @@ namespace CardOperating
             Buffer.BlockCopy(keyUnlock, 0, m_MPUK, 0, 16);
             
             byte[] SubKey = new byte[16];
-            byte[] encryptAsn = APDUBase.TripleEncryptData(ASN, m_MPUK);
+            byte[] encryptAsn = DesCryptography.TripleEncryptData(ASN, m_MPUK);
             byte[] XorASN = new byte[8];
             for (int i = 0; i < 8; i++)
                 XorASN[i] = (byte)(ASN[i] ^ 0xFF);
-            byte[] encryptXorAsn = APDUBase.TripleEncryptData(XorASN, m_MPUK);
+            byte[] encryptXorAsn = DesCryptography.TripleEncryptData(XorASN, m_MPUK);
             Buffer.BlockCopy(encryptAsn, 0, SubKey, 0, 8);
             Buffer.BlockCopy(encryptXorAsn, 0, SubKey, 8, 8);
             //发命令

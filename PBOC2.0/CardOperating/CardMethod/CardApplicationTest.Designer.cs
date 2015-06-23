@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupApp = new System.Windows.Forms.GroupBox();
+            this.Infomation = new System.Windows.Forms.Label();
             this.RecordInCard = new System.Windows.Forms.ListView();
             this.BusinessSn = new System.Windows.Forms.ColumnHeader();
             this.OverdraftMoney = new System.Windows.Forms.ColumnHeader();
@@ -55,13 +56,14 @@
             this.Money = new System.Windows.Forms.Label();
             this.textMoney = new System.Windows.Forms.TextBox();
             this.btnCardLoad = new System.Windows.Forms.Button();
-            this.Infomation = new System.Windows.Forms.Label();
+            this.btnUnload = new System.Windows.Forms.Button();
             this.groupApp.SuspendLayout();
             this.groupCardTest.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupApp
             // 
+            this.groupApp.Controls.Add(this.btnUnload);
             this.groupApp.Controls.Add(this.Infomation);
             this.groupApp.Controls.Add(this.RecordInCard);
             this.groupApp.Controls.Add(this.btnReadRecord);
@@ -84,6 +86,15 @@
             this.groupApp.TabIndex = 0;
             this.groupApp.TabStop = false;
             this.groupApp.Text = "卡应用";
+            // 
+            // Infomation
+            // 
+            this.Infomation.AutoSize = true;
+            this.Infomation.Location = new System.Drawing.Point(139, 28);
+            this.Infomation.Name = "Infomation";
+            this.Infomation.Size = new System.Drawing.Size(161, 12);
+            this.Infomation.TabIndex = 37;
+            this.Infomation.Text = "！使用数据库默认密钥操作！";
             // 
             // RecordInCard
             // 
@@ -315,14 +326,15 @@
             this.btnCardLoad.UseVisualStyleBackColor = true;
             this.btnCardLoad.Click += new System.EventHandler(this.btnCardLoad_Click);
             // 
-            // Infomation
+            // btnUnload
             // 
-            this.Infomation.AutoSize = true;
-            this.Infomation.Location = new System.Drawing.Point(139, 28);
-            this.Infomation.Name = "Infomation";
-            this.Infomation.Size = new System.Drawing.Size(161, 12);
-            this.Infomation.TabIndex = 37;
-            this.Infomation.Text = "！使用数据库默认密钥操作！";
+            this.btnUnload.Location = new System.Drawing.Point(250, 185);
+            this.btnUnload.Name = "btnUnload";
+            this.btnUnload.Size = new System.Drawing.Size(40, 23);
+            this.btnUnload.TabIndex = 38;
+            this.btnUnload.Text = "圈提";
+            this.btnUnload.UseVisualStyleBackColor = true;
+            this.btnUnload.Click += new System.EventHandler(this.btnUnload_Click);
             // 
             // CardApplicationTest
             // 
@@ -375,5 +387,6 @@
         private System.Windows.Forms.ColumnHeader TermID;
         private System.Windows.Forms.ColumnHeader BusinessTime;
         private System.Windows.Forms.Label Infomation;
+        private System.Windows.Forms.Button btnUnload;
     }
 }

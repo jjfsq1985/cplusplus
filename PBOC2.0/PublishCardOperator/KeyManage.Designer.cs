@@ -48,9 +48,9 @@
             this.CpuKeyLabel.AutoSize = true;
             this.CpuKeyLabel.Location = new System.Drawing.Point(24, 9);
             this.CpuKeyLabel.Name = "CpuKeyLabel";
-            this.CpuKeyLabel.Size = new System.Drawing.Size(83, 12);
+            this.CpuKeyLabel.Size = new System.Drawing.Size(89, 12);
             this.CpuKeyLabel.TabIndex = 0;
-            this.CpuKeyLabel.Text = "CPU卡密钥列表";
+            this.CpuKeyLabel.Text = "用户卡密钥列表";
             // 
             // CpuKeyGridView
             // 
@@ -192,7 +192,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "KeyManage";
-            this.Text = "CPU卡密钥管理";
+            this.Text = "用户卡密钥管理";
             this.Load += new System.EventHandler(this.KeyManage_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.KeyManage_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.CpuKeyGridView)).EndInit();

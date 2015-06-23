@@ -55,7 +55,7 @@ namespace PublishCardOperator
 
         public string PluginMenu()
         {
-            return "CPU卡密钥管理";
+            return "用户卡密钥管理";
         }
 
         public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)

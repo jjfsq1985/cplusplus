@@ -77,9 +77,9 @@ namespace PublishCardOperator
 
         private int GetOrgKeyTypeIndex(string strText)
         {
-            if (strText == "CPUø®√‹‘ø")
+            if (strText == "”√ªßø®√‹‘ø")
                 return 0;
-            else if (strText == "PSAMø®√‹‘ø")
+            else if (strText == "SAMø®√‹‘ø")
                 return 1;
             else if (strText == "π´π≤≥ı º√‹‘ø")
                 return 2;
@@ -92,10 +92,10 @@ namespace PublishCardOperator
             switch(nType)
             {
                 case 0:
-                   strType = "CPUø®√‹‘ø";
+                    strType = "”√ªßø®√‹‘ø";
                     break;
                 case 1:
-                    strType = "PSAMø®√‹‘ø";
+                    strType = "SAMø®√‹‘ø";
                     break;
                 case 2:
                     strType = "π´π≤≥ı º√‹‘ø";
@@ -313,8 +313,8 @@ namespace PublishCardOperator
             ComboBoxCell.Items.Clear();
             if (eItem == OrgKeyItem.eKeyCategory)
             {
-                ComboBoxCell.Items.Add("CPUø®√‹‘ø");
-                ComboBoxCell.Items.Add("PSAMø®√‹‘ø");
+                ComboBoxCell.Items.Add("”√ªßø®√‹‘ø");
+                ComboBoxCell.Items.Add("SAMø®√‹‘ø");
                 ComboBoxCell.Items.Add("π´π≤≥ı º√‹‘ø");
             }
             else if (eItem == OrgKeyItem.eKeyState)

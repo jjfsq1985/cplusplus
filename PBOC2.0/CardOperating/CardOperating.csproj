@@ -62,7 +62,6 @@
     <Compile Include="CmdProvider\UserCardControl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DllExportMT.cs" />
     <Compile Include="CmdProvider\IccCardControl.cs" />
     <Compile Include="CardInfo\IccCardInfo.cs">
       <SubType>Form</SubType>
@@ -85,6 +84,10 @@
       <Project>{27EAC653-4040-412A-A2F9-4B3C7BD6DFB5}</Project>
       <Name>ApduDaHua</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ApduParam\ApduParam.csproj">
+      <Project>{0391A3A8-5A8C-4ADA-9DEC-788C2244072A}</Project>
+      <Name>ApduParam</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IFuncPlugin\IFuncPlugin.csproj">
       <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
       <Name>IFuncPlugin</Name>
@@ -93,11 +96,6 @@
       <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
       <Name>SqlServerHelper</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="mt_32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AppUserOperator.resx">

@@ -51,7 +51,7 @@ namespace PublishCardOperator
 
         public string PluginMenu()
         {
-            return "PSAM卡密钥管理";
+            return "SAM卡密钥管理";
         }
 
         public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)

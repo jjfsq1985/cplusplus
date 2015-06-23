@@ -8,7 +8,9 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using SqlServerHelper;
 using IFuncPlugin;
+using ApduParam;
 using ApduDaHua;
+
 
 namespace CardOperating
 {

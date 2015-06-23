@@ -6,6 +6,7 @@ using SqlServerHelper;
 using System.Data;
 using IFuncPlugin;
 using System.Windows.Forms;
+using ApduParam;
 using ApduDaHua;
 
 namespace CardOperating
@@ -62,7 +63,7 @@ namespace CardOperating
             m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
             if (m_RetVal != 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "PSAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "SAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
                 return false;
             }
             else
@@ -888,7 +889,7 @@ namespace CardOperating
             m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
             if (m_RetVal != 0)
             {                
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "PSAM卡MAC1计算初始化失败"));
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "SAM卡MAC1计算初始化失败"));
                 return false;
             }
             else
@@ -897,7 +898,7 @@ namespace CardOperating
                 uint nAscLen = nRecvLen * 2;
                 byte[] InitAsc = new byte[nAscLen];
                 DllExportMT.hex_asc(m_RecvData, InitAsc, nRecvLen);                
-                base.OnTextOutput(new MsgOutEvent(0, "PSAM卡MAC1计算初始化应答：" +Encoding.ASCII.GetString(InitAsc)));
+                base.OnTextOutput(new MsgOutEvent(0, "SAM卡MAC1计算初始化应答：" +Encoding.ASCII.GetString(InitAsc)));
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                     return false;
                 //输出数据按灰锁命令数据域排列:终端交易序号，终端随机数，BCD时间，MAC1
@@ -920,7 +921,7 @@ namespace CardOperating
                 byte[] MAC1 = calcUserCardMAC1(ASN, random, BusinessSn, TermialSn, TermialRandom, srcData);                      
                 Buffer.BlockCopy(SysTime, 0, outData, 8, 7);
                 Buffer.BlockCopy(MAC1, 0, outData, 15, 4);//MAC1
-                string strInfo = string.Format("PSAM卡MAC1计算初始化 MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(PSAM_MAC1), BitConverter.ToString(MAC1));
+                string strInfo = string.Format("SAM卡MAC1计算初始化 MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(PSAM_MAC1), BitConverter.ToString(MAC1));
                 System.Diagnostics.Trace.WriteLine(strInfo);
                 if(!APDUBase.ByteDataEquals(MAC1,PSAM_MAC1))
                 {
@@ -940,7 +941,7 @@ namespace CardOperating
         /// <param name="Rand">用户卡随机数</param>
         /// <param name="OfflineSn">脱机交易序号（2字节）</param>
         /// <param name="TermialSn">终端序号（4字节）</param>
-        /// <param name="TermialRand">PSAM卡随机数</param>
+        /// <param name="TermialRand">SAM卡随机数</param>
         /// <returns></returns>
         private byte[] GetPrivateProcessKey(byte[] ASN, byte[] MasterKey, byte[] Rand, byte[] OfflineSn, byte[] TermialSn, byte[] TermialRand)
         {
@@ -948,18 +949,18 @@ namespace CardOperating
                 return null;
             //中间密钥
             byte[] DPKKey = new byte[16];
-            byte[] encryptAsn = APDUBase.TripleEncryptData(ASN, MasterKey);
+            byte[] encryptAsn = DesCryptography.TripleEncryptData(ASN, MasterKey);
             byte[] XorASN = new byte[8];
             for (int i = 0; i < 8; i++)
                 XorASN[i] = (byte)(ASN[i] ^ 0xFF);
-            byte[] encryptXorAsn = APDUBase.TripleEncryptData(XorASN, MasterKey);
+            byte[] encryptXorAsn = DesCryptography.TripleEncryptData(XorASN, MasterKey);
             Buffer.BlockCopy(encryptAsn, 0, DPKKey, 0, 8);
             Buffer.BlockCopy(encryptXorAsn, 0, DPKKey, 8, 8);
             byte[] byteData = new byte[8];
             Buffer.BlockCopy(Rand, 0, byteData, 0, 4);
             Buffer.BlockCopy(OfflineSn, 0, byteData, 4, 2);
             Buffer.BlockCopy(TermialSn, 2, byteData, 6, 2);
-            byte[] byteTmpck = APDUBase.TripleEncryptData(byteData, DPKKey);//中间密钥
+            byte[] byteTmpck = DesCryptography.TripleEncryptData(byteData, DPKKey);//中间密钥
             //计算过程密钥
             byte[] byteSESPK = m_ctrlApdu.CalcPrivateProcessKey(TermialRand, byteTmpck);
             return byteSESPK;
@@ -975,7 +976,7 @@ namespace CardOperating
             m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
             if (m_RetVal != 0)
             {                
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "PSAM卡验证MAC2失败"));
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "SAM卡验证MAC2失败"));
                 return false;
             }
             else
@@ -984,7 +985,7 @@ namespace CardOperating
                 uint nAscLen = nRecvLen * 2;
                 byte[] VerifyAsc = new byte[nAscLen];
                 DllExportMT.hex_asc(m_RecvData, VerifyAsc, nRecvLen);   
-                base.OnTextOutput(new MsgOutEvent(0, "PSAM卡验证MAC2应答：" + Encoding.ASCII.GetString(VerifyAsc)));
+                base.OnTextOutput(new MsgOutEvent(0, "SAM卡验证MAC2应答：" + Encoding.ASCII.GetString(VerifyAsc)));
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                     return false;
              }
@@ -1001,7 +1002,7 @@ namespace CardOperating
             m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
             if (m_RetVal != 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "PSAM卡计算GMAC失败"));
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "SAM卡计算GMAC失败"));
                 return false;
             }
             else
@@ -1010,7 +1011,7 @@ namespace CardOperating
                 uint nAscLen = nRecvLen * 2;
                 byte[] GmacAsc = new byte[nAscLen];
                 DllExportMT.hex_asc(m_RecvData, GmacAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "PSAM卡计算GMAC应答：" + Encoding.ASCII.GetString(GmacAsc)));
+                base.OnTextOutput(new MsgOutEvent(0, "SAM卡计算GMAC应答：" + Encoding.ASCII.GetString(GmacAsc)));
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                     return false;
                 Buffer.BlockCopy(m_RecvData, 0, outGMAC, 0, 4);
@@ -1249,7 +1250,7 @@ namespace CardOperating
             m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
             if (m_RetVal != 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "PSAM卡读取终端机编号失败"));
+                base.OnTextOutput(new MsgOutEvent(m_RetVal, "SAM卡读取终端机编号失败"));
                 return null;
             }
             else
@@ -1258,7 +1259,7 @@ namespace CardOperating
                 uint nAscLen = nRecvLen * 2;
                 byte[] TIDAsc = new byte[nAscLen];
                 DllExportMT.hex_asc(m_RecvData, TIDAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "PSAM卡读取终端机编号应答：" + Encoding.ASCII.GetString(TIDAsc)));
+                base.OnTextOutput(new MsgOutEvent(0, "SAM卡读取终端机编号应答：" + Encoding.ASCII.GetString(TIDAsc)));
                 if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
                     return null;
                 byte[] TerminalID = new byte[6];

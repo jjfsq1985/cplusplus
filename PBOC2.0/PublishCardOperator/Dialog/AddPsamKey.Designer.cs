@@ -244,7 +244,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddPsamKey";
-            this.Text = "PSAM卡密钥";
+            this.Text = "SAM卡密钥";
             this.ResumeLayout(false);
             this.PerformLayout();
 

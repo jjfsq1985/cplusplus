@@ -45,9 +45,9 @@
             this.PsamKeyLabel.AutoSize = true;
             this.PsamKeyLabel.Location = new System.Drawing.Point(15, 9);
             this.PsamKeyLabel.Name = "PsamKeyLabel";
-            this.PsamKeyLabel.Size = new System.Drawing.Size(89, 12);
+            this.PsamKeyLabel.Size = new System.Drawing.Size(83, 12);
             this.PsamKeyLabel.TabIndex = 1;
-            this.PsamKeyLabel.Text = "PSAM卡密钥列表";
+            this.PsamKeyLabel.Text = "SAM卡密钥列表";
             // 
             // PsamKeyView
             // 
@@ -155,7 +155,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PSAMKeyManage";
-            this.Text = "PSAM卡密钥管理";
+            this.Text = "SAM卡密钥管理";
             this.Load += new System.EventHandler(this.PSAMKeyManage_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PSAMKeyManage_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.PsamKeyView)).EndInit();

@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardOperating", "CardOperating\CardOperating.csproj", "{867C4012-8C2A-44E7-BB89-BB21716884DA}"
 	ProjectSection(ProjectDependencies) = postProject
+		{0391A3A8-5A8C-4ADA-9DEC-788C2244072A} = {0391A3A8-5A8C-4ADA-9DEC-788C2244072A}
 		{92D08CBB-2D18-45CD-8F46-644A545BD4A6} = {92D08CBB-2D18-45CD-8F46-644A545BD4A6}
 	EndProjectSection
 EndProject
@@ -29,6 +30,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogonForm", "LogonForm\LogonForm.csproj", "{89842A68-CBF8-413E-9ED0-F3F8A6E13DBD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApduDaHua", "ApduDaHua\ApduDaHua.csproj", "{27EAC653-4040-412A-A2F9-4B3C7BD6DFB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApduLoh", "ApduLoh\ApduLoh.csproj", "{D81C0ACC-24F9-4D16-87A2-0ED1BE39E8DE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0391A3A8-5A8C-4ADA-9DEC-788C2244072A} = {0391A3A8-5A8C-4ADA-9DEC-788C2244072A}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApduParam", "ApduParam\ApduParam.csproj", "{0391A3A8-5A8C-4ADA-9DEC-788C2244072A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApduInterface", "ApduInterface\ApduInterface.csproj", "{EDA49ECE-F7E8-4189-8895-23CBB017610E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +94,18 @@ Global
 		{27EAC653-4040-412A-A2F9-4B3C7BD6DFB5}.Debug|x86.Build.0 = Debug|x86
 		{27EAC653-4040-412A-A2F9-4B3C7BD6DFB5}.Release|x86.ActiveCfg = Release|x86
 		{27EAC653-4040-412A-A2F9-4B3C7BD6DFB5}.Release|x86.Build.0 = Release|x86
+		{D81C0ACC-24F9-4D16-87A2-0ED1BE39E8DE}.Debug|x86.ActiveCfg = Debug|x86
+		{D81C0ACC-24F9-4D16-87A2-0ED1BE39E8DE}.Debug|x86.Build.0 = Debug|x86
+		{D81C0ACC-24F9-4D16-87A2-0ED1BE39E8DE}.Release|x86.ActiveCfg = Release|x86
+		{D81C0ACC-24F9-4D16-87A2-0ED1BE39E8DE}.Release|x86.Build.0 = Release|x86
+		{0391A3A8-5A8C-4ADA-9DEC-788C2244072A}.Debug|x86.ActiveCfg = Debug|x86
+		{0391A3A8-5A8C-4ADA-9DEC-788C2244072A}.Debug|x86.Build.0 = Debug|x86
+		{0391A3A8-5A8C-4ADA-9DEC-788C2244072A}.Release|x86.ActiveCfg = Release|x86
+		{0391A3A8-5A8C-4ADA-9DEC-788C2244072A}.Release|x86.Build.0 = Release|x86
+		{EDA49ECE-F7E8-4189-8895-23CBB017610E}.Debug|x86.ActiveCfg = Debug|x86
+		{EDA49ECE-F7E8-4189-8895-23CBB017610E}.Debug|x86.Build.0 = Debug|x86
+		{EDA49ECE-F7E8-4189-8895-23CBB017610E}.Release|x86.ActiveCfg = Release|x86
+		{EDA49ECE-F7E8-4189-8895-23CBB017610E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace CardOperating
+namespace ApduDaHua
 {
     public class DllExportMT
     {
@@ -52,12 +52,12 @@ namespace CardOperating
         [DllImport("mt_32.dll", EntryPoint = "OpenCard", SetLastError = true,
              CharSet = CharSet.Auto, ExactSpelling = false,
              CallingConvention = CallingConvention.StdCall)]
-        public static extern short OpenCard(int icdev, byte mode, [MarshalAs(UnmanagedType.LPArray)]byte[] sAtr, [MarshalAs(UnmanagedType.LPArray)]byte[] snr, [MarshalAs(UnmanagedType.LPArray)]byte[] nAtrLen);
+        public static extern short OpenCard(int icdev, byte mode, [MarshalAs(UnmanagedType.LPArray)]byte[] snr, [MarshalAs(UnmanagedType.LPArray)]byte[] sAtr, [MarshalAs(UnmanagedType.LPArray)]byte[] nAtrLen);
 
         [DllImport("mt_32.dll", EntryPoint = "ExchangePro", SetLastError = true,
              CharSet = CharSet.Auto, ExactSpelling = false,
              CallingConvention = CallingConvention.StdCall)]
-        public static extern short ExchangePro(int icdev, [MarshalAs(UnmanagedType.LPArray)]byte[] sAtr, short len, [MarshalAs(UnmanagedType.LPArray)]byte[] Rec, [MarshalAs(UnmanagedType.LPArray)]byte[] nAtrLen);
+        public static extern short ExchangePro(int icdev, [MarshalAs(UnmanagedType.LPArray)]byte[] sCmd, short len, [MarshalAs(UnmanagedType.LPArray)]byte[] Res, [MarshalAs(UnmanagedType.LPArray)]byte[] nResLen);
 
         [DllImport("mt_32.dll", EntryPoint = "CloseCard", SetLastError = true,
              CharSet = CharSet.Auto, ExactSpelling = false,

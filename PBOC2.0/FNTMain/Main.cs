@@ -483,6 +483,7 @@ namespace FNTMain
             cmbCondition.Items.Add("所属单位");
             cmbCondition.SelectedIndex = 0;
 
+            listSearchResult.Items.Clear();
             listSearchResult.Columns.Clear();
             listSearchResult.Columns.Add("卡号", 120);
             listSearchResult.Columns.Add("卡类型", 60);
@@ -497,6 +498,7 @@ namespace FNTMain
 
         private void cmbCondition_SelectedIndexChanged(object sender, EventArgs e)
         {
+            listSearchResult.Items.Clear();
             listSearchResult.Columns.Clear();
             //清空textSearchContent内容，并限制输入
             textSearchContent.Text = "";
@@ -882,6 +884,7 @@ namespace FNTMain
 
         private void ChkSearchPsam_CheckedChanged(object sender, EventArgs e)
         {
+            listSearchResult.Items.Clear();
             listSearchResult.Columns.Clear();
             if (ChkSearchPsam.Checked)
             {

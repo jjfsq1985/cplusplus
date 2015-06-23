@@ -80,8 +80,8 @@
             this.cmbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbType.FormattingEnabled = true;
             this.cmbType.Items.AddRange(new object[] {
-            "CPU卡密钥",
-            "PSAM卡密钥",
+            "用户卡密钥",
+            "SAM卡密钥",
             "公共初始密钥"});
             this.cmbType.Location = new System.Drawing.Point(103, 19);
             this.cmbType.Name = "cmbType";

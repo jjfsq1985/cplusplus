@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using IFuncPlugin;
+using ApduParam;
 using ApduDaHua;
 
 namespace CardOperating
@@ -20,7 +21,7 @@ namespace CardOperating
 
         private ICC_Status m_curIccStatus = ICC_Status.ICC_PowerOff;
 
-        private readonly byte[] m_FixedTermialId = new byte[] { 0x20, 0x10, 0x01, 0x01, 0x00, 0x01 };  //固定的终端机设备编号
+        private readonly byte[] m_FixedTermialId = new byte[] { 0x20, 0x15, 0x01, 0x01, 0x00, 0x01 };  //固定的终端机设备编号
 
         private static byte[] m_TermialId = new byte[6];      //终端机设备编号
         private static byte[] m_ASN = new byte[] { 0x06, 0x71, 0x02, 0x01, 0x00, 0x00, 0x00, 0x01 };//用户卡卡号
@@ -183,8 +184,7 @@ namespace CardOperating
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
                 m_UserCardCtrl.UserCardLoad(m_ASN, TerminalId, (int)(dbMoneyLoad * 100.0),false);
             }
-            CloseUserCard();
-            CloseIccCard();
+            CloseUserCard();            
         }
 
         private void btnBalance_Click(object sender, EventArgs e)
@@ -251,8 +251,7 @@ namespace CardOperating
                 m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0), false);
                 m_bGray = false;
             }
-            CloseUserCard();
-            CloseIccCard();
+            CloseUserCard();            
         }
 
         private void btnLockCard_Click(object sender, EventArgs e)
@@ -392,6 +391,29 @@ namespace CardOperating
                 item.SubItems.Add(record.BusinessTime);
                 RecordInCard.Items.Add(item);
             }
+        }
+
+        private void btnUnload_Click(object sender, EventArgs e)
+        {
+            if (m_hDevHandler <= 0 || m_bGray)
+                return;
+            if (!OpenUserCard() || !ReadUserCardAsn())
+                return;
+            decimal MoneyUnLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
+            double dbMoneyUnLoad = decimal.ToDouble(MoneyUnLoad);
+            //圈提
+            string strInfo = string.Format("对卡号{0}圈提{1}元", BitConverter.ToString(m_ASN), dbMoneyUnLoad.ToString("F2"));
+            OnMessageOutput(new MsgOutEvent(0, strInfo));
+            if (m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
+            {
+                byte[] TerminalId = new byte[6];
+                if (APDUBase.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                    Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
+                else
+                    Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
+                m_UserCardCtrl.UserCardUnLoad(m_ASN, TerminalId, (int)(dbMoneyUnLoad * 100.0), false);
+            }
+            CloseUserCard();            
         }
     }
 }
