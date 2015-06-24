@@ -127,7 +127,7 @@ namespace PublishCardOperator
                         keyval.nKeyId = nId;
                         keyval.bValid = false;
                         keyval.KeyDetail = strDetail;
-                        byte[] byteKey = PublishCard.StringToBCD(strKey);                        
+                        byte[] byteKey = PublicFunc.StringToBCD(strKey);                        
                         if(byteKey.Length == 16)
                             Buffer.BlockCopy(byteKey, 0, keyval.OrgKey, 0, 16);
                         keyval.nKeyType = nType;
@@ -270,7 +270,7 @@ namespace PublishCardOperator
                         break;
                     case 2:
                         {                            
-                            byte[] byteKey = PublishCard.StringToBCD(strContent);
+                            byte[] byteKey = PublicFunc.StringToBCD(strContent);
                             if (BitConverter.ToString(value.OrgKey).Replace("-", "") != strContent)
                             {
                                 if (byteKey.Length == 16)

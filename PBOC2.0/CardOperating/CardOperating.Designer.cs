@@ -34,6 +34,7 @@
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.OutputText = new System.Windows.Forms.TextBox();
             this.Card = new System.Windows.Forms.GroupBox();
+            this.ContactCard = new System.Windows.Forms.CheckBox();
             this.btnUserCardReset = new System.Windows.Forms.Button();
             this.UserCardSetting = new System.Windows.Forms.Button();
             this.btnApplication = new System.Windows.Forms.Button();
@@ -51,36 +52,37 @@
             this.btnCleanInfo = new System.Windows.Forms.Button();
             this.CardInfoPanel = new System.Windows.Forms.Panel();
             this.btnMethod = new System.Windows.Forms.Button();
+            this.cmbDevType = new System.Windows.Forms.ComboBox();
             this.Card.SuspendLayout();
             this.ICC_Card.SuspendLayout();
             this.SuspendLayout();
             // 
             // CardOprQuit
             // 
-            this.CardOprQuit.Location = new System.Drawing.Point(401, 595);
+            this.CardOprQuit.Location = new System.Drawing.Point(430, 598);
             this.CardOprQuit.Name = "CardOprQuit";
             this.CardOprQuit.Size = new System.Drawing.Size(75, 23);
-            this.CardOprQuit.TabIndex = 0;
+            this.CardOprQuit.TabIndex = 8;
             this.CardOprQuit.Text = "退出";
             this.CardOprQuit.UseVisualStyleBackColor = true;
             this.CardOprQuit.Click += new System.EventHandler(this.CardOprQuit_Click);
             // 
             // btnInitCard
             // 
-            this.btnInitCard.Location = new System.Drawing.Point(17, 55);
+            this.btnInitCard.Location = new System.Drawing.Point(17, 71);
             this.btnInitCard.Name = "btnInitCard";
             this.btnInitCard.Size = new System.Drawing.Size(75, 23);
-            this.btnInitCard.TabIndex = 1;
+            this.btnInitCard.TabIndex = 3;
             this.btnInitCard.Text = "初始化";
             this.btnInitCard.UseVisualStyleBackColor = true;
             this.btnInitCard.Click += new System.EventHandler(this.btnInitCard_Click);
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(12, 12);
+            this.btnConnect.Location = new System.Drawing.Point(141, 12);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 23);
-            this.btnConnect.TabIndex = 2;
+            this.btnConnect.TabIndex = 1;
             this.btnConnect.Text = "建立连接";
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
@@ -88,10 +90,10 @@
             // btnDisconnect
             // 
             this.btnDisconnect.Enabled = false;
-            this.btnDisconnect.Location = new System.Drawing.Point(253, 12);
+            this.btnDisconnect.Location = new System.Drawing.Point(293, 12);
             this.btnDisconnect.Name = "btnDisconnect";
             this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
-            this.btnDisconnect.TabIndex = 3;
+            this.btnDisconnect.TabIndex = 2;
             this.btnDisconnect.Text = "断开连接";
             this.btnDisconnect.UseVisualStyleBackColor = true;
             this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
@@ -103,11 +105,12 @@
             this.OutputText.Name = "OutputText";
             this.OutputText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.OutputText.Size = new System.Drawing.Size(381, 536);
-            this.OutputText.TabIndex = 4;
+            this.OutputText.TabIndex = 6;
             // 
             // Card
             // 
             this.Card.BackColor = System.Drawing.SystemColors.Control;
+            this.Card.Controls.Add(this.ContactCard);
             this.Card.Controls.Add(this.btnUserCardReset);
             this.Card.Controls.Add(this.UserCardSetting);
             this.Card.Controls.Add(this.btnApplication);
@@ -117,57 +120,68 @@
             this.Card.Controls.Add(this.btnInitCard);
             this.Card.Location = new System.Drawing.Point(4, 45);
             this.Card.Name = "Card";
-            this.Card.Size = new System.Drawing.Size(108, 253);
-            this.Card.TabIndex = 5;
+            this.Card.Size = new System.Drawing.Size(115, 272);
+            this.Card.TabIndex = 4;
             this.Card.TabStop = false;
             this.Card.Text = "用户卡";
             // 
+            // ContactCard
+            // 
+            this.ContactCard.AutoSize = true;
+            this.ContactCard.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ContactCard.Location = new System.Drawing.Point(24, 51);
+            this.ContactCard.Name = "ContactCard";
+            this.ContactCard.Size = new System.Drawing.Size(60, 16);
+            this.ContactCard.TabIndex = 9;
+            this.ContactCard.Text = "接触式";
+            this.ContactCard.UseVisualStyleBackColor = true;
+            // 
             // btnUserCardReset
             // 
-            this.btnUserCardReset.Location = new System.Drawing.Point(17, 88);
+            this.btnUserCardReset.Location = new System.Drawing.Point(17, 104);
             this.btnUserCardReset.Name = "btnUserCardReset";
             this.btnUserCardReset.Size = new System.Drawing.Size(75, 23);
-            this.btnUserCardReset.TabIndex = 2;
+            this.btnUserCardReset.TabIndex = 4;
             this.btnUserCardReset.Text = "清空重置";
             this.btnUserCardReset.UseVisualStyleBackColor = true;
             this.btnUserCardReset.Click += new System.EventHandler(this.btnUserCardReset_Click);
             // 
             // UserCardSetting
             // 
-            this.UserCardSetting.Location = new System.Drawing.Point(17, 154);
+            this.UserCardSetting.Location = new System.Drawing.Point(17, 170);
             this.UserCardSetting.Name = "UserCardSetting";
             this.UserCardSetting.Size = new System.Drawing.Size(75, 23);
-            this.UserCardSetting.TabIndex = 4;
+            this.UserCardSetting.TabIndex = 6;
             this.UserCardSetting.Text = "信息设置";
             this.UserCardSetting.UseVisualStyleBackColor = true;
             this.UserCardSetting.Click += new System.EventHandler(this.UserCardSetting_Click);
             // 
             // btnApplication
             // 
-            this.btnApplication.Location = new System.Drawing.Point(17, 187);
+            this.btnApplication.Location = new System.Drawing.Point(17, 203);
             this.btnApplication.Name = "btnApplication";
             this.btnApplication.Size = new System.Drawing.Size(75, 23);
-            this.btnApplication.TabIndex = 5;
+            this.btnApplication.TabIndex = 7;
             this.btnApplication.Text = "加气应用";
             this.btnApplication.UseVisualStyleBackColor = true;
             this.btnApplication.Click += new System.EventHandler(this.btnApplication_Click);
             // 
             // btnCreate
             // 
-            this.btnCreate.Location = new System.Drawing.Point(17, 121);
+            this.btnCreate.Location = new System.Drawing.Point(17, 137);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(75, 23);
-            this.btnCreate.TabIndex = 3;
+            this.btnCreate.TabIndex = 5;
             this.btnCreate.Text = "安装密钥";
             this.btnCreate.UseVisualStyleBackColor = true;
             this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
             // btnCloseCard
             // 
-            this.btnCloseCard.Location = new System.Drawing.Point(17, 220);
+            this.btnCloseCard.Location = new System.Drawing.Point(17, 236);
             this.btnCloseCard.Name = "btnCloseCard";
             this.btnCloseCard.Size = new System.Drawing.Size(75, 23);
-            this.btnCloseCard.TabIndex = 6;
+            this.btnCloseCard.TabIndex = 8;
             this.btnCloseCard.Text = "关闭";
             this.btnCloseCard.UseVisualStyleBackColor = true;
             this.btnCloseCard.Click += new System.EventHandler(this.btnCloseCard_Click);
@@ -193,8 +207,8 @@
             this.ICC_Card.Controls.Add(this.btnInitIccCard);
             this.ICC_Card.Location = new System.Drawing.Point(4, 323);
             this.ICC_Card.Name = "ICC_Card";
-            this.ICC_Card.Size = new System.Drawing.Size(108, 258);
-            this.ICC_Card.TabIndex = 6;
+            this.ICC_Card.Size = new System.Drawing.Size(115, 258);
+            this.ICC_Card.TabIndex = 5;
             this.ICC_Card.TabStop = false;
             this.ICC_Card.Text = "SAM卡";
             // 
@@ -203,7 +217,7 @@
             this.btnIccCardReset.Location = new System.Drawing.Point(12, 92);
             this.btnIccCardReset.Name = "btnIccCardReset";
             this.btnIccCardReset.Size = new System.Drawing.Size(75, 23);
-            this.btnIccCardReset.TabIndex = 6;
+            this.btnIccCardReset.TabIndex = 2;
             this.btnIccCardReset.Text = "清空重置";
             this.btnIccCardReset.UseVisualStyleBackColor = true;
             this.btnIccCardReset.Click += new System.EventHandler(this.btnIccCardReset_Click);
@@ -213,7 +227,7 @@
             this.IccCardSetting.Location = new System.Drawing.Point(12, 126);
             this.IccCardSetting.Name = "IccCardSetting";
             this.IccCardSetting.Size = new System.Drawing.Size(75, 23);
-            this.IccCardSetting.TabIndex = 2;
+            this.IccCardSetting.TabIndex = 3;
             this.IccCardSetting.Text = "信息设置";
             this.IccCardSetting.UseVisualStyleBackColor = true;
             this.IccCardSetting.Click += new System.EventHandler(this.IccCardSetting_Click);
@@ -223,7 +237,7 @@
             this.btnIccAppKey.Location = new System.Drawing.Point(12, 194);
             this.btnIccAppKey.Name = "btnIccAppKey";
             this.btnIccAppKey.Size = new System.Drawing.Size(75, 23);
-            this.btnIccAppKey.TabIndex = 4;
+            this.btnIccAppKey.TabIndex = 5;
             this.btnIccAppKey.Text = "应用密钥";
             this.btnIccAppKey.UseVisualStyleBackColor = true;
             this.btnIccAppKey.Click += new System.EventHandler(this.btnIccAppKey_Click);
@@ -233,7 +247,7 @@
             this.btnIccCreate.Location = new System.Drawing.Point(12, 160);
             this.btnIccCreate.Name = "btnIccCreate";
             this.btnIccCreate.Size = new System.Drawing.Size(75, 23);
-            this.btnIccCreate.TabIndex = 3;
+            this.btnIccCreate.TabIndex = 4;
             this.btnIccCreate.Text = "业务应用";
             this.btnIccCreate.UseVisualStyleBackColor = true;
             this.btnIccCreate.Click += new System.EventHandler(this.btnIccCreate_Click);
@@ -243,7 +257,7 @@
             this.btnCloseIccCard.Location = new System.Drawing.Point(12, 228);
             this.btnCloseIccCard.Name = "btnCloseIccCard";
             this.btnCloseIccCard.Size = new System.Drawing.Size(75, 23);
-            this.btnCloseIccCard.TabIndex = 5;
+            this.btnCloseIccCard.TabIndex = 6;
             this.btnCloseIccCard.Text = "关闭";
             this.btnCloseIccCard.UseVisualStyleBackColor = true;
             this.btnCloseIccCard.Click += new System.EventHandler(this.btnCloseIccCard_Click);
@@ -283,7 +297,7 @@
             this.CardInfoPanel.Location = new System.Drawing.Point(518, 10);
             this.CardInfoPanel.Name = "CardInfoPanel";
             this.CardInfoPanel.Size = new System.Drawing.Size(442, 610);
-            this.CardInfoPanel.TabIndex = 8;
+            this.CardInfoPanel.TabIndex = 9;
             this.CardInfoPanel.Visible = false;
             // 
             // btnMethod
@@ -291,16 +305,30 @@
             this.btnMethod.Location = new System.Drawing.Point(384, 12);
             this.btnMethod.Name = "btnMethod";
             this.btnMethod.Size = new System.Drawing.Size(75, 23);
-            this.btnMethod.TabIndex = 13;
+            this.btnMethod.TabIndex = 3;
             this.btnMethod.Text = "卡应用测试";
             this.btnMethod.UseVisualStyleBackColor = true;
             this.btnMethod.Visible = false;
             this.btnMethod.Click += new System.EventHandler(this.btnMethod_Click);
             // 
+            // cmbDevType
+            // 
+            this.cmbDevType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDevType.FormattingEnabled = true;
+            this.cmbDevType.Items.AddRange(new object[] {
+            "达华卡",
+            "龙寰卡"});
+            this.cmbDevType.Location = new System.Drawing.Point(12, 12);
+            this.cmbDevType.Name = "cmbDevType";
+            this.cmbDevType.Size = new System.Drawing.Size(107, 20);
+            this.cmbDevType.TabIndex = 0;
+            this.cmbDevType.SelectedIndexChanged += new System.EventHandler(this.cmbDevType_SelectedIndexChanged);
+            // 
             // CardOperating
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(517, 628);
+            this.ClientSize = new System.Drawing.Size(517, 621);
+            this.Controls.Add(this.cmbDevType);
             this.Controls.Add(this.btnMethod);
             this.Controls.Add(this.CardInfoPanel);
             this.Controls.Add(this.btnCleanInfo);
@@ -318,6 +346,7 @@
             this.Text = "制发卡操作";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CardOperating_FormClosing);
             this.Card.ResumeLayout(false);
+            this.Card.PerformLayout();
             this.ICC_Card.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -349,5 +378,7 @@
         private System.Windows.Forms.Button btnUserCardReset;
         private System.Windows.Forms.Button btnIccCardReset;
         private System.Windows.Forms.Button btnMethod;
+        private System.Windows.Forms.ComboBox cmbDevType;
+        private System.Windows.Forms.CheckBox ContactCard;
     }
 }

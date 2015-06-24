@@ -4,9 +4,9 @@ using System.Text;
 using ApduParam;
 using ApduInterface;
 
-namespace ApduDaHua
+namespace ApduLoh
 {
-    public class PSAMCardAPDUProvider : ApduDaHuaBase, ISamApduProvider
+    public class PSAMCardAPDUProvider : APDULohBase, ISamApduProvider
     {
         public PSAMCardAPDUProvider()
         {

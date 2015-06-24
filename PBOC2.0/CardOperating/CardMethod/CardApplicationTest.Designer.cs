@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupApp = new System.Windows.Forms.GroupBox();
+            this.btnUnload = new System.Windows.Forms.Button();
             this.Infomation = new System.Windows.Forms.Label();
             this.RecordInCard = new System.Windows.Forms.ListView();
             this.BusinessSn = new System.Windows.Forms.ColumnHeader();
@@ -56,7 +57,6 @@
             this.Money = new System.Windows.Forms.Label();
             this.textMoney = new System.Windows.Forms.TextBox();
             this.btnCardLoad = new System.Windows.Forms.Button();
-            this.btnUnload = new System.Windows.Forms.Button();
             this.groupApp.SuspendLayout();
             this.groupCardTest.SuspendLayout();
             this.SuspendLayout();
@@ -87,10 +87,20 @@
             this.groupApp.TabStop = false;
             this.groupApp.Text = "卡应用";
             // 
+            // btnUnload
+            // 
+            this.btnUnload.Location = new System.Drawing.Point(250, 185);
+            this.btnUnload.Name = "btnUnload";
+            this.btnUnload.Size = new System.Drawing.Size(40, 23);
+            this.btnUnload.TabIndex = 38;
+            this.btnUnload.Text = "圈提";
+            this.btnUnload.UseVisualStyleBackColor = true;
+            this.btnUnload.Click += new System.EventHandler(this.btnUnload_Click);
+            // 
             // Infomation
             // 
             this.Infomation.AutoSize = true;
-            this.Infomation.Location = new System.Drawing.Point(139, 28);
+            this.Infomation.Location = new System.Drawing.Point(110, 31);
             this.Infomation.Name = "Infomation";
             this.Infomation.Size = new System.Drawing.Size(161, 12);
             this.Infomation.TabIndex = 37;
@@ -154,7 +164,7 @@
             // 
             // textPIN
             // 
-            this.textPIN.Location = new System.Drawing.Point(112, 67);
+            this.textPIN.Location = new System.Drawing.Point(112, 66);
             this.textPIN.MaxLength = 6;
             this.textPIN.Name = "textPIN";
             this.textPIN.Size = new System.Drawing.Size(100, 21);
@@ -165,7 +175,7 @@
             // LabelPIN
             // 
             this.LabelPIN.AutoSize = true;
-            this.LabelPIN.Location = new System.Drawing.Point(21, 70);
+            this.LabelPIN.Location = new System.Drawing.Point(21, 69);
             this.LabelPIN.Name = "LabelPIN";
             this.LabelPIN.Size = new System.Drawing.Size(83, 12);
             this.LabelPIN.TabIndex = 33;
@@ -325,16 +335,6 @@
             this.btnCardLoad.Text = "圈存";
             this.btnCardLoad.UseVisualStyleBackColor = true;
             this.btnCardLoad.Click += new System.EventHandler(this.btnCardLoad_Click);
-            // 
-            // btnUnload
-            // 
-            this.btnUnload.Location = new System.Drawing.Point(250, 185);
-            this.btnUnload.Name = "btnUnload";
-            this.btnUnload.Size = new System.Drawing.Size(40, 23);
-            this.btnUnload.TabIndex = 38;
-            this.btnUnload.Text = "圈提";
-            this.btnUnload.UseVisualStyleBackColor = true;
-            this.btnUnload.Click += new System.EventHandler(this.btnUnload_Click);
             // 
             // CardApplicationTest
             // 

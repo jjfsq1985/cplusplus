@@ -66,32 +66,6 @@ namespace PublishCardOperator
         eDbDirty,  //db需更新
         eDbAdd,   //新增
         eDbDelete  //删除
-    }
-
-    public class PublishCard
-    {
-
-        public static byte[] StringToBCD(string strData)
-        {
-            if (string.IsNullOrEmpty(strData) || strData.Length % 2 != 0)
-                return null;
-            try
-            {
-                int nByteSize = strData.Length / 2;
-                byte[] byteBCD = new byte[nByteSize];
-                for (int i = 0; i < nByteSize; i++)
-                {
-                    byte bcdbyte = 0;
-                    byte.TryParse(strData.Substring(i * 2, 2), System.Globalization.NumberStyles.HexNumber, null, out bcdbyte);
-                    byteBCD[i] = bcdbyte;
-                }
-                return byteBCD;
-            }
-            catch
-            {
-                return null;
-            }
-            
-        }
-    }
+    }  
+    
 }

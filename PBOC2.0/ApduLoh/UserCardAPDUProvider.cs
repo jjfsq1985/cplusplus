@@ -4,9 +4,9 @@ using System.Text;
 using ApduParam;
 using ApduInterface;
 
-namespace ApduDaHua
+namespace ApduLoh
 {
-    public class UserCardAPDUProvider : ApduDaHuaBase , IUserApduProvider
+    public class UserCardAPDUProvider : APDULohBase , IUserApduProvider
     {
         public UserCardAPDUProvider()
         {

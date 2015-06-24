@@ -5,12 +5,20 @@ using System.Text;
 namespace ApduLoh
 {
     public class PcscSmardCard
-    {        
+    {
+        private string m_ReadName0 = "Duali DE-620 Contact Reader 0";
+        private string m_ReadName1 = "Duali DE-620 Contactless Reader 0";
+        private string m_ReadName2 = "Duali DE-620 SAM Reader 0";
+
         private UIntPtr hContext = UIntPtr.Zero;
-        private string PcscReadName = "";
-        private UIntPtr hCard = UIntPtr.Zero;
-        private uint ActiveProtocol = WinSCard_Dll.SCARD_PROTOCOL_UNDEFINED;
         private uint IOCTL_BYPASS_COMMAND = 0x00312418;//直接写命令==SCARD_CTL_CODE(0x906)
+     
+        private UIntPtr hCardContact = UIntPtr.Zero;
+        private UIntPtr hCardContactless = UIntPtr.Zero;
+        private UIntPtr hCardSAM = UIntPtr.Zero;
+        private uint ActiveProtocolContact = WinSCard_Dll.SCARD_PROTOCOL_UNDEFINED;
+        private uint ActiveProtocolContactless = WinSCard_Dll.SCARD_PROTOCOL_UNDEFINED;
+        private uint ActiveProtocolSAM = WinSCard_Dll.SCARD_PROTOCOL_UNDEFINED;
 
         /// <summary>
         /// 连接PCSC读卡器
@@ -18,8 +26,7 @@ namespace ApduLoh
         /// <param name="lstReaders">PCSC读卡器列表</param>
         public bool LH_Open(ref List<string> lstReaders)
         {
-            if (hContext != UIntPtr.Zero)
-                return true;
+            LH_Close();
             int nResult = WinSCard_Dll.SCardEstablishContext(WinSCard_Dll.SCARD_SCOPE_USER, IntPtr.Zero, IntPtr.Zero, ref hContext);
             if (nResult != 0)
                 return false;            
@@ -54,7 +61,7 @@ namespace ApduLoh
         {
             if (hContext == UIntPtr.Zero)
                 return true;
-            LH_DisconnectReader();
+            LH_DisconnectReader(0);
             WinSCard_Dll.SCardReleaseContext(hContext);
             hContext = UIntPtr.Zero;
             return true;
@@ -70,8 +77,15 @@ namespace ApduLoh
             CardAtr = null;
             if (hContext == UIntPtr.Zero)
                 return false;
-            LH_DisconnectReader();
-            //独占方式连接读卡器            
+            if (strReadName == m_ReadName1)
+                LH_DisconnectReader(1);
+            else if(strReadName == m_ReadName0)
+                LH_DisconnectReader(2);
+            else if (strReadName == m_ReadName2)
+                LH_DisconnectReader(3);
+            //独占方式连接读卡器    
+            UIntPtr hCard = UIntPtr.Zero;
+            uint ActiveProtocol = WinSCard_Dll.SCARD_PROTOCOL_UNDEFINED;
             int nResult = WinSCard_Dll.SCardConnect(hContext, strReadName, WinSCard_Dll.SCARD_SHARE_EXCLUSIVE, WinSCard_Dll.SCARD_PROTOCOL_T0 | WinSCard_Dll.SCARD_PROTOCOL_T1, ref hCard, ref ActiveProtocol);
             if (nResult != 0 || hCard == UIntPtr.Zero)
                 return false;
@@ -89,22 +103,69 @@ namespace ApduLoh
             string strConvertReaderName = new string(ReaderName).TrimEnd('\0');
             if (strConvertReaderName == strReadName && ActiveProtocol == protocol)
             {
-                PcscReadName = strConvertReaderName;
+                if (strReadName == m_ReadName1)
+                {
+                    hCardContactless = hCard;
+                    ActiveProtocolContactless = ActiveProtocol;
+                }
+                else if (strReadName == m_ReadName0)
+                {
+                    hCardContact = hCard;
+                    ActiveProtocolContact = ActiveProtocol;
+                }
+                else if (strReadName == m_ReadName2)
+                {
+                    hCardSAM = hCard;
+                    ActiveProtocolSAM = ActiveProtocol;
+                }
                 return true;
             }
             else
+            {
                 return false;
+            }
         }
 
         /// <summary>
         /// 关闭PCSC读卡器
         /// </summary>        
-        public bool LH_DisconnectReader()
+        public bool LH_DisconnectReader(int nReader)
         {
-            if (hCard == UIntPtr.Zero)
-                return true;
-            WinSCard_Dll.SCardDisconnect(hCard, WinSCard_Dll.SCARD_LEAVE_CARD);
-            hCard = UIntPtr.Zero;
+            if (nReader == 0)
+            {
+                if (hCardContact != UIntPtr.Zero)
+                {
+                    WinSCard_Dll.SCardDisconnect(hCardContact, WinSCard_Dll.SCARD_LEAVE_CARD);
+                    hCardContact = UIntPtr.Zero;
+                }
+                if (hCardContactless != UIntPtr.Zero)
+                {
+                    WinSCard_Dll.SCardDisconnect(hCardContactless, WinSCard_Dll.SCARD_LEAVE_CARD);
+                    hCardContactless = UIntPtr.Zero;
+                }
+                if (hCardSAM != UIntPtr.Zero)
+                {
+                    WinSCard_Dll.SCardDisconnect(hCardSAM, WinSCard_Dll.SCARD_LEAVE_CARD);
+                    hCardSAM = UIntPtr.Zero;
+                }
+            }
+            else if(nReader >= 1 && nReader <= 3)
+            {
+                UIntPtr[] DisconnectPtr = new UIntPtr[4] { UIntPtr.Zero, hCardContactless,hCardContact,hCardSAM };
+
+                if (DisconnectPtr[nReader] != UIntPtr.Zero)
+                {
+                    WinSCard_Dll.SCardDisconnect(DisconnectPtr[nReader], WinSCard_Dll.SCARD_LEAVE_CARD);
+                    if(nReader == 1)
+                        hCardContactless = UIntPtr.Zero;
+                    else if(nReader == 2)
+                        hCardContact = UIntPtr.Zero;
+                    else if(nReader == 3)
+                        hCardSAM = UIntPtr.Zero;
+                }
+            }
+
+
             return true;
         }
 
@@ -115,27 +176,45 @@ namespace ApduLoh
         /// <param name="uSendLen">发送长度</param>
         /// <param name="RecvData">接收的数据</param>
         /// <param name="uRecvLen">接收长度</param>        
-        public bool LH_DataTransmit(byte[] SendData, int SendLen, out byte[] RecvData, out int RecvLen)
+        public int LH_DataTransmit(string strReadName, byte[] SendData, int SendLen, out byte[] RecvData, out int RecvLen)
         {
             RecvData = null;
             RecvLen = 0;
+
+            UIntPtr hCard = UIntPtr.Zero;
+            uint ActiveProtocol = WinSCard_Dll.SCARD_PROTOCOL_UNDEFINED;
+            if (strReadName == m_ReadName1)
+            {
+                hCard = hCardContactless;
+                ActiveProtocol = ActiveProtocolContactless;
+            }
+            else if (strReadName == m_ReadName0)
+            {
+                hCard = hCardContact;
+                ActiveProtocol = ActiveProtocolContact;
+            }
+            else if (strReadName == m_ReadName2)
+            {
+                hCard = hCardSAM;
+                ActiveProtocol = ActiveProtocolSAM;
+            }
             if (hCard == UIntPtr.Zero)
-                return false;
+                return -1;
             IntPtr SendPci = IntPtr.Zero;
             if (ActiveProtocol == WinSCard_Dll.SCARD_PROTOCOL_T0)
                 SendPci = WinSCard_Dll.SCardT0Pci();
-            else if(ActiveProtocol == WinSCard_Dll.SCARD_PROTOCOL_T1)
+            else if (ActiveProtocol == WinSCard_Dll.SCARD_PROTOCOL_T1)
                 SendPci = WinSCard_Dll.SCardT1Pci();
 
             uint cbRecvLength = 255;
             byte[] cRecvBuffer = new byte[cbRecvLength];
             int nResult = WinSCard_Dll.SCardTransmit(hCard, SendPci, SendData, (uint)SendLen, IntPtr.Zero, cRecvBuffer, ref cbRecvLength);
             if (nResult != 0)
-                return false;
+                return -1;
             RecvLen = (int)cbRecvLength;
             RecvData = new byte[RecvLen];
             Array.Copy(cRecvBuffer, RecvData, RecvLen);
-            return true;
+            return (RecvData[RecvLen - 2] << 8) + (RecvData[RecvLen - 1]);
         }
 
         /// <summary>
@@ -158,11 +237,11 @@ namespace ApduLoh
         /// <summary>
         /// PCSC读卡器Mode修改
         /// </summary>
-        /// <param name="bInquire">是否查询，如果true,输出nMode</param>
+        /// <param name="bInquire">是否查询，如果true,输出nMode(只能在PCSC模式下查询)</param>
         /// <param name="nMode">0 smartcard模式，pscs关闭; 1 RF(即Contactless),2 RF+contact, 3 RF+Contact+SAM</param>        
         public bool LH_ChangeMode(bool bInquire, ref byte nMode)
         {
-            if (hCard == UIntPtr.Zero || !PcscReadName.Contains("Contactless"))
+            if (hCardContactless == UIntPtr.Zero)
                 return false;
             if (!bInquire && nMode > 3)
                 return false;
@@ -181,7 +260,7 @@ namespace ApduLoh
             }
             uint uRet = 0;
             byte[] OutBuffer = new byte[8];
-            WinSCard_Dll.SCardControl(hCard, IOCTL_BYPASS_COMMAND, data, datalen, OutBuffer, 8, ref uRet);
+            WinSCard_Dll.SCardControl(hCardContactless, IOCTL_BYPASS_COMMAND, data, datalen, OutBuffer, 8, ref uRet);
             if (uRet > 0)
             {
                 if (bInquire && uRet == 4 && OutBuffer[1] == 0x02)

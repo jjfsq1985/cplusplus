@@ -80,9 +80,13 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ApduDaHua\ApduDaHua.csproj">
-      <Project>{27EAC653-4040-412A-A2F9-4B3C7BD6DFB5}</Project>
-      <Name>ApduDaHua</Name>
+    <ProjectReference Include="..\ApduControler\ApduControler.csproj">
+      <Project>{8474A20B-7BCF-4356-9E63-6CC613CF7CE0}</Project>
+      <Name>ApduControler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ApduInterface\ApduInterface.csproj">
+      <Project>{EDA49ECE-F7E8-4189-8895-23CBB017610E}</Project>
+      <Name>ApduInterface</Name>
     </ProjectReference>
     <ProjectReference Include="..\ApduParam\ApduParam.csproj">
       <Project>{0391A3A8-5A8C-4ADA-9DEC-788C2244072A}</Project>

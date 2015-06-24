@@ -6,7 +6,6 @@ using System.Data.SqlClient;
 using System.Data;
 using SqlServerHelper;
 using ApduParam;
-using ApduDaHua;
 
 namespace CardOperating
 {
@@ -37,14 +36,6 @@ namespace CardOperating
         //PSAM卡的MF下卡片主控密钥
         protected static byte[] m_KeyPsamMain = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f };
 
-        protected int m_MtDevHandler = 0;
-        protected short m_RetVal = 0;  //返回值
-
-        protected byte[] m_RecvData = new byte[128];
-        protected byte[] m_RecvDataLen = new byte[4];
-
-        //用于接收数值初始化
-        protected readonly byte[] m_InitByte = new byte[128];
         protected SqlConnectInfo m_DBInfo = new SqlConnectInfo();
 
         public CardControlBase()
@@ -183,7 +174,7 @@ namespace CardOperating
 
         protected void StrKeyToByte(string strKey, byte[] byteKey)
         {
-            byte[] BcdKey = APDUBase.StringToBCD(strKey);
+            byte[] BcdKey = PublicFunc.StringToBCD(strKey);
             if (BcdKey.Length == 16)
                 Buffer.BlockCopy(BcdKey, 0, byteKey, 0, 16);
         }

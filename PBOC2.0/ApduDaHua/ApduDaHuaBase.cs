@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using ApduParam;
+using ApduInterface;
 
 namespace ApduDaHua
 {
-    public class APDUBase
+    public class ApduDaHuaBase : IApduBase
     {
         private static byte[] DEFAULT_MF_NAME = new byte[] { 0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31 };//"1PAY.SYS.DDF01"        
-        public APDUBase()
+        public ApduDaHuaBase()
         {
 
         }
@@ -42,20 +43,6 @@ namespace ApduDaHua
             if (m_nTotalLen > nOffset)
                 outByte[nOffset] = m_le;
             return outByte;
-        }
-
-
-
-        public static bool ByteDataEquals(byte[] byteL, byte[] byteR)
-        {
-            if (byteL.Length != byteR.Length)
-                return false;
-            for (int i = 0; i < byteL.Length; i++)
-            {
-                if (byteL[i] != byteR[i])
-                    return false;
-            }
-            return true;
         }
 
         //选择
@@ -196,18 +183,8 @@ namespace ApduDaHua
             return true;
         }
 
-        protected byte XorValue(byte[] data)
-        {
-            byte byteRetVal = 0;
-            for (int i = 0; i < data.Length; i++)
-            {
-                byteRetVal ^= data[i];
-            }
-            return byteRetVal;
-        }
-
         //计算命令数据的MAC值作为传输正确性验证
-        protected static byte[] CalcMACValue(byte[] srcData, byte[] KeyValue, byte[] InitVal)
+        protected byte[] CalcMACValue(byte[] srcData, byte[] KeyValue, byte[] InitVal)
         {
             byte[] MacResult = new byte[8];//EncryptData，DecryptData计算中会修改该值
 
@@ -272,7 +249,7 @@ namespace ApduDaHua
             return SingleDesCalc(srcData, tmpck);
         }
 
-        protected static byte[] SingleDesCalc(byte[] srcData, byte[] KeyValue)
+        private byte[] SingleDesCalc(byte[] srcData, byte[] KeyValue)
         {
             byte[] MacResult = new byte[8];//初始值全0
             int nAppendLen = 8 - (srcData.Length % 8);
@@ -316,7 +293,7 @@ namespace ApduDaHua
             return byteReturn;
         }
 
-        public static byte[] StringToBCD(string strData)
+        protected byte[] StringToBCD(string strData)
         {
             if (string.IsNullOrEmpty(strData) || strData.Length % 2 != 0)
                 return null;
@@ -329,6 +306,18 @@ namespace ApduDaHua
                 byteBCD[i] = bcdbyte;
             }
             return byteBCD;
+        }
+
+        protected bool ByteDataEquals(byte[] byteL, byte[] byteR)
+        {
+            if (byteL.Length != byteR.Length)
+                return false;
+            for (int i = 0; i < byteL.Length; i++)
+            {
+                if (byteL[i] != byteR[i])
+                    return false;
+            }
+            return true;
         }
 
     }

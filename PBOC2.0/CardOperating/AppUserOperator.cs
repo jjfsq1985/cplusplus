@@ -9,7 +9,7 @@ using IFuncPlugin;
 using SqlServerHelper;
 using System.Data.SqlClient;
 using ApduParam;
-using ApduDaHua;
+using ApduCtrl;
 
 namespace CardOperating
 {
@@ -36,11 +36,16 @@ namespace CardOperating
         private List<CityInfo> m_ListCityInfo = new List<CityInfo>();   //地市
         private List<SuperiorInfo> m_ListSuperiorInfo = new List<SuperiorInfo>(); //上级单位（公司）
         private List<StationInfo> m_ListStationInfo = new List<StationInfo>(); //上级单位（公司）
-        private int m_hDevHandler = 0;//读卡器句柄
+
+        private ApduController m_DevControl = null;
+
         public AppUserOperator()
         {
             InitializeComponent();
             textPIN.Text = m_strPIN;
+            cmbDevType.SelectedIndex = 0;
+            m_DevControl = new ApduController(ApduDomain.DaHua);
+            OpenDevice();
         }
 
         public MenuType GetMenuType()
@@ -411,31 +416,28 @@ namespace CardOperating
 
         private bool OpenUserCard()
         {
-            if (m_hDevHandler > 0 || m_UserCardCtrl != null)
-                return true;
-            m_hDevHandler = DllExportMT.open_device(0, 9600);
-            if (m_hDevHandler <= 0)
+            if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            m_UserCardCtrl = new UserCardControl(m_hDevHandler, m_DBInfo);
+            if (m_UserCardCtrl != null)
+                return true;
+            m_UserCardCtrl = new UserCardControl(m_DevControl, m_DBInfo);
 
-            byte[] cardUid = new byte[4];
-            byte[] cardInfo = new byte[64];
-            byte[] cardInfolen = new byte[4];            
-            short nRetValue = DllExportMT.OpenCard(m_hDevHandler, 1, cardUid, cardInfo, cardInfolen);
-            if (nRetValue != 0)              
-                return false;
+            string cardInfo = "";
+            if (ContactCard.Checked)
+                return m_DevControl.OpenContactCard(ref cardInfo);                
             else
-                return true;
+                return m_DevControl.OpenCard(ref cardInfo);
         }
 
         private bool CloseUserCard()
         {
-            if (m_hDevHandler <= 0)
+            if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            DllExportMT.CloseCard(m_hDevHandler);
-            DllExportMT.close_device(m_hDevHandler);
+            if (ContactCard.Checked)
+                m_DevControl.CloseContactCard();
+            else
+                m_DevControl.CloseCard();
             m_UserCardCtrl = null;
-            m_hDevHandler = 0;
             return true;
         }
 
@@ -678,7 +680,7 @@ namespace CardOperating
         {
             if (byteLimit == 0xFF || strLimitAreaCode.Length % 2 != 0)
                 return;
-            byte[] AreaCode = APDUBase.StringToBCD(strLimitAreaCode);
+            byte[] AreaCode = PublicFunc.StringToBCD(strLimitAreaCode);
             if (AreaCode == null)
                 return;
             switch (byteLimit)
@@ -734,7 +736,7 @@ namespace CardOperating
                             foreach (StationInfo info in m_ListStationInfo)
                             {
                                 Buffer.BlockCopy(AreaCode, nLimitIndex, StationCode, 0, 4);
-                                if (APDUBase.ByteDataEquals(info.StationCode, StationCode))
+                                if (PublicFunc.ByteDataEquals(info.StationCode, StationCode))
                                 {
                                     listLimitArea.SetItemChecked(i, true);
                                     break;
@@ -875,7 +877,7 @@ namespace CardOperating
             if (nRet == 1)
             {
                 byte[] TerminalId = new byte[6];
-                if (APDUBase.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                if (PublicFunc.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
                     Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
@@ -994,7 +996,7 @@ namespace CardOperating
             if (nRet == 1)
             {
                 byte[] TerminalId = new byte[6];
-                if (APDUBase.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                if (PublicFunc.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
                     Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
@@ -1185,6 +1187,52 @@ namespace CardOperating
 
             ObjSql.CloseConnection();
             ObjSql = null;
+        }
+
+        private void cmbDevType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int nSel = cmbDevType.SelectedIndex;
+            if (nSel == 0)
+            {
+                CloseDevice();
+                m_DevControl = new ApduController(ApduDomain.DaHua);
+                ContactCard.Checked = false;
+                ContactCard.Enabled = false;
+                OpenDevice();
+            }
+            else if (nSel == 1)
+            {
+                CloseDevice();
+                m_DevControl = new ApduController(ApduDomain.LongHuan);
+                ContactCard.Checked = false;
+                ContactCard.Enabled = true;
+                OpenDevice();
+            }
+            else
+            {
+                m_DevControl = null;
+                ContactCard.Checked = false;
+                ContactCard.Enabled = false;
+            }
+        }
+
+        private bool OpenDevice()
+        {
+            if (m_DevControl == null)
+                return false;
+            if (m_DevControl.IsDeviceOpen())
+                return true;
+            return m_DevControl.Open_Device();
+        }
+
+        private bool CloseDevice()
+        {
+            if (m_DevControl == null)
+                return false;
+            if (!m_DevControl.IsDeviceOpen())
+                return false;
+            m_DevControl.Close_Device();
+            return true;
         }
     }
 }

@@ -85,6 +85,8 @@
             this.btnModifyCard = new System.Windows.Forms.Button();
             this.CardInfoPanel = new System.Windows.Forms.SplitContainer();
             this.CardInfo = new System.Windows.Forms.GroupBox();
+            this.cmbIdType = new System.Windows.Forms.ComboBox();
+            this.IdTypeLabel = new System.Windows.Forms.Label();
             this.CardApp = new System.Windows.Forms.GroupBox();
             this.PINOperate = new System.Windows.Forms.GroupBox();
             this.btnPinChange = new System.Windows.Forms.Button();
@@ -106,8 +108,9 @@
             this.Money = new System.Windows.Forms.Label();
             this.textMoney = new System.Windows.Forms.TextBox();
             this.btnCardLoad = new System.Windows.Forms.Button();
-            this.cmbIdType = new System.Windows.Forms.ComboBox();
-            this.IdTypeLabel = new System.Windows.Forms.Label();
+            this.cmbDevType = new System.Windows.Forms.ComboBox();
+            this.CardReader = new System.Windows.Forms.Label();
+            this.ContactCard = new System.Windows.Forms.CheckBox();
             this.groupLimit.SuspendLayout();
             this.CardInfoPanel.Panel1.SuspendLayout();
             this.CardInfoPanel.Panel2.SuspendLayout();
@@ -621,7 +624,7 @@
             // 
             // CardInfoPanel
             // 
-            this.CardInfoPanel.Location = new System.Drawing.Point(5, 6);
+            this.CardInfoPanel.Location = new System.Drawing.Point(7, 28);
             this.CardInfoPanel.Name = "CardInfoPanel";
             // 
             // CardInfoPanel.Panel1
@@ -631,7 +634,7 @@
             // CardInfoPanel.Panel2
             // 
             this.CardInfoPanel.Panel2.Controls.Add(this.CardApp);
-            this.CardInfoPanel.Size = new System.Drawing.Size(790, 574);
+            this.CardInfoPanel.Size = new System.Drawing.Size(790, 573);
             this.CardInfoPanel.SplitterDistance = 477;
             this.CardInfoPanel.TabIndex = 103;
             // 
@@ -686,10 +689,33 @@
             this.CardInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CardInfo.Location = new System.Drawing.Point(0, 0);
             this.CardInfo.Name = "CardInfo";
-            this.CardInfo.Size = new System.Drawing.Size(477, 574);
+            this.CardInfo.Size = new System.Drawing.Size(477, 573);
             this.CardInfo.TabIndex = 103;
             this.CardInfo.TabStop = false;
             this.CardInfo.Text = "卡信息";
+            // 
+            // cmbIdType
+            // 
+            this.cmbIdType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbIdType.FormattingEnabled = true;
+            this.cmbIdType.Items.AddRange(new object[] {
+            "身份证",
+            "驾驶证",
+            "军官证",
+            "其他证"});
+            this.cmbIdType.Location = new System.Drawing.Point(79, 126);
+            this.cmbIdType.Name = "cmbIdType";
+            this.cmbIdType.Size = new System.Drawing.Size(89, 20);
+            this.cmbIdType.TabIndex = 104;
+            // 
+            // IdTypeLabel
+            // 
+            this.IdTypeLabel.AutoSize = true;
+            this.IdTypeLabel.Location = new System.Drawing.Point(15, 130);
+            this.IdTypeLabel.Name = "IdTypeLabel";
+            this.IdTypeLabel.Size = new System.Drawing.Size(53, 12);
+            this.IdTypeLabel.TabIndex = 103;
+            this.IdTypeLabel.Text = "证件类型";
             // 
             // CardApp
             // 
@@ -709,7 +735,7 @@
             this.CardApp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CardApp.Location = new System.Drawing.Point(0, 0);
             this.CardApp.Name = "CardApp";
-            this.CardApp.Size = new System.Drawing.Size(309, 574);
+            this.CardApp.Size = new System.Drawing.Size(309, 573);
             this.CardApp.TabIndex = 47;
             this.CardApp.TabStop = false;
             this.CardApp.Text = "卡应用";
@@ -910,34 +936,47 @@
             this.btnCardLoad.UseVisualStyleBackColor = true;
             this.btnCardLoad.Click += new System.EventHandler(this.btnCardLoad_Click);
             // 
-            // cmbIdType
+            // cmbDevType
             // 
-            this.cmbIdType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbIdType.FormattingEnabled = true;
-            this.cmbIdType.Items.AddRange(new object[] {
-            "身份证",
-            "驾驶证",
-            "军官证",
-            "其他证"});
-            this.cmbIdType.Location = new System.Drawing.Point(79, 126);
-            this.cmbIdType.Name = "cmbIdType";
-            this.cmbIdType.Size = new System.Drawing.Size(89, 20);
-            this.cmbIdType.TabIndex = 104;
+            this.cmbDevType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDevType.FormattingEnabled = true;
+            this.cmbDevType.Items.AddRange(new object[] {
+            "达华卡",
+            "龙寰卡"});
+            this.cmbDevType.Location = new System.Drawing.Point(130, 5);
+            this.cmbDevType.Name = "cmbDevType";
+            this.cmbDevType.Size = new System.Drawing.Size(107, 20);
+            this.cmbDevType.TabIndex = 104;
+            this.cmbDevType.SelectedIndexChanged += new System.EventHandler(this.cmbDevType_SelectedIndexChanged);
             // 
-            // IdTypeLabel
+            // CardReader
             // 
-            this.IdTypeLabel.AutoSize = true;
-            this.IdTypeLabel.Location = new System.Drawing.Point(15, 130);
-            this.IdTypeLabel.Name = "IdTypeLabel";
-            this.IdTypeLabel.Size = new System.Drawing.Size(53, 12);
-            this.IdTypeLabel.TabIndex = 103;
-            this.IdTypeLabel.Text = "证件类型";
+            this.CardReader.AutoSize = true;
+            this.CardReader.Location = new System.Drawing.Point(70, 10);
+            this.CardReader.Name = "CardReader";
+            this.CardReader.Size = new System.Drawing.Size(29, 12);
+            this.CardReader.TabIndex = 105;
+            this.CardReader.Text = "卡商";
+            // 
+            // ContactCard
+            // 
+            this.ContactCard.AutoSize = true;
+            this.ContactCard.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ContactCard.Location = new System.Drawing.Point(290, 9);
+            this.ContactCard.Name = "ContactCard";
+            this.ContactCard.Size = new System.Drawing.Size(60, 16);
+            this.ContactCard.TabIndex = 105;
+            this.ContactCard.Text = "接触式";
+            this.ContactCard.UseVisualStyleBackColor = true;
             // 
             // AppUserOperator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(802, 586);
+            this.ClientSize = new System.Drawing.Size(802, 604);
+            this.Controls.Add(this.ContactCard);
+            this.Controls.Add(this.CardReader);
+            this.Controls.Add(this.cmbDevType);
             this.Controls.Add(this.CardInfoPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -957,6 +996,7 @@
             this.PINOperate.ResumeLayout(false);
             this.PINOperate.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1042,6 +1082,9 @@
         private System.Windows.Forms.Button btnPinChange;
         private System.Windows.Forms.ComboBox cmbIdType;
         private System.Windows.Forms.Label IdTypeLabel;
+        private System.Windows.Forms.ComboBox cmbDevType;
+        private System.Windows.Forms.Label CardReader;
+        private System.Windows.Forms.CheckBox ContactCard;
 
     }
 }

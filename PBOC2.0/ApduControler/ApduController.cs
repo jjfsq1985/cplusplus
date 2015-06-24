@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ApduInterface;
 
-namespace ApduInterface
+namespace ApduCtrl
 {
-    public enum ApduDomain
-    {
-        Unknown = 0,
-        DaHua = 1,
-        LongHuan = 2
-    }
-
     public class ApduController
     {
-        ApduDomain m_Domain = ApduDomain.Unknown;
-        DaHuaDomain m_DahuaDomain = null;
-        LongHuanDomain m_LongHuanDomain = null;
+        private ApduDomain m_Domain = ApduDomain.Unknown;
+        private DaHuaDomain m_DahuaDomain = null;
+        private LongHuanDomain m_LongHuanDomain = null;
+        private bool m_bDeviceOpen = false;
 
 
         public ApduController(ApduDomain eDomain)
@@ -27,19 +22,45 @@ namespace ApduInterface
                 m_LongHuanDomain = new LongHuanDomain();
         }
 
-
-        public bool Open_Device(int nReader)
+        public ISamApduProvider GetPsamApduProvider()
         {
             if (m_Domain == ApduDomain.DaHua)
-                return m_DahuaDomain.Open_Device(nReader);
+                return m_DahuaDomain.GetPsamApduProvider();
             else if (m_Domain == ApduDomain.LongHuan)
-                return m_LongHuanDomain.Open_Device(nReader);
+                return m_LongHuanDomain.GetPsamApduProvider();
             else
-                return false;
+                return null;
+        }
+
+        public IUserApduProvider GetUserApduProvider()
+        {
+            if (m_Domain == ApduDomain.DaHua)
+                return m_DahuaDomain.GetUserApduProvider();
+            else if (m_Domain == ApduDomain.LongHuan)
+                return m_LongHuanDomain.GetUserApduProvider();
+            else
+                return null;
+        }
+
+        public bool IsDeviceOpen()
+        {
+            return m_bDeviceOpen;
+        }
+
+        public bool Open_Device()
+        {
+            if (m_Domain == ApduDomain.DaHua)
+                m_bDeviceOpen = m_DahuaDomain.Open_Device();
+            else if (m_Domain == ApduDomain.LongHuan)
+                m_bDeviceOpen = m_LongHuanDomain.Open_Device();
+            else
+                m_bDeviceOpen = false;
+            return m_bDeviceOpen;
         }
 
         public void Close_Device()
         {
+            m_bDeviceOpen = false;
             if (m_Domain == ApduDomain.DaHua)
                 m_DahuaDomain.Close_Device();
             else if (m_Domain == ApduDomain.LongHuan)
@@ -56,14 +77,14 @@ namespace ApduInterface
                 return false;
         }
 
-        public bool CmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
+        public int CmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
         {
             if (m_Domain == ApduDomain.DaHua)
                 return m_DahuaDomain.CmdExchange(data, datalen, outdata, ref outdatalen);
             else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.CmdExchange(data, datalen, outdata, ref outdatalen);
             else
-                return false;
+                return -1;
         }
 
         public void CloseCard()
@@ -74,7 +95,29 @@ namespace ApduInterface
                 m_LongHuanDomain.CloseCard();
         }
 
-        public bool IccPowerOn(int nReader,ref string CardAtr)
+        public bool OpenContactCard(ref string CardAtr)
+        {
+            if (m_Domain == ApduDomain.LongHuan)
+                return m_LongHuanDomain.OpenContactCard(ref CardAtr);
+            else
+                return false;
+        }
+
+        public int ContactCmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
+        {
+            if (m_Domain == ApduDomain.LongHuan)
+                return m_LongHuanDomain.ContactCmdExchange(data, datalen, outdata, ref outdatalen);
+            else
+                return -1;
+        }
+
+        public void CloseContactCard()
+        {
+            if (m_Domain == ApduDomain.LongHuan)
+                m_LongHuanDomain.CloseContactCard();
+        }
+
+        public bool IccPowerOn(ref string CardAtr)
         {
             if (m_Domain == ApduDomain.DaHua)
                 return m_DahuaDomain.IccPowerOn(ref CardAtr);
@@ -84,14 +127,14 @@ namespace ApduInterface
                 return false;
         }
 
-        public bool IccCmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
+        public int IccCmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
         {
             if (m_Domain == ApduDomain.DaHua)
                 return m_DahuaDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
             else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
             else
-                return false;
+                return -1;
         }
 
         public void IccPowerOff()
@@ -110,6 +153,28 @@ namespace ApduInterface
                 return m_LongHuanDomain.hex2asc(dataSrc, nSrcLen);
             else
                 return "";
+        }
+
+        public bool IsDevicePcscMode(ref int nMode)
+        {
+            if (m_Domain == ApduDomain.LongHuan)
+                return m_LongHuanDomain.IsDevicePcscMode(ref nMode);
+            else
+                return true;
+        }
+
+        public bool ChangeDevice(int nMode)
+        {
+            if (nMode <= 0 || nMode > 3)
+                return false;
+            if (m_Domain == ApduDomain.LongHuan)
+            {
+                return m_LongHuanDomain.ChangeDevice(nMode);
+            }
+            else
+            {
+                return false;
+            }            
         }
     }
 }

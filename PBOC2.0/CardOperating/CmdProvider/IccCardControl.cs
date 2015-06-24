@@ -7,13 +7,15 @@ using System.Data;
 using IFuncPlugin;
 using System.Windows.Forms;
 using ApduParam;
-using ApduDaHua;
+using ApduInterface;
+using ApduCtrl;
 
 namespace CardOperating
 {
     public class IccCardControl : CardControlBase
     {
-        private PSAMCardAPDUProvider m_ctrlApdu = new PSAMCardAPDUProvider();
+        private ApduController m_ctrlApdu = null;
+        private ISamApduProvider m_CmdProvider = null;
 
         private static byte[] m_PSE = new byte[] { 0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31 };//"1PAY.SYS.DDF01"
         private static byte[] m_ADF01 = new byte[] { 0x45, 0x4E, 0x45, 0x52, 0x47, 0x59, 0x2E, 0x30, 0x31 };//ENERGY.01
@@ -47,33 +49,31 @@ namespace CardOperating
         private static byte[] m_MADK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
 
 
-        public IccCardControl(int icdev, SqlConnectInfo DbInfo)
+        public IccCardControl(ApduController ApduCtrlObj, SqlConnectInfo DbInfo)
         {
-            m_MtDevHandler = icdev;
+            m_ctrlApdu = ApduCtrlObj;
+            m_CmdProvider = m_ctrlApdu.GetPsamApduProvider();
             m_DBInfo = DbInfo;
         } 
 
         private bool SelectFile(byte[] byteArray, byte[] prefixData)
         {
-            m_ctrlApdu.createSelectCmd(byteArray, prefixData);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createSelectCmd(byteArray, prefixData);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];            
+            int nRecvLen = 0;  
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "SAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "SAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] selectAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, selectAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "选择" + GetFileDescribe(byteArray) + "文件应答：" + Encoding.ASCII.GetString(selectAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "选择" + GetFileDescribe(byteArray) + "文件应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -81,57 +81,49 @@ namespace CardOperating
 
         public void GetCardCosVersion()
         {
-            m_ctrlApdu.createCosVersionCmd();
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createCosVersionCmd();
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取COS版本失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "读取COS版本失败"));
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] VerAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, VerAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "读取COS版本应答：" + Encoding.ASCII.GetString(VerAsc)));
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "读取COS版本应答：" + strData));
             }
         }
 
-        private byte[] GetRandomValue(APDUBase provider, int nRandomLen)
+        private byte[] GetRandomValue(int nRandomLen)
         {
-            provider.createGetChallengeCmd(nRandomLen);
-            byte[] data = provider.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createGetChallengeCmd(nRandomLen);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet != 0)
             {
-                this.OnTextOutput(new MsgOutEvent(m_RetVal, "获取随机值失败"));
+                this.OnTextOutput(new MsgOutEvent(nRet, "获取随机值失败"));
                 return null;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                //uint nAscLen = nRecvLen * 2;
-                //byte[] randAsc = new byte[nAscLen];
-                //DllExportMT.hex_asc(m_RecvData, randAsc, nRecvLen);
-                //this.OnTextOutput(new MsgOutEvent(0, "随机值应答：" + Encoding.ASCII.GetString(randAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return null;
             }
             byte[] RandomValue = new byte[nRandomLen];
-            Buffer.BlockCopy(m_RecvData, 0, RandomValue, 0, nRandomLen);
+            Buffer.BlockCopy(RecvData, 0, RandomValue, 0, nRandomLen);
             return RandomValue;
         }
 
         private bool ExternalAuthWithKey(byte[] KeyVal)
         {
-            byte[] randByte = GetRandomValue(m_ctrlApdu, 8);
+            byte[] randByte = GetRandomValue(8);
             if (randByte == null || randByte.Length != 8)
                 return false;
 
@@ -142,7 +134,7 @@ namespace CardOperating
 
         private bool ExternalAuthentication(bool bMainKey)
         {
-            byte[] randByte = GetRandomValue(m_ctrlApdu, 8);
+            byte[] randByte = GetRandomValue(8);
             if (randByte == null || randByte.Length != 8)
                 return false;
 
@@ -153,25 +145,22 @@ namespace CardOperating
 
         private bool ExternalAuthenticate(byte[] randByte, byte[] KeyVal)
         {
-            m_ctrlApdu.createExternalAuthenticationCmd(randByte, KeyVal);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createExternalAuthenticationCmd(randByte, KeyVal);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "外部认证失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "外部认证失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] ExAuthAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, ExAuthAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "外部认证应答：" + Encoding.ASCII.GetString(ExAuthAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "外部认证应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -179,7 +168,7 @@ namespace CardOperating
 
         private bool DeleteMF(bool bMainKey)
         {
-            byte[] randByte = GetRandomValue(m_ctrlApdu, 8);
+            byte[] randByte = GetRandomValue(8);
             if (randByte == null || randByte.Length != 8)
                 return false;
 
@@ -190,7 +179,7 @@ namespace CardOperating
 
         private bool DeleteMFWithKey(byte[] KeyVal)
         {
-            byte[] randByte = GetRandomValue(m_ctrlApdu, 8);
+            byte[] randByte = GetRandomValue(8);
             if (randByte == null || randByte.Length != 8)
                 return false;
 
@@ -201,25 +190,22 @@ namespace CardOperating
 
         private bool ClearMF(byte[] randByte, byte[] KeyVal)
         {
-            m_ctrlApdu.createClearMFcmd(randByte, KeyVal);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createClearMFcmd(randByte, KeyVal);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "初始化失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "初始化失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] ClearAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, ClearAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "初始化应答：" + Encoding.ASCII.GetString(ClearAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "初始化应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -227,13 +213,13 @@ namespace CardOperating
 
         private string GetFileDescribe(byte[] byteArray)
         {
-            if (APDUBase.ByteDataEquals(byteArray, m_PSE))
+            if (PublicFunc.ByteDataEquals(byteArray, m_PSE))
                 return "MF";
-            else if (APDUBase.ByteDataEquals(byteArray, m_ADF01))
+            else if (PublicFunc.ByteDataEquals(byteArray, m_ADF01))
                 return "ADF01";
-            else if (APDUBase.ByteDataEquals(byteArray, m_ADF02))
+            else if (PublicFunc.ByteDataEquals(byteArray, m_ADF02))
                 return "ADF02";
-            else if (APDUBase.ByteDataEquals(byteArray, m_ADF03))
+            else if (PublicFunc.ByteDataEquals(byteArray, m_ADF03))
                 return "ADF03";
             else
                 return "";
@@ -274,25 +260,22 @@ namespace CardOperating
 
         private bool CreateKeyFile(ushort RecordCount, byte RecordLength)
         {
-            m_ctrlApdu.createGenerateKeyCmd(RecordCount, RecordLength);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createGenerateKeyCmd(RecordCount, RecordLength);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "创建Key文件失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "创建Key文件失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] keyAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, keyAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "创建Key文件应答：" + Encoding.ASCII.GetString(keyAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "创建Key文件应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -300,25 +283,22 @@ namespace CardOperating
 
         private bool CreateFCI()
         {
-            m_ctrlApdu.createGenerateEFCmd(0x00, 0xEF1E, 0xA4, 0x23);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createGenerateEFCmd(0x00, 0xEF1E, 0xA4, 0x23);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "创建FCI文件失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "创建FCI文件失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] fciAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, fciAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "创建FCI文件应答：" + Encoding.ASCII.GetString(fciAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "创建FCI文件应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -326,25 +306,22 @@ namespace CardOperating
 
         private bool StorageFCI(byte[] byteName, byte[] prefix)
         {
-            m_ctrlApdu.createStorageFCICmd(byteName, prefix);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createStorageFCICmd(byteName, prefix);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "安装FCI文件失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "安装FCI文件失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] fciAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, fciAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "安装FCI文件应答：" + Encoding.ASCII.GetString(fciAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "安装FCI文件应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -352,27 +329,24 @@ namespace CardOperating
 
         private bool CreateCardInfo(byte GenerateFlag, ushort FileId, byte FileType, ushort FileLen)
         {
-            m_ctrlApdu.createGenerateEFCmd(GenerateFlag, FileId, FileType, FileLen);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createGenerateEFCmd(GenerateFlag, FileId, FileType, FileLen);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
                 string strMsg = string.Format("创建文件{0}失败", FileId.ToString("X"));
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, strMsg));
+                base.OnTextOutput(new MsgOutEvent(nRet, strMsg));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] infoAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, infoAsc, nRecvLen);
-                string strMsg = string.Format("创建文件{0}应答：{1}", FileId.ToString("X"), Encoding.ASCII.GetString(infoAsc));
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                string strMsg = string.Format("创建文件{0}应答：{1}", FileId.ToString("X"), strData);
                 base.OnTextOutput(new MsgOutEvent(0, strMsg));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -416,27 +390,24 @@ namespace CardOperating
 
         private bool SelectCardInfo(ushort FileId,bool bMainKey)
         {
-            m_ctrlApdu.createSelectEFCmd(FileId);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createSelectEFCmd(FileId);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
                 string strMessage = string.Format("选择{0}失败", GetFileName(FileId, bMainKey));
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, strMessage));
+                base.OnTextOutput(new MsgOutEvent(nRet, strMessage));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] selectAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, selectAsc, nRecvLen);
-                string strMessage = string.Format("选择{0}应答：{1}", GetFileName(FileId, bMainKey), Encoding.ASCII.GetString(selectAsc));
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                string strMessage = string.Format("选择{0}应答：{1}", GetFileName(FileId, bMainKey), strData);
                 base.OnTextOutput(new MsgOutEvent(0, strMessage));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -444,25 +415,22 @@ namespace CardOperating
 
         private bool StorageCardInfo(byte[] PsamId)
         {
-            m_ctrlApdu.createStorageCardInfoCmd(PsamId);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createStorageCardInfoCmd(PsamId);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "写入卡片公共信息失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "写入卡片公共信息失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] storageAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, storageAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "写入卡片公共信息应答：" + Encoding.ASCII.GetString(storageAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "写入卡片公共信息应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -470,25 +438,22 @@ namespace CardOperating
 
         private bool StorageTermialInfo(byte[] TermialId)
         {
-            m_ctrlApdu.createStorageTermInfoCmd(TermialId);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createStorageTermInfoCmd(TermialId);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "写入终端信息失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "写入终端信息失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] storageAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, storageAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "写入终端信息应答：" + Encoding.ASCII.GetString(storageAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "写入终端信息应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -553,27 +518,24 @@ namespace CardOperating
 
         private bool GenerateADF(byte[] byteName, ushort FileId)
         {
-            m_ctrlApdu.createGenerateADFCmd(byteName, FileId);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createGenerateADFCmd(byteName, FileId);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
                 string strMessage = string.Format("创建{0}文件失败", GetFileDescribe(byteName));
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, strMessage));
+                base.OnTextOutput(new MsgOutEvent(nRet, strMessage));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] adfAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, adfAsc, nRecvLen);
-                string strMessage = string.Format("创建{0}文件应答：{1}", GetFileDescribe(byteName), Encoding.ASCII.GetString(adfAsc));
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                string strMessage = string.Format("创建{0}文件应答：{1}", GetFileDescribe(byteName), strData);
                 base.OnTextOutput(new MsgOutEvent(0, strMessage));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -601,25 +563,22 @@ namespace CardOperating
 
         private bool StoragePsamInfo(IccCardInfoParam psamInfo)
         {
-            m_ctrlApdu.createStoragePsamInfoCmd(psamInfo);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createStoragePsamInfoCmd(psamInfo);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "写入应用公共信息失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "写入应用公共信息失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] infoAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, infoAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "写入应用公共信息应答：" + Encoding.ASCII.GetString(infoAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "写入应用公共信息应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -627,25 +586,22 @@ namespace CardOperating
 
         private bool WriteMAC2()
         {
-            m_ctrlApdu.createWriteMAC2Cmd(0x0A, 0x0A);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createWriteMAC2Cmd(0x0A, 0x0A);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "写MAC2文件失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "写MAC2文件失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] infoAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, infoAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "写MAC2文件应答：" + Encoding.ASCII.GetString(infoAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "写MAC2文件应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -653,28 +609,25 @@ namespace CardOperating
 
         private bool SetPsamCardStatus()
         {
-            byte[] randomVal = GetRandomValue(m_ctrlApdu, 8);
+            byte[] randomVal = GetRandomValue(8);
             if (randomVal == null || randomVal.Length != 8)
                 return false;
-            m_ctrlApdu.createSetStatusCmd(randomVal, m_PsamKeyOrg);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createSetStatusCmd(randomVal, m_PsamKeyOrg);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "生命周期转换失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "生命周期转换失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] SetStatusAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, SetStatusAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "生命周期转换应答：" + Encoding.ASCII.GetString(SetStatusAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "生命周期转换应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -763,33 +716,30 @@ namespace CardOperating
 
         private bool StoragePsamKey(byte[] keyApp, byte Usage, byte Ver, bool bMainKey)
         {
-            byte[] randVal = GetRandomValue(m_ctrlApdu, 4);
+            byte[] randVal = GetRandomValue(4);
             if (randVal == null || randVal.Length != 4)
                 return false;
             //PSAM卡写入密钥随机值4字节+4字节0
             byte[] randomVal = new byte[8];
             Buffer.BlockCopy(randVal, 0, randomVal, 0, 4);
-            m_ctrlApdu.createStorageAppKeyCmd(randomVal, keyApp, Usage, Ver, m_PsamKeyOrg);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createStorageAppKeyCmd(randomVal, keyApp, Usage, Ver, m_PsamKeyOrg);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
                 string strMessage = string.Format("写入{0}失败", GetKeyName(Usage, Ver, bMainKey));
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, strMessage));
+                base.OnTextOutput(new MsgOutEvent(nRet, strMessage));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] storageAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, storageAsc, nRecvLen);
-                string strMessage = string.Format("写入{0}应答：{1}", GetKeyName(Usage, Ver, bMainKey), Encoding.ASCII.GetString(storageAsc));
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                string strMessage = string.Format("写入{0}应答：{1}", GetKeyName(Usage, Ver, bMainKey), strData);
                 base.OnTextOutput(new MsgOutEvent(0, strMessage));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
@@ -865,7 +815,7 @@ namespace CardOperating
             byte[] sespk = GetPrivateProcessKey(ASN, m_MPK1, rand, BusinessSn, TermialSn, TermialRand);
             if (sespk == null)
                 return MAC1;
-             MAC1 = m_ctrlApdu.CalcMacVal(srcData, sespk);
+             MAC1 = m_CmdProvider.CalcMacVal(srcData, sespk);
              return MAC1;
         }
 
@@ -881,39 +831,36 @@ namespace CardOperating
             byteData[18] = 0x01;//Key Ver
             byteData[19] = 0x00; // Key Flag
             Buffer.BlockCopy(ASN, 0, byteData, 20, 8);
-            m_ctrlApdu.createInitSamGrayLockCmd(byteData);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
-            {                
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "SAM卡MAC1计算初始化失败"));
+            m_CmdProvider.createInitSamGrayLockCmd(byteData);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(nRet, "SAM卡MAC1计算初始化失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] InitAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, InitAsc, nRecvLen);                
-                base.OnTextOutput(new MsgOutEvent(0, "SAM卡MAC1计算初始化应答：" +Encoding.ASCII.GetString(InitAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "SAM卡MAC1计算初始化应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
                 //输出数据按灰锁命令数据域排列:终端交易序号，终端随机数，BCD时间，MAC1
-                Buffer.BlockCopy(m_RecvData, 0, outData, 0, 4);
-                Buffer.BlockCopy(m_RecvData, 4, outData, 4, 4);
-                Buffer.BlockCopy(m_RecvData, 8, outData, 15, 4);                
+                Buffer.BlockCopy(RecvData, 0, outData, 0, 4);
+                Buffer.BlockCopy(RecvData, 4, outData, 4, 4);
+                Buffer.BlockCopy(RecvData, 8, outData, 15, 4);                
                 //PSAM卡计算的MAC1
                 byte[] PSAM_MAC1 = new byte[4];
-                Buffer.BlockCopy(m_RecvData, 8, PSAM_MAC1, 0, 4);
+                Buffer.BlockCopy(RecvData, 8, PSAM_MAC1, 0, 4);
 
                  //加气专用过程密钥 计算
                 byte[] TermialSn = new byte[4];                
                 byte[] TermialRandom = new byte[4];
-                Buffer.BlockCopy(m_RecvData, 0, TermialSn, 0, 4);
-                Buffer.BlockCopy(m_RecvData, 4, TermialRandom, 0, 4);
+                Buffer.BlockCopy(RecvData, 0, TermialSn, 0, 4);
+                Buffer.BlockCopy(RecvData, 4, TermialRandom, 0, 4);
                 byte[] srcData = new byte[14];//用于计算MAC1的原始数据                                
                 srcData[0] = BusinessType;
                 Buffer.BlockCopy(TermialID, 0, srcData, 1, 6);
@@ -923,7 +870,7 @@ namespace CardOperating
                 Buffer.BlockCopy(MAC1, 0, outData, 15, 4);//MAC1
                 string strInfo = string.Format("SAM卡MAC1计算初始化 MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(PSAM_MAC1), BitConverter.ToString(MAC1));
                 System.Diagnostics.Trace.WriteLine(strInfo);
-                if(!APDUBase.ByteDataEquals(MAC1,PSAM_MAC1))
+                if(!PublicFunc.ByteDataEquals(MAC1,PSAM_MAC1))
                 {
                     string strMessage = string.Format("MAC1计算验证失败：终端机编号{0}，用户卡号{1}", BitConverter.ToString(TermialID), BitConverter.ToString(ASN));
                     base.OnTextOutput(new MsgOutEvent(0, strMessage));
@@ -962,31 +909,28 @@ namespace CardOperating
             Buffer.BlockCopy(TermialSn, 2, byteData, 6, 2);
             byte[] byteTmpck = DesCryptography.TripleEncryptData(byteData, DPKKey);//中间密钥
             //计算过程密钥
-            byte[] byteSESPK = m_ctrlApdu.CalcPrivateProcessKey(TermialRand, byteTmpck);
+            byte[] byteSESPK = m_CmdProvider.CalcPrivateProcessKey(TermialRand, byteTmpck);
             return byteSESPK;
         }
 
         public bool VerifyMAC2(byte[] MAC2)
         {
-            m_ctrlApdu.createVerifyMAC2Cmd(MAC2);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
-            {                
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "SAM卡验证MAC2失败"));
+            m_CmdProvider.createVerifyMAC2Cmd(MAC2);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(nRet, "SAM卡验证MAC2失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] VerifyAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, VerifyAsc, nRecvLen);   
-                base.OnTextOutput(new MsgOutEvent(0, "SAM卡验证MAC2应答：" + Encoding.ASCII.GetString(VerifyAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "SAM卡验证MAC2应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
              }
             return true;
@@ -994,27 +938,24 @@ namespace CardOperating
 
         public bool CalcGMAC(byte BusinessType,byte[] ASN, int nOffLineSn, int nMoney, byte[] outGMAC)
         {
-            m_ctrlApdu.createCalcGMACCmd(BusinessType, ASN, nOffLineSn, nMoney);
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createCalcGMACCmd(BusinessType, ASN, nOffLineSn, nMoney);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "SAM卡计算GMAC失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "SAM卡计算GMAC失败"));
                 return false;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] GmacAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, GmacAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "SAM卡计算GMAC应答：" + Encoding.ASCII.GetString(GmacAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "SAM卡计算GMAC应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
-                Buffer.BlockCopy(m_RecvData, 0, outGMAC, 0, 4);
+                Buffer.BlockCopy(RecvData, 0, outGMAC, 0, 4);
             }
             return true;
 
@@ -1068,7 +1009,7 @@ namespace CardOperating
             }
 
             byte[] ConsumerKey = GetRelatedKey(ObjSql, CardCategory.CpuCard);
-            if (ConsumerKey == null || !APDUBase.ByteDataEquals(ConsumerKey, m_MPK1))
+            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK1))
             {
                 base.OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
                 MessageBox.Show("加气消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1098,7 +1039,7 @@ namespace CardOperating
                     if (dataReader.Read())
                     {
                         string strKey = (string)dataReader["OrgKey"];
-                        byte[] byteKey = APDUBase.StringToBCD(strKey);
+                        byte[] byteKey = PublicFunc.StringToBCD(strKey);
                         SetOrgKeyValue(byteKey, CardCategory.PsamCard);
                     }
                     dataReader.Close();
@@ -1217,13 +1158,13 @@ namespace CardOperating
                         if (bMainKey)
                         {
                             string strMasterKey = (string)dataReader["PsamMasterKey"];
-                            byte[] byteKey = APDUBase.StringToBCD(strMasterKey);
+                            byte[] byteKey = PublicFunc.StringToBCD(strMasterKey);
                             Buffer.BlockCopy(byteKey, 0, KeyInit, 0, 16);
                         }
                         else
                         {
                             string strOrgKey = (string)dataReader["OrgKey"];
-                            byte[] byteKey = APDUBase.StringToBCD(strOrgKey);
+                            byte[] byteKey = PublicFunc.StringToBCD(strOrgKey);
                             Buffer.BlockCopy(byteKey, 0, KeyInit, 0, 16);
                         }
                         bRet = true;
@@ -1242,28 +1183,25 @@ namespace CardOperating
         {
             if (!SelectFile(m_PSE, null))
                 return null;
-            m_ctrlApdu.createGetEFFileCmd(0x96, 0x06);//文件标识(100+10110)0x16,终端机编号长度6
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ICC_CommandExchange(m_MtDevHandler, 0x00, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createGetEFFileCmd(0x96, 0x06);//文件标识(100+10110)0x16,终端机编号长度6
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(m_RetVal, "SAM卡读取终端机编号失败"));
+                base.OnTextOutput(new MsgOutEvent(nRet, "SAM卡读取终端机编号失败"));
                 return null;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] TIDAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, TIDAsc, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "SAM卡读取终端机编号应答：" + Encoding.ASCII.GetString(TIDAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "SAM卡读取终端机编号应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return null;
                 byte[] TerminalID = new byte[6];
-                Buffer.BlockCopy(m_RecvData, 0, TerminalID, 0, 6);
+                Buffer.BlockCopy(RecvData, 0, TerminalID, 0, 6);
                 return TerminalID;
             }
         }
@@ -1274,30 +1212,27 @@ namespace CardOperating
         /// </summary>
         public byte[] GetPsamASN(bool bMessage)
         {
-            m_ctrlApdu.createGetEFFileCmd(0x95, 0x0E);//公共信息(100+10101)0x15文件长度0x0E
-            byte[] data = m_ctrlApdu.GetOutputCmd();
-            short datalen = (short)data.Length;
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvData, 0, 128);
-            Buffer.BlockCopy(m_InitByte, 0, m_RecvDataLen, 0, 4);
-            m_RetVal = DllExportMT.ExchangePro(m_MtDevHandler, data, datalen, m_RecvData, m_RecvDataLen);
-            if (m_RetVal != 0)
+            m_CmdProvider.createGetEFFileCmd(0x95, 0x0E);//公共信息(100+10101)0x15文件长度0x0E
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
             {
                 if (bMessage)
-                    base.OnTextOutput(new MsgOutEvent(m_RetVal, "读取卡号失败"));
+                    base.OnTextOutput(new MsgOutEvent(nRet, "读取卡号失败"));
                 return null;
             }
             else
             {
-                uint nRecvLen = BitConverter.ToUInt32(m_RecvDataLen, 0);
-                uint nAscLen = nRecvLen * 2;
-                byte[] ASNAsc = new byte[nAscLen];
-                DllExportMT.hex_asc(m_RecvData, ASNAsc, nRecvLen);
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
                 if (bMessage)
-                    base.OnTextOutput(new MsgOutEvent(0, "读取卡号应答：" + Encoding.ASCII.GetString(ASNAsc)));
-                if (!(nRecvLen >= 2 && m_RecvData[nRecvLen - 2] == 0x90 && m_RecvData[nRecvLen - 1] == 0x00))
+                    base.OnTextOutput(new MsgOutEvent(0, "读取卡号应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return null;
                 byte[] PsamAsn = new byte[8];
-                Buffer.BlockCopy(m_RecvData, 2, PsamAsn, 0, 8);//实际10个字节，前两个字节为0，跳过
+                Buffer.BlockCopy(RecvData, 2, PsamAsn, 0, 8);//实际10个字节，前两个字节为0，跳过
                 return PsamAsn;
             }
         }

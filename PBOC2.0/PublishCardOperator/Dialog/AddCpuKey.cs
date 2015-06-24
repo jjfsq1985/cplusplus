@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using IFuncPlugin;
 
 namespace PublishCardOperator.Dialog
 {
@@ -37,7 +38,7 @@ namespace PublishCardOperator.Dialog
                 MessageBox.Show(strMessage);
                 return false;
             }
-            byte[] key = PublishCard.StringToBCD(strText);
+            byte[] key = PublicFunc.StringToBCD(strText);
             if (key.Length == 16)
                 Buffer.BlockCopy(key, 0, keyData, 0, 16);
             return true;

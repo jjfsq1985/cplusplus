@@ -9,7 +9,6 @@ using SqlServerHelper;
 using System.Data.SqlClient;
 using IFuncPlugin;
 using ApduParam;
-using ApduDaHua;
 
 namespace CardOperating
 {

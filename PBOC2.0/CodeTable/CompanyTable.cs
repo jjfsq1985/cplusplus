@@ -122,7 +122,7 @@ namespace CodeTable
                         SuperiorVal.eDbState = DbStateFlag.eDbOK;
                         SuperiorVal.nDataGridViewRowIndex = index;
                         SuperiorVal.strSuperiorName = (string)dataReader["CompanyName"];
-                        byte[] codeBcd = ConvertBCD.StringToBCD((string)dataReader["CompanyCode"]);
+                        byte[] codeBcd = PublicFunc.StringToBCD((string)dataReader["CompanyCode"]);
                         Trace.Assert(codeBcd != null && codeBcd.Length == 2);
                         SuperiorVal.SuperiorCode[0] = codeBcd[0];
                         SuperiorVal.SuperiorCode[1] = codeBcd[1];
@@ -209,7 +209,7 @@ namespace CodeTable
                     MessageBox.Show("公司代码只能是数字");
                     return;
                 }
-                byte[] codebyte = ConvertBCD.StringToBCD(strInput);
+                byte[] codebyte = PublicFunc.StringToBCD(strInput);
                 if (codebyte == null || codebyte.Length != 2)
                 {
                     SuperiorView.CurrentCell.Value = "";

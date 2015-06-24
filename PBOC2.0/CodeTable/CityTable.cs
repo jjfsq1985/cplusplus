@@ -122,7 +122,7 @@ namespace CodeTable
                         CityVal.eDbState = DbStateFlag.eDbOK;
                         CityVal.nDataGridViewRowIndex = index;
                         CityVal.strCityName = (string)dataReader["CityName"];
-                        byte[] codeBcd = ConvertBCD.StringToBCD((string)dataReader["CityCode"]);
+                        byte[] codeBcd = PublicFunc.StringToBCD((string)dataReader["CityCode"]);
                         Trace.Assert(codeBcd != null && codeBcd.Length == 2);
                         CityVal.CityCode[0] = codeBcd[0];
                         CityVal.CityCode[1] = codeBcd[1];
@@ -209,7 +209,7 @@ namespace CodeTable
                     MessageBox.Show("地市代码只能是数字");
                     return;
                 }
-                byte[] codebyte = ConvertBCD.StringToBCD(strInput);
+                byte[] codebyte = PublicFunc.StringToBCD(strInput);
                 if (codebyte == null || codebyte.Length != 2)
                 {
                     CityView.CurrentCell.Value = "";

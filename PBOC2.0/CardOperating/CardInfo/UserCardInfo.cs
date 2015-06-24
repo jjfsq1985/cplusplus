@@ -9,7 +9,6 @@ using System.Data.SqlClient;
 using SqlServerHelper;
 using IFuncPlugin;
 using ApduParam;
-using ApduDaHua;
 
 
 namespace CardOperating
@@ -780,7 +779,7 @@ namespace CardOperating
         {
             if (byteLimit == 0xFF || strLimitAreaCode.Length % 2 != 0)
                 return;
-            byte[] AreaCode = APDUBase.StringToBCD(strLimitAreaCode);
+            byte[] AreaCode = PublicFunc.StringToBCD(strLimitAreaCode);
             if (AreaCode == null)
                 return;
             switch (byteLimit)
@@ -836,7 +835,7 @@ namespace CardOperating
                             foreach (StationInfo info in m_ListStationInfo)
                             {
                                 Buffer.BlockCopy(AreaCode, nLimitIndex, StationCode, 0, 4);
-                                if (APDUBase.ByteDataEquals(info.StationCode, StationCode))
+                                if (PublicFunc.ByteDataEquals(info.StationCode, StationCode))
                                 {
                                     listLimitArea.SetItemChecked(i, true);
                                     break;

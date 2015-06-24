@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using IFuncPlugin;
 using ApduParam;
-using ApduDaHua;
+using ApduCtrl;
 
 namespace CardOperating
 {
@@ -15,11 +15,9 @@ namespace CardOperating
     {
         private const Char Backspace = (Char)8;
         public event MessageOutput TextOutput = null;
-        private int m_hDevHandler = 0 ;//读卡器句柄
+        
         private IccCardControl m_IccCardCtrl = null;
         private UserCardControl m_UserCardCtrl = null;
-
-        private ICC_Status m_curIccStatus = ICC_Status.ICC_PowerOff;
 
         private readonly byte[] m_FixedTermialId = new byte[] { 0x20, 0x15, 0x01, 0x01, 0x00, 0x01 };  //固定的终端机设备编号
 
@@ -34,6 +32,9 @@ namespace CardOperating
 
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
 
+        private ApduController m_DevControl = null;
+        private bool m_bContactCard = false;
+
         public CardApplicationTest()
         {
             InitializeComponent();
@@ -45,48 +46,30 @@ namespace CardOperating
             m_DBInfo = DbInfo;
         }
 
-        public void SetDeviceHandler(int hDevHandler)
+        public void SetDeviceHandler(ApduController ApduCtrlObj,bool bContactCard)
         {
-            m_hDevHandler = hDevHandler;
+            m_DevControl = ApduCtrlObj;
+            m_bContactCard = bContactCard;
         }
 
         private bool OpenIccCard()
         {
-            if (m_hDevHandler <= 0)
+            if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            m_IccCardCtrl = new IccCardControl(m_hDevHandler,m_DBInfo);
+            m_IccCardCtrl = new IccCardControl(m_DevControl, m_DBInfo);
             m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
- 
-            byte[] sInfo = new byte[64];
-            byte[] sInfolen = new byte[4];
-            uint infoLen = 0;
-            short nRetValue = 0;
-            if (m_curIccStatus == ICC_Status.ICC_PowerOn)
-            {
-                nRetValue = DllExportMT.ICC_Reset(m_hDevHandler, 0x00, sInfo, sInfolen);
-            }
-            else
-            {
-                nRetValue = DllExportMT.ICC_PowerOn(m_hDevHandler, 0x00, sInfo, sInfolen);
-            }
 
-            if (nRetValue != 0)
+            string strCardInfo = "";
+            bool bRet = m_DevControl.IccPowerOn(ref strCardInfo);
+            if (!bRet)
             {
-                OnMessageOutput(new MsgOutEvent(nRetValue, "接触式卡复位失败"));
-                m_curIccStatus = ICC_Status.ICC_PowerOff;
+                OnMessageOutput(new MsgOutEvent(0, "SAM卡复位失败"));                
                 return false;
             }
             else
             {
-                if (m_curIccStatus == ICC_Status.ICC_PowerOff)
-                    OnMessageOutput(new MsgOutEvent(0, "接触式卡上电复位成功"));
-                else
-                    OnMessageOutput(new MsgOutEvent(0, "接触式卡重新复位成功"));
-                m_curIccStatus = ICC_Status.ICC_PowerOn;
-                infoLen = BitConverter.ToUInt32(sInfolen, 0);
-                byte[] infoAsc = new byte[infoLen * 2];
-                DllExportMT.hex_asc(sInfo, infoAsc, infoLen);
-                OnMessageOutput(new MsgOutEvent(0, "复位信息：" + Encoding.ASCII.GetString(infoAsc)));
+                OnMessageOutput(new MsgOutEvent(0, "SAM卡复位成功"));
+                OnMessageOutput(new MsgOutEvent(0, "复位信息：" + strCardInfo));
             }
             byte[] TermialId = m_IccCardCtrl.GetTerminalId();
             if(TermialId != null)
@@ -96,66 +79,62 @@ namespace CardOperating
 
         private bool CloseIccCard()
         {
-            if (m_hDevHandler <= 0)
+            if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            short nRetValue = DllExportMT.ICC_PowerOff(m_hDevHandler, 0x00);
-            if (nRetValue != 0)
-                OnMessageOutput(new MsgOutEvent(nRetValue, "关闭卡片失败"));   
-            else
-                OnMessageOutput(new MsgOutEvent(0, "关闭卡片成功"));
-            m_curIccStatus = ICC_Status.ICC_PowerOff;
+            m_DevControl.IccPowerOff();
+            OnMessageOutput(new MsgOutEvent(0, "关闭卡片成功"));
             m_IccCardCtrl = null;
             return true;
         }
 
         private bool OpenUserCard()
         {
-            if (m_hDevHandler <= 0)
+            if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            m_UserCardCtrl = new UserCardControl(m_hDevHandler, m_DBInfo);
+            m_UserCardCtrl = new UserCardControl(m_DevControl, m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
             if (!m_UserCardCtrl.ReadKeyValueFormDb())
             {
                 MessageBox.Show("未读到默认密钥，请检查数据库是否正常。");
                 return false;
             }
-  
-            byte[] cardUid = new byte[4];
-            byte[] cardInfo = new byte[64];
-            byte[] cardInfolen = new byte[4];
-            uint infoLen = 0;
-            short nRetValue = DllExportMT.OpenCard(m_hDevHandler, 1, cardUid, cardInfo, cardInfolen);
-            if (nRetValue != 0)
+            string cardInfo = "";
+            if (m_bContactCard)
             {
-                OnMessageOutput(new MsgOutEvent(nRetValue, "非接触式卡打开失败"));
-                return false;
+                bool bRet = m_DevControl.OpenContactCard(ref cardInfo);
+                if (!bRet)
+                {
+                    OnMessageOutput(new MsgOutEvent(0, "接触式用户卡打开失败"));                    
+                    return false;
+                }
             }
             else
             {
-                OnMessageOutput(new MsgOutEvent(0, "非接触式卡打开成功"));                
-                byte[] cardUidAsc = new byte[8];
-                DllExportMT.hex_asc(cardUid, cardUidAsc, 4);
-                OnMessageOutput( new MsgOutEvent(0, "Uid：" + Encoding.ASCII.GetString(cardUidAsc)) );
-                infoLen = BitConverter.ToUInt32(cardInfolen, 0);
-                byte[] cardInfoAsc = new byte[infoLen * 2];
-                DllExportMT.hex_asc(cardInfo, cardInfoAsc, infoLen);
-                OnMessageOutput( new MsgOutEvent(0, "卡信息：" + Encoding.ASCII.GetString(cardInfoAsc)) ) ;
+                bool bRet = m_DevControl.OpenCard(ref cardInfo);
+                if (!bRet)
+                {
+                    OnMessageOutput(new MsgOutEvent(0, "非接触式卡打开失败"));
+                    return false;
+                }
             }
+
+            OnMessageOutput(new MsgOutEvent(0, "用户卡打开成功"));
+            OnMessageOutput(new MsgOutEvent(0, "卡信息：" + cardInfo));
             return true;
         }
 
         private bool CloseUserCard()
         {
-            if (m_hDevHandler <= 0)
+            if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            short nRetValue = DllExportMT.CloseCard(m_hDevHandler);
-            if (nRetValue != 0)
-                OnMessageOutput( new MsgOutEvent(nRetValue, "关闭卡片失败") ) ;                
+            if (m_bContactCard)
+                m_DevControl.CloseContactCard();
             else
-                OnMessageOutput(new MsgOutEvent(0, "关闭卡片成功"));
+                m_DevControl.CloseCard();
+            OnMessageOutput(new MsgOutEvent(0, "关闭卡片成功"));
             m_UserCardCtrl = null;
             return true;
-        }
+       }
 
         private void OnMessageOutput(MsgOutEvent args)
         {
@@ -166,8 +145,6 @@ namespace CardOperating
         //圈存
         private void btnCardLoad_Click(object sender, EventArgs e)
         {
-            if (m_hDevHandler <= 0)
-                return;
             if (!OpenUserCard() || !ReadUserCardAsn())
                 return;
             decimal MoneyLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
@@ -178,7 +155,7 @@ namespace CardOperating
             if(m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
             {
                 byte[] TerminalId = new byte[6];
-                if (APDUBase.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                if (PublicFunc.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
                     Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
@@ -189,8 +166,6 @@ namespace CardOperating
 
         private void btnBalance_Click(object sender, EventArgs e)
         {
-            if (m_hDevHandler <= 0)
-                return;
             if (!OpenUserCard() || !ReadUserCardAsn())
                 return;
             string strInfo = string.Format("读取卡号{0}的余额，并检查是否灰锁。", BitConverter.ToString(m_ASN));
@@ -235,8 +210,6 @@ namespace CardOperating
         //强制解灰
         private void btnUnlockGrayCard_Click(object sender, EventArgs e)
         {
-            if (m_hDevHandler <= 0)
-                return;
             //未灰状态不可强制解灰
             if (!m_bGray || !OpenUserCard() || !ReadUserCardAsn())
                 return;
@@ -244,7 +217,7 @@ namespace CardOperating
             {
                 const float BusinessMoney = 0.0F;//强制联机解灰 0 扣款
                 byte[] TerminalId = new byte[6];
-                if (APDUBase.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                if (PublicFunc.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
                     Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
@@ -361,8 +334,6 @@ namespace CardOperating
 
         private void btnReadRecord_Click(object sender, EventArgs e)
         {
-            if (m_hDevHandler <= 0)
-                return;
             if (!OpenUserCard())
                 return;
             if (!m_UserCardCtrl.SelectCardApp())
@@ -395,7 +366,7 @@ namespace CardOperating
 
         private void btnUnload_Click(object sender, EventArgs e)
         {
-            if (m_hDevHandler <= 0 || m_bGray)
+            if (m_bGray)
                 return;
             if (!OpenUserCard() || !ReadUserCardAsn())
                 return;
@@ -407,7 +378,7 @@ namespace CardOperating
             if (m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
             {
                 byte[] TerminalId = new byte[6];
-                if (APDUBase.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                if (PublicFunc.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
                     Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);

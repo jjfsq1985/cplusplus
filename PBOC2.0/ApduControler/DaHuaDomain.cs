@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using ApduDaHua;
+using ApduInterface;
 
-namespace ApduInterface
+namespace ApduCtrl
 {
     class DaHuaDomain
     {
@@ -15,8 +16,11 @@ namespace ApduInterface
 
         private int m_hDevHandler = 0;//读卡器句柄
         private ICC_Status m_curIccStatus = ICC_Status.ICC_PowerOff;
+        private PSAMCardAPDUProvider m_ctrlPsamApdu = new PSAMCardAPDUProvider();
+        private UserCardAPDUProvider m_ctrlUserCardApdu = new UserCardAPDUProvider();
 
-        public bool Open_Device(int nReader)
+
+        public bool Open_Device()
         {
             m_hDevHandler = DllExportMT.open_device(0, 9600);
             if (m_hDevHandler <= 0)
@@ -31,6 +35,16 @@ namespace ApduInterface
                 return;
             DllExportMT.close_device(m_hDevHandler);
             m_hDevHandler = 0;
+        }
+
+        public ISamApduProvider GetPsamApduProvider()
+        {
+            return m_ctrlPsamApdu;
+        }
+
+        public IUserApduProvider GetUserApduProvider()
+        {
+            return m_ctrlUserCardApdu;
         }
 
         public bool OpenCard(ref string CardAtr)
@@ -50,19 +64,19 @@ namespace ApduInterface
             return true;   
         }
 
-        public bool CmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
+        public int CmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
         {
             if (m_hDevHandler <= 0)
-                return false;
+                return -1;
             byte[] recvBuffer = new byte[255];
             byte[] recvLen = new byte[4];
             short nRet = DllExportMT.ExchangePro(m_hDevHandler, data, (short)datalen, recvBuffer, recvLen);
             if (nRet != 0)
-                return false;            
+                return -1;            
             uint outLen = BitConverter.ToUInt32(recvLen, 0);
             outdatalen = (int)outLen;
-            Buffer.BlockCopy(recvBuffer, 0, outdata, 0, outdatalen);
-            return true;
+            Buffer.BlockCopy(recvBuffer, 0, outdata, 0, outdatalen);            
+            return (outdata[outdatalen - 2] <<8) + (outdata[outdatalen - 1]);
         }
 
         public void CloseCard()
@@ -97,19 +111,19 @@ namespace ApduInterface
             return true;
         }
 
-        public bool IccCmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
+        public int IccCmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
         {
             if (m_hDevHandler <= 0)
-                return false;
+                return -1;
             byte[] recvBuffer = new byte[255];
             byte[] recvLen = new byte[4];
             short nRet = DllExportMT.ICC_CommandExchange(m_hDevHandler, 0x00, data, (short)datalen, recvBuffer, recvLen);
             if (nRet != 0)
-                return false;
+                return -1;
             uint outLen = BitConverter.ToUInt32(recvLen, 0);
             outdatalen = (int)outLen;
             Buffer.BlockCopy(recvBuffer, 0, outdata, 0, outdatalen);
-            return true;
+            return (outdata[outdatalen - 2] << 8) + (outdata[outdatalen - 1]);
         }
 
         public void IccPowerOff()

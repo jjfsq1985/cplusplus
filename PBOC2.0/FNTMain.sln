@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApduParam", "ApduParam\Apdu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApduInterface", "ApduInterface\ApduInterface.csproj", "{EDA49ECE-F7E8-4189-8895-23CBB017610E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApduControler", "ApduControler\ApduControler.csproj", "{8474A20B-7BCF-4356-9E63-6CC613CF7CE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -106,6 +108,10 @@ Global
 		{EDA49ECE-F7E8-4189-8895-23CBB017610E}.Debug|x86.Build.0 = Debug|x86
 		{EDA49ECE-F7E8-4189-8895-23CBB017610E}.Release|x86.ActiveCfg = Release|x86
 		{EDA49ECE-F7E8-4189-8895-23CBB017610E}.Release|x86.Build.0 = Release|x86
+		{8474A20B-7BCF-4356-9E63-6CC613CF7CE0}.Debug|x86.ActiveCfg = Debug|x86
+		{8474A20B-7BCF-4356-9E63-6CC613CF7CE0}.Debug|x86.Build.0 = Debug|x86
+		{8474A20B-7BCF-4356-9E63-6CC613CF7CE0}.Release|x86.ActiveCfg = Release|x86
+		{8474A20B-7BCF-4356-9E63-6CC613CF7CE0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

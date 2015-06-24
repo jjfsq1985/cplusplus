@@ -137,7 +137,7 @@ namespace PublishCardOperator
         private string FillKeyValue(SqlDataReader dataReader, byte[] keyVal, string strName)
         {
             string strKeyVal = (string)dataReader[strName];
-            byte[] byteKey = PublishCard.StringToBCD(strKeyVal);
+            byte[] byteKey = PublicFunc.StringToBCD(strKeyVal);
             if (byteKey.Length == 16)
                 Buffer.BlockCopy(byteKey, 0, keyVal, 0, 16);
             return strKeyVal;
@@ -374,7 +374,7 @@ namespace PublishCardOperator
         private byte[] GetPsamKeyByte(int nIndex, int nItem, byte[] srcByte)
         {
             string strKey = (string)PsamKeyView.Rows[nIndex].Cells[nItem].EditedFormattedValue;
-            byte[] byteKey = PublishCard.StringToBCD(strKey);
+            byte[] byteKey = PublicFunc.StringToBCD(strKey);
             if (BitConverter.ToString(srcByte).Replace("-", "") != strKey)
             {
                 if (byteKey.Length == 16)
