@@ -91,7 +91,7 @@ namespace CardOperating
         {
             if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            m_UserCardCtrl = new UserCardControl(m_DevControl, m_DBInfo);
+            m_UserCardCtrl = new UserCardControl(m_DevControl, m_bContactCard, m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
             if (!m_UserCardCtrl.ReadKeyValueFormDb())
             {

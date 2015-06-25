@@ -233,11 +233,10 @@ namespace CardOperating
             WriteMsg(0, "用户卡打开成功");
             WriteMsg(0, "卡信息：" + cardInfo);           
 
-            m_UserCardCtrl = new UserCardControl(m_DevControl, m_DBInfo);
+            m_UserCardCtrl = new UserCardControl(m_DevControl,ContactCard.Checked, m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
             if (!m_UserCardCtrl.ReadKeyValueFormDb())
-                WriteMsg(0, "未读到密钥，请检查数据库是否正常。");
-            m_UserCardCtrl.GetCardCosVersion();
+                WriteMsg(0, "未读到密钥，请检查数据库是否正常。");            
         }
 
         private void btnCloseCard_Click(object sender, EventArgs e)
@@ -362,8 +361,7 @@ namespace CardOperating
             m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
 
             if (!m_IccCardCtrl.ReadKeyValueFormDb())
-                WriteMsg(0, "未读到密钥，请检查数据库是否正常。");
-            m_IccCardCtrl.GetCardCosVersion();
+                WriteMsg(0, "未读到密钥，请检查数据库是否正常。");            
         }
 
         private void btnCloseIccCard_Click(object sender, EventArgs e)

@@ -45,6 +45,36 @@ namespace ApduLoh
             return outByte;
         }
 
+        public bool createNewMFcmd(byte[] PSE)
+        {
+            if (PSE.Length != 14)
+                return false;
+            m_CLA = 0x80;
+            m_INS = 0xE0;
+            m_P1 = 0x3F;
+            m_P2 = 0x00;
+            int nLen = 13;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            m_Data[0] = 0x38;
+            m_Data[1] = 0x07;
+            m_Data[2] = 0x00;
+            m_Data[3] = 0xEF;
+            m_Data[4] = 0xEF;
+
+            m_Data[5] = 0xFF;
+            m_Data[6] = 0xFF;
+            m_Data[7] = 0xFF;
+            m_Data[8] = 0xFF;
+            m_Data[9] = 0xFF;
+            m_Data[10] = 0xFF;
+            m_Data[11] = 0xFF;
+            m_Data[12] = 0xFF;
+            m_le = 0;
+            m_nTotalLen = 18;
+            return true;
+        }
+
         //选择
         public bool createSelectCmd(byte[] byteName, byte[] prefixData)
         {
@@ -93,20 +123,6 @@ namespace ApduLoh
             m_Lc = 0x00;  //不存在
             m_Data = null; //不存在
             m_le = (byte)nRandLen;   //指定随机数字节
-            m_nTotalLen = 5;
-            return true;
-        }
-
-        //COS版本
-        public bool createCosVersionCmd()
-        {
-            m_CLA = 0x00;
-            m_INS = 0xCA;
-            m_P1 = 0x9F;
-            m_P2 = 0x80;
-            m_Lc = 0x00;  //不存在
-            m_Data = null; //不存在
-            m_le = 3;
             m_nTotalLen = 5;
             return true;
         }

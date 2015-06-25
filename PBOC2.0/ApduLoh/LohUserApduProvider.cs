@@ -6,9 +6,9 @@ using ApduInterface;
 
 namespace ApduLoh
 {
-    public class UserCardAPDUProvider : APDULohBase , IUserApduProvider
+    public class LohUserApduProvider : APDULohBase , IUserApduProvider
     {
-        public UserCardAPDUProvider()
+        public LohUserApduProvider()
         {
 
         }
@@ -43,11 +43,11 @@ namespace ApduLoh
             return true;
         }
 
-        public bool createStorageFCICmd(string strName, byte[] param, byte[] prefix)
+        public bool createStorageFCICmd(byte[] AidName, byte[] param, byte[] prefix)
         {
-            if (string.IsNullOrEmpty(strName) || strName.Length < 5 || strName.Length > 16)
+            if (AidName.Length < 5 || AidName.Length > 16)
                 return false;
-            int nNameLen = strName.Length;
+            int nNameLen = AidName.Length;
             m_CLA = 0x00;
             m_INS = 0xDC;
             m_P1 = 0x01;
@@ -76,9 +76,8 @@ namespace ApduLoh
             {
                 Buffer.BlockCopy(prefix, 0, m_Data, nOffset, prefix.Length);
                 nOffset += prefix.Length;
-            }
-            byte[] byteName = Encoding.ASCII.GetBytes(strName);
-            Buffer.BlockCopy(byteName, 0, m_Data, nOffset, nNameLen);
+            }            
+            Buffer.BlockCopy(AidName, 0, m_Data, nOffset, nNameLen);
             nOffset += nNameLen;
             //Tag
             m_Data[nOffset] = 0xA5;
@@ -96,11 +95,11 @@ namespace ApduLoh
 
         //更新目录文件1(nFileIndex = 1, strFileName = "ENN ENERGY")
         //目录文件2(nFileIndex = 2, strFileName = "ENN LOYALTY"),目录文件3(nFileIndex = 3, strFileName = "ENN SV")
-        public bool createUpdateEF01Cmd(byte nFileIndex, string strFileName)
+        public bool createUpdateEF01Cmd(byte nFileIndex, byte[] AidName)
         {
-            if (string.IsNullOrEmpty(strFileName) || strFileName.Length < 5 || strFileName.Length > 16)
+            if (AidName.Length < 5 || AidName.Length > 16)
                 return false;
-            int nNameLen = strFileName.Length;
+            int nNameLen = AidName.Length;
             m_CLA = 0x00;
             m_INS = 0xDC;
             m_P1 = nFileIndex;
@@ -121,9 +120,8 @@ namespace ApduLoh
             m_Data[5] = 0x00;
             m_Data[6] = 0x00;
             m_Data[7] = 0x00;
-            m_Data[8] = 0x03;
-            byte[] byteName = Encoding.ASCII.GetBytes(strFileName);
-            Buffer.BlockCopy(byteName, 0, m_Data, 9, nNameLen);
+            m_Data[8] = 0x03;            
+            Buffer.BlockCopy(AidName, 0, m_Data, 9, nNameLen);
             m_le = 0;
             m_nTotalLen = 5 + nLen;
             return true;
@@ -220,11 +218,11 @@ namespace ApduLoh
             return true;
         }
 
-        public bool createGenerateADFCmd(string strName)
+        public bool createGenerateADFCmd(byte[] ADFName)
         {
-            if (string.IsNullOrEmpty(strName) || strName.Length < 5 || strName.Length > 16)
+            if (ADFName.Length < 5 || ADFName.Length > 16)
                 return false;
-            int nNameLen = strName.Length;
+            int nNameLen = ADFName.Length;
             m_CLA = 0x80;
             m_INS = 0xE0;
             m_P1 = 0x00;
@@ -250,67 +248,11 @@ namespace ApduLoh
             m_Data[9] = 0x00;
             m_Data[10] = 0x00;
             m_Data[11] = 0x03;
-
-            byte[] byteName = Encoding.ASCII.GetBytes(strName);
-            Buffer.BlockCopy(byteName, 0, m_Data, 12, nNameLen);
+            Buffer.BlockCopy(ADFName, 0, m_Data, 12, nNameLen);
             m_le = 0;
             m_nTotalLen = 5 + nLen;
             return true;
-        }
-
-        public bool createADFStorageFCICmd(string strName)
-        {
-            if (string.IsNullOrEmpty(strName) || strName.Length < 5 || strName.Length > 16)
-                return false;
-            int nNameLen = strName.Length;
-            m_CLA = 0x00;
-            m_INS = 0xDC;
-            m_P1 = 0x01;
-            m_P2 = 0x54;
-            int nLen = 20 + nNameLen;  //Data Len
-            m_Lc = (byte)nLen; //0x1A
-            m_Data = new byte[nLen];
-            //Tag
-            m_Data[0] = 0x6F;
-            //Len
-            m_Data[1] = 27;
-            //Tag
-            m_Data[2] = 0x84;
-            //Len
-            m_Data[3] = (byte)(5 + nNameLen); //0x0F
-
-            m_Data[4] = 0xA0;
-            m_Data[5] = 0x00;
-            m_Data[6] = 0x00;
-            m_Data[7] = 0x00;
-            m_Data[8] = 0x03;
-
-            byte[] byteName = Encoding.ASCII.GetBytes(strName);
-            int nOffset = 9;
-            Buffer.BlockCopy(byteName, 0, m_Data, nOffset, nNameLen);
-            nOffset += nNameLen;
-            //Tag
-            m_Data[nOffset] = 0xA5;
-            //Len
-            m_Data[nOffset + 1] = 0x9;
-            //Tag
-            m_Data[nOffset + 2] = 0x9F;
-            m_Data[nOffset + 3] = 0x08;
-            //应用版本号
-            m_Data[nOffset + 4] = 0x01;
-            m_Data[nOffset + 5] = 0x01;
-            //Tag
-            m_Data[nOffset + 6] = 0xBF;
-            m_Data[nOffset + 7] = 0x0C;
-            //发卡方数据
-            m_Data[nOffset + 8] = 0x02;
-            m_Data[nOffset + 9] = 0x55;
-            m_Data[nOffset + 10] = 0x66;
-            //
-            m_le = 0;
-            m_nTotalLen = 5 + nLen; //APDU Len
-            return true;
-        }
+        }        
 
         /// <summary>
         ///  创建EF文件

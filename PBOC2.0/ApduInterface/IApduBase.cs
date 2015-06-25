@@ -8,11 +8,11 @@ namespace ApduInterface
     {
         byte[] GetOutputCmd();
 
+        bool createNewMFcmd(byte[] PSE);
+
         bool createSelectCmd(byte[] byteName, byte[] prefixData);
 
-        bool createGetChallengeCmd(int nRandLen);
-
-        bool createCosVersionCmd();
+        bool createGetChallengeCmd(int nRandLen);        
 
         bool createExternalAuthenticationCmd(byte[] byteRandom, byte[] KeyValue);
 

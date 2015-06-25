@@ -420,7 +420,7 @@ namespace CardOperating
                 return false;
             if (m_UserCardCtrl != null)
                 return true;
-            m_UserCardCtrl = new UserCardControl(m_DevControl, m_DBInfo);
+            m_UserCardCtrl = new UserCardControl(m_DevControl,ContactCard.Checked, m_DBInfo);
 
             string cardInfo = "";
             if (ContactCard.Checked)

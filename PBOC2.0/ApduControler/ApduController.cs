@@ -77,14 +77,26 @@ namespace ApduCtrl
                 return false;
         }
 
-        public int CmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
+        public int CmdExchange(bool bContact,byte[] data, int datalen, byte[] outdata, ref int outdatalen)
         {
             if (m_Domain == ApduDomain.DaHua)
-                return m_DahuaDomain.CmdExchange(data, datalen, outdata, ref outdatalen);
+            {
+                if (bContact)
+                    return -1;
+                else
+                    return m_DahuaDomain.CmdExchange(data, datalen, outdata, ref outdatalen);
+            }
             else if (m_Domain == ApduDomain.LongHuan)
-                return m_LongHuanDomain.CmdExchange(data, datalen, outdata, ref outdatalen);
+            {
+                if (bContact)
+                    return m_LongHuanDomain.ContactCmdExchange(data, datalen, outdata, ref outdatalen);
+                else
+                    return m_LongHuanDomain.CmdExchange(data, datalen, outdata, ref outdatalen);
+            }
             else
+            {
                 return -1;
+            }
         }
 
         public void CloseCard()
@@ -101,14 +113,6 @@ namespace ApduCtrl
                 return m_LongHuanDomain.OpenContactCard(ref CardAtr);
             else
                 return false;
-        }
-
-        public int ContactCmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
-        {
-            if (m_Domain == ApduDomain.LongHuan)
-                return m_LongHuanDomain.ContactCmdExchange(data, datalen, outdata, ref outdatalen);
-            else
-                return -1;
         }
 
         public void CloseContactCard()

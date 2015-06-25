@@ -6,9 +6,9 @@ using ApduInterface;
 
 namespace ApduLoh
 {
-    public class PSAMCardAPDUProvider : APDULohBase, ISamApduProvider
+    public class LohPsamApduProvider : APDULohBase, ISamApduProvider
     {
-        public PSAMCardAPDUProvider()
+        public LohPsamApduProvider()
         {
 
         }

@@ -9,17 +9,15 @@ namespace ApduInterface
     {
         bool createGenerateFCICmd();
 
-        bool createStorageFCICmd(string strName, byte[] param, byte[] prefix);
+        bool createStorageFCICmd(byte[] AidName, byte[] param, byte[] prefix);
 
-        bool createUpdateEF01Cmd(byte nFileIndex, string strFileName);
+        bool createUpdateEF01Cmd(byte nFileIndex, byte[] AidName);
         
         bool createGenerateKeyCmd();
         
         bool createStorageKeyCmd(byte[] RandomVal, byte[] StorageKey, byte[] EncryptKey);
 
-        bool createGenerateADFCmd(string strName);
-
-        bool createADFStorageFCICmd(string strName);
+        bool createGenerateADFCmd(byte[] ADFName);
 
         bool createGenerateEFCmd(ushort fileID, byte fileType, ushort fileLen, byte keyIndex, byte RecordNum, byte RecordLen, ushort ACr, ushort ACw);
 

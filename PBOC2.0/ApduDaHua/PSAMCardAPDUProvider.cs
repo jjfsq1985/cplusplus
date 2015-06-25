@@ -222,7 +222,7 @@ namespace ApduDaHua
 
         public bool createGenerateADFCmd(byte[] byteName, ushort FileId)
         {
-            if (byteName == null || byteName.Length < 5 || byteName.Length > 16)
+            if (byteName.Length < 5 || byteName.Length > 16)
                 return false;
             int nNameLen = byteName.Length;
             m_CLA = 0x80;

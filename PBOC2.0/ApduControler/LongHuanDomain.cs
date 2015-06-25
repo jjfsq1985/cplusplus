@@ -14,8 +14,8 @@ namespace ApduCtrl
 
         private PcscSmardCard m_PcscReader = new PcscSmardCard();
 
-        private PSAMCardAPDUProvider m_ctrlPsamApdu = new PSAMCardAPDUProvider();
-        private UserCardAPDUProvider m_ctrlUserCardApdu = new UserCardAPDUProvider();
+        private LohPsamApduProvider m_ctrlPsamApdu = new LohPsamApduProvider();
+        private LohUserApduProvider m_ctrlUserCardApdu = new LohUserApduProvider();
 
         public bool Open_Device()
         {
@@ -170,5 +170,6 @@ namespace ApduCtrl
             }
 
         }
+
     }
 }

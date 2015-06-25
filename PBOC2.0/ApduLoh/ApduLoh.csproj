@@ -43,8 +43,8 @@
     <Compile Include="DllExportDuali.cs" />
     <Compile Include="PcscSmardCard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PSAMCardAPDUProvider.cs" />
-    <Compile Include="UserCardAPDUProvider.cs" />
+    <Compile Include="LohPsamApduProvider.cs" />
+    <Compile Include="LohUserApduProvider.cs" />
     <Compile Include="winscard_export.cs" />
   </ItemGroup>
   <ItemGroup>

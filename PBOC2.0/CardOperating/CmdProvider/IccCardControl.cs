@@ -79,25 +79,6 @@ namespace CardOperating
             return true;
         }
 
-        public void GetCardCosVersion()
-        {
-            m_CmdProvider.createCosVersionCmd();
-            byte[] data = m_CmdProvider.GetOutputCmd();
-            int datalen = data.Length;
-            byte[] RecvData = new byte[128];
-            int nRecvLen = 0;
-            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
-            if (nRet < 0)
-            {
-                base.OnTextOutput(new MsgOutEvent(nRet, "读取COS版本失败"));
-            }
-            else
-            {
-                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "读取COS版本应答：" + strData));
-            }
-        }
-
         private byte[] GetRandomValue(int nRandomLen)
         {
             m_CmdProvider.createGetChallengeCmd(nRandomLen);
@@ -211,6 +192,28 @@ namespace CardOperating
             return true;
         }
 
+        private void InitWhiteCard()
+        {
+            if (SelectFile(m_PSE, null))//MF能Select则return
+                return;
+            //创建MF
+            m_CmdProvider.createNewMFcmd(m_PSE);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(nRet, "创建MF失败"));
+            }
+            else
+            {
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "创建MF应答：" + strData));
+            }
+        }
+
         private string GetFileDescribe(byte[] byteArray)
         {
             if (PublicFunc.ByteDataEquals(byteArray, m_PSE))
@@ -240,6 +243,8 @@ namespace CardOperating
             }
             else
             {
+                InitWhiteCard();
+
                 if (!ExternalAuthentication(bMainKey))
                     return 2;
                 if (!DeleteMF(bMainKey))

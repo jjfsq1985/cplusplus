@@ -17,6 +17,7 @@ namespace CardOperating
     {
         private ApduController m_ctrlApdu = null;
         private IUserApduProvider m_CmdProvider = null;
+        private bool m_bContactCard = false;
  
         private const string m_strPSE = "1PAY.SYS.DDF01";
         private const string m_strDIR1 = "ENN ENERGY";//加气应用
@@ -48,9 +49,10 @@ namespace CardOperating
         //内部认证主密钥MIAK
         private static byte[] m_MIAK = new byte[] { 0xF2, 0x11, 0x20, 0x6C, 0x05, 0x68, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xBB };
 
-        public UserCardControl(ApduController ApduCtrlObj, SqlConnectInfo DbInfo)
+        public UserCardControl(ApduController ApduCtrlObj, bool bContactCard, SqlConnectInfo DbInfo)
         {
             m_ctrlApdu = ApduCtrlObj;
+            m_bContactCard = bContactCard;
             m_CmdProvider = m_ctrlApdu.GetUserApduProvider();
             m_DBInfo = DbInfo;
         }
@@ -65,7 +67,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];            
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "选择" + GetFileDescribe(strName) + "文件失败"));
@@ -81,25 +83,6 @@ namespace CardOperating
             return true;
         }
 
-        public void GetCardCosVersion()
-        {
-            m_CmdProvider.createCosVersionCmd();
-            byte[] data = m_CmdProvider.GetOutputCmd();
-            int datalen = data.Length;
-            byte[] RecvData = new byte[128];
-            int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
-            if (nRet < 0)
-            {
-                base.OnTextOutput(new MsgOutEvent(nRet, "读取COS版本失败"));
-            }
-            else
-            {
-                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "读取COS版本应答：" + strData));
-            }
-        }
-
         private byte[] GetRandomValue(int nRandomLen)
         {
             m_CmdProvider.createGetChallengeCmd(nRandomLen);
@@ -107,7 +90,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 this.OnTextOutput(new MsgOutEvent(nRet, "获取随机值失败"));
@@ -130,7 +113,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "外部认证失败"));
@@ -182,7 +165,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "初始化失败"));
@@ -220,6 +203,29 @@ namespace CardOperating
             return ClearMF(randByte, KeyVal);
         }
 
+        private void InitWhiteCard()
+        {
+            if (SelectFile(m_strPSE, null))//MF能Select则return
+                return;
+            //创建MF
+            byte[] bytePSE = Encoding.ASCII.GetBytes(m_strPSE);
+            m_CmdProvider.createNewMFcmd(bytePSE);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                base.OnTextOutput(new MsgOutEvent(nRet, "创建MF失败"));
+            }
+            else
+            {
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                base.OnTextOutput(new MsgOutEvent(0, "创建MF应答：" + strData));
+            }
+        }
+
         private string GetFileDescribe(string strName)
         {
             if (strName == m_strPSE)
@@ -245,6 +251,8 @@ namespace CardOperating
             }
             else
             {
+                InitWhiteCard();
+
                 if (!ExternalAuthentication(bMainKey))
                     return 2;
                 if (!DeleteMF(bMainKey))
@@ -260,7 +268,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "创建FCI文件失败"));
@@ -276,14 +284,14 @@ namespace CardOperating
             return true;
         }
 
-        private bool StorageFCI(string strName, byte[] param, byte[] prefix)
+        private bool StorageFCI(byte[] AidName, byte[] param, byte[] prefix)
         {
-            m_CmdProvider.createStorageFCICmd(strName, param, prefix);
+            m_CmdProvider.createStorageFCICmd(AidName, param, prefix);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "安装FCI文件失败"));
@@ -309,7 +317,8 @@ namespace CardOperating
             if (!CreateFCI())
                 return false;
             byte[] param = new byte[]{0x88,0x01,0x01};
-            if (!StorageFCI(m_strPSE, param, null))
+            byte[] AidName = Encoding.ASCII.GetBytes(m_strPSE);
+            if (!StorageFCI(AidName, param, null))
                 return false;
             if (!CreateEFDir())
                 return false;
@@ -317,7 +326,8 @@ namespace CardOperating
             string[] strDirName = new string[] { m_strDIR1, m_strDIR2, m_strDIR3 };
             for (int i = 0; i < 3; i++)
             {
-                if (!UpdateDir(i + 1, strDirName[i]))
+                byte[] DirAid = Encoding.ASCII.GetBytes(strDirName[i]);
+                if (!UpdateDir(i + 1, DirAid))
                 {
                     bRet = false;
                     break;
@@ -334,7 +344,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "创建目录EF01失败"));
@@ -350,14 +360,14 @@ namespace CardOperating
             return true;
         }
 
-        private bool UpdateDir(int nIndex, string strName)
+        private bool UpdateDir(int nIndex, byte[] AidName)
         {
-            m_CmdProvider.createUpdateEF01Cmd((byte)nIndex, strName);
+            m_CmdProvider.createUpdateEF01Cmd((byte)nIndex, AidName);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 string strErr = string.Format("更新目录文件{0}失败", nIndex);
@@ -392,7 +402,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "创建Key文件失败"));
@@ -420,7 +430,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "安装Key文件失败"));
@@ -443,7 +453,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 string strMessage = string.Format("创建{0}文件失败", fileID.ToString("X4"));
@@ -468,7 +478,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 string strMessage = string.Format("创建{0}记录文件失败", fileID.ToString("X4"));
@@ -493,7 +503,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 string strMessage = string.Format("创建{0}文件失败", fileID.ToString("X4"));
@@ -518,7 +528,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "更新文件失败"));
@@ -552,7 +562,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "安装PIN文件失败"));
@@ -568,24 +578,24 @@ namespace CardOperating
             return true;
         }
 
-        private bool GenerateADF(string strADFName)
+        private bool GenerateADF(byte[] ADFName)
         {
-            m_CmdProvider.createGenerateADFCmd(strADFName);
+            m_CmdProvider.createGenerateADFCmd(ADFName);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                string strMessage = string.Format("创建ADF文件{0}失败", strADFName);
+                string strMessage = string.Format("创建ADF文件{0}失败", BitConverter.ToString(ADFName).Replace("-",""));
                 base.OnTextOutput(new MsgOutEvent(nRet, strMessage));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                string strMessage = string.Format("创建ADF文件{0}应答：{1}", strADFName, strData);
+                string strMessage = string.Format("创建ADF文件{0}应答：{1}", BitConverter.ToString(ADFName).Replace("-", ""), strData);
                 base.OnTextOutput(new MsgOutEvent(0, strMessage));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
@@ -596,7 +606,8 @@ namespace CardOperating
         //创建加气应用ADF01
         public bool CreateADFApp()
         {
-            if (!GenerateADF(m_strDIR1))
+            byte[] AdfName = Encoding.ASCII.GetBytes(m_strDIR1);
+            if (!GenerateADF(AdfName))
                 return false;
             byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
             if (!SelectFile(m_strDIR1, prefix))
@@ -605,8 +616,9 @@ namespace CardOperating
                 return false;
             if (!CreateFCI())
                 return false;
-            byte[] param = new byte[] { 0x9F, 0x08, 0x01, 0x01, 0xBF, 0x0C, 0x02, 0x55, 0x66 };            
-            if (!StorageFCI(m_strDIR1, param, prefix))
+            byte[] param = new byte[] { 0x9F, 0x08, 0x01, 0x01, 0xBF, 0x0C, 0x02, 0x55, 0x66 };
+            byte[] AidName = Encoding.ASCII.GetBytes(m_strDIR1);
+            if (!StorageFCI(AidName, param, prefix))
                 return false;
             return true;
         }
@@ -655,7 +667,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "创建气票交易密钥失败"));
@@ -771,7 +783,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, Param.PromptInfo + "失败"));
@@ -797,7 +809,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "生命周期转换失败"));
@@ -823,7 +835,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "更新公共应用基本数据文件EF15失败"));
@@ -849,7 +861,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "更新持卡人基本数据文件EF16失败"));
@@ -883,7 +895,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "验证PIN失败"));
@@ -911,7 +923,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "更新普通信息数据文件EF0B失败"));
@@ -937,7 +949,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "更新敏感信息数据文件EF1C失败"));
@@ -963,7 +975,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "更新气票专用数据文件EF0D失败"));
@@ -989,7 +1001,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "更新灰锁文件失败"));
@@ -1053,7 +1065,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "圈存初始化失败"));
@@ -1077,7 +1089,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "圈提初始化失败"));
@@ -1117,7 +1129,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "圈存交易失败"));
@@ -1141,7 +1153,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "圈提交易失败"));
@@ -1288,7 +1300,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "读取余额失败"));
@@ -1317,7 +1329,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "读取灰锁状态失败"));
@@ -1350,7 +1362,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "灰锁初始化失败"));
@@ -1375,7 +1387,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "灰锁失败"));
@@ -1401,7 +1413,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "联机解扣初始化失败"));
@@ -1477,7 +1489,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "联机解扣失败"));
@@ -1501,7 +1513,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "卡解扣失败"));
@@ -1525,7 +1537,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "清除TACUF失败"));
@@ -1783,7 +1795,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 if (bMessage)
@@ -1810,7 +1822,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)                
                 return;
             if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
@@ -1842,7 +1854,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)                
                 return;
             if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
@@ -1878,7 +1890,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
                 return;            
             if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
@@ -1965,7 +1977,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "读取加气记录失败"));
@@ -2128,7 +2140,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "修改PIN码失败"));
@@ -2175,7 +2187,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "重装PIN码失败"));
@@ -2225,7 +2237,7 @@ namespace CardOperating
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 base.OnTextOutput(new MsgOutEvent(nRet, "解锁PIN码失败"));
