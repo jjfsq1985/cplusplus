@@ -161,7 +161,7 @@ namespace ApduDaHua
         }
 
         //安装主控密钥
-        public bool createStorageKeyCmd(byte[] RandomVal, byte[] StorageKey, byte[] EncryptKey)
+        public bool createStorageKeyCmd(byte[] StorageKey, byte[] RandomVal, byte[] EncryptKey)
         {
             if (RandomVal.Length != 8)
                 return false;
@@ -433,20 +433,20 @@ namespace ApduDaHua
             byte[] encryptAll = new byte[nEncryptLen + nAddLen];            //len
             encryptAll[0] = 24;//0x18 = 8 (头)+ 8（卡号3DES后） + 8（卡号异或0xFF后再3DES）
             //key type
-            encryptAll[1] = Param.KeyType;
+            encryptAll[1] = Param.KeyPar1;
             //key index
-            encryptAll[2] = Param.KeyIndex;
+            encryptAll[2] = Param.KeyPar2;
             //key version
             encryptAll[3] = 0x01;
             //Err Num
-            encryptAll[4] = Param.ErrCount;
+            encryptAll[4] = Param.KeyPar3;
             //Algorithm
             encryptAll[5] = 0x00;
             //Change AC
             encryptAll[6] = 0x00;
             encryptAll[7] = 0x00;
             //PriValue
-            encryptAll[8] = Param.PriValue;
+            encryptAll[8] = Param.KeyPar4;
             Buffer.BlockCopy(encryptAsn, 0, encryptAll, 9, 8);
             Buffer.BlockCopy(encryptXorAsn, 0, encryptAll, 17, 8);
             for (int i = 0; i < nAddLen; i++)
@@ -1009,8 +1009,8 @@ namespace ApduDaHua
         {
             m_CLA = 0x00;
             m_INS = 0xB2;
-            m_P1 = 0x98; //短文件标识符读文件100+11000-----（二进制11000即18文件）
-            m_P2 = 0x00;
+            m_P1 = 0x01;
+            m_P2 = 0xC4;
             m_Lc = 0x00;  //不存在
             m_Data = null; //不存在
             m_le = ResponseLen;   //公共应用基本数据文件EF15长度

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using ApduDaHua;
 using ApduInterface;
+using DaHuaApduCtrl;
+using IFuncPlugin;
 
 namespace ApduCtrl
 {
@@ -83,8 +85,7 @@ namespace ApduCtrl
         {
             if (m_hDevHandler <= 0)
                 return;
-            DllExportMT.CloseCard(m_hDevHandler);
-            m_hDevHandler = 0;
+            DllExportMT.CloseCard(m_hDevHandler);            
         }
 
         public bool IccPowerOn(ref string CardAtr)
@@ -139,6 +140,16 @@ namespace ApduCtrl
             byte[] dataAsc = new byte[nSrcLen * 2];
             DllExportMT.hex_asc(dataSrc, dataAsc, (uint)nSrcLen);
             return Encoding.ASCII.GetString(dataAsc);
+        }
+
+        public ISamCardControl SamCardConstructor(ApduController ctrlApdu, SqlConnectInfo DbInfo)
+        {
+            return new DaHuaIccCardCtrl(ctrlApdu, DbInfo);
+        }
+
+        public IUserCardControl UserCardConstructor(ApduController ctrlApdu, bool bContact, SqlConnectInfo DbInfo)
+        {
+            return new DaHuaCpuCardCtrl(ctrlApdu, bContact, DbInfo);
         }
     }
 }

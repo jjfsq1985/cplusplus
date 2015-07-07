@@ -8,7 +8,10 @@ namespace ApduInterface
     {
         byte[] GetOutputCmd();
 
+        bool createGetResponseCmd(int nResponseLen);
+
         bool createNewMFcmd(byte[] PSE);
+        bool createClearDFcmd();
 
         bool createSelectCmd(byte[] byteName, byte[] prefixData);
 

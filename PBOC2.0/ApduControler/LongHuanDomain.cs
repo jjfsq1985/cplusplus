@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using ApduLoh;
 using ApduInterface;
+using System.Diagnostics;
+using LohApduCtrl;
+using IFuncPlugin;
 
 namespace ApduCtrl
 {
@@ -73,12 +76,12 @@ namespace ApduCtrl
 
         public int CmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
         {
-            return m_PcscReader.LH_DataTransmit(m_ReaderNameContactless, data, datalen, out outdata, out outdatalen);
+            return m_PcscReader.LH_DataTransmit(m_ReaderNameContactless, data, datalen, outdata, ref outdatalen);
         }
 
         public int ContactCmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
         {
-            return m_PcscReader.LH_DataTransmit(m_ReaderNameContact, data, datalen, out outdata, out outdatalen);
+            return m_PcscReader.LH_DataTransmit(m_ReaderNameContact, data, datalen, outdata, ref outdatalen);
         }
 
         public void CloseCard()
@@ -104,7 +107,7 @@ namespace ApduCtrl
 
         public int IccCmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
         {
-            return m_PcscReader.LH_DataTransmit(m_ReaderNameSam,data, datalen, out outdata, out outdatalen);
+            return m_PcscReader.LH_DataTransmit(m_ReaderNameSam,data, datalen, outdata, ref outdatalen);
 
         }
 
@@ -169,6 +172,16 @@ namespace ApduCtrl
                 return bChange;
             }
 
+        }
+
+        public ISamCardControl SamCardConstructor(ApduController ctrlApdu, SqlConnectInfo DbInfo)
+        {
+            return new LohPsamCardControl(ctrlApdu, DbInfo);
+        }
+
+        public IUserCardControl UserCardConstructor(ApduController ctrlApdu, bool bContact, SqlConnectInfo DbInfo)
+        {
+            return new LohUserCardControl(ctrlApdu, bContact, DbInfo);
         }
 
     }

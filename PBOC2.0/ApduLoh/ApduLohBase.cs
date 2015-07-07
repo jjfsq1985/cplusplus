@@ -45,10 +45,21 @@ namespace ApduLoh
             return outByte;
         }
 
+        public bool createGetResponseCmd(int nResponseLen)
+        {
+            m_CLA = 0x00;
+            m_INS = 0xC0;
+            m_P1 = 0x00;
+            m_P2 = 0x00;
+            m_Lc = 0;
+            m_Data = null;
+            m_le = (byte)nResponseLen;
+            m_nTotalLen = 5;
+            return true;
+        }
+
         public bool createNewMFcmd(byte[] PSE)
         {
-            if (PSE.Length != 14)
-                return false;
             m_CLA = 0x80;
             m_INS = 0xE0;
             m_P1 = 0x3F;
@@ -75,10 +86,23 @@ namespace ApduLoh
             return true;
         }
 
+        public bool createClearDFcmd()
+        {
+            m_CLA = 0x80;
+            m_INS = 0x0E;
+            m_P1 = 0x00;
+            m_P2 = 0x00;
+            m_Lc = 0;
+            m_Data = null;
+            m_le = 0;
+            m_nTotalLen = 5;
+            return true;
+        }
+
         //选择
         public bool createSelectCmd(byte[] byteName, byte[] prefixData)
         {
-            if (byteName == null || byteName.Length < 5 || byteName.Length > 16)
+            if (byteName == null || byteName.Length < 2)
                 return false;
             bool bMF = false;
             if (prefixData == null && ByteDataEquals(byteName, DEFAULT_MF_NAME))
@@ -92,7 +116,7 @@ namespace ApduLoh
             {
                 nLen += prefixData.Length;
             }
-            m_Lc = (byte)nLen; //1. MF 0x0e   / 2. ADF name.length + prefixData.length        
+            m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
             if (bMF)
             {
@@ -168,21 +192,16 @@ namespace ApduLoh
             if (byteRandom.Length != 4 && byteRandom.Length != 8)
                 return false;
 
-            m_CLA = 0x80;
+            m_CLA = 0x00;
             m_INS = 0xE4;
             m_P1 = 0x00;
             m_P2 = 0x00;
-            m_Lc = 0x08;
-
-            //byteRandom.Length==4时后4字节为0x00，加密后得到认证数据
-            byte[] baseData = new byte[8];
-            Buffer.BlockCopy(byteRandom, 0, baseData, 0, byteRandom.Length);
-            byte[] cryptData = DesCryptography.TripleEncryptData(baseData, KeyValue);
-
-            m_Data = new byte[8];//密文
-            Buffer.BlockCopy(cryptData, 0, m_Data, 0, 8);
+            m_Lc = 0x02;
+            m_Data = new byte[2];
+            m_Data[0] = 0x3F;
+            m_Data[1] = 0x00;
             m_le = 0;
-            m_nTotalLen = 13;
+            m_nTotalLen = 7;
             return true;
         }
 
@@ -313,15 +332,22 @@ namespace ApduLoh
         {
             if (string.IsNullOrEmpty(strData) || strData.Length % 2 != 0)
                 return null;
-            int nByteSize = strData.Length / 2;
-            byte[] byteBCD = new byte[nByteSize];
-            for (int i = 0; i < nByteSize; i++)
+            try
             {
-                byte bcdbyte = 0;
-                byte.TryParse(strData.Substring(i * 2, 2), System.Globalization.NumberStyles.HexNumber, null, out bcdbyte);
-                byteBCD[i] = bcdbyte;
+                int nByteSize = strData.Length / 2;
+                byte[] byteBCD = new byte[nByteSize];
+                for (int i = 0; i < nByteSize; i++)
+                {
+                    byte bcdbyte = 0;
+                    byte.TryParse(strData.Substring(i * 2, 2), System.Globalization.NumberStyles.HexNumber, null, out bcdbyte);
+                    byteBCD[i] = bcdbyte;
+                }
+                return byteBCD;
             }
-            return byteBCD;
+            catch
+            {
+                return null;
+            }
         }
 
         protected bool ByteDataEquals(byte[] byteL, byte[] byteR)

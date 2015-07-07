@@ -521,8 +521,7 @@
             this.textUserCardId.Name = "textUserCardId";
             this.textUserCardId.ReadOnly = true;
             this.textUserCardId.Size = new System.Drawing.Size(154, 21);
-            this.textUserCardId.TabIndex = 5;
-            this.textUserCardId.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textUserCardId_KeyPress);
+            this.textUserCardId.TabIndex = 5;            
             // 
             // UserCardId
             // 

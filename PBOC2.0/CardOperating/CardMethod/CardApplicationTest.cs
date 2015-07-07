@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using IFuncPlugin;
 using ApduParam;
 using ApduCtrl;
+using ApduInterface;
 
 namespace CardOperating
 {
@@ -15,9 +16,9 @@ namespace CardOperating
     {
         private const Char Backspace = (Char)8;
         public event MessageOutput TextOutput = null;
-        
-        private IccCardControl m_IccCardCtrl = null;
-        private UserCardControl m_UserCardCtrl = null;
+
+        private ISamCardControl m_IccCardCtrl = null;
+        private IUserCardControl m_UserCardCtrl = null;
 
         private readonly byte[] m_FixedTermialId = new byte[] { 0x20, 0x15, 0x01, 0x01, 0x00, 0x01 };  //固定的终端机设备编号
 
@@ -56,7 +57,7 @@ namespace CardOperating
         {
             if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            m_IccCardCtrl = new IccCardControl(m_DevControl, m_DBInfo);
+            m_IccCardCtrl = m_DevControl.SamCardConstructor(m_DBInfo);
             m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
 
             string strCardInfo = "";
@@ -91,7 +92,7 @@ namespace CardOperating
         {
             if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            m_UserCardCtrl = new UserCardControl(m_DevControl, m_bContactCard, m_DBInfo);
+            m_UserCardCtrl = m_DevControl.UserCardConstructor(m_bContactCard, m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
             if (!m_UserCardCtrl.ReadKeyValueFormDb())
             {
@@ -221,8 +222,8 @@ namespace CardOperating
                     Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
-                m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0), false);
-                m_bGray = false;
+                if(m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0), false))
+                    m_bGray = false;
             }
             CloseUserCard();            
         }
@@ -288,7 +289,7 @@ namespace CardOperating
             DebitData[13] = (byte)((m_nTermialSn >> 16) & 0xFF);
             DebitData[14] = (byte)((m_nTermialSn >> 8) & 0xFF);
             DebitData[15] = (byte)(m_nTermialSn & 0xFF);
-            byte[] SysTime = CardControlBase.GetBCDTime();
+            byte[] SysTime = PublicFunc.GetBCDTime();
             Buffer.BlockCopy(SysTime, 0, DebitData, 16, 7);//BCD时间
             Buffer.BlockCopy(GMAC, 0, DebitData, 23, 4);//GMAC
             return DebitData;
@@ -314,7 +315,9 @@ namespace CardOperating
         {
             if (!m_UserCardCtrl.SelectCardApp())
                 return false;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN(true);
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(true, ref cardStart, ref cardEnd);
             if (ASN == null)
                 return false;
             Buffer.BlockCopy(ASN, 0, m_ASN, 0, 8);

@@ -5,15 +5,18 @@ using System.Data.SqlClient;
 using SqlServerHelper;
 using System.Data;
 using IFuncPlugin;
-using System.Windows.Forms;
 using ApduParam;
 using ApduInterface;
 using ApduCtrl;
+using System.Windows.Forms;
+using System.Diagnostics;
 
-namespace CardOperating
+namespace DaHuaApduCtrl
 {
-    public class IccCardControl : CardControlBase
+    public class DaHuaIccCardCtrl : DaHuaCardCtrlBase, ISamCardControl
     {
+        public event MessageOutput TextOutput = null;
+
         private ApduController m_ctrlApdu = null;
         private ISamApduProvider m_CmdProvider = null;
 
@@ -49,12 +52,19 @@ namespace CardOperating
         private static byte[] m_MADK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
 
 
-        public IccCardControl(ApduController ApduCtrlObj, SqlConnectInfo DbInfo)
+        public DaHuaIccCardCtrl(ApduController ApduCtrlObj, SqlConnectInfo DbInfo)
         {
             m_ctrlApdu = ApduCtrlObj;
             m_CmdProvider = m_ctrlApdu.GetPsamApduProvider();
             m_DBInfo = DbInfo;
-        } 
+        }
+
+        protected virtual void OnTextOutput(MsgOutEvent args)
+        {
+            Trace.WriteLine(args.Message);
+            if (TextOutput != null)
+                TextOutput(args);
+        }
 
         private bool SelectFile(byte[] byteArray, byte[] prefixData)
         {
@@ -66,13 +76,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "SAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "SAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "选择" + GetFileDescribe(byteArray) + "文件应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "选择" + GetFileDescribe(byteArray) + "文件应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -89,7 +99,7 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
             if (nRet != 0)
             {
-                this.OnTextOutput(new MsgOutEvent(nRet, "获取随机值失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "获取随机值失败"));
                 return null;
             }
             else
@@ -108,7 +118,7 @@ namespace CardOperating
             if (randByte == null || randByte.Length != 8)
                 return false;
 
-            base.OnTextOutput(new MsgOutEvent(0, "使用密钥：" + BitConverter.ToString(KeyVal) + "进行外部认证"));
+            OnTextOutput(new MsgOutEvent(0, "使用密钥：" + BitConverter.ToString(KeyVal) + "进行外部认证"));
 
             return ExternalAuthenticate(randByte, KeyVal);
         }
@@ -134,13 +144,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "外部认证失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "外部认证失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "外部认证应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "外部认证应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -164,7 +174,7 @@ namespace CardOperating
             if (randByte == null || randByte.Length != 8)
                 return false;
 
-            base.OnTextOutput(new MsgOutEvent(0, "使用密钥：" + BitConverter.ToString(KeyVal) + "初始化"));
+            OnTextOutput(new MsgOutEvent(0, "使用密钥：" + BitConverter.ToString(KeyVal) + "初始化"));
 
             return ClearMF(randByte, KeyVal);
         }
@@ -179,39 +189,17 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "初始化失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "初始化失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "初始化应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "初始化应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
             return true;
-        }
-
-        private void InitWhiteCard()
-        {
-            if (SelectFile(m_PSE, null))//MF能Select则return
-                return;
-            //创建MF
-            m_CmdProvider.createNewMFcmd(m_PSE);
-            byte[] data = m_CmdProvider.GetOutputCmd();
-            int datalen = data.Length;
-            byte[] RecvData = new byte[128];
-            int nRecvLen = 0;
-            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
-            if (nRet < 0)
-            {
-                base.OnTextOutput(new MsgOutEvent(nRet, "创建MF失败"));
-            }
-            else
-            {
-                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "创建MF应答：" + strData));
-            }
         }
 
         private string GetFileDescribe(byte[] byteArray)
@@ -230,12 +218,12 @@ namespace CardOperating
 
         public int InitIccCard(bool bMainKey)
         {
-            if (!SelectFile(m_PSE, null))
-                return 1;
             byte[] KeyInit = new byte[16];
             bool bPublished = CheckPublishedCard(bMainKey, KeyInit);
             if (bPublished)
             {
+                if (!SelectFile(m_PSE, null))
+                    return 1;
                 if (!ExternalAuthWithKey(KeyInit))
                     return 2;
                 if (!DeleteMFWithKey(KeyInit))
@@ -243,13 +231,16 @@ namespace CardOperating
             }
             else
             {
-                InitWhiteCard();
-
-                if (!ExternalAuthentication(bMainKey))
-                    return 2;
-                if (!DeleteMF(bMainKey))
-                    return 3;
+                //新建立MF不需要外部认证
+                if (SelectFile(m_PSE, null))
+                {
+                    if (!ExternalAuthentication(bMainKey))
+                        return 2;
+                    if (!DeleteMF(bMainKey))
+                        return 3;
+                }
             }
+
             return 0;
         }
 
@@ -273,13 +264,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "创建Key文件失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "创建Key文件失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "创建Key文件应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "创建Key文件应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -296,13 +287,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "创建FCI文件失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "创建FCI文件失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "创建FCI文件应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "创建FCI文件应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -319,13 +310,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "安装FCI文件失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "安装FCI文件失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "安装FCI文件应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "安装FCI文件应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -343,14 +334,14 @@ namespace CardOperating
             if (nRet < 0)
             {
                 string strMsg = string.Format("创建文件{0}失败", FileId.ToString("X"));
-                base.OnTextOutput(new MsgOutEvent(nRet, strMsg));
+                OnTextOutput(new MsgOutEvent(nRet, strMsg));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
                 string strMsg = string.Format("创建文件{0}应答：{1}", FileId.ToString("X"), strData);
-                base.OnTextOutput(new MsgOutEvent(0, strMsg));
+                OnTextOutput(new MsgOutEvent(0, strMsg));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -404,14 +395,14 @@ namespace CardOperating
             if (nRet < 0)
             {
                 string strMessage = string.Format("选择{0}失败", GetFileName(FileId, bMainKey));
-                base.OnTextOutput(new MsgOutEvent(nRet, strMessage));
+                OnTextOutput(new MsgOutEvent(nRet, strMessage));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
                 string strMessage = string.Format("选择{0}应答：{1}", GetFileName(FileId, bMainKey), strData);
-                base.OnTextOutput(new MsgOutEvent(0, strMessage));
+                OnTextOutput(new MsgOutEvent(0, strMessage));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -428,13 +419,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "写入卡片公共信息失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "写入卡片公共信息失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "写入卡片公共信息应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "写入卡片公共信息应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -451,13 +442,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "写入终端信息失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "写入终端信息失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "写入终端信息应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "写入终端信息应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -532,14 +523,14 @@ namespace CardOperating
             if (nRet < 0)
             {
                 string strMessage = string.Format("创建{0}文件失败", GetFileDescribe(byteName));
-                base.OnTextOutput(new MsgOutEvent(nRet, strMessage));
+                OnTextOutput(new MsgOutEvent(nRet, strMessage));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
                 string strMessage = string.Format("创建{0}文件应答：{1}", GetFileDescribe(byteName), strData);
-                base.OnTextOutput(new MsgOutEvent(0, strMessage));
+                OnTextOutput(new MsgOutEvent(0, strMessage));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -576,13 +567,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "写入应用公共信息失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "写入应用公共信息失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "写入应用公共信息应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "写入应用公共信息应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -599,13 +590,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "写MAC2文件失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "写MAC2文件失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "写MAC2文件应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "写MAC2文件应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -625,13 +616,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "生命周期转换失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "生命周期转换失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "生命周期转换应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "生命周期转换应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -736,14 +727,14 @@ namespace CardOperating
             if (nRet < 0)
             {
                 string strMessage = string.Format("写入{0}失败", GetKeyName(Usage, Ver, bMainKey));
-                base.OnTextOutput(new MsgOutEvent(nRet, strMessage));
+                OnTextOutput(new MsgOutEvent(nRet, strMessage));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
                 string strMessage = string.Format("写入{0}应答：{1}", GetKeyName(Usage, Ver, bMainKey), strData);
-                base.OnTextOutput(new MsgOutEvent(0, strMessage));
+                OnTextOutput(new MsgOutEvent(0, strMessage));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
@@ -826,7 +817,7 @@ namespace CardOperating
 
         public bool InitSamGrayLock(byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData)
         {
-            byte[] SysTime = GetBCDTime();
+            byte[] SysTime = PublicFunc.GetBCDTime();
             byte[] byteData = new byte[28];
             Buffer.BlockCopy(random, 0, byteData, 0, 4);
             Buffer.BlockCopy(BusinessSn, 0, byteData, 4, 2);
@@ -844,13 +835,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "SAM卡MAC1计算初始化失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "SAM卡MAC1计算初始化失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "SAM卡MAC1计算初始化应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "SAM卡MAC1计算初始化应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
                 //输出数据按灰锁命令数据域排列:终端交易序号，终端随机数，BCD时间，MAC1
@@ -878,7 +869,7 @@ namespace CardOperating
                 if(!PublicFunc.ByteDataEquals(MAC1,PSAM_MAC1))
                 {
                     string strMessage = string.Format("MAC1计算验证失败：终端机编号{0}，用户卡号{1}", BitConverter.ToString(TermialID), BitConverter.ToString(ASN));
-                    base.OnTextOutput(new MsgOutEvent(0, strMessage));
+                    OnTextOutput(new MsgOutEvent(0, strMessage));
                     return false;
                 }
             }
@@ -928,13 +919,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "SAM卡验证MAC2失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "SAM卡验证MAC2失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "SAM卡验证MAC2应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "SAM卡验证MAC2应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
              }
@@ -951,13 +942,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "SAM卡计算GMAC失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "SAM卡计算GMAC失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "SAM卡计算GMAC应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "SAM卡计算GMAC应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
                 Buffer.BlockCopy(RecvData, 0, outGMAC, 0, 4);
@@ -1016,7 +1007,7 @@ namespace CardOperating
             byte[] ConsumerKey = GetRelatedKey(ObjSql, CardCategory.CpuCard);
             if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK1))
             {
-                base.OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
+                OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
                 MessageBox.Show("加气消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
@@ -1196,13 +1187,13 @@ namespace CardOperating
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                base.OnTextOutput(new MsgOutEvent(nRet, "SAM卡读取终端机编号失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "SAM卡读取终端机编号失败"));
                 return null;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                base.OnTextOutput(new MsgOutEvent(0, "SAM卡读取终端机编号应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "SAM卡读取终端机编号应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return null;
                 byte[] TerminalID = new byte[6];
@@ -1226,18 +1217,17 @@ namespace CardOperating
             if (nRet < 0)
             {
                 if (bMessage)
-                    base.OnTextOutput(new MsgOutEvent(nRet, "读取卡号失败"));
+                    OnTextOutput(new MsgOutEvent(nRet, "读取卡号失败"));
                 return null;
             }
             else
             {
-                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                if (bMessage)
-                    base.OnTextOutput(new MsgOutEvent(0, "读取卡号应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return null;
                 byte[] PsamAsn = new byte[8];
                 Buffer.BlockCopy(RecvData, 2, PsamAsn, 0, 8);//实际10个字节，前两个字节为0，跳过
+                if (bMessage)
+                    OnTextOutput(new MsgOutEvent(0, "读取到卡号：" + BitConverter.ToString(PsamAsn)));
                 return PsamAsn;
             }
         }

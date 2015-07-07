@@ -32,7 +32,7 @@ CREATE PROCEDURE PROC_GetCpuKey(
 	--开始事务
 	begin tran maintran
 	select @CpuKeyId = UseKeyID from Config_SysParams;
-	select * from Key_CpuCard left join Key_CARD_ADF on Key_CpuCard.KeyId = Key_CARD_ADF.RelatedKeyId and Key_CpuCard.KeyId=@CpuKeyId and Key_CARD_ADF.ApplicationIndex = @ApplicationIndex;
+	select * from Key_CpuCard inner join Key_CARD_ADF on Key_CpuCard.KeyId = Key_CARD_ADF.RelatedKeyId and Key_CpuCard.KeyId=@CpuKeyId and Key_CARD_ADF.ApplicationIndex = @ApplicationIndex;
 	if(@@ERROR <> 0)
 		begin
 		rollback tran maintran

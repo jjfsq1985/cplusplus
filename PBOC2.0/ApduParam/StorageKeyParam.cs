@@ -8,10 +8,10 @@ namespace ApduParam
     {
         private string m_strStorageName; //信息        
         private byte m_StorageIndex; //密钥编号
-        private byte m_KeyType; //密钥类型
-        private byte m_KeyIndex; //密钥索引号
-        private byte m_ErrorCount; //错误计数器
-        private byte m_PriValue;  //正确应用后的后继权限
+        private byte m_KeyPar1; //密钥类型
+        private byte m_KeyPar2; //密钥索引号
+        private byte m_KeyPar3; //错误计数器
+        private byte m_KeyPar4;  //正确应用后的后继权限
         private byte[] m_ASN = null;  //卡号
         private byte[] m_XorASN = null; //异或后的卡号
         private byte[] m_StorageKey = null; //安装的Key,位于数据区
@@ -25,21 +25,21 @@ namespace ApduParam
         {
             get { return m_StorageIndex; }
         }
-        public byte KeyType
+        public byte KeyPar1
         {
-            get { return m_KeyType; }
+            get { return m_KeyPar1; }
         }
-        public byte KeyIndex
+        public byte KeyPar2
         {
-            get { return m_KeyIndex; }
+            get { return m_KeyPar2; }
         }
-        public byte ErrCount
+        public byte KeyPar3
         {
-            get { return m_ErrorCount; }
+            get { return m_KeyPar3; }
         }
-        public byte PriValue
+        public byte KeyPar4
         {
-            get { return m_PriValue; }
+            get { return m_KeyPar4; }
         }
         public byte[] ASN
         {
@@ -58,14 +58,14 @@ namespace ApduParam
             get { return m_EncryptKey; }
         }
 
-        public StorageKeyParam(string strStorageName, byte StorageIndex, byte KeyType, byte KeyIndex, byte ErrCount, byte PriValue)
+        public StorageKeyParam(string strStorageName, byte StorageIndex, byte KeyPar1, byte KeyPar2, byte KeyPar3, byte KeyPar4)
         {
             m_strStorageName = strStorageName;
             m_StorageIndex = StorageIndex;
-            m_KeyType = KeyType;
-            m_KeyIndex = KeyIndex;
-            m_ErrorCount = ErrCount;
-            m_PriValue = PriValue;
+            m_KeyPar1 = KeyPar1;
+            m_KeyPar2 = KeyPar2;
+            m_KeyPar3 = KeyPar3;
+            m_KeyPar4 = KeyPar4;
         }
 
         public void SetParam(byte[] ASN, byte[] StorageKey, byte[] EncryptKey)

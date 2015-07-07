@@ -6,20 +6,13 @@ using System.Data.SqlClient;
 using System.Data;
 using SqlServerHelper;
 using ApduParam;
+using ApduCtrl;
+using ApduInterface;
 
-namespace CardOperating
+namespace DaHuaApduCtrl
 {
-    public class CardControlBase
+    public class DaHuaCardCtrlBase : ICardCtrlBase
     {
-        public event MessageOutput TextOutput = null;
-
-        //卡片种类
-        public enum CardCategory
-        {
-            CpuCard,  //CPU卡
-            PsamCard  //PSAM卡
-        }
-
         //卡片中初始密钥
         protected static byte[] m_KeyOrg = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
 
@@ -38,28 +31,9 @@ namespace CardOperating
 
         protected SqlConnectInfo m_DBInfo = new SqlConnectInfo();
 
-        public CardControlBase()
+        public DaHuaCardCtrlBase()
         {
 
-        }
-
-        protected virtual void OnTextOutput(MsgOutEvent args)
-        {
-            if (this.TextOutput != null)
-                this.TextOutput(args);
-        }
-
-        //获取当前BCD码格式的系统时间
-        public static byte[] GetBCDTime()
-        {
-            string strTime = DateTime.Now.ToString("yyyyMMddHHmmss");
-            int nByteSize = strTime.Length / 2;
-            byte[] byteBCD = new byte[nByteSize];
-            for (int i = 0; i < nByteSize; i++)
-            {
-                byteBCD[i] = Convert.ToByte(strTime.Substring(i * 2, 2), 16);
-            }
-            return byteBCD;
         }
 
         protected string GetErrString(byte SW1, byte SW2, string strErrCode)

@@ -12,10 +12,10 @@ namespace ApduInterface
         bool createStorageFCICmd(byte[] AidName, byte[] param, byte[] prefix);
 
         bool createUpdateEF01Cmd(byte nFileIndex, byte[] AidName);
-        
+
         bool createGenerateKeyCmd();
         
-        bool createStorageKeyCmd(byte[] RandomVal, byte[] StorageKey, byte[] EncryptKey);
+        bool createStorageKeyCmd(byte[] StorageKey, byte[] param1, byte[] param2);
 
         bool createGenerateADFCmd(byte[] ADFName);
 

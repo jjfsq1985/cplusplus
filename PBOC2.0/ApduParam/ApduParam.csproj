@@ -42,6 +42,7 @@
     <Compile Include="CardInfoParam.cs" />
     <Compile Include="DesCryptography.cs" />
     <Compile Include="IccCardInfoParam.cs" />
+    <Compile Include="MsgOutEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageKeyParam.cs" />
   </ItemGroup>

@@ -288,6 +288,7 @@
             this.textDiscountRate.Name = "textDiscountRate";
             this.textDiscountRate.Size = new System.Drawing.Size(52, 21);
             this.textDiscountRate.TabIndex = 74;
+            this.textDiscountRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textDiscountRate_KeyPress);
             // 
             // DiscountRateExprieValid
             // 
@@ -379,6 +380,7 @@
             this.textPriceLevel.Name = "textPriceLevel";
             this.textPriceLevel.Size = new System.Drawing.Size(43, 21);
             this.textPriceLevel.TabIndex = 68;
+            this.textPriceLevel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPriceLevel_KeyPress);
             // 
             // PriceLevel
             // 
@@ -396,6 +398,7 @@
             this.textUserIdentity.Name = "textUserIdentity";
             this.textUserIdentity.Size = new System.Drawing.Size(194, 21);
             this.textUserIdentity.TabIndex = 70;
+            this.textUserIdentity.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textUserIdentity_KeyPress);
             // 
             // UserID
             // 
@@ -533,6 +536,7 @@
             this.textGasAmount.Name = "textGasAmount";
             this.textGasAmount.Size = new System.Drawing.Size(64, 21);
             this.textGasAmount.TabIndex = 10;
+            this.textGasAmount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textGasAmount_KeyPress);
             // 
             // GasAmount
             // 
@@ -550,6 +554,7 @@
             this.textGasCount.Name = "textGasCount";
             this.textGasCount.Size = new System.Drawing.Size(64, 21);
             this.textGasCount.TabIndex = 8;
+            this.textGasCount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textGasCount_KeyPress);
             // 
             // GasCount
             // 
@@ -947,7 +952,6 @@
             this.cmbDevType.Name = "cmbDevType";
             this.cmbDevType.Size = new System.Drawing.Size(107, 20);
             this.cmbDevType.TabIndex = 104;
-            this.cmbDevType.SelectedIndexChanged += new System.EventHandler(this.cmbDevType_SelectedIndexChanged);
             // 
             // CardReader
             // 

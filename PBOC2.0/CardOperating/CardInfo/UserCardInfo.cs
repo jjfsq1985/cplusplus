@@ -421,7 +421,7 @@ namespace CardOperating
             m_CardInfoPar.CarType = GetCarCateGory(cmbCarCategory.SelectedIndex);
             m_CardInfoPar.CarNo = textCarNo.Text;
             m_CardInfoPar.TelePhone = textTelephone.Text;
-            m_CardInfoPar.SelfId = textCarNo.Text;
+            m_CardInfoPar.SelfId = textSelfId.Text;
 
             m_CardInfoPar.LimitCarNo = LimitCarNo.Checked;
             m_CardInfoPar.LimitGasType = GetLimitGasType(cmbLimitGasType.SelectedIndex);
@@ -531,12 +531,6 @@ namespace CardOperating
                 e.Handled = true;//不接受非数字值
         }
 
-        private void textUserCardId_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
-                e.Handled = true;//不接受非数字值
-        }
-
         private void textPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
@@ -553,12 +547,6 @@ namespace CardOperating
         {
             if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace && !IsHexKey(e.KeyChar))
                 e.Handled = true;//不接受非数字值
-        }
-
-        private void textLimitAreaCode_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
-                e.Handled = true;//不接受非数字值            
         }
 
         private void textGasCount_KeyPress(object sender, KeyPressEventArgs e)
@@ -586,20 +574,21 @@ namespace CardOperating
         {
             if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace && e.KeyChar != Value_Dot)
                 e.Handled = true;//不接受非数字值
-        }
-
-        private void textGasType_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            //只接受Hex数字
-            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace && !IsHexKey(e.KeyChar))
-                e.Handled = true;
-        }
+        }        
 
         private void textUserIdentity_KeyPress(object sender, KeyPressEventArgs e)
         {
             //身份证号只接受数字值和字母X
-            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace && e.KeyChar != Key_X)
-                e.Handled = true;
+            if (textUserIdentity.Text.Length < 17)
+            {
+                if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
+                    e.Handled = true;
+            }
+            else
+            {
+                if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace && e.KeyChar != Key_X)
+                    e.Handled = true;
+            }
         }
 
         private void cmbAreaLimit_SelectedIndexChanged(object sender, EventArgs e)

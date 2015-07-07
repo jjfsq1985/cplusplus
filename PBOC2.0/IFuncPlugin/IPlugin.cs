@@ -7,6 +7,19 @@ namespace IFuncPlugin
 {
     public class PublicFunc
     {
+        //获取当前BCD码格式的系统时间
+        public static byte[] GetBCDTime()
+        {
+            string strTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+            int nByteSize = strTime.Length / 2;
+            byte[] byteBCD = new byte[nByteSize];
+            for (int i = 0; i < nByteSize; i++)
+            {
+                byteBCD[i] = Convert.ToByte(strTime.Substring(i * 2, 2), 16);
+            }
+            return byteBCD;
+        }
+
         public static bool ByteDataEquals(byte[] byteL, byte[] byteR)
         {
             if (byteL.Length != byteR.Length)

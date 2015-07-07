@@ -431,7 +431,7 @@ namespace PublishCardOperator
             AddOrgKey AddForm = new AddOrgKey();
             if (AddForm.ShowDialog(this) != DialogResult.OK)
                 return;
-            OrgKeyValue newOrgKey = AddForm.GetOrgKeyValue();     
+            OrgKeyValue newOrgKey = AddForm.GetOrgKeyVal();     
             newOrgKey.eDbFlag = DbStateFlag.eDbAdd;            
             m_lstOrgKey.Add(newOrgKey);
             int index = OrgKeyGridView.Rows.Add();

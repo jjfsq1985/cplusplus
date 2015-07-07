@@ -343,7 +343,7 @@ namespace ApduLoh
             m_Data = new byte[nLen];//密文 + MAC
             Buffer.BlockCopy(cryptData, 0, m_Data, 0, 24);
             byte[] srcMacData = new byte[29]; //头5 +密文24
-            srcMacData[0] = m_CLA;//不需要后半字节为4
+            srcMacData[0] = m_CLA;
             srcMacData[1] = m_INS;
             srcMacData[2] = m_P1;
             srcMacData[3] = m_P2;

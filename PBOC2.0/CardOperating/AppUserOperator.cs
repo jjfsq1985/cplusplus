@@ -10,6 +10,7 @@ using SqlServerHelper;
 using System.Data.SqlClient;
 using ApduParam;
 using ApduCtrl;
+using ApduInterface;
 
 namespace CardOperating
 {
@@ -20,8 +21,11 @@ namespace CardOperating
         private int m_nLoginUserId = 0;
 
         private const Char Backspace = (Char)8;
+        private const Char Value_Dot = (Char)46;
+        private const Char Key_X = (Char)88;
+
         private UserCardInfoParam m_CardInfoPar = new UserCardInfoParam();
-        private UserCardControl m_UserCardCtrl = null;
+        private IUserCardControl m_UserCardCtrl = null;
         private readonly byte[] m_FixedTermialId = new byte[] { 0x20, 0x15, 0x01, 0x01, 0x00, 0x01 };  //固定的终端机设备编号
 
         private static byte[] m_TermialId = new byte[6];            //终端机设备编号
@@ -44,8 +48,6 @@ namespace CardOperating
             InitializeComponent();
             textPIN.Text = m_strPIN;
             cmbDevType.SelectedIndex = 0;
-            m_DevControl = new ApduController(ApduDomain.DaHua);
-            OpenDevice();
         }
 
         public MenuType GetMenuType()
@@ -102,6 +104,13 @@ namespace CardOperating
             {
                 cmbClientName.Items.Add(info.strClientName);
             }
+
+            m_DevControl = new ApduController(ApduDomain.DaHua);
+            cmbDevType.SelectedIndexChanged += new System.EventHandler(this.cmbDevType_SelectedIndexChanged);
+            ContactCard.Checked = false;
+            ContactCard.Enabled = false;
+
+            OpenDevice();
         }
 
         private int GetClientIdIndex(int nClientID)
@@ -420,7 +429,7 @@ namespace CardOperating
                 return false;
             if (m_UserCardCtrl != null)
                 return true;
-            m_UserCardCtrl = new UserCardControl(m_DevControl,ContactCard.Checked, m_DBInfo);
+            m_UserCardCtrl = m_DevControl.UserCardConstructor(ContactCard.Checked, m_DBInfo);
 
             string cardInfo = "";
             if (ContactCard.Checked)
@@ -458,7 +467,7 @@ namespace CardOperating
         private void ReadCardInfo(UserCardInfoParam CardInfo)
         {
             if (!m_UserCardCtrl.SelectCardApp())
-                return;
+                return;            
             m_UserCardCtrl.GetUserCardInfo(CardInfo);
         }
 
@@ -590,7 +599,7 @@ namespace CardOperating
             m_CardInfoPar.CarType = GetCarCateGory(cmbCarCategory.SelectedIndex);
             m_CardInfoPar.CarNo = textCarNo.Text;
             m_CardInfoPar.TelePhone = textTelephone.Text;
-            m_CardInfoPar.SelfId = textCarNo.Text;
+            m_CardInfoPar.SelfId = textSelfId.Text;
 
             m_CardInfoPar.LimitCarNo = LimitCarNo.Checked;
             m_CardInfoPar.LimitGasType = GetLimitGasType(cmbLimitGasType.SelectedIndex);            
@@ -835,8 +844,7 @@ namespace CardOperating
             }
             if (!m_UserCardCtrl.UpdateCardInfo(m_CardInfoPar))
             {
-                MessageBox.Show("修改卡片信息失败");
-                ReadCardInfo(m_CardInfoPar);
+                MessageBox.Show("修改卡片信息失败");                
             }
             else
             {
@@ -864,7 +872,9 @@ namespace CardOperating
                 return;
             if (!m_UserCardCtrl.SelectCardApp())
                 return;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false);
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
@@ -922,7 +932,9 @@ namespace CardOperating
                 return;
             if (!m_UserCardCtrl.SelectCardApp())
                 return;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false);
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
@@ -985,7 +997,9 @@ namespace CardOperating
                 return;
             if (!m_UserCardCtrl.SelectCardApp())
                 return;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false);
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
@@ -1001,8 +1015,8 @@ namespace CardOperating
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
                 const double BusinessMoney = 0.0;//强制联机解灰 0 扣款
-                m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0),true);
-                m_bGray = false;
+                if(m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0),true))
+                    m_bGray = false;
             }
             else if (nRet == 2)
             {
@@ -1026,7 +1040,9 @@ namespace CardOperating
 
             if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp())
                 return;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false);
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
@@ -1054,7 +1070,9 @@ namespace CardOperating
             }
             if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp())
                 return;
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false);
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
@@ -1233,6 +1251,45 @@ namespace CardOperating
                 return false;
             m_DevControl.Close_Device();
             return true;
+        }
+
+        private void textUserIdentity_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //身份证号只接受数字值和字母X
+            if (textUserIdentity.Text.Length < 17)
+            {
+                if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
+                    e.Handled = true;
+            }
+            else
+            {
+                if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace && e.KeyChar != Key_X)
+                    e.Handled = true;
+            }
+        }
+
+        private void textDiscountRate_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace && e.KeyChar != Value_Dot)
+                e.Handled = true;//不接受非数字值
+        }
+
+        private void textGasAmount_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace && e.KeyChar != Value_Dot)
+                e.Handled = true;//不接受非数字值   
+        }
+
+        private void textGasCount_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
+                e.Handled = true;//不接受非数字值   
+        }
+
+        private void textPriceLevel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
+                e.Handled = true;//不接受非数字值
         }
     }
 }

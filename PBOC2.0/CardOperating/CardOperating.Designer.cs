@@ -308,7 +308,6 @@
             this.btnMethod.TabIndex = 3;
             this.btnMethod.Text = "卡应用测试";
             this.btnMethod.UseVisualStyleBackColor = true;
-            this.btnMethod.Visible = false;
             this.btnMethod.Click += new System.EventHandler(this.btnMethod_Click);
             // 
             // cmbDevType
@@ -322,7 +321,6 @@
             this.cmbDevType.Name = "cmbDevType";
             this.cmbDevType.Size = new System.Drawing.Size(107, 20);
             this.cmbDevType.TabIndex = 0;
-            this.cmbDevType.SelectedIndexChanged += new System.EventHandler(this.cmbDevType_SelectedIndexChanged);
             // 
             // CardOperating
             // 
@@ -344,6 +342,7 @@
             this.MinimizeBox = false;
             this.Name = "CardOperating";
             this.Text = "制发卡操作";
+            this.Load += new System.EventHandler(this.CardOperating_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CardOperating_FormClosing);
             this.Card.ResumeLayout(false);
             this.Card.PerformLayout();

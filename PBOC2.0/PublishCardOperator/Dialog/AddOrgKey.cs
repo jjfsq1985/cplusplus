@@ -19,7 +19,7 @@ namespace PublishCardOperator.Dialog
             IsValid.Checked = false;
         }
 
-        public OrgKeyValue GetOrgKeyValue()
+        public OrgKeyValue GetOrgKeyVal()
         {
             return m_OrgKey;
         }

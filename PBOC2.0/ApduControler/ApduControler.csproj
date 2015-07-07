@@ -36,11 +36,18 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApduController.cs" />
     <Compile Include="ApduDomain.cs" />
+    <Compile Include="DaHuaCmdProvider\DaHuaCardCtrlBase.cs" />
+    <Compile Include="DaHuaCmdProvider\DaHuaIccCardCtrl.cs" />
+    <Compile Include="DaHuaCmdProvider\DaHuaCpuCardCtrl.cs" />
+    <Compile Include="LohCmdProvider\LohCardCtrlBase.cs" />
+    <Compile Include="LohCmdProvider\LohPsamCardControl.cs" />
+    <Compile Include="LohCmdProvider\LohUserCardControl.cs" />
     <Compile Include="DaHuaDomain.cs" />
     <Compile Include="LongHuanDomain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,6 +64,18 @@
     <ProjectReference Include="..\ApduLoh\ApduLoh.csproj">
       <Project>{D81C0ACC-24F9-4D16-87A2-0ED1BE39E8DE}</Project>
       <Name>ApduLoh</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ApduParam\ApduParam.csproj">
+      <Project>{0391A3A8-5A8C-4ADA-9DEC-788C2244072A}</Project>
+      <Name>ApduParam</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IFuncPlugin\IFuncPlugin.csproj">
+      <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
+      <Name>IFuncPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlServerHelper\SqlServerHelper.csproj">
+      <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
+      <Name>SqlServerHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

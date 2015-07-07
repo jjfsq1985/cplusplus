@@ -10,15 +10,16 @@ using SqlServerHelper;
 using System.Data.SqlClient;
 using ApduParam;
 using ApduCtrl;
+using ApduInterface;
 
 namespace CardOperating
 {
     public partial class CardOperating : Form, IPlugin
     {
-        private ApduController m_DevControl = null;        
+        private ApduController m_DevControl = null;
 
-        private IccCardControl m_IccCardCtrl = null;
-        private UserCardControl m_UserCardCtrl = null;
+        private ISamCardControl m_IccCardCtrl = null;
+        private IUserCardControl m_UserCardCtrl = null;
 
         private byte[] m_IccCardId = null;
         private byte[] m_UserCardId = null;
@@ -35,10 +36,6 @@ namespace CardOperating
         {
             InitializeComponent();
             //CardOperatingCtrlPos();
-
-            cmbDevType.SelectedIndex = 0;            
-            m_DevControl = new ApduController(ApduDomain.DaHua);
-
             m_CardUser.TopLevel = false;
             m_CardUser.Parent = this;
             CardInfoPanel.Controls.Add(m_CardUser);
@@ -51,6 +48,7 @@ namespace CardOperating
             m_CardMethod.Parent = this;
             CardInfoPanel.Controls.Add(m_CardMethod);
 
+            cmbDevType.SelectedIndex = 0;
         }
 
         public MenuType GetMenuType()
@@ -164,7 +162,7 @@ namespace CardOperating
             int nMode = 0;
             if (!m_DevControl.IsDevicePcscMode(ref nMode))
             {
-                DialogResult Result = MessageBox.Show("当前读卡器不能使用，是否切换到PC/SC模式？", "错误", MessageBoxButtons.YesNo);
+                DialogResult Result = MessageBox.Show("读卡器没有插入或者不是PC/SC模式，是否切换到PC/SC模式？", "错误", MessageBoxButtons.YesNo);
                 if (Result == DialogResult.Yes)
                 {
                     m_DevControl.ChangeDevice(3);//三类读卡器全开。
@@ -173,7 +171,7 @@ namespace CardOperating
             }
             else
             {
-                if (nMode != 3)
+                if (nMode > 0 && nMode != 3)
                 {
                     DialogResult Result = MessageBox.Show("接触式读卡器不能使用，是否打开？", "提示", MessageBoxButtons.YesNo);
                     if (Result == DialogResult.Yes)
@@ -233,7 +231,7 @@ namespace CardOperating
             WriteMsg(0, "用户卡打开成功");
             WriteMsg(0, "卡信息：" + cardInfo);           
 
-            m_UserCardCtrl = new UserCardControl(m_DevControl,ContactCard.Checked, m_DBInfo);
+            m_UserCardCtrl = m_DevControl.UserCardConstructor(ContactCard.Checked,m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
             if (!m_UserCardCtrl.ReadKeyValueFormDb())
                 WriteMsg(0, "未读到密钥，请检查数据库是否正常。");            
@@ -305,8 +303,6 @@ namespace CardOperating
         {
             if (!m_DevControl.IsDeviceOpen() || m_UserCardCtrl == null)
                 return;
-            if (!m_UserCardCtrl.CreateDIR())
-                return;
             m_UserCardCtrl.CreateKey();
         }
 
@@ -323,8 +319,9 @@ namespace CardOperating
                 return;
             }
             WriteMsg(0, "用户卡号：" + BitConverter.ToString(m_UserCardId));
-            //建立加气应用ADF01
-            if (!m_UserCardCtrl.CreateADFApp())
+
+            //建立应用目录
+            if (!m_UserCardCtrl.CreateDIR())
                 return;
             //生成加气数据文件
             if (!m_UserCardCtrl.CreateApplication(m_UserCardId, cardInfo.DefaultPwdFlag, cardInfo.CustomPassword))
@@ -357,7 +354,7 @@ namespace CardOperating
                 WriteMsg(0, "复位信息：" + strCardInfo);
             }
 
-            m_IccCardCtrl = new IccCardControl(m_DevControl, m_DBInfo);
+            m_IccCardCtrl = m_DevControl.SamCardConstructor(m_DBInfo);
             m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
 
             if (!m_IccCardCtrl.ReadKeyValueFormDb())
@@ -548,6 +545,12 @@ namespace CardOperating
                 ContactCard.Checked = false;
                 ContactCard.Enabled = false;
             }
+        }
+
+        private void CardOperating_Load(object sender, EventArgs e)
+        {
+            m_DevControl = new ApduController(ApduDomain.DaHua);
+            cmbDevType.SelectedIndexChanged += new System.EventHandler(this.cmbDevType_SelectedIndexChanged);
         }
 
     }

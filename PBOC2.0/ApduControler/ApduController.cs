@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ApduInterface;
+using IFuncPlugin;
 
 namespace ApduCtrl
 {
@@ -180,5 +181,26 @@ namespace ApduCtrl
                 return false;
             }            
         }
+
+        public ISamCardControl SamCardConstructor(SqlConnectInfo DbInfo)
+        {
+            if (m_Domain == ApduDomain.DaHua)
+                return m_DahuaDomain.SamCardConstructor(this,DbInfo);
+            else if (m_Domain == ApduDomain.LongHuan)
+                return m_LongHuanDomain.SamCardConstructor(this, DbInfo);
+            else
+                return null;
+        }
+
+        public IUserCardControl UserCardConstructor(bool bContact, SqlConnectInfo DbInfo)
+        {
+            if (m_Domain == ApduDomain.DaHua)
+                return m_DahuaDomain.UserCardConstructor(this, bContact, DbInfo);
+            else if (m_Domain == ApduDomain.LongHuan)
+                return m_LongHuanDomain.UserCardConstructor(this, bContact, DbInfo);
+            else
+                return null;
+        }
+
     }
 }

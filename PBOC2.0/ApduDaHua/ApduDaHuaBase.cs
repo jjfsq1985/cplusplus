@@ -45,33 +45,19 @@ namespace ApduDaHua
             return outByte;
         }
 
+        public bool createGetResponseCmd(int nResponseLen)
+        {
+            return false;
+        }
+
         public bool createNewMFcmd(byte[] PSE)
         {
-            if (PSE.Length != 14)
-                return false;
-            m_CLA = 0x80;
-            m_INS = 0xE0;
-            m_P1 = 0x00;
-            m_P2 = 0x00;
-            int nLen = 21;
-            m_Lc = (byte)nLen;
-            m_Data = new byte[nLen];
-            //File ID
-            m_Data[0] = 0x3F;
-            m_Data[1] = 0x00;
-            //File Type
-            m_Data[2] = 0x39;
-            //AC
-            m_Data[3] = 0x00;
-            m_Data[4] = 0x01;
-            //MacErrCount
-            m_Data[5] = 0xAA;
-            //Name Len
-            m_Data[6] = (byte)PSE.Length;
-            Buffer.BlockCopy(PSE, 0, m_Data, 7, PSE.Length);
-            m_le = 0;
-            m_nTotalLen = 26;
-            return true;
+            return false;
+        }
+
+        public bool createClearDFcmd()
+        {
+            return false;
         }
 
         //选择

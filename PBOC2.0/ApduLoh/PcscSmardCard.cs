@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace ApduLoh
 {
@@ -176,11 +177,8 @@ namespace ApduLoh
         /// <param name="uSendLen">发送长度</param>
         /// <param name="RecvData">接收的数据</param>
         /// <param name="uRecvLen">接收长度</param>        
-        public int LH_DataTransmit(string strReadName, byte[] SendData, int SendLen, out byte[] RecvData, out int RecvLen)
-        {
-            RecvData = null;
-            RecvLen = 0;
-
+        public int LH_DataTransmit(string strReadName, byte[] SendData, int SendLen, byte[] RecvData, ref int RecvLen)
+        {            
             UIntPtr hCard = UIntPtr.Zero;
             uint ActiveProtocol = WinSCard_Dll.SCARD_PROTOCOL_UNDEFINED;
             if (strReadName == m_ReadName1)
@@ -209,10 +207,10 @@ namespace ApduLoh
             uint cbRecvLength = 255;
             byte[] cRecvBuffer = new byte[cbRecvLength];
             int nResult = WinSCard_Dll.SCardTransmit(hCard, SendPci, SendData, (uint)SendLen, IntPtr.Zero, cRecvBuffer, ref cbRecvLength);
+            Trace.WriteLine(BitConverter.ToString(SendData).Replace("-", ""));
             if (nResult != 0)
                 return -1;
-            RecvLen = (int)cbRecvLength;
-            RecvData = new byte[RecvLen];
+            RecvLen = (int)cbRecvLength > RecvData.Length ? RecvData.Length : (int)cbRecvLength;            
             Array.Copy(cRecvBuffer, RecvData, RecvLen);
             return (RecvData[RecvLen - 2] << 8) + (RecvData[RecvLen - 1]);
         }
