@@ -7,7 +7,9 @@ namespace ApduInterface
 {
     public interface ISamApduProvider : IApduBase
     {
-        bool createGenerateKeyCmd(ushort RecordCount, byte RecordLength);
+        bool createGenerateKeyCmd(ushort uFileId,ushort RecordCount, byte RecordLength);
+
+        bool createStorageKeyCmd(byte[] keyVal, byte[] param1, byte[] param2);
 
         bool createStorageFCICmd(byte[] byteName, byte[] prefix);
 

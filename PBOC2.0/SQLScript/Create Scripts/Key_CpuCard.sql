@@ -36,9 +36,10 @@ CREATE TABLE [dbo].[Key_CARD_ADF](
 	[PINResetKey] [char](32) NULL,
 	[PINUnlockKey] [char](32) NULL,
 	[ConsumerMasterKey] [char](32) NULL,
-	[LoadMasterKey] [char](32) NULL,
+	[LoadKey] [char](32) NULL,
+	[UnLoadKey] [char](32) NULL,
 	[TacMasterKey] [char](32) NULL,
-	[UnlockUnloadKey] [char](32) NULL,
+	[UnGrayKey] [char](32) NULL,
 	[OverdraftKey] [char](32) NULL,
  CONSTRAINT [PK_Key_CARD_ADF] PRIMARY KEY CLUSTERED 
 (
@@ -95,13 +96,16 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'消费主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'ConsumerMasterKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'圈存主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'LoadMasterKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'圈存主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'LoadKey'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'圈提主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'UnLoadKey'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'TAC主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'TacMasterKey'
 GO
 	
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'联机解扣、圈提主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'UnlockUnloadKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'联机解扣主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'UnGrayKey'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'修改透支限额主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'OverdraftKey'
@@ -120,6 +124,7 @@ insert into Key_CARD_ADF values(1,1,'F21B1234043830D448293E66368833CC',
 									'88888888888888888888888888888888',
 									'11111111111111111111111111111111',
 									'66666666666666666666666666666666',
+									'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
 									'77777777777777777777777777777777',
 									'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
 									'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC');

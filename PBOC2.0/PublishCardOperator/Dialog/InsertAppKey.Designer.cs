@@ -44,12 +44,14 @@
             this.AIAuthLabel = new System.Windows.Forms.Label();
             this.AMTendingLabel = new System.Windows.Forms.Label();
             this.AMLabel = new System.Windows.Forms.Label();
-            this.textUnlockUnloadKey = new System.Windows.Forms.TextBox();
-            this.UnlockUnloadLabel = new System.Windows.Forms.Label();
+            this.textUnGrayKey = new System.Windows.Forms.TextBox();
+            this.UnGrayLabel = new System.Windows.Forms.Label();
             this.textOverdraftKey = new System.Windows.Forms.TextBox();
             this.ODLabel = new System.Windows.Forms.Label();
             this.textTacKey = new System.Windows.Forms.TextBox();
             this.TACLabel = new System.Windows.Forms.Label();
+            this.textAppUnLoadKey = new System.Windows.Forms.TextBox();
+            this.ULMLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -74,7 +76,7 @@
             // 
             // textAppLoadKey
             // 
-            this.textAppLoadKey.Location = new System.Drawing.Point(146, 319);
+            this.textAppLoadKey.Location = new System.Drawing.Point(143, 289);
             this.textAppLoadKey.MaxLength = 32;
             this.textAppLoadKey.Name = "textAppLoadKey";
             this.textAppLoadKey.Size = new System.Drawing.Size(229, 21);
@@ -83,7 +85,7 @@
             // LMLabel
             // 
             this.LMLabel.AutoSize = true;
-            this.LMLabel.Location = new System.Drawing.Point(57, 322);
+            this.LMLabel.Location = new System.Drawing.Point(54, 292);
             this.LMLabel.Name = "LMLabel";
             this.LMLabel.Size = new System.Drawing.Size(53, 12);
             this.LMLabel.TabIndex = 6;
@@ -91,7 +93,7 @@
             // 
             // textCMKey
             // 
-            this.textCMKey.Location = new System.Drawing.Point(146, 271);
+            this.textCMKey.Location = new System.Drawing.Point(143, 246);
             this.textCMKey.MaxLength = 32;
             this.textCMKey.Name = "textCMKey";
             this.textCMKey.Size = new System.Drawing.Size(229, 21);
@@ -100,7 +102,7 @@
             // CMLabel
             // 
             this.CMLabel.AutoSize = true;
-            this.CMLabel.Location = new System.Drawing.Point(51, 274);
+            this.CMLabel.Location = new System.Drawing.Point(48, 249);
             this.CMLabel.Name = "CMLabel";
             this.CMLabel.Size = new System.Drawing.Size(65, 12);
             this.CMLabel.TabIndex = 5;
@@ -108,7 +110,7 @@
             // 
             // textPinUnlockKey
             // 
-            this.textPinUnlockKey.Location = new System.Drawing.Point(146, 223);
+            this.textPinUnlockKey.Location = new System.Drawing.Point(143, 203);
             this.textPinUnlockKey.MaxLength = 32;
             this.textPinUnlockKey.Name = "textPinUnlockKey";
             this.textPinUnlockKey.Size = new System.Drawing.Size(229, 21);
@@ -117,7 +119,7 @@
             // PINUNLOCKLabel
             // 
             this.PINUNLOCKLabel.AutoSize = true;
-            this.PINUNLOCKLabel.Location = new System.Drawing.Point(60, 226);
+            this.PINUNLOCKLabel.Location = new System.Drawing.Point(57, 206);
             this.PINUNLOCKLabel.Name = "PINUNLOCKLabel";
             this.PINUNLOCKLabel.Size = new System.Drawing.Size(47, 12);
             this.PINUNLOCKLabel.TabIndex = 4;
@@ -125,7 +127,7 @@
             // 
             // textPinResetKey
             // 
-            this.textPinResetKey.Location = new System.Drawing.Point(146, 175);
+            this.textPinResetKey.Location = new System.Drawing.Point(143, 160);
             this.textPinResetKey.MaxLength = 32;
             this.textPinResetKey.Name = "textPinResetKey";
             this.textPinResetKey.Size = new System.Drawing.Size(229, 21);
@@ -133,7 +135,7 @@
             // 
             // textAIAuthKey
             // 
-            this.textAIAuthKey.Location = new System.Drawing.Point(146, 127);
+            this.textAIAuthKey.Location = new System.Drawing.Point(143, 117);
             this.textAIAuthKey.MaxLength = 32;
             this.textAIAuthKey.Name = "textAIAuthKey";
             this.textAIAuthKey.Size = new System.Drawing.Size(229, 21);
@@ -141,7 +143,7 @@
             // 
             // textAMTendingKey
             // 
-            this.textAMTendingKey.Location = new System.Drawing.Point(146, 79);
+            this.textAMTendingKey.Location = new System.Drawing.Point(143, 74);
             this.textAMTendingKey.MaxLength = 32;
             this.textAMTendingKey.Name = "textAMTendingKey";
             this.textAMTendingKey.Size = new System.Drawing.Size(229, 21);
@@ -149,7 +151,7 @@
             // 
             // textAMKey
             // 
-            this.textAMKey.Location = new System.Drawing.Point(146, 31);
+            this.textAMKey.Location = new System.Drawing.Point(143, 31);
             this.textAMKey.MaxLength = 32;
             this.textAMKey.Name = "textAMKey";
             this.textAMKey.Size = new System.Drawing.Size(229, 21);
@@ -158,7 +160,7 @@
             // PINRESETLabel
             // 
             this.PINRESETLabel.AutoSize = true;
-            this.PINRESETLabel.Location = new System.Drawing.Point(48, 178);
+            this.PINRESETLabel.Location = new System.Drawing.Point(45, 163);
             this.PINRESETLabel.Name = "PINRESETLabel";
             this.PINRESETLabel.Size = new System.Drawing.Size(71, 12);
             this.PINRESETLabel.TabIndex = 3;
@@ -167,7 +169,7 @@
             // AIAuthLabel
             // 
             this.AIAuthLabel.AutoSize = true;
-            this.AIAuthLabel.Location = new System.Drawing.Point(33, 130);
+            this.AIAuthLabel.Location = new System.Drawing.Point(30, 120);
             this.AIAuthLabel.Name = "AIAuthLabel";
             this.AIAuthLabel.Size = new System.Drawing.Size(101, 12);
             this.AIAuthLabel.TabIndex = 2;
@@ -176,7 +178,7 @@
             // AMTendingLabel
             // 
             this.AMTendingLabel.AutoSize = true;
-            this.AMTendingLabel.Location = new System.Drawing.Point(45, 82);
+            this.AMTendingLabel.Location = new System.Drawing.Point(42, 77);
             this.AMTendingLabel.Name = "AMTendingLabel";
             this.AMTendingLabel.Size = new System.Drawing.Size(77, 12);
             this.AMTendingLabel.TabIndex = 1;
@@ -185,32 +187,32 @@
             // AMLabel
             // 
             this.AMLabel.AutoSize = true;
-            this.AMLabel.Location = new System.Drawing.Point(45, 34);
+            this.AMLabel.Location = new System.Drawing.Point(42, 34);
             this.AMLabel.Name = "AMLabel";
             this.AMLabel.Size = new System.Drawing.Size(77, 12);
             this.AMLabel.TabIndex = 0;
             this.AMLabel.Text = "应用主控密钥";
             // 
-            // textUnlockUnloadKey
+            // textUnGrayKey
             // 
-            this.textUnlockUnloadKey.Location = new System.Drawing.Point(146, 415);
-            this.textUnlockUnloadKey.MaxLength = 32;
-            this.textUnlockUnloadKey.Name = "textUnlockUnloadKey";
-            this.textUnlockUnloadKey.Size = new System.Drawing.Size(229, 21);
-            this.textUnlockUnloadKey.TabIndex = 18;
+            this.textUnGrayKey.Location = new System.Drawing.Point(143, 418);
+            this.textUnGrayKey.MaxLength = 32;
+            this.textUnGrayKey.Name = "textUnGrayKey";
+            this.textUnGrayKey.Size = new System.Drawing.Size(229, 21);
+            this.textUnGrayKey.TabIndex = 18;
             // 
-            // UnlockUnloadLabel
+            // UnGrayLabel
             // 
-            this.UnlockUnloadLabel.AutoSize = true;
-            this.UnlockUnloadLabel.Location = new System.Drawing.Point(45, 418);
-            this.UnlockUnloadLabel.Name = "UnlockUnloadLabel";
-            this.UnlockUnloadLabel.Size = new System.Drawing.Size(77, 12);
-            this.UnlockUnloadLabel.TabIndex = 8;
-            this.UnlockUnloadLabel.Text = "联机解扣密钥";
+            this.UnGrayLabel.AutoSize = true;
+            this.UnGrayLabel.Location = new System.Drawing.Point(42, 421);
+            this.UnGrayLabel.Name = "UnGrayLabel";
+            this.UnGrayLabel.Size = new System.Drawing.Size(77, 12);
+            this.UnGrayLabel.TabIndex = 8;
+            this.UnGrayLabel.Text = "联机解扣密钥";
             // 
             // textOverdraftKey
             // 
-            this.textOverdraftKey.Location = new System.Drawing.Point(146, 463);
+            this.textOverdraftKey.Location = new System.Drawing.Point(143, 461);
             this.textOverdraftKey.MaxLength = 32;
             this.textOverdraftKey.Name = "textOverdraftKey";
             this.textOverdraftKey.Size = new System.Drawing.Size(229, 21);
@@ -219,7 +221,7 @@
             // ODLabel
             // 
             this.ODLabel.AutoSize = true;
-            this.ODLabel.Location = new System.Drawing.Point(33, 466);
+            this.ODLabel.Location = new System.Drawing.Point(30, 464);
             this.ODLabel.Name = "ODLabel";
             this.ODLabel.Size = new System.Drawing.Size(101, 12);
             this.ODLabel.TabIndex = 9;
@@ -227,7 +229,7 @@
             // 
             // textTacKey
             // 
-            this.textTacKey.Location = new System.Drawing.Point(146, 367);
+            this.textTacKey.Location = new System.Drawing.Point(143, 375);
             this.textTacKey.MaxLength = 32;
             this.textTacKey.Name = "textTacKey";
             this.textTacKey.Size = new System.Drawing.Size(229, 21);
@@ -236,23 +238,42 @@
             // TACLabel
             // 
             this.TACLabel.AutoSize = true;
-            this.TACLabel.Location = new System.Drawing.Point(60, 370);
+            this.TACLabel.Location = new System.Drawing.Point(57, 378);
             this.TACLabel.Name = "TACLabel";
             this.TACLabel.Size = new System.Drawing.Size(47, 12);
             this.TACLabel.TabIndex = 7;
             this.TACLabel.Text = "TAC密钥";
+            // 
+            // textAppUnLoadKey
+            // 
+            this.textAppUnLoadKey.Location = new System.Drawing.Point(143, 332);
+            this.textAppUnLoadKey.MaxLength = 32;
+            this.textAppUnLoadKey.Name = "textAppUnLoadKey";
+            this.textAppUnLoadKey.Size = new System.Drawing.Size(229, 21);
+            this.textAppUnLoadKey.TabIndex = 23;
+            // 
+            // ULMLabel
+            // 
+            this.ULMLabel.AutoSize = true;
+            this.ULMLabel.Location = new System.Drawing.Point(54, 335);
+            this.ULMLabel.Name = "ULMLabel";
+            this.ULMLabel.Size = new System.Drawing.Size(53, 12);
+            this.ULMLabel.TabIndex = 22;
+            this.ULMLabel.Text = "圈存密钥";
             // 
             // InsertAppKey
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(426, 562);
+            this.Controls.Add(this.textAppUnLoadKey);
+            this.Controls.Add(this.ULMLabel);
             this.Controls.Add(this.textTacKey);
             this.Controls.Add(this.TACLabel);
             this.Controls.Add(this.textOverdraftKey);
             this.Controls.Add(this.ODLabel);
-            this.Controls.Add(this.textUnlockUnloadKey);
-            this.Controls.Add(this.UnlockUnloadLabel);
+            this.Controls.Add(this.textUnGrayKey);
+            this.Controls.Add(this.UnGrayLabel);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.textAppLoadKey);
@@ -297,11 +318,13 @@
         private System.Windows.Forms.Label AIAuthLabel;
         private System.Windows.Forms.Label AMTendingLabel;
         private System.Windows.Forms.Label AMLabel;
-        private System.Windows.Forms.TextBox textUnlockUnloadKey;
-        private System.Windows.Forms.Label UnlockUnloadLabel;
+        private System.Windows.Forms.TextBox textUnGrayKey;
+        private System.Windows.Forms.Label UnGrayLabel;
         private System.Windows.Forms.TextBox textOverdraftKey;
         private System.Windows.Forms.Label ODLabel;
         private System.Windows.Forms.TextBox textTacKey;
         private System.Windows.Forms.Label TACLabel;
+        private System.Windows.Forms.TextBox textAppUnLoadKey;
+        private System.Windows.Forms.Label ULMLabel;
     }
 }

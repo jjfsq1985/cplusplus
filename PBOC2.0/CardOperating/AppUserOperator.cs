@@ -1291,5 +1291,27 @@ namespace CardOperating
             if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
                 e.Handled = true;//不接受非数字值
         }
+
+        private void textGasCount_Validated(object sender, EventArgs e)
+        {
+            byte LimitGasCount = 0;
+            byte.TryParse(textGasCount.Text, out LimitGasCount);
+            if (LimitGasCount <= 0 || LimitGasCount > 9)
+            {
+                textGasCount.Text = "";
+                MessageBox.Show("每日限制加气1～9次。");
+            }
+        }
+
+        private void textGasAmount_Validated(object sender, EventArgs e)
+        {
+            double dbAmount = 0;
+            double.TryParse(textGasAmount.Text, out dbAmount);
+            if (dbAmount <= 0 && dbAmount >= 1000000.0)
+            {
+                textGasCount.Text = "";
+                MessageBox.Show("每日限制总加气金额最多1000,000.00元");                
+            }
+        }
     }
 }

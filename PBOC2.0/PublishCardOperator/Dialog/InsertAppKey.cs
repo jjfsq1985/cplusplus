@@ -52,11 +52,13 @@ namespace PublishCardOperator.Dialog
                 return;
             if (!FillAppKeyValue(textCMKey.Text, m_AppKeyVal.ConsumerMasterKey, "消费主密钥"))
                 return;
-            if (!FillAppKeyValue(textAppLoadKey.Text, m_AppKeyVal.LoadMasterKey, "圈存密钥"))
+            if (!FillAppKeyValue(textAppLoadKey.Text, m_AppKeyVal.LoadKey, "圈存密钥"))
+                return;
+            if (!FillAppKeyValue(textAppLoadKey.Text, m_AppKeyVal.UnLoadKey, "圈提密钥"))
                 return;
             if (!FillAppKeyValue(textTacKey.Text, m_AppKeyVal.TacMasterKey, "TAC密钥"))
                 return;
-            if (!FillAppKeyValue(textUnlockUnloadKey.Text, m_AppKeyVal.UnlockUnloadKey, "联机解扣密钥"))
+            if (!FillAppKeyValue(textUnGrayKey.Text, m_AppKeyVal.UnGrayKey, "联机解扣密钥"))
                 return;
             if (!FillAppKeyValue(textOverdraftKey.Text, m_AppKeyVal.OverdraftKey, "修改透支限额密钥"))
                 return;

@@ -85,8 +85,8 @@ begin
 		select @OrgKey = OrgKey from Key_OrgRoot where KeyId = @OrgKeyId and KeyType <> 1;
 		select @MasterKey = MasterKey from Key_CpuCard where KeyId = @CpuKeyId;
 		insert into Base_Card_Key select @KeyGuid,@OrgKey,@MasterKey,
-					ApplicationIndex,ApplicationTendingKey,LoadMasterKey,
-					UnlockUnloadKey,PINUnlockKey,PINResetKey from Key_CARD_ADF where RelatedKeyId = @CpuKeyId;
+					ApplicationIndex,ApplicationTendingKey,LoadKey,UnLoadKey,
+					UnGrayKey,PINUnlockKey,PINResetKey from Key_CARD_ADF where RelatedKeyId = @CpuKeyId;
 	commit tran miantran
 	return 0
 end

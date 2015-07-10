@@ -165,18 +165,18 @@ namespace CardOperating
                 DialogResult Result = MessageBox.Show("读卡器没有插入或者不是PC/SC模式，是否切换到PC/SC模式？", "错误", MessageBoxButtons.YesNo);
                 if (Result == DialogResult.Yes)
                 {
-                    m_DevControl.ChangeDevice(3);//三类读卡器全开。
+                    m_DevControl.ChangeDevice(2);//打开接触和非接式读卡器。
                     return;
                 }
             }
             else
             {
-                if (nMode > 0 && nMode != 3)
+                if (nMode == 1)
                 {
                     DialogResult Result = MessageBox.Show("接触式读卡器不能使用，是否打开？", "提示", MessageBoxButtons.YesNo);
                     if (Result == DialogResult.Yes)
                     {
-                        m_DevControl.ChangeDevice(3);//三类读卡器全开。
+                        m_DevControl.ChangeDevice(2);//打开接触和非接式读卡器。
                         return;
                     }                    
                 }

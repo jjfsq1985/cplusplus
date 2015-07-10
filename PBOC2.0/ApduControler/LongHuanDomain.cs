@@ -13,7 +13,7 @@ namespace ApduCtrl
     {
         private string m_ReaderNameContactless = "Duali DE-620 Contactless Reader 0";
         private string m_ReaderNameContact = "Duali DE-620 Contact Reader 0";
-        private string m_ReaderNameSam = "Duali DE-620 SAM Reader 0";
+        private string m_ReaderNameSam = "Duali DE-620 SAM Reader 0";   //该读卡器在内部，标准SAM卡槽，一般不用于制卡
 
         private PcscSmardCard m_PcscReader = new PcscSmardCard();
 
@@ -86,18 +86,18 @@ namespace ApduCtrl
 
         public void CloseCard()
         {
-            m_PcscReader.LH_DisconnectReader(1);
+            m_PcscReader.LH_DisconnectReader(m_ReaderNameContactless);
         }
 
         public void CloseContactCard()
         {
-            m_PcscReader.LH_DisconnectReader(2);
+            m_PcscReader.LH_DisconnectReader(m_ReaderNameContact);
         }
 
         public bool IccPowerOn(ref string CardAtr)
         {
             byte[] byteCardAtr = null;
-            if (m_PcscReader.LH_ConnectReader(m_ReaderNameSam, out byteCardAtr))
+            if (m_PcscReader.LH_ConnectReader(m_ReaderNameContact, out byteCardAtr))
             {
                 CardAtr = BitConverter.ToString(byteCardAtr).Replace("-", "");
                 return true;
@@ -107,13 +107,13 @@ namespace ApduCtrl
 
         public int IccCmdExchange(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
         {
-            return m_PcscReader.LH_DataTransmit(m_ReaderNameSam,data, datalen, outdata, ref outdatalen);
+            return m_PcscReader.LH_DataTransmit(m_ReaderNameContact, data, datalen, outdata, ref outdatalen);
 
         }
 
         public void IccPowerOff()
         {
-            m_PcscReader.LH_DisconnectReader(3);
+            m_PcscReader.LH_DisconnectReader(m_ReaderNameContact);
         }
 
         private byte ToAsc(byte Hex)
@@ -168,7 +168,7 @@ namespace ApduCtrl
                 }
                 byte ChangeMode = (byte)nMode;
                 bool bChange = m_PcscReader.LH_ChangeMode(false,ref ChangeMode);
-                m_PcscReader.LH_DisconnectReader(1);
+                m_PcscReader.LH_DisconnectReader(m_ReaderNameContactless);
                 return bChange;
             }
 

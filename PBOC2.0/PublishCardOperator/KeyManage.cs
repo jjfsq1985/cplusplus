@@ -111,9 +111,10 @@ namespace PublishCardOperator
             AppKeyGridView.Columns.Add("AppPinResetKey", "PIN密码重装\n密钥");
             AppKeyGridView.Columns.Add("AppPinUnlockKey", "PIN解锁密钥");
             AppKeyGridView.Columns.Add("ConsumerMasterKey", "消费主密钥");
-            AppKeyGridView.Columns.Add("LoadMasterKey", "圈存密钥");
+            AppKeyGridView.Columns.Add("LoadKey", "圈存密钥");
+            AppKeyGridView.Columns.Add("UnloadKey", "圈提密钥");
             AppKeyGridView.Columns.Add("TacMasterKey", "TAC密钥");
-            AppKeyGridView.Columns.Add("UnlockUnloadKey", "联机解扣密钥");
+            AppKeyGridView.Columns.Add("UnGrayKey", "联机解扣密钥");
             AppKeyGridView.Columns.Add("OverdraftKey", "修改透支限额\n密钥");
             for (int i = 0; i < AppKeyGridView.Columns.Count; i++)
                 AppKeyGridView.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -268,9 +269,10 @@ namespace PublishCardOperator
                         FillKeyValue(dataReader, keyval.PINResetKey, "PINResetKey");
                         FillKeyValue(dataReader, keyval.PINUnlockKey, "PINUnlockKey");
                         FillKeyValue(dataReader, keyval.ConsumerMasterKey, "ConsumerMasterKey");
-                        FillKeyValue(dataReader, keyval.LoadMasterKey, "LoadMasterKey");
+                        FillKeyValue(dataReader, keyval.LoadKey, "LoadKey");
+                        FillKeyValue(dataReader, keyval.UnLoadKey, "UnLoadKey");
                         FillKeyValue(dataReader, keyval.TacMasterKey, "TacMasterKey");
-                        FillKeyValue(dataReader, keyval.UnlockUnloadKey, "UnlockUnloadKey");
+                        FillKeyValue(dataReader, keyval.UnGrayKey, "UnGrayKey");
                         FillKeyValue(dataReader, keyval.OverdraftKey, "OverdraftKey");
                         lstAppKey.Add(keyval);
                     }
@@ -300,10 +302,11 @@ namespace PublishCardOperator
                 AppKeyGridView.Rows[index].Cells[5].Value = BitConverter.ToString(AppKeyGroup.PINResetKey).Replace("-", "");
                 AppKeyGridView.Rows[index].Cells[6].Value = BitConverter.ToString(AppKeyGroup.PINUnlockKey).Replace("-", "");
                 AppKeyGridView.Rows[index].Cells[7].Value = BitConverter.ToString(AppKeyGroup.ConsumerMasterKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[8].Value = BitConverter.ToString(AppKeyGroup.LoadMasterKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[9].Value = BitConverter.ToString(AppKeyGroup.TacMasterKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[10].Value = BitConverter.ToString(AppKeyGroup.UnlockUnloadKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[11].Value = BitConverter.ToString(AppKeyGroup.OverdraftKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[8].Value = BitConverter.ToString(AppKeyGroup.LoadKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[9].Value = BitConverter.ToString(AppKeyGroup.UnLoadKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[10].Value = BitConverter.ToString(AppKeyGroup.TacMasterKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[11].Value = BitConverter.ToString(AppKeyGroup.UnGrayKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[12].Value = BitConverter.ToString(AppKeyGroup.OverdraftKey).Replace("-", "");
             }
         }
 
@@ -680,15 +683,18 @@ namespace PublishCardOperator
                         CheckItemText(nAppIndex, nItem, AppKeyVal.ConsumerMasterKey);
                         break;
                     case 8:
-                        CheckItemText(nAppIndex, nItem, AppKeyVal.LoadMasterKey);
+                        CheckItemText(nAppIndex, nItem, AppKeyVal.LoadKey);
                         break;
                     case 9:
-                        CheckItemText(nAppIndex, nItem, AppKeyVal.TacMasterKey);
+                        CheckItemText(nAppIndex, nItem, AppKeyVal.UnLoadKey);
                         break;
                     case 10:
-                        CheckItemText(nAppIndex, nItem, AppKeyVal.UnlockUnloadKey);
+                        CheckItemText(nAppIndex, nItem, AppKeyVal.TacMasterKey);
                         break;
                     case 11:
+                        CheckItemText(nAppIndex, nItem, AppKeyVal.UnGrayKey);
+                        break;
+                    case 12:
                         CheckItemText(nAppIndex, nItem, AppKeyVal.OverdraftKey);
                         break;
                 }
@@ -804,15 +810,25 @@ namespace PublishCardOperator
                         break;
                     case 8:
                         {
-                            byte[] KeyVal = GetCpuKeyByte(AppKeyGridView, nAppIndex, nItem, AppKeyVal.LoadMasterKey);
+                            byte[] KeyVal = GetCpuKeyByte(AppKeyGridView, nAppIndex, nItem, AppKeyVal.LoadKey);
                             if (KeyVal != null)
                             {
-                                Buffer.BlockCopy(KeyVal, 0, AppKeyVal.LoadMasterKey, 0, 16);
+                                Buffer.BlockCopy(KeyVal, 0, AppKeyVal.LoadKey, 0, 16);
                                 AppKeyVal.eDbFlag = DbStateFlag.eDbDirty;
                             }
                         }
                         break;
                     case 9:
+                        {
+                            byte[] KeyVal = GetCpuKeyByte(AppKeyGridView, nAppIndex, nItem, AppKeyVal.UnLoadKey);
+                            if (KeyVal != null)
+                            {
+                                Buffer.BlockCopy(KeyVal, 0, AppKeyVal.UnLoadKey, 0, 16);
+                                AppKeyVal.eDbFlag = DbStateFlag.eDbDirty;
+                            }
+                        }
+                        break;
+                    case 10:
                         {
                             byte[] KeyVal = GetCpuKeyByte(AppKeyGridView, nAppIndex, nItem, AppKeyVal.TacMasterKey);
                             if (KeyVal != null)
@@ -822,17 +838,17 @@ namespace PublishCardOperator
                             }
                         }
                         break;
-                    case 10:
+                    case 11:
                         {
-                            byte[] KeyVal = GetCpuKeyByte(AppKeyGridView, nAppIndex, nItem, AppKeyVal.UnlockUnloadKey);
+                            byte[] KeyVal = GetCpuKeyByte(AppKeyGridView, nAppIndex, nItem, AppKeyVal.UnGrayKey);
                             if (KeyVal != null)
                             {
-                                Buffer.BlockCopy(KeyVal, 0, AppKeyVal.UnlockUnloadKey, 0, 16);
+                                Buffer.BlockCopy(KeyVal, 0, AppKeyVal.UnGrayKey, 0, 16);
                                 AppKeyVal.eDbFlag = DbStateFlag.eDbDirty;
                             }
                         }
                         break;
-                    case 11:
+                    case 12:
                         {
                             byte[] KeyVal = GetCpuKeyByte(AppKeyGridView, nAppIndex, nItem, AppKeyVal.OverdraftKey);
                             if (KeyVal != null)
@@ -912,7 +928,7 @@ namespace PublishCardOperator
                     AppKeyValueGroup AppKey = m_lstCpuKey[i].LstAppKeyGroup[j];
                     if (AppKey.eDbFlag != DbStateFlag.eDbOK)
                     {
-                        SqlParameter[] sqlparams = new SqlParameter[13];
+                        SqlParameter[] sqlparams = new SqlParameter[14];
                         sqlparams[0] = m_ObjSql.MakeParam("RelatedKeyId", SqlDbType.Int, 4, ParameterDirection.Input, nRelatedKeyId);
                         sqlparams[1] = m_ObjSql.MakeParam("AppIndex", SqlDbType.Int, 4, ParameterDirection.Input, AppKey.AppIndex);
 
@@ -934,19 +950,22 @@ namespace PublishCardOperator
                         strBcd = BitConverter.ToString(AppKey.ConsumerMasterKey).Replace("-", "");
                         sqlparams[7] = m_ObjSql.MakeParam("ConsumerMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
-                        strBcd = BitConverter.ToString(AppKey.LoadMasterKey).Replace("-", "");
-                        sqlparams[8] = m_ObjSql.MakeParam("LoadMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+                        strBcd = BitConverter.ToString(AppKey.LoadKey).Replace("-", "");
+                        sqlparams[8] = m_ObjSql.MakeParam("LoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+                        strBcd = BitConverter.ToString(AppKey.UnLoadKey).Replace("-", "");
+                        sqlparams[9] = m_ObjSql.MakeParam("UnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
                         strBcd = BitConverter.ToString(AppKey.TacMasterKey).Replace("-", "");
-                        sqlparams[9] = m_ObjSql.MakeParam("TacMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+                        sqlparams[10] = m_ObjSql.MakeParam("TacMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
-                        strBcd = BitConverter.ToString(AppKey.UnlockUnloadKey).Replace("-", "");
-                        sqlparams[10] = m_ObjSql.MakeParam("UnlockUnloadKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+                        strBcd = BitConverter.ToString(AppKey.UnGrayKey).Replace("-", "");
+                        sqlparams[11] = m_ObjSql.MakeParam("UnGrayKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
                         strBcd = BitConverter.ToString(AppKey.OverdraftKey).Replace("-", "");
-                        sqlparams[11] = m_ObjSql.MakeParam("OvertraftKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+                        sqlparams[12] = m_ObjSql.MakeParam("OvertraftKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
-                        sqlparams[12] = m_ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, AppKey.eDbFlag);
+                        sqlparams[13] = m_ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, AppKey.eDbFlag);
 
                         if (m_ObjSql.ExecuteProc("PROC_UpdateCpuAppKey", sqlparams) == 0)
                         {
@@ -1057,10 +1076,11 @@ namespace PublishCardOperator
                 AppKeyGridView.Rows[index].Cells[5].Value = BitConverter.ToString(newAppKey.PINResetKey).Replace("-", "");
                 AppKeyGridView.Rows[index].Cells[6].Value = BitConverter.ToString(newAppKey.PINUnlockKey).Replace("-", "");
                 AppKeyGridView.Rows[index].Cells[7].Value = BitConverter.ToString(newAppKey.ConsumerMasterKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[8].Value = BitConverter.ToString(newAppKey.LoadMasterKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[9].Value = BitConverter.ToString(newAppKey.TacMasterKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[10].Value = BitConverter.ToString(newAppKey.UnlockUnloadKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[11].Value = BitConverter.ToString(newAppKey.OverdraftKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[8].Value = BitConverter.ToString(newAppKey.LoadKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[9].Value = BitConverter.ToString(newAppKey.UnLoadKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[10].Value = BitConverter.ToString(newAppKey.TacMasterKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[11].Value = BitConverter.ToString(newAppKey.UnGrayKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[12].Value = BitConverter.ToString(newAppKey.OverdraftKey).Replace("-", "");
                 SaveLstDataToDb();
             }
         }

@@ -91,9 +91,10 @@ namespace PublishCardOperator.Dialog
             item.SubItems.Add(BitConverter.ToString(newAppKey.PINResetKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.PINUnlockKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.ConsumerMasterKey).Replace("-", ""));
-            item.SubItems.Add(BitConverter.ToString(newAppKey.LoadMasterKey).Replace("-", ""));
+            item.SubItems.Add(BitConverter.ToString(newAppKey.LoadKey).Replace("-", ""));
+            item.SubItems.Add(BitConverter.ToString(newAppKey.UnLoadKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.TacMasterKey).Replace("-", ""));
-            item.SubItems.Add(BitConverter.ToString(newAppKey.UnlockUnloadKey).Replace("-", ""));
+            item.SubItems.Add(BitConverter.ToString(newAppKey.UnGrayKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.OverdraftKey).Replace("-", ""));            
             listAppKey.Items.Add(item);
         }

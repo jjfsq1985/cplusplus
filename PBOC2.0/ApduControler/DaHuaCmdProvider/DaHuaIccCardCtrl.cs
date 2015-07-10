@@ -254,9 +254,9 @@ namespace DaHuaApduCtrl
             return true; 
         }
 
-        private bool CreateKeyFile(ushort RecordCount, byte RecordLength)
+        private bool CreateKeyFile(ushort uFileId,ushort RecordCount, byte RecordLength)
         {
-            m_CmdProvider.createGenerateKeyCmd(RecordCount, RecordLength);
+            m_CmdProvider.createGenerateKeyCmd(uFileId,RecordCount, RecordLength);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -475,7 +475,7 @@ namespace DaHuaApduCtrl
                 return false;
             if (!ExternalAuthentication(false))
                 return false;
-            if (!CreateKeyFile(0x000A, 0x15))
+            if (!CreateKeyFile(0xFE01,0x000A, 0x15))
                 return false;
             if (!CreateFCI())
                 return false;
@@ -547,7 +547,7 @@ namespace DaHuaApduCtrl
             if (!ExternalAuthentication(false))
                 return false;
             //创建Key
-            if (!CreateKeyFile(0x0010, 0x15))
+            if (!CreateKeyFile(0xFE01,0x0010, 0x15))
                 return false;
             //FCI
             if (!CreateFCI())
@@ -781,7 +781,7 @@ namespace DaHuaApduCtrl
             //加密密钥3
             if (!StoragePsamKey(m_MADK, 0x87, 0x00, false))
                 return false;
-            //应用主控密钥
+            //密钥（MAC加密等）
             if (!StoragePsamKey(m_MADK, 0x89, 0x00, false))
                 return false;
             return true;

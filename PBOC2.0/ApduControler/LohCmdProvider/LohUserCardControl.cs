@@ -172,16 +172,16 @@ namespace LohApduCtrl
             return true;
         }
 
-        private bool ExternalAuthentication(bool bMainKey)
-        {
-            byte[] randByte = GetRandomValue(8);
-            if (randByte == null || randByte.Length != 8)
-                return false;
+        //private bool ExternalAuthentication(bool bMainKey)
+        //{
+        //    byte[] randByte = GetRandomValue(8);
+        //    if (randByte == null || randByte.Length != 8)
+        //        return false;
 
-            byte[] KeyVal = GetKeyVal(bMainKey, CardCategory.CpuCard);
+        //    byte[] KeyVal = GetKeyVal(bMainKey, CardCategory.CpuCard);
 
-            return ExternalAuthenticate(randByte, KeyVal);
-        }
+        //    return ExternalAuthenticate(randByte, KeyVal);
+        //}
 
         private bool ExternalAuthWithKey(byte[] KeyVal)
         {
@@ -219,24 +219,12 @@ namespace LohApduCtrl
 
         private bool DeleteMFWithKey(byte[] KeyVal)
         {
-            byte[] randByte = GetRandomValue(8);
-            if (randByte == null || randByte.Length != 8)
-                return false;
-
-            OnTextOutput(new MsgOutEvent(0, "使用密钥：" + BitConverter.ToString(KeyVal) + "初始化"));
-
-            return ClearMF(randByte, KeyVal);
+            return ClearMF(null, null);
         }
 
         private bool DeleteMF(bool bMainKey)
         {
-            byte[] randByte = GetRandomValue(8);
-            if (randByte == null || randByte.Length != 8)
-                return false;
-
-            byte[] KeyVal = GetKeyVal(bMainKey, CardCategory.CpuCard);
-            
-            return ClearMF(randByte, KeyVal);
+            return ClearMF(null, null);
         }
 
         private string GetFileDescribe(byte[] AIDName)
@@ -302,8 +290,6 @@ namespace LohApduCtrl
         public bool CreateDIR()
         {
             if (!SelectFile(m_PSE, null))
-                return false;
-            if (!ExternalAuthentication(false))
                 return false;
             if (!CreateFCI())
                 return false;
@@ -1136,7 +1122,7 @@ namespace LohApduCtrl
                     MessageBox.Show("无此卡的记录，不能解灰。");
                     return false;
                 }
-                Buffer.BlockCopy(keyUnlockGray, 0, m_MULK, 0, 16);
+                Buffer.BlockCopy(keyUnlockGray, 0, m_MUGK, 0, 16);
             }
             const byte BusinessType = 0x95; //交易类型标识：联机解0扣
             byte[] outData = new byte[18];
@@ -1156,7 +1142,7 @@ namespace LohApduCtrl
             byte[] MAC1 = new byte[4];
             Buffer.BlockCopy(outData, 14, MAC1, 0, 4);
             //判断MAC1是否正确
-            byte[] sesukk = GetProcessKey(ASN, m_MULK, rand, OnlineSn);//联机解扣密钥
+            byte[] sesukk = GetProcessKey(ASN, m_MUGK, rand, OnlineSn);//联机解扣密钥
             if (sesukk == null)
                 return false;
             byte[] srcData = new byte[13];//用于计算MAC1的原始数据
@@ -1333,12 +1319,14 @@ namespace LohApduCtrl
                 StrKeyToByte(strKey, m_MPUK);
                 strKey = (string)dataReader["ConsumerMasterKey"];
                 StrKeyToByte(strKey, m_MPK);
-                strKey = (string)dataReader["LoadMasterKey"];
+                strKey = (string)dataReader["LoadKey"];
                 StrKeyToByte(strKey, m_MLK);
+                strKey = (string)dataReader["UnLoadKey"];
+                StrKeyToByte(strKey, m_MULK);
                 strKey = (string)dataReader["TacMasterKey"];
                 StrKeyToByte(strKey, m_MTK);
-                strKey = (string)dataReader["UnlockUnloadKey"];
-                StrKeyToByte(strKey, m_MULK);
+                strKey = (string)dataReader["UnGrayKey"];
+                StrKeyToByte(strKey, m_MUGK);
                 strKey = (string)dataReader["OverdraftKey"];
                 StrKeyToByte(strKey, m_MUK);
                 SetUserAppKeyValue(m_MCMK);
@@ -1951,7 +1939,7 @@ namespace LohApduCtrl
         private void InitWhiteCard()
         {
             CreateMF();
-            ClearDF();            
+            //ClearDF();            
         }
     }
 }

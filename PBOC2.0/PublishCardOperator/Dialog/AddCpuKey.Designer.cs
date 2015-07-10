@@ -46,15 +46,16 @@
             this.PINUnlockKey = new System.Windows.Forms.ColumnHeader();
             this.AppConsumerKey = new System.Windows.Forms.ColumnHeader();
             this.AppLoadKey = new System.Windows.Forms.ColumnHeader();
+            this.AppUnLoadKey = new System.Windows.Forms.ColumnHeader();
             this.AppTacKey = new System.Windows.Forms.ColumnHeader();
-            this.UnlockUnloadKey = new System.Windows.Forms.ColumnHeader();
+            this.UnGrayKey = new System.Windows.Forms.ColumnHeader();
             this.OverdraftKey = new System.Windows.Forms.ColumnHeader();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupAppKey = new System.Windows.Forms.GroupBox();
             this.btnDelKey = new System.Windows.Forms.Button();
             this.BtnAddKey = new System.Windows.Forms.Button();
             this.KeyDetail = new System.Windows.Forms.Label();
             this.textKeyDetail = new System.Windows.Forms.TextBox();
-            this.groupBox1.SuspendLayout();
+            this.groupAppKey.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -149,8 +150,9 @@
             this.PINUnlockKey,
             this.AppConsumerKey,
             this.AppLoadKey,
+            this.AppUnLoadKey,
             this.AppTacKey,
-            this.UnlockUnloadKey,
+            this.UnGrayKey,
             this.OverdraftKey});
             this.listAppKey.FullRowSelect = true;
             this.listAppKey.GridLines = true;
@@ -207,27 +209,27 @@
             this.AppTacKey.Text = "TAC密钥";
             this.AppTacKey.Width = 150;
             // 
-            // UnlockUnloadKey
+            // UnGrayKey
             // 
-            this.UnlockUnloadKey.Text = "联机解扣密钥";
-            this.UnlockUnloadKey.Width = 150;
+            this.UnGrayKey.Text = "联机解扣密钥";
+            this.UnGrayKey.Width = 150;
             // 
             // OverdraftKey
             // 
             this.OverdraftKey.Text = "修改透支限额密钥";
             this.OverdraftKey.Width = 150;
             // 
-            // groupBox1
+            // groupAppKey
             // 
-            this.groupBox1.Controls.Add(this.btnDelKey);
-            this.groupBox1.Controls.Add(this.BtnAddKey);
-            this.groupBox1.Controls.Add(this.listAppKey);
-            this.groupBox1.Location = new System.Drawing.Point(11, 153);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(658, 206);
-            this.groupBox1.TabIndex = 32;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "应用密钥列表";
+            this.groupAppKey.Controls.Add(this.btnDelKey);
+            this.groupAppKey.Controls.Add(this.BtnAddKey);
+            this.groupAppKey.Controls.Add(this.listAppKey);
+            this.groupAppKey.Location = new System.Drawing.Point(11, 153);
+            this.groupAppKey.Name = "groupAppKey";
+            this.groupAppKey.Size = new System.Drawing.Size(658, 206);
+            this.groupAppKey.TabIndex = 32;
+            this.groupAppKey.TabStop = false;
+            this.groupAppKey.Text = "应用密钥列表";
             // 
             // btnDelKey
             // 
@@ -273,7 +275,7 @@
             this.ClientSize = new System.Drawing.Size(681, 428);
             this.Controls.Add(this.textKeyDetail);
             this.Controls.Add(this.KeyDetail);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupAppKey);
             this.Controls.Add(this.IsValid);
             this.Controls.Add(this.textAuthKey);
             this.Controls.Add(this.textTendingKey);
@@ -288,7 +290,7 @@
             this.MinimizeBox = false;
             this.Name = "AddCpuKey";
             this.Text = "用户卡密钥";
-            this.groupBox1.ResumeLayout(false);
+            this.groupAppKey.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -314,10 +316,11 @@
         private System.Windows.Forms.ColumnHeader PINUnlockKey;
         private System.Windows.Forms.ColumnHeader AppConsumerKey;
         private System.Windows.Forms.ColumnHeader AppLoadKey;
+        private System.Windows.Forms.ColumnHeader AppUnLoadKey;
         private System.Windows.Forms.ColumnHeader AppTacKey;
-        private System.Windows.Forms.ColumnHeader UnlockUnloadKey;
+        private System.Windows.Forms.ColumnHeader UnGrayKey;
         private System.Windows.Forms.ColumnHeader OverdraftKey;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupAppKey;
         private System.Windows.Forms.Button btnDelKey;
         private System.Windows.Forms.Button BtnAddKey;
         private System.Windows.Forms.Label KeyDetail;

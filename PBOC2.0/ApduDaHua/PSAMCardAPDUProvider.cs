@@ -13,7 +13,7 @@ namespace ApduDaHua
 
         }
 
-        public bool createGenerateKeyCmd(ushort RecordCount, byte RecordLength)
+        public bool createGenerateKeyCmd(ushort uFileId, ushort RecordCount, byte RecordLength)
         {
             m_CLA = 0x80;
             m_INS = 0xF5;
@@ -23,8 +23,8 @@ namespace ApduDaHua
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
             //File ID
-            m_Data[0] = 0xFE;
-            m_Data[1] = 0x01;
+            m_Data[0] = (byte)((uFileId >> 8) & 0xff);
+            m_Data[1] = (byte)(uFileId & 0xff);
             //File Type
             m_Data[2] = 0x8C;
             //Record Number
@@ -41,6 +41,11 @@ namespace ApduDaHua
             m_le = 0;
             m_nTotalLen = 14;
             return true;
+        }
+
+        public bool createStorageKeyCmd(byte[] keyVal, byte[] param1, byte[] param2)
+        {
+            return false;
         }
 
         public bool createStorageFCICmd(byte[] byteName, byte[] prefix)

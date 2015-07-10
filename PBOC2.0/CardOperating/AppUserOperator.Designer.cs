@@ -536,6 +536,7 @@
             this.textGasAmount.Name = "textGasAmount";
             this.textGasAmount.Size = new System.Drawing.Size(64, 21);
             this.textGasAmount.TabIndex = 10;
+            this.textGasAmount.Validated += new System.EventHandler(this.textGasAmount_Validated);
             this.textGasAmount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textGasAmount_KeyPress);
             // 
             // GasAmount
@@ -554,6 +555,7 @@
             this.textGasCount.Name = "textGasCount";
             this.textGasCount.Size = new System.Drawing.Size(64, 21);
             this.textGasCount.TabIndex = 8;
+            this.textGasCount.Validated += new System.EventHandler(this.textGasCount_Validated);
             this.textGasCount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textGasCount_KeyPress);
             // 
             // GasCount

@@ -40,9 +40,10 @@ namespace PublishCardOperator
         public byte[] PINResetKey = new byte[16];  //PIN密码重装密钥
         public byte[] PINUnlockKey = new byte[16]; //PIN解锁密钥
         public byte[] ConsumerMasterKey = new byte[16]; //消费主密钥
-        public byte[] LoadMasterKey = new byte[16];//圈存密钥
+        public byte[] LoadKey = new byte[16];//圈存密钥
+        public byte[] UnLoadKey = new byte[16];//圈提密钥
         public byte[] TacMasterKey = new byte[16];//TAC密钥
-        public byte[] UnlockUnloadKey = new byte[16];//联机解扣、圈提密钥
+        public byte[] UnGrayKey = new byte[16];//联机解扣密钥
         public byte[] OverdraftKey = new byte[16];//修改透支限额主密钥
         public DbStateFlag eDbFlag = DbStateFlag.eDbOK;  //是否已修改 
     }

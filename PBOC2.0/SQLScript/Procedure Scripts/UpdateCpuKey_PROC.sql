@@ -140,9 +140,10 @@ CREATE PROCEDURE PROC_UpdateCpuAppKey(
 	@PinResetKey char(32), --PIN密码重装密钥
 	@PinUnlockKey char(32), --PIN解锁密钥
 	@ConsumerMasterKey char(32),--消费主密钥
-	@LoadMasterKey char(32), --圈存密钥
+	@LoadKey char(32), --圈存密钥
+	@UnLoadKey char(32), --圈提密钥
 	@TacMasterKey	char(32), --TAC密钥
-	@UnlockUnloadKey char(32),  --联机解扣、圈提密钥
+	@UnGrayKey char(32),  --联机解扣密钥
 	@OvertraftKey char(32),--修改透支限额密钥
 	@DbState int --操作类型（0-不操作，1-更新，2-增加，3-删除）	
 	) With Encryption
@@ -167,11 +168,13 @@ CREATE PROCEDURE PROC_UpdateCpuAppKey(
 			return 2
 		if(len(@ConsumerMasterKey)<>32)	
 			return 2
-		if(len(@LoadMasterKey)<>32)
+		if(len(@LoadKey)<>32)
+			return 2
+		if(len(@UnLoadKey)<>32)
 			return 2
 		if(len(@TacMasterKey)<>32)
 			return 2
-		if(len(@UnlockUnloadKey)<>32)
+		if(len(@UnGrayKey)<>32)
 			return 2	
 		if(len(@OvertraftKey)<>32)
 			return 2
@@ -194,9 +197,10 @@ CREATE PROCEDURE PROC_UpdateCpuAppKey(
 								PINResetKey = @PinResetKey,
 								PINUnlockKey=@PinUnlockKey,
 								ConsumerMasterKey=@ConsumerMasterKey,
-								LoadMasterKey=@LoadMasterKey,
+								LoadKey=@LoadKey,
+								UnLoadKey=@UnLoadKey,
 								TacMasterKey=@TacMasterKey,
-								UnlockUnloadKey=@UnlockUnloadKey,
+								UnGrayKey=@UnGrayKey,
 								OverdraftKey=@OvertraftKey where RelatedKeyId = @RelatedKeyId and ApplicationIndex = @AppIndex;
 		if(@@ERROR <> 0)
 			begin
@@ -214,7 +218,7 @@ CREATE PROCEDURE PROC_UpdateCpuAppKey(
 		if(@AppCount <> 0)
 			return 3;
 		insert into Key_CARD_ADF values(@RelatedKeyId,@AppIndex,@AppMasterKey,@AppTendingKey,@AppInternalAuthKey,
-										@PinResetKey,@PinUnlockKey,@ConsumerMasterKey,@LoadMasterKey,@TacMasterKey,@UnlockUnloadKey,@OvertraftKey);
+										@PinResetKey,@PinUnlockKey,@ConsumerMasterKey,@LoadKey,@UnLoadKey,@TacMasterKey,@UnGrayKey,@OvertraftKey);
 		if(@@ERROR <> 0)
 			begin
 		    rollback tran maintran

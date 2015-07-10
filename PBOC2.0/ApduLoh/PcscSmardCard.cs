@@ -62,7 +62,7 @@ namespace ApduLoh
         {
             if (hContext == UIntPtr.Zero)
                 return true;
-            LH_DisconnectReader(0);
+            LH_DisconnectReader(null);
             WinSCard_Dll.SCardReleaseContext(hContext);
             hContext = UIntPtr.Zero;
             return true;
@@ -78,12 +78,7 @@ namespace ApduLoh
             CardAtr = null;
             if (hContext == UIntPtr.Zero)
                 return false;
-            if (strReadName == m_ReadName1)
-                LH_DisconnectReader(1);
-            else if(strReadName == m_ReadName0)
-                LH_DisconnectReader(2);
-            else if (strReadName == m_ReadName2)
-                LH_DisconnectReader(3);
+            LH_DisconnectReader(strReadName);
             //独占方式连接读卡器    
             UIntPtr hCard = UIntPtr.Zero;
             uint ActiveProtocol = WinSCard_Dll.SCARD_PROTOCOL_UNDEFINED;
@@ -130,9 +125,9 @@ namespace ApduLoh
         /// <summary>
         /// 关闭PCSC读卡器
         /// </summary>        
-        public bool LH_DisconnectReader(int nReader)
+        public bool LH_DisconnectReader(string strReaderName)
         {
-            if (nReader == 0)
+            if (string.IsNullOrEmpty(strReaderName))
             {
                 if (hCardContact != UIntPtr.Zero)
                 {
@@ -150,23 +145,24 @@ namespace ApduLoh
                     hCardSAM = UIntPtr.Zero;
                 }
             }
-            else if(nReader >= 1 && nReader <= 3)
+            else
             {
-                UIntPtr[] DisconnectPtr = new UIntPtr[4] { UIntPtr.Zero, hCardContactless,hCardContact,hCardSAM };
-
-                if (DisconnectPtr[nReader] != UIntPtr.Zero)
+                if (strReaderName == m_ReadName1)
                 {
-                    WinSCard_Dll.SCardDisconnect(DisconnectPtr[nReader], WinSCard_Dll.SCARD_LEAVE_CARD);
-                    if(nReader == 1)
-                        hCardContactless = UIntPtr.Zero;
-                    else if(nReader == 2)
-                        hCardContact = UIntPtr.Zero;
-                    else if(nReader == 3)
-                        hCardSAM = UIntPtr.Zero;
+                    WinSCard_Dll.SCardDisconnect(hCardContactless, WinSCard_Dll.SCARD_LEAVE_CARD);
+                    hCardContactless = UIntPtr.Zero;
+                }
+                else if (strReaderName == m_ReadName0)
+                {
+                    WinSCard_Dll.SCardDisconnect(hCardContact, WinSCard_Dll.SCARD_LEAVE_CARD);
+                    hCardContact = UIntPtr.Zero;
+                }
+                else if (strReaderName == m_ReadName2)
+                {
+                    WinSCard_Dll.SCardDisconnect(hCardSAM, WinSCard_Dll.SCARD_LEAVE_CARD);
+                    hCardSAM = UIntPtr.Zero;
                 }
             }
-
-
             return true;
         }
 

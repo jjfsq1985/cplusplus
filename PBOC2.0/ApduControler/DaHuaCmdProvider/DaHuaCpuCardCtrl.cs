@@ -38,8 +38,10 @@ namespace DaHuaApduCtrl
         private static byte[] m_MLK2 = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
         //TAC主密钥MTK
         private static byte[] m_MTK = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
-        //联机解扣主密钥 / 圈提主密钥MULK
+        //圈提主密钥MULK
         private static byte[] m_MULK = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
+        //联机解扣主密钥
+        private static byte[] m_MUGK = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
         //透支限额主密钥MUK
         private static byte[] m_MUK = new byte[] { 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC };
         //PIN解锁主密钥MPUK
@@ -1609,12 +1611,14 @@ namespace DaHuaApduCtrl
                 StrKeyToByte(strKey, m_MPUK);
                 strKey = (string)dataReader["ConsumerMasterKey"];
                 StrKeyToByte(strKey, m_MPK1);
-                strKey = (string)dataReader["LoadMasterKey"];
+                strKey = (string)dataReader["LoadKey"];
                 StrKeyToByte(strKey, m_MLK1);
+                strKey = (string)dataReader["UnLoadKey"];
+                StrKeyToByte(strKey, m_MULK);
                 strKey = (string)dataReader["TacMasterKey"];
                 StrKeyToByte(strKey, m_MTK);
-                strKey = (string)dataReader["UnlockUnloadKey"];
-                StrKeyToByte(strKey, m_MULK);
+                strKey = (string)dataReader["UnGrayKey"];
+                StrKeyToByte(strKey, m_MUGK);
                 strKey = (string)dataReader["OverdraftKey"];
                 StrKeyToByte(strKey, m_MUK);
                 SetUserAppKeyValue(m_MCMK);

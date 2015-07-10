@@ -63,7 +63,8 @@ CREATE TABLE [dbo].[Base_Card_Key](
 	[ApplicationIndex] [int] NOT NULL,
 	[AppTendingKey] [char](32) NULL,
 	[AppLoadKey] [char] (32) NULL,
-	[AppUnlockKey] [char](32) NULL,
+	[AppUnLoadKey] [char] (32) NULL,	
+	[AppUnGrayKey] [char](32) NULL,
 	[AppPinUnlockKey] [char](32) NULL,
 	[AppPinResetKey] [char](32) NULL
 ) ON [PRIMARY]
@@ -201,7 +202,10 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用圈存密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card_Key', @level2type=N'COLUMN',@level2name=N'AppLoadKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用联机解扣密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card_Key', @level2type=N'COLUMN',@level2name=N'AppUnlockKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用圈提密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card_Key', @level2type=N'COLUMN',@level2name=N'AppUnLoadKey'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用联机解扣密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card_Key', @level2type=N'COLUMN',@level2name=N'AppUnGrayKey'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用PIN解锁密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card_Key', @level2type=N'COLUMN',@level2name=N'AppPinUnlockKey'

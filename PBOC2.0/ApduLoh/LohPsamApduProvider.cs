@@ -13,103 +13,49 @@ namespace ApduLoh
 
         }
 
-        public bool createGenerateKeyCmd(ushort RecordCount, byte RecordLength)
+        public bool createGenerateKeyCmd(ushort uFileId, ushort RecordCount, byte RecordLength)
         {
             m_CLA = 0x80;
-            m_INS = 0xF5;
+            m_INS = 0xE0;
             m_P1 = 0x00;
             m_P2 = 0x00;
-            int nLen = 9;
+            int nLen = 7;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
-            //File ID
-            m_Data[0] = 0xFE;
-            m_Data[1] = 0x01;
-            //File Type
-            m_Data[2] = 0x8C;
-            //Record Number
-            m_Data[3] = (byte)((RecordCount >> 8) & 0xff);
-            m_Data[4] = (byte)(RecordCount & 0xff);
-            //Record Length
-            m_Data[5] = RecordLength;
-            //ACr
-            m_Data[6] = 0x00;
-            //ACw
-            m_Data[7] = 0x00;
-            //ACu
-            m_Data[8] = 0x40;//密文+MAC
+            m_Data[0] = (byte)((uFileId >> 8) & 0xff);
+            m_Data[1] = (byte)(uFileId & 0xff);
+            m_Data[2] = 0x48;
+            m_Data[3] = 0x01;
+            m_Data[4] = 0xF0;
+            m_Data[5] = 0xFF;
+            m_Data[6] = 0xFF;
             m_le = 0;
-            m_nTotalLen = 14;
+            m_nTotalLen = 12;
+            return true;
+        }
+        
+        //卡片主控和维护密钥 的明文导入
+        public bool createStorageKeyCmd(byte[] keyVal, byte[] param1, byte[] param2)
+        {
+            if (param1.Length != 2 || param2.Length != 5)
+                return false;
+            m_CLA = 0x80;
+            m_INS = 0xD4;
+            m_P1 = param1[0];
+            m_P2 = param1[1];
+            int nLen = 21;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            Buffer.BlockCopy(param2, 0, m_Data, 0, 5);
+            Buffer.BlockCopy(keyVal, 0, m_Data, 5, 16);
+            m_le = 0;
+            m_nTotalLen = 5 + nLen;
             return true;
         }
 
         public bool createStorageFCICmd(byte[] byteName, byte[] prefix)
         {
-            if (byteName == null || byteName.Length < 5 || byteName.Length > 16)
-                return false;
-            int nNameLen = byteName.Length;
-            m_CLA = 0x80;
-            m_INS = 0xE2;
-            m_P1 = 0x00;
-            m_P2 = 0x01;
-            int nLen = nNameLen + 22;
-            if (prefix != null)
-                nLen += prefix.Length;
-            m_Lc = (byte)nLen;
-            m_Data = new byte[nLen];
-            m_Data[0] = 0x1E;
-            m_Data[1] = 0x01;
-            m_Data[2] = 0x21;
-            m_Data[3] = 0x20;
-            //Tag
-            m_Data[4] = 0x6F;
-            //Len
-            int nLen6F = nNameLen + 16; //后面所有长度
-            if (prefix != null)
-                nLen6F += prefix.Length;
-            m_Data[5] = (byte)nLen6F;
-            //Tag
-            m_Data[6] = 0x84;
-            //Len
-            int nLen84 = nNameLen;
-            if (prefix != null)
-                nLen84 += prefix.Length;
-            m_Data[7] = (byte)nLen84; //Name长度（包含A0 00 00 00 03）
-            int nOffset = 8;
-            if (prefix != null)
-            {
-                Buffer.BlockCopy(prefix, 0, m_Data, nOffset, prefix.Length);
-                nOffset += prefix.Length;
-            }            
-            Buffer.BlockCopy(byteName, 0, m_Data, nOffset, nNameLen);
-            nOffset += nNameLen;
-            //Tag
-            m_Data[nOffset] = 0xA5;
-            //Length
-            m_Data[nOffset+1] = 0x09;
-            //tag
-            m_Data[nOffset+2] = 0x9F;
-            m_Data[nOffset+3] = 0x08;
-            //应用版本号
-            m_Data[nOffset+4] = 0x01;
-            m_Data[nOffset+5] = 0x01;
-            //tag
-            m_Data[nOffset+6] = 0xBF;
-            m_Data[nOffset+7] = 0x0C;
-            //自定义数据
-            m_Data[nOffset+8] = 0x02;
-            m_Data[nOffset+9] = 0x55;
-            m_Data[nOffset+10] = 0x66;
-            //tag
-            m_Data[nOffset+11] = 0x88;
-            //目录基本文件的SFI
-            m_Data[nOffset+12] = 0x01;
-            m_Data[nOffset+13] = 0x01;            
-            nOffset += 14;
-            //}}
-            m_le = 0;
-            m_nTotalLen = 5 + nLen; //APDU Len
-            return true;
+            return false;//80e0
         }
 
         public bool createStorageCardInfoCmd(byte[] byteASN)
@@ -118,13 +64,13 @@ namespace ApduLoh
                 return false;
             m_CLA = 0x00;
             m_INS = 0xD6;
-            m_P1 = 0x00;
+            m_P1 = 0x95;
             m_P2 = 0x00;
             int nLen  = 14;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
-            //序列号，前面补2字节0
-            m_Data[0] = 0x00;
+            //序列号，前面补2字节
+            m_Data[0] = 0x01;
             m_Data[1] = 0x00;
             Buffer.BlockCopy(byteASN, 0, m_Data, 2, 8);
             m_Data[10] = 0x01;//PSAM版本号
@@ -148,41 +94,21 @@ namespace ApduLoh
         public bool createGenerateEFCmd(byte GenerateFlag, ushort FileId, byte FileType, ushort FileSize)
         {
             m_CLA = 0x80;
-            m_INS = 0xF5;
-            m_P1 = GenerateFlag;
-            m_P2 = 0x00;
-            int nLen = 10;
+            m_INS = 0xE0;
+            m_P1 = (byte)((FileId >> 8) & 0xff);
+            m_P2 = (byte)(FileId & 0xff);
+            int nLen = 7;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
-            //FileId
-            m_Data[0] = (byte)((FileId >> 8) & 0xff);
-            m_Data[1] = (byte)(FileId & 0xff);
-            //file Type
-            m_Data[2] = FileType; 
-            //file Size
-            m_Data[3] = (byte)((FileSize >> 8) & 0xff);
-            m_Data[4] = (byte)(FileSize & 0xff);
-            //Data
-            m_Data[5] = 0x00;
-            if (FileId == 0xFF01 || FileId == 0xFF03)
-            {
-                m_Data[6] = 0xFF;
-                m_Data[7] = 0xFF;
-            }
-            else if (FileId == 0x0018)
-            {
-                m_Data[6] = 0x00;
-                m_Data[7] = 0x01;
-            }
-            else
-            {
-                m_Data[6] = 0x00;
-                m_Data[7] = 0x00;
-            }
-            m_Data[8] = 0x00;
-            m_Data[9] = 0x00;
+            m_Data[0] = FileType;
+            m_Data[1] = (byte)((FileSize >> 8) & 0xff);
+            m_Data[2] = (byte)(FileSize & 0xff); 
+            m_Data[3] = 0xF0;
+            m_Data[4] = 0xF0;
+            m_Data[5] = 0xFF;
+            m_Data[6] = 0xFF;
             m_le = 0;
-            m_nTotalLen = 15;
+            m_nTotalLen = 12;
             return true;
         }
 
@@ -190,7 +116,7 @@ namespace ApduLoh
         {
             m_CLA = 0x00;
             m_INS = 0xA4;
-            m_P1 = 0x02;
+            m_P1 = 0x00;
             m_P2 = 0x00;
             int nLen = 2;
             m_Lc = (byte)nLen;
@@ -209,7 +135,7 @@ namespace ApduLoh
                 return false;
             m_CLA = 0x00;
             m_INS = 0xD6;
-            m_P1 = 0x00;
+            m_P1 = 0x96;
             m_P2 = 0x00;
             int nLen = 6;
             m_Lc = (byte)nLen;
@@ -226,27 +152,21 @@ namespace ApduLoh
                 return false;
             int nNameLen = byteName.Length;
             m_CLA = 0x80;
-            m_INS = 0xE6;
-            m_P1 = 0x08;
-            m_P2 = 0x00;
-            int nLen = 13 + nNameLen;
+            m_INS = 0xE0;
+            m_P1 = (byte)((FileId >> 8) & 0xff);
+            m_P2 = (byte)(FileId & 0xff);
+            int nLen = 21;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
-            //File ID
-            m_Data[0] = (byte)((FileId >> 8) & 0xff);
-            m_Data[1] = (byte)(FileId & 0xff);
-            //File Type
-            m_Data[2] = 0x20;
-            //AC
-            m_Data[3] = 0x00;
-            //应用类型
-            m_Data[4] = 0x01;
-            //FCI索引
-            m_Data[5] = 0x00;
-            //外部认证
-            m_Data[6] = 0x00;
-            //前3bit: SM+后6bit:Length
-            m_Data[7] = 0x2E;  //SM：密文+MAC
+            m_Data[0] = 0x38;
+            m_Data[1] = 0x05;                                    
+            m_Data[2] = 0x00;
+            m_Data[3] = 0xAA;
+            m_Data[4] = 0xAA;
+            m_Data[5] = 0xFF;
+            m_Data[6] = 0xFF;
+            m_Data[7] = 0xFF;
+
             m_Data[8] = 0xA0;
             m_Data[9] = 0x00;
             m_Data[10] = 0x00;
@@ -262,7 +182,7 @@ namespace ApduLoh
         {
             m_CLA = 0x00;
             m_INS = 0xD6;
-            m_P1 = 0x00;
+            m_P1 = 0x97;
             m_P2 = 0x00;
             int nLen = 25;
             m_Lc = (byte)nLen;
@@ -282,18 +202,7 @@ namespace ApduLoh
 
         public bool createWriteMAC2Cmd(byte maxCount, byte remainCount)
         {
-            m_CLA = 0x00;
-            m_INS = 0xD6;
-            m_P1 = 0x00;
-            m_P2 = 0x00;            
-            m_Lc = 2;
-            m_Data = new byte[2];
-            //全国消费密钥索引
-            m_Data[0] = 0x0A;
-            m_Data[1] = 0x0A;
-            m_le = 0;
-            m_nTotalLen = 7;
-            return true;
+            return false;
         }
 
         public bool createSetStatusCmd(byte[] RandomVal, byte[] keyCalc)
@@ -325,9 +234,9 @@ namespace ApduLoh
             m_Lc = (byte)nLen;
 
             byte[] bufferData = new byte[24];
-            bufferData[0] = 0x13;
+            bufferData[0] = 0x13; //明文长度
             bufferData[1] = Usage;
-            bufferData[2] = Ver;            
+            bufferData[2] = Ver;
             bufferData[3] = 0x00;
             Buffer.BlockCopy(StorageKey, 0, bufferData, 4, 16);
             //补齐24字节计算密文

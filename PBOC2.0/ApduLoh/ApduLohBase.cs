@@ -189,9 +189,6 @@ namespace ApduLoh
         /// <returns></returns>
         public bool createClearMFcmd(byte[] byteRandom, byte[] KeyValue)
         {
-            if (byteRandom.Length != 4 && byteRandom.Length != 8)
-                return false;
-
             m_CLA = 0x00;
             m_INS = 0xE4;
             m_P1 = 0x00;
