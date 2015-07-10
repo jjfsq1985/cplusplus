@@ -18,6 +18,8 @@ namespace FNTMain
         public DbSetting()
         {
             InitializeComponent();
+            this.AcceptButton = btnOK;
+            this.CancelButton = btnCancel;
         }
 
         public SqlConnectInfo GetDbInfo()

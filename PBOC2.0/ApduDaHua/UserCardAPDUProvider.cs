@@ -505,7 +505,7 @@ namespace ApduDaHua
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
             //发卡方标识
-            m_Data[0] = 0x35;
+            m_Data[0] = 0x10;  //中石化
             m_Data[1] = 0xFF;
             m_Data[2] = 0xFF;
             m_Data[3] = 0xFF;

@@ -71,8 +71,7 @@
             this.textPwd.PasswordChar = '#';
             this.textPwd.Size = new System.Drawing.Size(131, 23);
             this.textPwd.TabIndex = 1;
-            this.textPwd.Leave += new System.EventHandler(this.textPwd_Leave);
-            this.textPwd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPwd_KeyPress);
+            this.textPwd.Leave += new System.EventHandler(this.textPwd_Leave);            
             this.textPwd.Enter += new System.EventHandler(this.textPwd_Enter);
             // 
             // btnIn

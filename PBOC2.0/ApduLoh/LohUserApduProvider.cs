@@ -245,7 +245,7 @@ namespace ApduLoh
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
             //发卡方标识
-            m_Data[0] = 0x10;
+            m_Data[0] = 0x10;  //中石化
             m_Data[1] = 0xFF;
             m_Data[2] = 0xFF;
             m_Data[3] = 0xFF;
@@ -484,7 +484,71 @@ namespace ApduLoh
         
         public bool createUpdateEF0DFileCmd(byte[] key, byte[] RandomVal, UserCardInfoParam cardInfo)
         {
-            return false;
+            if (RandomVal.Length != 8)
+                return false;
+            m_CLA = 0x00;
+            int nLen = 64;
+            if (key != null)
+            {
+                m_CLA = 0x04;
+                nLen += 4;
+            }
+            m_INS = 0xD6;
+            m_P1 = 0x8D;
+            m_P2 = 0x00; 
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            for (int i = 0; i < nLen; i++)
+                m_Data[i] = 0xFF;
+            byte[] BoalExprie = GetBCDDate(cardInfo.BoalExprie);
+            Buffer.BlockCopy(BoalExprie, 0, m_Data, 0, 4);
+            if (!string.IsNullOrEmpty(cardInfo.CarNo))
+            {
+                byte[] CarNo = Encoding.Unicode.GetBytes(cardInfo.CarNo);
+                if (CarNo.Length <= 16)
+                    Buffer.BlockCopy(CarNo, 0, m_Data, 4, CarNo.Length);
+            }
+            if (!string.IsNullOrEmpty(cardInfo.BoalId))
+            {
+                byte[] BoalId = Encoding.ASCII.GetBytes(cardInfo.BoalId);
+                if (BoalId.Length <= 16)
+                    Buffer.BlockCopy(BoalId, 0, m_Data, 20, BoalId.Length);
+            }
+            m_Data[36] = (byte)cardInfo.CylinderNum; //钢瓶数量
+            if (!string.IsNullOrEmpty(cardInfo.BoalFactoryID))
+            {
+                byte[] BoalFactoryId = Encoding.ASCII.GetBytes(cardInfo.BoalFactoryID);
+                if (BoalFactoryId.Length <= 7)
+                    Buffer.BlockCopy(BoalFactoryId, 0, m_Data, 37, BoalFactoryId.Length);
+            }
+            m_Data[44] = (byte)(cardInfo.CylinderVolume & 0xFF); //钢瓶容积
+            m_Data[45] = (byte)((cardInfo.CylinderVolume >> 8) & 0xFF); //钢瓶容积
+            m_Data[46] = cardInfo.GetByteCarType();//车类型
+            if (!string.IsNullOrEmpty(cardInfo.BusDistance))
+            {
+                byte[] BusDistance = Encoding.ASCII.GetBytes(cardInfo.BusDistance);
+                if (BusDistance.Length <= 5)
+                    Buffer.BlockCopy(BusDistance, 0, m_Data, 47, BusDistance.Length);
+            }
+            //Array Index 52~63保留 0xFF
+            m_le = 0;
+            m_nTotalLen = 69;
+
+            if (key != null)
+            {
+                byte[] srcMacData = new byte[69]; //头5 +Data64
+                srcMacData[0] = m_CLA;
+                srcMacData[1] = m_INS;
+                srcMacData[2] = m_P1;
+                srcMacData[3] = m_P2;
+                srcMacData[4] = m_Lc;
+                Buffer.BlockCopy(m_Data, 0, srcMacData, 5, 64);
+                byte[] byteMAC = CalcMACValue(srcMacData, key, RandomVal);//计算MAC
+                Buffer.BlockCopy(byteMAC, 0, m_Data, 64, 4);  //m_Data的最后4字节是MAC校验
+                m_nTotalLen += 4;
+            }
+
+            return true;
         }
 
         public bool createUpdateEF10FileCmd(byte[] key, byte[] RandomVal)

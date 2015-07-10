@@ -30,6 +30,9 @@ namespace FNTMain
         {
             InitializeComponent();
 
+            this.AcceptButton = btnIn;
+            this.CancelButton = btnOut;
+
             ReadDbInfo();
         }
 
@@ -43,24 +46,30 @@ namespace FNTMain
             this.DialogResult = DialogResult.Cancel;
         }
 
-        private void CheckEnterMainForm()
+        private void btnIn_Click(object sender, EventArgs e)
         {
             if (!m_DbInfo.m_bConfig)
             {
                 MessageBox.Show("数据库尚未配置，请先设置数据库。");
                 return;
             }
-
-            if (textUser.Text.Length < 2 || textUser.Text.Length > 32)
+            if (string.IsNullOrEmpty(textUser.Text) || textUser.Text.Length < 2 || textUser.Text.Length > 32)
+            {
+                MessageBox.Show("请输入用户名");
                 return;
-            if (textPwd.Text.Length < 4 || textPwd.Text.Length > 32)
+            }
+            if (string.IsNullOrEmpty(textPwd.Text) || textPwd.Text.Length < 4 || textPwd.Text.Length > 32)
+            {
+                Info.ForeColor = Color.Red;
+                Info.Text = "(4-32个字符)";
                 return;
+            }
             string strUser = textUser.Text;
             string strPwd = textPwd.Text;
 
             if (!CheckUserAndPwd(strUser, strPwd))
             {
-               MessageBox.Show("用户名或密码不正确，请重新输入");
+                MessageBox.Show("用户名或密码不正确，请重新输入");
             }
             else
             {
@@ -69,15 +78,9 @@ namespace FNTMain
             }
         }
 
-        private void btnIn_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(textUser.Text) || string.IsNullOrEmpty(textPwd.Text))
-                return;
-            CheckEnterMainForm();
-        }
-
         private void CheckPwd()
         {
+            Info.ForeColor = Color.Black;
             if (textPwd.Text.Length < 4 || textPwd.Text.Length > 32)
                 Info.Text = "(4-32个字符)";
             else
@@ -156,15 +159,7 @@ namespace FNTMain
             ObjSql.CloseConnection();
             ObjSql = null;
             return bCheckPass;
-        }
-
-        private void textPwd_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == EnterKey && !string.IsNullOrEmpty(textUser.Text) && !string.IsNullOrEmpty(textPwd.Text))
-            {
-                CheckEnterMainForm();
-            }
-        }
+        }        
 
         private void btnDbSetting_Click(object sender, EventArgs e)
         {

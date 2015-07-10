@@ -445,6 +445,9 @@ namespace LohApduCtrl
              //气票应用敏感信息数据文件
             if (!CreateEFFile(0x001C, 0xA8, 0x0060, 0, 0xF0F0, 0xFFFF))
                  return false;
+            //气票专用数据文件
+            if (!CreateEFFile(0x000D, 0xA8, 0x0040, 0, 0xF0F0, 0xFFFF))
+                return false;
              //交易明细文件EF18 循环记录文件
              if (!CreateRecordFile(0x0018, 0x2E, 0x0B, 0x17, 0xF1EF, 0xFFFF))
                 return false;
@@ -714,6 +717,32 @@ namespace LohApduCtrl
             return true;
         }
 
+        private bool UpdateEF0DFile(byte[] key, UserCardInfoParam cardInfo)
+        {
+            byte[] randomVal = GetRandomValue(8);
+            if (randomVal == null || randomVal.Length != 8)
+                return false;
+            m_CmdProvider.createUpdateEF0DFileCmd(key, randomVal, cardInfo);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "更新气票专用数据文件EF0D失败"));
+                return false;
+            }
+            else
+            {
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                OnTextOutput(new MsgOutEvent(0, "更新气票专用数据文件EF0D应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+            }
+            return true;
+        }
+
         //更新加气应用文件
         //建文件时更新应用文件不需要密钥，也不需要MAC
         public bool UpdateApplicationFile(UserCardInfoParam UserCardInfoPar, byte[] AppTendingKey)
@@ -734,7 +763,10 @@ namespace LohApduCtrl
                 return false;
             //敏感信息文件
             if (!UpdateEF1CFile(AppTendingKey, UserCardInfoPar))
-                return false;   
+                return false;
+            //气票专用文件
+            if (!UpdateEF0DFile(AppTendingKey, UserCardInfoPar))
+                return false;
             return true;
         }
 
@@ -1442,6 +1474,7 @@ namespace LohApduCtrl
             {
                 GetBaseInfo(CardInfo);
                 GetLimitInfo(CardInfo);
+                GetCylinderInfo(CardInfo);
             }
         }
 
@@ -1552,6 +1585,90 @@ namespace LohApduCtrl
             }
             CardInfo.LimitGasFillCount = RecvData[63];
             CardInfo.LimitGasFillAmount = (uint)((RecvData[64] << 24) + (RecvData[65] << 16) + (RecvData[66] << 8) + RecvData[67]);            
+        }
+
+        private void GetCylinderInfo(UserCardInfoParam CardInfo)
+        {
+            m_CmdProvider.createGetEFFileCmd(0x8D, 0x40);//基本数据(100+01101)0x0D文件长度64
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+                return;
+            if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                return;
+            CardInfo.BoalExprie = DateTime.ParseExact(BitConverter.ToString(RecvData, 0, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+            int nCarNoCount = 0;
+            for (int i = 0; i < 16; i++)
+            {
+                if (RecvData[4 + i] != 0xFF)
+                    nCarNoCount++;
+                else
+                    break;
+            }
+            if (nCarNoCount > 0)
+            {
+                CardInfo.CarNo = Encoding.Unicode.GetString(RecvData, 4, nCarNoCount); //装配气瓶的车牌号
+            }
+            int nCount = 0;
+            for (int i = 0; i < 16; i++)
+            {
+                if (RecvData[20 + i] != 0xFF)
+                    nCount++;
+                else
+                    break;
+            }
+            if (nCount > 0)
+                CardInfo.BoalId = Encoding.ASCII.GetString(RecvData, 20, nCount);
+            CardInfo.CylinderNum = (int)RecvData[36];
+            nCount = 0;
+            for (int i = 0; i < 7; i++)
+            {
+                if (RecvData[37 + i] != 0xFF)
+                    nCount++;
+                else
+                    break;
+            }
+            if (nCount > 0)
+                CardInfo.BoalFactoryID = Encoding.ASCII.GetString(RecvData, 37, nCount);
+            CardInfo.CylinderVolume = (ushort)((RecvData[45] << 8) + RecvData[44]);
+            CardInfo.CarType = GetCarCateGorybyByte(RecvData[46]);
+            nCount = 0;
+            for (int i = 0; i < 5; i++)
+            {
+                if (RecvData[47 + i] != 0xFF)
+                    nCount++;
+                else
+                    break;
+            }
+            if (nCount > 0)
+                CardInfo.BusDistance = Encoding.ASCII.GetString(RecvData, 47, nCount);
+        }
+
+        private string GetCarCateGorybyByte(byte carType)
+        {
+            string strRet = "不限";
+            switch (carType)
+            {
+                case 0xFF:
+                    strRet = "不限";
+                    break;
+                case 0x01:
+                    strRet = "私家车";
+                    break;
+                case 0x02:
+                    strRet = "单位车";
+                    break;
+                case 0x03:
+                    strRet = "出租车";
+                    break;
+                case 0x04:
+                    strRet = "公交车";
+                    break;
+            }
+            return strRet;
         }
 
         //读卡片中的加气记录

@@ -69,8 +69,8 @@ namespace ApduParam
             m_ValidAppForm = new DateTime(2010, 1, 1);
             m_ValidAppTo = new DateTime(2020, 12, 31);
             m_strTermialID = "201001010001";
-            m_strCompanyIssue = "10FFFFFFFFFFFFFF";
-            m_strCompanyRecv = "35FFFFFFFFFFFFFF";
+            m_strCompanyIssue = "10FFFFFFFFFFFFFF";  //中石化
+            m_strCompanyRecv = "32FFFFFFFFFFFFFF";    //江苏
             m_strRemark = "";
         }
 

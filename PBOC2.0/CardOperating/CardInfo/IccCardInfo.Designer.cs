@@ -150,7 +150,7 @@
             this.textCompanyTo.ReadOnly = true;
             this.textCompanyTo.Size = new System.Drawing.Size(157, 21);
             this.textCompanyTo.TabIndex = 9;
-            this.textCompanyTo.Text = "35FFFFFFFFFFFFFF";
+            this.textCompanyTo.Text = "32FFFFFFFFFFFFFF";
             // 
             // textCompanyFrom
             // 
@@ -212,7 +212,7 @@
             this.IccCardNo.AutoSize = true;
             this.IccCardNo.Location = new System.Drawing.Point(35, 66);
             this.IccCardNo.Name = "IccCardNo";
-            this.IccCardNo.Size = new System.Drawing.Size(65, 12);
+            this.IccCardNo.Size = new System.Drawing.Size(59, 12);
             this.IccCardNo.TabIndex = 1;
             this.IccCardNo.Text = "SAM序列号";
             // 
