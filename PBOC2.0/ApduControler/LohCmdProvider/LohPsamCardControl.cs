@@ -50,6 +50,34 @@ namespace LohApduCtrl
                 TextOutput(args);
         }
 
+        private bool SelectSamFile(bool bSamSlot,byte[] byteArray, byte[] prefixData)
+        {
+            m_CmdProvider.createSelectCmd(byteArray, prefixData);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot,data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "SAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
+                return false;
+            }
+            else
+            {
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                OnTextOutput(new MsgOutEvent(0, "SAM卡选择" + GetFileDescribe(byteArray) + "文件应答：" + strData));
+                if (nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x61 && RecvData[nRecvLen - 1] > 0x00)
+                {
+                    int nGetLen = (int)RecvData[nRecvLen - 1];
+                    return GetSamResponse(bSamSlot,nGetLen);
+                }
+                else if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+            }
+            return true;
+        }
+
         private bool SelectFile(byte[] byteArray, byte[] prefixData)
         {
             m_CmdProvider.createSelectCmd(byteArray, prefixData);
@@ -66,7 +94,7 @@ namespace LohApduCtrl
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                OnTextOutput(new MsgOutEvent(0, "选择" + GetFileDescribe(byteArray) + "文件应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "SAM卡选择" + GetFileDescribe(byteArray) + "文件应答：" + strData));
                 if (nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x61 && RecvData[nRecvLen - 1] > 0x00)
                 {
                     int nGetLen = (int)RecvData[nRecvLen - 1];
@@ -75,6 +103,29 @@ namespace LohApduCtrl
                 else if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
             }
+            return true;
+        }
+
+        private bool GetSamResponse(bool bSamSlot,int nResLen)
+        {
+            m_CmdProvider.createGetResponseCmd(nResLen);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot,data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "获取返回数据失败"));
+                return false;
+            }
+            else
+            {
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+            }
+
+            OnTextOutput(new MsgOutEvent(0, "获取返回数据应答：" + m_ctrlApdu.hex2asc(RecvData, nRecvLen)));
             return true;
         }
 
@@ -200,10 +251,8 @@ namespace LohApduCtrl
             if (randByte == null || randByte.Length != 8)
                 return false;
 
-            OnTextOutput(new MsgOutEvent(0, "使用密钥：" + BitConverter.ToString(KeyVal) + "初始化"));
-
             return ClearMF(randByte, KeyVal);
-        }
+        }        
 
         private bool ClearMF(byte[] randByte, byte[] KeyVal)
         {
@@ -272,6 +321,16 @@ namespace LohApduCtrl
             byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
             if (!SelectFile(m_ADF01, prefix))
                 return false;            
+            return true; 
+        }
+
+        public bool SamAppSelect(bool bSamSlot)
+        {
+            if (!SelectSamFile(bSamSlot,m_PSE, null))
+                return false;
+            byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
+            if (!SelectSamFile(bSamSlot,m_ADF01, prefix))
+                return false;
             return true; 
         }
 
@@ -351,14 +410,14 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                string strMessage = string.Format("选择{0}失败", GetFileName(FileId, bMainKey));
+                string strMessage = string.Format("SAM卡选择{0}失败", GetFileName(FileId, bMainKey));
                 OnTextOutput(new MsgOutEvent(nRet, strMessage));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                string strMessage = string.Format("选择{0}应答：{1}", GetFileName(FileId, bMainKey), strData);
+                string strMessage = string.Format("SAM卡选择{0}应答：{1}", GetFileName(FileId, bMainKey), strData);
                 OnTextOutput(new MsgOutEvent(0, strMessage));
                 if (nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x61 && RecvData[nRecvLen - 1] > 0x00)
                 {
@@ -599,7 +658,7 @@ namespace LohApduCtrl
             if (!StoragePsamKey(m_MAMTK, 0x01, 0x01, m_MAMK))
                 return false;
             //消费主密钥
-            if (!StoragePsamKey(m_MPK, 0x42, 0x01, m_MAMK))
+            if (!StoragePsamKey(m_MPK, 0x42, 0x01, m_MAMK))//0x42要求PSAM卡计算MAC1时进行两次分散
                 return false;
             //SAM TAC密钥
             if (!StoragePsamKey(m_DTK, 0x15, 0x01, m_MAMK))
@@ -622,14 +681,14 @@ namespace LohApduCtrl
             byte[] sespk = GetPrivateProcessKey(ASN, m_MPK, rand, BusinessSn, TermialSn, TermialRand);
             if (sespk == null)
                 return MAC1;
-             MAC1 = m_CmdProvider.CalcMacVal(srcData, sespk);
+             MAC1 = m_CmdProvider.CalcMacVal_DES(srcData, sespk);
              return MAC1;
         }
 
-        public bool InitSamGrayLock(byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData)
+        public bool InitSamGrayLock(bool bSamSlot,byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData)
         {
             byte[] SysTime = PublicFunc.GetBCDTime();
-            byte[] byteData = new byte[28];
+            byte[] byteData = new byte[36]; //28字节数据+8字节分散因子
             Buffer.BlockCopy(random, 0, byteData, 0, 4);
             Buffer.BlockCopy(BusinessSn, 0, byteData, 4, 2);
             Buffer.BlockCopy(byteBalance, 0, byteData, 6, 4);
@@ -638,12 +697,13 @@ namespace LohApduCtrl
             byteData[18] = 0x01;//Key Ver
             byteData[19] = 0x00; // Key Flag
             Buffer.BlockCopy(ASN, 0, byteData, 20, 8);
+            Buffer.BlockCopy(ASN, 0, byteData, 28, 8); //用户卡序列号作为分散因子
             m_CmdProvider.createInitSamGrayLockCmd(byteData);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 OnTextOutput(new MsgOutEvent(nRet, "SAM卡MAC1计算初始化失败"));
@@ -672,12 +732,13 @@ namespace LohApduCtrl
                 srcData[0] = BusinessType;
                 Buffer.BlockCopy(TermialID, 0, srcData, 1, 6);
                 Buffer.BlockCopy(SysTime, 0, srcData, 7, 7);
+                //龙寰卡使用消费密钥进行两次分散后计算MAC1
                 byte[] MAC1 = calcUserCardMAC1(ASN, random, BusinessSn, TermialSn, TermialRandom, srcData);                      
                 Buffer.BlockCopy(SysTime, 0, outData, 8, 7);
-                Buffer.BlockCopy(MAC1, 0, outData, 15, 4);//MAC1
+                Buffer.BlockCopy(PSAM_MAC1, 0, outData, 15, 4);//MAC1
                 string strInfo = string.Format("SAM卡MAC1计算初始化 MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(PSAM_MAC1), BitConverter.ToString(MAC1));
                 System.Diagnostics.Trace.WriteLine(strInfo);
-                if(!PublicFunc.ByteDataEquals(MAC1,PSAM_MAC1))
+                if (!PublicFunc.ByteDataEquals(MAC1, PSAM_MAC1))
                 {
                     string strMessage = string.Format("MAC1计算验证失败：终端机编号{0}，用户卡号{1}", BitConverter.ToString(TermialID), BitConverter.ToString(ASN));
                     OnTextOutput(new MsgOutEvent(0, strMessage));
@@ -688,46 +749,54 @@ namespace LohApduCtrl
         }
 
         /// <summary>
-        /// 加气专用消费交易过程密钥
+        /// 加气专用消费交易过程密钥，验证PSAM卡计算的MAC1是否有效
         /// </summary>
         /// <param name="ASN">用户卡卡号</param>
-        /// <param name="MasterKey">消费主密钥</param>
+        /// <param name="MPKKey">消费主密钥</param>
         /// <param name="Rand">用户卡随机数</param>
         /// <param name="OfflineSn">脱机交易序号（2字节）</param>
         /// <param name="TermialSn">终端序号（4字节）</param>
         /// <param name="TermialRand">SAM卡随机数</param>
         /// <returns></returns>
-        private byte[] GetPrivateProcessKey(byte[] ASN, byte[] MasterKey, byte[] Rand, byte[] OfflineSn, byte[] TermialSn, byte[] TermialRand)
+        private byte[] GetPrivateProcessKey(byte[] ASN, byte[] MPKKey, byte[] Rand, byte[] OfflineSn, byte[] TermialSn, byte[] TermialRand)
         {
             if (ASN.Length != 8)
                 return null;
-            //中间密钥
+            //中间密钥,两次分散
             byte[] DPKKey = new byte[16];
-            byte[] encryptAsn = DesCryptography.TripleEncryptData(ASN, MasterKey);
+            byte[] LeftDiversify = DesCryptography.TripleEncryptData(ASN, MPKKey);
             byte[] XorASN = new byte[8];
             for (int i = 0; i < 8; i++)
                 XorASN[i] = (byte)(ASN[i] ^ 0xFF);
-            byte[] encryptXorAsn = DesCryptography.TripleEncryptData(XorASN, MasterKey);
-            Buffer.BlockCopy(encryptAsn, 0, DPKKey, 0, 8);
-            Buffer.BlockCopy(encryptXorAsn, 0, DPKKey, 8, 8);
+            byte[] RightDiversify = DesCryptography.TripleEncryptData(XorASN, MPKKey);
+            Buffer.BlockCopy(LeftDiversify, 0, DPKKey, 0, 8);
+            Buffer.BlockCopy(RightDiversify, 0, DPKKey, 8, 8);
+
+            byte[] SecondDPKKey = new byte[16];
+            byte[] LeftDPK = DesCryptography.TripleEncryptData(ASN, DPKKey);
+            byte[] RightDPK = DesCryptography.TripleEncryptData(XorASN, DPKKey);
+            Buffer.BlockCopy(LeftDPK, 0, SecondDPKKey, 0, 8);
+            Buffer.BlockCopy(RightDPK, 0, SecondDPKKey, 8, 8);
+
             byte[] byteData = new byte[8];
             Buffer.BlockCopy(Rand, 0, byteData, 0, 4);
             Buffer.BlockCopy(OfflineSn, 0, byteData, 4, 2);
             Buffer.BlockCopy(TermialSn, 2, byteData, 6, 2);
-            byte[] byteTmpck = DesCryptography.TripleEncryptData(byteData, DPKKey);//中间密钥
-            //计算过程密钥
+            //中间密钥
+            byte[] byteTmpck = DesCryptography.TripleEncryptData(byteData, SecondDPKKey);
+            //计算MAC的密钥
             byte[] byteSESPK = m_CmdProvider.CalcPrivateProcessKey(TermialRand, byteTmpck);
             return byteSESPK;
         }
 
-        public bool VerifyMAC2(byte[] MAC2)
+        public bool VerifyMAC2(bool bSamSlot,byte[] MAC2)
         {
             m_CmdProvider.createVerifyMAC2Cmd(MAC2);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 OnTextOutput(new MsgOutEvent(nRet, "SAM卡验证MAC2失败"));
@@ -743,14 +812,14 @@ namespace LohApduCtrl
             return true;
         }
 
-        public bool CalcGMAC(byte BusinessType,byte[] ASN, int nOffLineSn, int nMoney, byte[] outGMAC)
+        public bool CalcGMAC(bool bSamSlot,byte BusinessType,byte[] ASN, int nOffLineSn, int nMoney, byte[] outGMAC)
         {
             m_CmdProvider.createCalcGMACCmd(BusinessType, ASN, nOffLineSn, nMoney);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 OnTextOutput(new MsgOutEvent(nRet, "SAM卡计算GMAC失败"));
@@ -835,12 +904,18 @@ namespace LohApduCtrl
                 }
                 else
                 {
+                    byte[] byteKey = null;
+                    string strKey = "";
                     if (dataReader.Read())
                     {
-                        string strKey = (string)dataReader["MasterKey"];
-                        StrKeyToByte(strKey, m_KeyPsamMain);   //卡片主控密钥
+                        strKey = (string)dataReader["MasterKey"];
+                        byteKey = PublicFunc.StringToBCD(strKey);
+                        SetMainKeyValue(byteKey, CardCategory.PsamCard);  //卡片主控密钥  
+
                         strKey = (string)dataReader["MasterTendingKey"];
-                        StrKeyToByte(strKey, m_KeyPsamMaintain);
+                        byteKey = PublicFunc.StringToBCD(strKey);
+                        SetMaintainKeyValue(byteKey, CardCategory.PsamCard);  //卡片维护密钥
+
                         strKey = (string)dataReader["ApplicatonMasterKey"];
                         StrKeyToByte(strKey, m_MAMK);//psam卡应用主控密钥
                         strKey = (string)dataReader["ApplicationTendingKey"];
@@ -938,16 +1013,16 @@ namespace LohApduCtrl
         }
 
         //获取终端机编号
-        public byte[] GetTerminalId()
+        public byte[] GetTerminalId(bool bSamSlot)
         {
-            if (!SelectFile(m_PSE, null))
+            if (!SelectSamFile(bSamSlot,m_PSE, null))
                 return null;
             m_CmdProvider.createGetEFFileCmd(0x96, 0x06);//文件标识(100+10110)0x16,终端机编号长度6
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
+            int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 OnTextOutput(new MsgOutEvent(nRet, "SAM卡读取终端机编号失败"));

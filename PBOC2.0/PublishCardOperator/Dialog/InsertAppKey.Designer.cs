@@ -259,7 +259,7 @@
             this.ULMLabel.Name = "ULMLabel";
             this.ULMLabel.Size = new System.Drawing.Size(53, 12);
             this.ULMLabel.TabIndex = 22;
-            this.ULMLabel.Text = "圈存密钥";
+            this.ULMLabel.Text = "圈提密钥";
             // 
             // InsertAppKey
             // 

@@ -17,7 +17,7 @@ namespace CardOperating
         private const Char Backspace = (Char)8;
         public event MessageOutput TextOutput = null;
 
-        private ISamCardControl m_IccCardCtrl = null;
+        private ISamCardControl m_SamCardCtrl = null;
         private IUserCardControl m_UserCardCtrl = null;
 
         private readonly byte[] m_FixedTermialId = new byte[] { 0x20, 0x15, 0x01, 0x01, 0x00, 0x01 };  //固定的终端机设备编号
@@ -51,17 +51,33 @@ namespace CardOperating
         {
             m_DevControl = ApduCtrlObj;
             m_bContactCard = bContactCard;
+
+            //接触式用户卡只能使用SAM卡槽消费
+            if (m_bContactCard)
+            {
+                SamSlot.Checked = true;
+                SamSlot.Enabled = false;
+            }
+            else
+            {
+                SamSlot.Checked = false;
+                SamSlot.Enabled = true;
+            }
+
+            ContactCard.Checked = m_bContactCard;
         }
 
-        private bool OpenIccCard()
+        private bool OpenSAMCard(bool bSamSlot)
         {
             if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            m_IccCardCtrl = m_DevControl.SamCardConstructor(m_DBInfo);
-            m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
-
+            m_SamCardCtrl = m_DevControl.SamCardConstructor(m_DBInfo);
+            m_SamCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
+            if (!m_SamCardCtrl.ReadKeyValueFormDb())
+                OnMessageOutput(new MsgOutEvent(0, "未读到密钥，请检查数据库是否正常。"));
+                        
             string strCardInfo = "";
-            bool bRet = m_DevControl.IccPowerOn(ref strCardInfo);
+            bool bRet = m_DevControl.SAMPowerOn(bSamSlot, ref strCardInfo);
             if (!bRet)
             {
                 OnMessageOutput(new MsgOutEvent(0, "SAM卡复位失败"));                
@@ -72,19 +88,20 @@ namespace CardOperating
                 OnMessageOutput(new MsgOutEvent(0, "SAM卡复位成功"));
                 OnMessageOutput(new MsgOutEvent(0, "复位信息：" + strCardInfo));
             }
-            byte[] TermialId = m_IccCardCtrl.GetTerminalId();
+
+            byte[] TermialId = m_SamCardCtrl.GetTerminalId(bSamSlot);
             if(TermialId != null)
                 Buffer.BlockCopy(TermialId, 0, m_TermialId, 0, 6);
             return true;
         }
 
-        private bool CloseIccCard()
+        private bool CloseSAMCard(bool bSamSlot)
         {
             if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;
-            m_DevControl.IccPowerOff();
+            m_DevControl.SAMPowerOff(bSamSlot);
             OnMessageOutput(new MsgOutEvent(0, "关闭卡片成功"));
-            m_IccCardCtrl = null;
+            m_SamCardCtrl = null;
             return true;
         }
 
@@ -232,9 +249,7 @@ namespace CardOperating
         {
             if (m_bGray)
                 return;
-            if (!OpenUserCard() || !OpenIccCard())
-                return;
-            if (!ReadUserCardAsn() || !m_IccCardCtrl.SelectPsamApp())
+            if (!OpenUserCard() || !ReadUserCardAsn())
                 return;
             if (m_UserCardCtrl.VerifyUserPin(m_strPIN) != 1)
                 return;            
@@ -252,19 +267,26 @@ namespace CardOperating
             //灰锁
             const byte BusinessType = 0x91;//交易类型
             byte[] GrayLockData = new byte[19]; //从PSAM卡获得顺序为终端交易序号，终端随机数，BCD时间，MAC1
-            if (!m_IccCardCtrl.InitSamGrayLock(m_TermialId, rand, OfflineSn, byteBalance, BusinessType, m_ASN, GrayLockData))
+
+            bool bSamSlot = SamSlot.Checked;//使用SAM卡槽
+
+            if (!OpenSAMCard(bSamSlot) || !m_SamCardCtrl.SamAppSelect(bSamSlot))
+                return;
+            if (!m_SamCardCtrl.InitSamGrayLock(bSamSlot, m_TermialId, rand, OfflineSn, byteBalance, BusinessType, m_ASN, GrayLockData))
                 return;
             byte[] GTAC = new byte[4];
             byte[] MAC2 =new byte[4];
             if (!m_UserCardCtrl.GrayLock(GrayLockData, GTAC, MAC2))
                 return;
-            if (!m_IccCardCtrl.VerifyMAC2(MAC2))//验证MAC2
+            if (!m_SamCardCtrl.VerifyMAC2(bSamSlot, MAC2))//验证MAC2
                 return;
             m_nBusinessSn = (int)((OfflineSn[0] << 8) | OfflineSn[1]);
             m_nTermialSn = (int)((GrayLockData[0] << 24) | (GrayLockData[1] << 16) | (GrayLockData[2] << 8) | GrayLockData[3]);
+            if(!m_bContactCard)
+                SamSlot.Enabled = false;
         }
 
-        private byte[] GetDebitforUnlockData()
+        private byte[] GetDebitforUnlockData(bool bSamSlot)
         {
             byte[] DebitData = new byte[27];
              //计算GMAC
@@ -273,7 +295,7 @@ namespace CardOperating
             double dbAmount = decimal.ToDouble(Amount);
             int nMoneyAmount = (int)(dbAmount * 100.0); ////气票消费金额
             byte[] GMAC = new byte[4];
-            if (!m_IccCardCtrl.CalcGMAC(BusinessType, m_ASN, m_nBusinessSn, nMoneyAmount, GMAC))
+            if (!m_SamCardCtrl.CalcGMAC(bSamSlot, BusinessType, m_ASN, m_nBusinessSn, nMoneyAmount, GMAC))
                 return null;
             byte[] byteMoney = BitConverter.GetBytes(nMoneyAmount); //气票消费金额
             DebitData[0] = byteMoney[3];
@@ -297,18 +319,28 @@ namespace CardOperating
 
         private void btnUnlockCard_Click(object sender, EventArgs e)
         {
-            if (m_bGray || m_IccCardCtrl == null || m_UserCardCtrl == null)
+            if (m_bGray || m_UserCardCtrl == null)
                 return;
-            byte[] UnlockData = GetDebitforUnlockData();
-            if (UnlockData == null)
-                return;
-            //解扣debit for unlock
-            if (!m_UserCardCtrl.DebitForUnlock(UnlockData))
-                return;            
-            //清TACUF （即 读灰锁状态，但其中P1 == 0x01）
-            m_UserCardCtrl.ClearTACUF();            
+            bool bSamSlot = SamSlot.Checked;
+            byte[] UnlockData = null;
+            if (m_SamCardCtrl != null)
+            {
+                UnlockData = GetDebitforUnlockData(bSamSlot);
+                CloseSAMCard(bSamSlot);
+            }
+            if(!m_bContactCard)
+                SamSlot.Enabled = true;
+
+            if (UnlockData != null)
+            {
+                //解扣debit for unlock
+                if (m_UserCardCtrl.DebitForUnlock(UnlockData))
+                {
+                    //清TACUF （即 读灰锁状态，但其中P1 == 0x01）
+                    m_UserCardCtrl.ClearTACUF();
+                }
+            }
             CloseUserCard();
-            CloseIccCard();
         }
 
         private bool ReadUserCardAsn()
@@ -389,5 +421,22 @@ namespace CardOperating
             }
             CloseUserCard();            
         }
+
+        private void ContactCard_CheckedChanged(object sender, EventArgs e)
+        {
+            m_bContactCard = ContactCard.Checked;
+            //接触式用户卡只能使用SAM卡槽消费
+            if (m_bContactCard)
+            {
+                SamSlot.Checked = true;
+                SamSlot.Enabled = false;
+            }
+            else
+            {
+                SamSlot.Checked = false;
+                SamSlot.Enabled = true;
+            }
+        }
+
     }
 }

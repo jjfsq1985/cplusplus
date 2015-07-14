@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupApp = new System.Windows.Forms.GroupBox();
+            this.ContactCard = new System.Windows.Forms.CheckBox();
             this.btnUnload = new System.Windows.Forms.Button();
             this.Infomation = new System.Windows.Forms.Label();
             this.RecordInCard = new System.Windows.Forms.ListView();
@@ -42,6 +43,7 @@
             this.textPIN = new System.Windows.Forms.TextBox();
             this.LabelPIN = new System.Windows.Forms.Label();
             this.groupCardTest = new System.Windows.Forms.GroupBox();
+            this.SamSlot = new System.Windows.Forms.CheckBox();
             this.btnLockCard = new System.Windows.Forms.Button();
             this.Purchase = new System.Windows.Forms.Label();
             this.btnUnlockCard = new System.Windows.Forms.Button();
@@ -63,6 +65,7 @@
             // 
             // groupApp
             // 
+            this.groupApp.Controls.Add(this.ContactCard);
             this.groupApp.Controls.Add(this.btnUnload);
             this.groupApp.Controls.Add(this.Infomation);
             this.groupApp.Controls.Add(this.RecordInCard);
@@ -87,6 +90,18 @@
             this.groupApp.TabStop = false;
             this.groupApp.Text = "卡应用";
             // 
+            // ContactCard
+            // 
+            this.ContactCard.AutoSize = true;
+            this.ContactCard.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ContactCard.Location = new System.Drawing.Point(75, 33);
+            this.ContactCard.Name = "ContactCard";
+            this.ContactCard.Size = new System.Drawing.Size(102, 16);
+            this.ContactCard.TabIndex = 33;
+            this.ContactCard.Text = "接触式用户卡";
+            this.ContactCard.UseVisualStyleBackColor = true;
+            this.ContactCard.CheckedChanged += new System.EventHandler(this.ContactCard_CheckedChanged);
+            // 
             // btnUnload
             // 
             this.btnUnload.Location = new System.Drawing.Point(250, 185);
@@ -100,9 +115,11 @@
             // Infomation
             // 
             this.Infomation.AutoSize = true;
-            this.Infomation.Location = new System.Drawing.Point(110, 31);
+            this.Infomation.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Infomation.ForeColor = System.Drawing.Color.Red;
+            this.Infomation.Location = new System.Drawing.Point(248, 36);
             this.Infomation.Name = "Infomation";
-            this.Infomation.Size = new System.Drawing.Size(161, 12);
+            this.Infomation.Size = new System.Drawing.Size(174, 12);
             this.Infomation.TabIndex = 37;
             this.Infomation.Text = "！使用数据库默认密钥操作！";
             // 
@@ -183,6 +200,7 @@
             // 
             // groupCardTest
             // 
+            this.groupCardTest.Controls.Add(this.SamSlot);
             this.groupCardTest.Controls.Add(this.btnLockCard);
             this.groupCardTest.Controls.Add(this.Purchase);
             this.groupCardTest.Controls.Add(this.btnUnlockCard);
@@ -190,10 +208,20 @@
             this.groupCardTest.Controls.Add(this.Unit3);
             this.groupCardTest.Location = new System.Drawing.Point(23, 229);
             this.groupCardTest.Name = "groupCardTest";
-            this.groupCardTest.Size = new System.Drawing.Size(363, 101);
+            this.groupCardTest.Size = new System.Drawing.Size(363, 118);
             this.groupCardTest.TabIndex = 32;
             this.groupCardTest.TabStop = false;
             this.groupCardTest.Text = "消费测试";
+            // 
+            // SamSlot
+            // 
+            this.SamSlot.AutoSize = true;
+            this.SamSlot.Location = new System.Drawing.Point(116, 83);
+            this.SamSlot.Name = "SamSlot";
+            this.SamSlot.Size = new System.Drawing.Size(84, 16);
+            this.SamSlot.TabIndex = 32;
+            this.SamSlot.Text = "PSAM卡内置";
+            this.SamSlot.UseVisualStyleBackColor = true;
             // 
             // btnLockCard
             // 
@@ -388,5 +416,7 @@
         private System.Windows.Forms.ColumnHeader BusinessTime;
         private System.Windows.Forms.Label Infomation;
         private System.Windows.Forms.Button btnUnload;
+        private System.Windows.Forms.CheckBox SamSlot;
+        private System.Windows.Forms.CheckBox ContactCard;
     }
 }

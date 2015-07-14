@@ -26,10 +26,10 @@ namespace DaHuaApduCtrl
         private const string m_strDIR2 = "ENN LOYALTY"; //积分应用
         private const string m_strDIR3 = "ENN SV";    //监管应用
 
+        //加气应用主控密钥MAMK
+        private static byte[] m_MAMK = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
         //加气消费密钥MPK1
         private static byte[] m_MPK1 = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
-        //加气应用主控密钥MCMK
-        private static byte[] m_MCMK = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
         //加气消费密钥MPK2
         private static byte[] m_MPK2 = new byte[] { 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22 };
         //圈存主密钥MLK1
@@ -49,7 +49,7 @@ namespace DaHuaApduCtrl
         //密码重装主密钥MRPK
         private static byte[] m_MRPK = new byte[] { 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99 };
         //应用维护主密钥MAMK
-        private static byte[] m_MAMK = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
+        private static byte[] m_MAMTK = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
         //内部认证主密钥MIAK
         private static byte[] m_MIAK = new byte[] { 0xF2, 0x11, 0x20, 0x6C, 0x05, 0x68, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xBB };
 
@@ -651,13 +651,13 @@ namespace DaHuaApduCtrl
         //安装各种密钥
         private bool StorageEncryptyKey(byte[] byteASN)
         {
-            StorageKeyParam KeyInfo = null;            
-            byte[] keyDiversify = StorageKeyParam.GetDiversify(byteASN, m_KeyAppMain);
+            StorageKeyParam KeyInfo = null;
+            byte[] keyDiversify = StorageKeyParam.GetDiversify(byteASN, m_MAMK);
             if (keyDiversify == null)
                 return false;            
             //加气应用主控密钥MCMK
             KeyInfo = new StorageKeyParam("安装应用主控密钥", 0x02, 0x49, 0x00, 0xFF, 0x01);
-            KeyInfo.SetParam(byteASN, m_MCMK, m_KeyOrg);
+            KeyInfo.SetParam(byteASN, m_MAMK, m_KeyOrg);
             if (!storageUserKey(KeyInfo))
                 return false;
             //主控密钥安装后命令的MAC需要使用主控密钥的分散密钥计算
@@ -717,7 +717,7 @@ namespace DaHuaApduCtrl
                 return false;
             //应用维护主密钥MAMK
             KeyInfo = new StorageKeyParam("安装应用维护主密钥", 0x0A, 0x45, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MAMK, m_KeyOrg);
+            KeyInfo.SetParam(byteASN, m_MAMTK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
@@ -992,8 +992,8 @@ namespace DaHuaApduCtrl
             byte[] byteCardId = UserCardInfoPar.GetUserCardID();            
             //卡信息更新时使用外部提供的密钥
             if(AppTendingKey != null)
-                Buffer.BlockCopy(AppTendingKey,0,m_MAMK,0,16);
-            byte[] keyUpdate = StorageKeyParam.GetUpdateEFKey(m_MAMK, byteCardId);
+                Buffer.BlockCopy(AppTendingKey, 0, m_MAMTK, 0, 16);
+            byte[] keyUpdate = StorageKeyParam.GetUpdateEFKey(m_MAMTK, byteCardId);
            if (keyUpdate == null)
                 return false;
             //更新公共应用基本数据文件EF15
@@ -1083,7 +1083,7 @@ namespace DaHuaApduCtrl
             srcData[4] = BusinessType;
             Buffer.BlockCopy(TermialID, 0, srcData, 5, 6);
             Buffer.BlockCopy(TimeBcd, 0, srcData, 11, 7);
-            byte[] MAC2 = m_CmdProvider.CalcMacVal(srcData, byteKey);
+            byte[] MAC2 = m_CmdProvider.CalcMacVal_DES(srcData, byteKey);
             return MAC2;
         }
 
@@ -1192,7 +1192,7 @@ namespace DaHuaApduCtrl
             srcData[7] = byteMoney[0];
             srcData[8] = BusinessType;
             Buffer.BlockCopy(TermId, 0, srcData, 9, 6);
-            byte[] MAC1Compare = m_CmdProvider.CalcMacVal(srcData, seslk);
+            byte[] MAC1Compare = m_CmdProvider.CalcMacVal_DES(srcData, seslk);
             if (!PublicFunc.ByteDataEquals(MAC1, MAC1Compare))//MAC1检查
             {
                 string strInfo = string.Format("圈存功能 Output MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(MAC1), BitConverter.ToString(MAC1Compare));
@@ -1245,7 +1245,7 @@ namespace DaHuaApduCtrl
             srcData[7] = byteMoney[0];
             srcData[8] = BusinessType;
             Buffer.BlockCopy(TermId, 0, srcData, 9, 6);
-            byte[] MAC1Compare = m_CmdProvider.CalcMacVal(srcData, sesulk);
+            byte[] MAC1Compare = m_CmdProvider.CalcMacVal_DES(srcData, sesulk);
             if (!PublicFunc.ByteDataEquals(MAC1, MAC1Compare))//MAC1检查
             {
                 string strInfo = string.Format("圈提功能 Output MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(MAC1), BitConverter.ToString(MAC1Compare));
@@ -1435,7 +1435,7 @@ namespace DaHuaApduCtrl
             Buffer.BlockCopy(OfflineSn, 0, srcData, 4, 2);           
             srcData[6] = BusinessType;
             Buffer.BlockCopy(TermialID, 0, srcData, 7, 6);
-            byte[] MAC1Compare = m_CmdProvider.CalcMacVal(srcData, sesukk);
+            byte[] MAC1Compare = m_CmdProvider.CalcMacVal_DES(srcData, sesukk);
             if (!PublicFunc.ByteDataEquals(MAC1, MAC1Compare))//MAC1检查
             {
                 string strInfo = string.Format("联机解扣 Output MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(MAC1), BitConverter.ToString(MAC1Compare));
@@ -1594,15 +1594,22 @@ namespace DaHuaApduCtrl
                 dataReader.Close();
                 return false;
             }
+            byte[] byteKey = null;
+            string strKey = "";
             if (dataReader.Read())
             {
-                string strKey = (string)dataReader["MasterKey"];
-                byte[] byteKey = PublicFunc.StringToBCD(strKey);
+                strKey = (string)dataReader["MasterKey"];
+                byteKey = PublicFunc.StringToBCD(strKey);
                 SetMainKeyValue(byteKey, CardCategory.CpuCard);//卡片主控密钥
+
+                strKey = (string)dataReader["MasterTendingKey"];
+                byteKey = PublicFunc.StringToBCD(strKey);
+                SetMaintainKeyValue(byteKey, CardCategory.CpuCard);  //卡片维护密钥
+
                 strKey = (string)dataReader["ApplicatonMasterKey"];
-                StrKeyToByte(strKey, m_MCMK);
-                strKey = (string)dataReader["ApplicationTendingKey"];
                 StrKeyToByte(strKey, m_MAMK);
+                strKey = (string)dataReader["ApplicationTendingKey"];
+                StrKeyToByte(strKey, m_MAMTK);
                 strKey = (string)dataReader["AppInternalAuthKey"];
                 StrKeyToByte(strKey, m_MIAK);
                 strKey = (string)dataReader["PINResetKey"];
@@ -1620,8 +1627,7 @@ namespace DaHuaApduCtrl
                 strKey = (string)dataReader["UnGrayKey"];
                 StrKeyToByte(strKey, m_MUGK);
                 strKey = (string)dataReader["OverdraftKey"];
-                StrKeyToByte(strKey, m_MUK);
-                SetUserAppKeyValue(m_MCMK);
+                StrKeyToByte(strKey, m_MUK);                
             }
             dataReader.Close();
             dataReader = null;
@@ -2181,9 +2187,12 @@ namespace DaHuaApduCtrl
         {
             if (ASN.Length != 8 || strPIN.Length != 6)
                 return false;
-            byte[] randomVal = GetRandomValue(8);
-            if (randomVal == null || randomVal.Length != 8)
+            byte[] randomVal = GetRandomValue(4);
+            if (randomVal == null || randomVal.Length != 4)
                 return false;
+
+            byte[] MacInit = new byte[8];
+            Buffer.BlockCopy(randomVal, 0, MacInit, 0, 4);//４字节随机值＋４字节０
 
             byte[] PwdData = new byte[6];
             for (int i = 0; i < 6; i++)
@@ -2206,7 +2215,7 @@ namespace DaHuaApduCtrl
             Buffer.BlockCopy(encryptAsn, 0, SubKey, 0, 8);
             Buffer.BlockCopy(encryptXorAsn, 0, SubKey, 8, 8);
             //发命令
-            m_CmdProvider.createPINUnLockCmd(randomVal, SubKey, PwdData);
+            m_CmdProvider.createPINUnLockCmd(MacInit, SubKey, PwdData);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];

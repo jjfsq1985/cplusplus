@@ -18,16 +18,19 @@ namespace DaHuaApduCtrl
 
         //MFœ¬ø®∆¨÷˜øÿ√‹‘ø
         protected static byte[] m_KeyMain = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0x78 };
-
-        //ø®∆¨”¶”√÷˜øÿ√‹‘ø
-        protected static byte[] m_KeyAppMain = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
+        //MFœ¬ø®∆¨Œ¨ª§√‹‘ø
+        protected static byte[] m_KeyMaintain = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0x78 };
 
         //////////////////////////////////////////////////////////////////////////
         //PSAMø® ≥ı º√‹‘ø
         protected static byte[] m_PsamKeyOrg = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
 
         //PSAMø®µƒMFœ¬ø®∆¨÷˜øÿ√‹‘ø
-        protected static byte[] m_KeyPsamMain = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f };
+        protected static byte[] m_KeyPsamMain = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+
+        //PSAMø®µƒMFœ¬ø®∆¨Œ¨ª§√‹‘ø
+        protected static byte[] m_KeyPsamMaintain = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+
 
         protected SqlConnectInfo m_DBInfo = new SqlConnectInfo();
 
@@ -74,11 +77,14 @@ namespace DaHuaApduCtrl
                 Buffer.BlockCopy(byteKey, 0, m_KeyPsamMain, 0, 16);
         }
 
-        public void SetUserAppKeyValue(byte[] byteKey)
+        public void SetMaintainKeyValue(byte[] byteKey, CardCategory eCategory)
         {
             if (byteKey.Length != 16)
                 return;
-            Buffer.BlockCopy(byteKey, 0, m_KeyAppMain, 0, 16);
+            if (eCategory == CardCategory.CpuCard)
+                Buffer.BlockCopy(byteKey, 0, m_KeyMaintain, 0, 16);
+            else if (eCategory == CardCategory.PsamCard)
+                Buffer.BlockCopy(byteKey, 0, m_KeyPsamMaintain, 0, 16);
         }
 
         public byte[] CardKeyToDb(bool bOrg, CardCategory eCategory)

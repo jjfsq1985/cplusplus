@@ -116,6 +116,29 @@ namespace ApduCtrl
             m_PcscReader.LH_DisconnectReader(m_ReaderNameContact);
         }
 
+
+        public bool OpenSAM(ref string CardAtr)
+        {
+            byte[] byteCardAtr = null;
+            if (m_PcscReader.LH_ConnectReader(m_ReaderNameSam, out byteCardAtr))
+            {
+                CardAtr = BitConverter.ToString(byteCardAtr).Replace("-", "");
+                return true;
+            }
+            return false;
+        }
+
+        public int CmdExchangeSam(byte[] data, int datalen, byte[] outdata, ref int outdatalen)
+        {
+            return m_PcscReader.LH_DataTransmit(m_ReaderNameSam, data, datalen, outdata, ref outdatalen);
+
+        }
+
+        public void CloseSAM()
+        {
+            m_PcscReader.LH_DisconnectReader(m_ReaderNameSam);
+        }
+
         private byte ToAsc(byte Hex)
         {
             if (Hex >= 0 && Hex <= 9)

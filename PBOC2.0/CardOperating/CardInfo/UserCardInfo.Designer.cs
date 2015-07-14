@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupUserCardInfo = new System.Windows.Forms.GroupBox();
+            this.cmbIdType = new System.Windows.Forms.ComboBox();
+            this.IdTypeLabel = new System.Windows.Forms.Label();
             this.textRemark = new System.Windows.Forms.TextBox();
             this.Remark = new System.Windows.Forms.Label();
             this.textBusDistance = new System.Windows.Forms.TextBox();
@@ -89,8 +91,6 @@
             this.cmbAreaLimit = new System.Windows.Forms.ComboBox();
             this.LimitArea = new System.Windows.Forms.Label();
             this.LimitGas = new System.Windows.Forms.Label();
-            this.IdTypeLabel = new System.Windows.Forms.Label();
-            this.cmbIdType = new System.Windows.Forms.ComboBox();
             this.groupUserCardInfo.SuspendLayout();
             this.groupLimit.SuspendLayout();
             this.SuspendLayout();
@@ -155,9 +155,32 @@
             this.groupUserCardInfo.TabStop = false;
             this.groupUserCardInfo.Text = "非接触式卡信息";
             // 
+            // cmbIdType
+            // 
+            this.cmbIdType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbIdType.FormattingEnabled = true;
+            this.cmbIdType.Items.AddRange(new object[] {
+            "身份证",
+            "驾驶证",
+            "军官证",
+            "其他证"});
+            this.cmbIdType.Location = new System.Drawing.Point(82, 154);
+            this.cmbIdType.Name = "cmbIdType";
+            this.cmbIdType.Size = new System.Drawing.Size(102, 20);
+            this.cmbIdType.TabIndex = 52;
+            // 
+            // IdTypeLabel
+            // 
+            this.IdTypeLabel.AutoSize = true;
+            this.IdTypeLabel.Location = new System.Drawing.Point(25, 158);
+            this.IdTypeLabel.Name = "IdTypeLabel";
+            this.IdTypeLabel.Size = new System.Drawing.Size(53, 12);
+            this.IdTypeLabel.TabIndex = 51;
+            this.IdTypeLabel.Text = "证件类型";
+            // 
             // textRemark
             // 
-            this.textRemark.Location = new System.Drawing.Point(82, 488);
+            this.textRemark.Location = new System.Drawing.Point(98, 569);
             this.textRemark.MaxLength = 50;
             this.textRemark.Name = "textRemark";
             this.textRemark.Size = new System.Drawing.Size(246, 21);
@@ -521,7 +544,7 @@
             this.textUserCardId.Name = "textUserCardId";
             this.textUserCardId.ReadOnly = true;
             this.textUserCardId.Size = new System.Drawing.Size(154, 21);
-            this.textUserCardId.TabIndex = 5;            
+            this.textUserCardId.TabIndex = 5;
             // 
             // UserCardId
             // 
@@ -711,29 +734,6 @@
             this.LimitGas.Size = new System.Drawing.Size(53, 12);
             this.LimitGas.TabIndex = 3;
             this.LimitGas.Text = "油气限制";
-            // 
-            // IdTypeLabel
-            // 
-            this.IdTypeLabel.AutoSize = true;
-            this.IdTypeLabel.Location = new System.Drawing.Point(25, 158);
-            this.IdTypeLabel.Name = "IdTypeLabel";
-            this.IdTypeLabel.Size = new System.Drawing.Size(53, 12);
-            this.IdTypeLabel.TabIndex = 51;
-            this.IdTypeLabel.Text = "证件类型";
-            // 
-            // cmbIdType
-            // 
-            this.cmbIdType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbIdType.FormattingEnabled = true;
-            this.cmbIdType.Items.AddRange(new object[] {
-            "身份证",
-            "驾驶证",
-            "军官证",
-            "其他证"});
-            this.cmbIdType.Location = new System.Drawing.Point(82, 154);
-            this.cmbIdType.Name = "cmbIdType";
-            this.cmbIdType.Size = new System.Drawing.Size(102, 20);
-            this.cmbIdType.TabIndex = 52;
             // 
             // UserCardInfo
             // 

@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Security.Cryptography;
 using IFuncPlugin;
 using System.Xml;
+using System.IO;
 
 namespace FNTMain
 {
@@ -26,6 +27,9 @@ namespace FNTMain
 
         SqlConnectInfo m_DbInfo = new SqlConnectInfo();
 
+        private string szUserName;
+        private string szPassword;
+
         public LoginMain()
         {
             InitializeComponent();
@@ -34,6 +38,9 @@ namespace FNTMain
             this.CancelButton = btnOut;
 
             ReadDbInfo();
+            ReadLoginInfo();
+            textUser.Text = szUserName;
+            textPwd.Text = szPassword;
         }
 
         public SqlConnectInfo GetDbInfo()
@@ -64,15 +71,16 @@ namespace FNTMain
                 Info.Text = "(4-32个字符)";
                 return;
             }
-            string strUser = textUser.Text;
-            string strPwd = textPwd.Text;
+            szUserName = textUser.Text;
+            szPassword = textPwd.Text;
 
-            if (!CheckUserAndPwd(strUser, strPwd))
+            if (!CheckUserAndPwd(szUserName, szPassword))
             {
                 MessageBox.Show("用户名或密码不正确，请重新输入");
             }
             else
-            {
+            {                
+                SaveLoginInfo();
                 UpdateUserDb();
                 this.DialogResult = DialogResult.OK;
             }
@@ -176,42 +184,178 @@ namespace FNTMain
             XmlNode node = null;
             XmlDocument xml = new XmlDocument();
             string strXmlPath = Application.StartupPath + @"\DbConfig.xml";
-            xml.Load(strXmlPath);//按路径读xml文件
-            XmlNode root = xml.SelectSingleNode("DBConfig");//指向根节点
-            root.Attributes["Connect"].InnerText = "true";
-            node = root.SelectSingleNode("Server");
-            node.InnerText = m_DbInfo.strServerName;             
-            node = root.SelectSingleNode("DbName");
-            node.InnerText = m_DbInfo.strDbName;
-            node = root.SelectSingleNode("User");
-            node.InnerText = m_DbInfo.strUser;
-            node = root.SelectSingleNode("Pwd");
-            if (!string.IsNullOrEmpty(m_DbInfo.strUserPwd))
+            if (File.Exists(strXmlPath))
+                xml.Load(strXmlPath);
+            XmlElement Root = xml.DocumentElement;
+            if (Root == null)
             {
-                node.InnerText = Convert.ToBase64String(Encoding.ASCII.GetBytes(m_DbInfo.strUserPwd));                
+                Root = xml.CreateElement("Root");
+                xml.AppendChild(Root);
             }
+
+            XmlNode dbRoot = null;            
+            if(Root != null)
+                dbRoot = Root.SelectSingleNode("DBConfig");
+            if (dbRoot == null)
+            {
+                dbRoot = xml.CreateNode(XmlNodeType.Element, "DBConfig", "");
+
+                XmlAttribute DbCfgAttr = xml.CreateAttribute("Connect");
+                DbCfgAttr.Value = "true";
+                dbRoot.Attributes.Append(DbCfgAttr);
+
+                node = xml.CreateNode(XmlNodeType.Element, "Server", "");
+                node.InnerText = m_DbInfo.strServerName;
+                dbRoot.AppendChild(node);
+
+                node = xml.CreateNode(XmlNodeType.Element, "DbName", "");
+                node.InnerText = m_DbInfo.strDbName;
+                dbRoot.AppendChild(node);
+
+                node = xml.CreateNode(XmlNodeType.Element, "User", "");
+                node.InnerText = m_DbInfo.strUser;
+                dbRoot.AppendChild(node);
+
+                node = xml.CreateNode(XmlNodeType.Element, "Pwd", "");
+                if (!string.IsNullOrEmpty(m_DbInfo.strUserPwd))
+                {
+                    node.InnerText = Convert.ToBase64String(Encoding.ASCII.GetBytes(m_DbInfo.strUserPwd));
+                }
+                dbRoot.AppendChild(node);
+
+                Root.AppendChild(dbRoot);
+            }
+            else
+            {
+                dbRoot.Attributes["Connect"].InnerText = "true";
+                node = dbRoot.SelectSingleNode("Server");
+                node.InnerText = m_DbInfo.strServerName;
+                node = dbRoot.SelectSingleNode("DbName");
+                node.InnerText = m_DbInfo.strDbName;
+                node = dbRoot.SelectSingleNode("User");
+                node.InnerText = m_DbInfo.strUser;
+                node = dbRoot.SelectSingleNode("Pwd");
+                if (!string.IsNullOrEmpty(m_DbInfo.strUserPwd))
+                {
+                    node.InnerText = Convert.ToBase64String(Encoding.ASCII.GetBytes(m_DbInfo.strUserPwd));
+                }
+            }
+            
             xml.Save(strXmlPath);
         }
 
         private void ReadDbInfo()
         {
-            XmlNode node = null;
-            XmlDocument xml = new XmlDocument();
-            string strXmlPath = Application.StartupPath + @"\DbConfig.xml";
-            xml.Load(strXmlPath);//按路径读xml文件
-            XmlNode root = xml.SelectSingleNode("DBConfig");//指向根节点
-            if (root.Attributes["Connect"].InnerText == "true")
-                m_DbInfo.m_bConfig = true;
-            node = root.SelectSingleNode("Server");
-            m_DbInfo.strServerName = node.InnerText;
-            node = root.SelectSingleNode("DbName");
-            m_DbInfo.strDbName = node.InnerText;
-            node = root.SelectSingleNode("User");
-            m_DbInfo.strUser = node.InnerText;
-            node = root.SelectSingleNode("Pwd");
-            if (!string.IsNullOrEmpty(node.InnerText))
+            try
             {
-                m_DbInfo.strUserPwd = Encoding.ASCII.GetString(Convert.FromBase64String(node.InnerText));
+                XmlNode node = null;
+                XmlDocument xml = new XmlDocument();
+                string strXmlPath = Application.StartupPath + @"\DbConfig.xml";
+                xml.Load(strXmlPath);//按路径读xml文件
+                XmlNode root = xml.DocumentElement;
+                XmlNode DbNode = root.SelectSingleNode("DBConfig");//指向根节点
+                if (DbNode.Attributes["Connect"].InnerText == "true")
+                    m_DbInfo.m_bConfig = true;
+                node = DbNode.SelectSingleNode("Server");
+                m_DbInfo.strServerName = node.InnerText;
+                node = DbNode.SelectSingleNode("DbName");
+                m_DbInfo.strDbName = node.InnerText;
+                node = DbNode.SelectSingleNode("User");
+                m_DbInfo.strUser = node.InnerText;
+                node = DbNode.SelectSingleNode("Pwd");
+                if (!string.IsNullOrEmpty(node.InnerText))
+                {
+                    m_DbInfo.strUserPwd = Encoding.ASCII.GetString(Convert.FromBase64String(node.InnerText));
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void SaveLoginInfo()
+        {
+            XmlNode node = null;
+            XmlDocument xml = new XmlDocument();
+            string strXmlPath = Application.StartupPath + @"\DbConfig.xml";
+            if (File.Exists(strXmlPath))                
+                xml.Load(strXmlPath);
+            XmlElement Root = xml.DocumentElement;
+            if (Root == null)
+            {
+                Root = xml.CreateElement("Root");
+                xml.AppendChild(Root);
+            }
+
+            XmlNode loginRoot = null;            
+            if(Root != null)
+                loginRoot = Root.SelectSingleNode("LoginCfg");
+            if (loginRoot == null)
+            {
+                loginRoot = xml.CreateNode(XmlNodeType.Element, "LoginCfg", "");
+            
+                node = xml.CreateNode(XmlNodeType.Element, "User", "");
+                node.InnerText = szUserName;
+                loginRoot.AppendChild(node);
+
+                node = xml.CreateNode(XmlNodeType.Element, "Password", "");
+                if(SaveLogin.Checked && !string.IsNullOrEmpty(szPassword))
+                {
+                    node.InnerText = Convert.ToBase64String(Encoding.ASCII.GetBytes(szPassword));
+                }
+                else
+                {
+                    node.InnerText = "";
+                }
+                loginRoot.AppendChild(node);
+                Root.AppendChild(loginRoot);
+            }
+            else
+            {
+                node = loginRoot.SelectSingleNode("User");
+                node.InnerText = szUserName;
+                node = loginRoot.SelectSingleNode("Password");
+                if (SaveLogin.Checked && !string.IsNullOrEmpty(szPassword))
+                {
+                    node.InnerText = Convert.ToBase64String(Encoding.ASCII.GetBytes(szPassword));
+                }
+                else
+                {
+                    node.InnerText = "";
+                }
+            }
+            xml.Save(strXmlPath);            
+        }
+
+
+        private void ReadLoginInfo()
+        {
+            try
+            {
+                XmlNode node = null;
+                XmlDocument xml = new XmlDocument();
+                string strXmlPath = Application.StartupPath + @"\DbConfig.xml";
+                xml.Load(strXmlPath);//按路径读xml文件
+                XmlNode root = xml.DocumentElement;
+                XmlNode loginNode = root.SelectSingleNode("LoginCfg");//指向根节点
+                node = loginNode.SelectSingleNode("User");
+                szUserName = node.InnerText;
+                node = loginNode.SelectSingleNode("Password");
+                if (!string.IsNullOrEmpty(node.InnerText))
+                {
+                    szPassword = Encoding.ASCII.GetString(Convert.FromBase64String(node.InnerText));
+                    SaveLogin.Checked = true;
+                }
+                else
+                {
+                    szPassword = "";
+                    SaveLogin.Checked = false;
+                }
+            }
+            catch
+            {
+
             }
         }
 

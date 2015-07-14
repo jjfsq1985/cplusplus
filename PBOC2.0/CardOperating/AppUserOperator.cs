@@ -1081,7 +1081,7 @@ namespace CardOperating
             Buffer.BlockCopy(ASN, 0, m_ASN, 0, 8);
             if (m_UserCardCtrl.PINReset(m_ASN, textNewPIN.Text))
             {
-                MessageBox.Show("新PIN码PIN码已装入");
+                MessageBox.Show("新PIN码已装入");
             }
             else
             {

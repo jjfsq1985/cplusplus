@@ -18,9 +18,6 @@ namespace LohApduCtrl
         //MF下卡片维护密钥
         protected static byte[] m_KeyMaintain = new byte[] { 0x57, 0x41, 0x54, 0x43, 0x48, 0x44, 0x41, 0x54, 0x41, 0x54, 0x69, 0x6d, 0x65, 0x43, 0x4f, 0x53 };
 
-        //卡片应用主控密钥
-        protected static byte[] m_KeyAppMain = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
-
         //////////////////////////////////////////////////////////////////////////
         //PSAM卡的MF下卡片主控密钥
         protected static byte[] m_KeyPsamMain = new byte[] { 0x57, 0x41, 0x54, 0x43, 0x48, 0x44, 0x41, 0x54, 0x41, 0x54, 0x69, 0x6d, 0x65, 0x43, 0x4f, 0x53 };
@@ -62,11 +59,14 @@ namespace LohApduCtrl
                 Buffer.BlockCopy(byteKey, 0, m_KeyPsamMain, 0, 16);
         }
 
-        public void SetUserAppKeyValue(byte[] byteKey)
+        public void SetMaintainKeyValue(byte[] byteKey, CardCategory eCategory)
         {
             if (byteKey.Length != 16)
                 return;
-            Buffer.BlockCopy(byteKey, 0, m_KeyAppMain, 0, 16);
+            if (eCategory == CardCategory.CpuCard)
+                Buffer.BlockCopy(byteKey, 0, m_KeyMaintain, 0, 16);
+            else if (eCategory == CardCategory.PsamCard)
+                Buffer.BlockCopy(byteKey, 0, m_KeyPsamMaintain, 0, 16);
         }
 
         public byte[] CardKeyToDb(bool bOrg, CardCategory eCategory)
@@ -98,13 +98,13 @@ namespace LohApduCtrl
                 return null;
             //过程密钥
             byte[] SubKey = new byte[16];
-            byte[] encryptAsn = DesCryptography.TripleEncryptData(ASN, MasterKey);
+            byte[] LeftDiversify = DesCryptography.TripleEncryptData(ASN, MasterKey);
             byte[] XorASN = new byte[8];
             for (int i = 0; i < 8; i++)
                 XorASN[i] = (byte)(ASN[i] ^ 0xFF);
-            byte[] encryptXorAsn = DesCryptography.TripleEncryptData(XorASN, MasterKey);
-            Buffer.BlockCopy(encryptAsn, 0, SubKey, 0, 8);
-            Buffer.BlockCopy(encryptXorAsn, 0, SubKey, 8, 8);
+            byte[] RightDiversify = DesCryptography.TripleEncryptData(XorASN, MasterKey);
+            Buffer.BlockCopy(LeftDiversify, 0, SubKey, 0, 8);
+            Buffer.BlockCopy(RightDiversify, 0, SubKey, 8, 8);
             byte[] byteData = new byte[8];
             Buffer.BlockCopy(RandVal, 0, byteData, 0, 4);
             Buffer.BlockCopy(byteSn, 0, byteData, 4, 2);

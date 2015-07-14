@@ -25,12 +25,10 @@ namespace LohApduCtrl
         private static byte[] m_ADF01 = new byte[] { 0x86, 0x98, 0x07, 0x01};
         private static byte[] m_ADF02 = new byte[] { 0x86, 0x98, 0x07, 0x02 };
 
-        //加气应用主控密钥MCMK
-        private static byte[] m_MCMK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
+        //加气应用主控密钥MAMK
+        private static byte[] m_MAMK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
         //加气消费密钥MPK1
         private static byte[] m_MPK = new byte[] { 0xDA, 0xC2, 0x71, 0x5F, 0x15, 0xC1, 0x40, 0x6D, 0xF3, 0x2E, 0xE6, 0x9E, 0xD4, 0xF8, 0x46, 0x2E };
-        //应用维护密钥MAMK
-        private static byte[] m_MAMK = new byte[] { 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33 };
         //圈存密钥MLK
         private static byte[] m_MLK = new byte[] { 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44 };
         //圈提密钥MULK
@@ -45,6 +43,8 @@ namespace LohApduCtrl
         private static byte[] m_MUK = new byte[] { 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99 };
         //联机解扣密钥
         private static byte[] m_MUGK = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
+        //应用维护密钥MAMK
+        private static byte[] m_MAMTK = new byte[] { 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33 };
         //内部认证密钥MIAK
         private static byte[] m_MIAK = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
 
@@ -217,14 +217,49 @@ namespace LohApduCtrl
             return true;
         }
 
-        private bool DeleteMFWithKey(byte[] KeyVal)
+        private bool DeleteMFWithKey(bool bContact,byte[] KeyVal)
         {
+            if (!bContact)
+            {
+                //非接触式卡，锁PIN后重新制卡仍然锁PIN，需清理卡片其他区域
+                ClearCardFile(0x01);
+                ClearCardFile(0x02);
+            }
             return ClearMF(null, null);
         }
 
-        private bool DeleteMF(bool bMainKey)
+        private bool DeleteMF(bool bContact, bool bMainKey)
         {
+            if (!bContact)
+            {
+                //非接触式卡，锁PIN后重新制卡仍然锁PIN，需清理卡片其他区域
+                ClearCardFile(0x01);
+                ClearCardFile(0x02);
+            }
             return ClearMF(null, null);
+        }
+
+        private bool ClearCardFile(byte fileId)
+        {
+            m_CmdProvider.createClearCardFileCmd(fileId);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "清空卡片失败"));
+                return false;
+            }
+            else
+            {
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                OnTextOutput(new MsgOutEvent(0, "清空卡片应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+            }
+            return true;
         }
 
         private string GetFileDescribe(byte[] AIDName)
@@ -247,7 +282,7 @@ namespace LohApduCtrl
                 //在应用内获取卡号后回到MF下   
                 if (SelectFile(m_PSE, null))
                 {
-                    if (!DeleteMFWithKey(KeyInit))
+                    if (!DeleteMFWithKey(m_bContactCard,KeyInit))
                         return 1;
                 }
             }
@@ -256,7 +291,7 @@ namespace LohApduCtrl
                 //新建立MF不需要外部认证
                 if (SelectFile(m_PSE, null))
                 {
-                    if (!DeleteMF(bMainKey))                        
+                    if (!DeleteMF(m_bContactCard,bMainKey))                        
                         return 1;
                 }
             }
@@ -288,6 +323,11 @@ namespace LohApduCtrl
         }
 
         public bool CreateDIR()
+        {
+            return true;
+        }
+
+        public bool CreateDF()
         {
             if (!SelectFile(m_PSE, null))
                 return false;
@@ -409,7 +449,7 @@ namespace LohApduCtrl
         //创建加气应用ADF01
         public bool CreateADFApp()
         {
-            return false;
+            return CreateDF();                     
         }
 
         public bool CreateApplication(byte[] byteASN, bool bDefaultPwd, string strCustomPwd)
@@ -420,18 +460,9 @@ namespace LohApduCtrl
             //气票交易密钥
             if (!CreateEFKeyFile())
                 return false;
-            byte[] PwdData = new byte[6];
-            if (strCustomPwd.Length == 6)
-            {
-                for (int i = 0; i < 6; i++)
-                    PwdData[i] = Convert.ToByte(strCustomPwd.Substring(i, 1), 10);
-            }
-            else
-            {
-                for (int i = 0; i < 6; i++)
-                    PwdData[i] = 0x09;
-            }
-            StorageEncryptyKey(byteASN, bDefaultPwd, PwdData);
+
+            StorageEncryptyKey(byteASN);
+            StoragePINFile(bDefaultPwd, strCustomPwd);//PIN安装
 
             //公共应用基本数据文件
             if (!CreateEFFile(0x0015, 0xA8, 0x001E, 0, 0xF0F0, 0xFFFF))
@@ -477,23 +508,30 @@ namespace LohApduCtrl
             return true;
         }
 
-        //安装各种密钥
-        private bool StorageEncryptyKey(byte[] byteASN, bool bDefaultPwd, byte[] customPwd)
+        //安装各种密钥，用户卡消费密钥进行两次分散，其他都是一次分散
+        //用户卡与PSAM卡消费密钥对应，龙寰PSAM卡计算MAC1时是两次分散
+        private bool StorageEncryptyKey(byte[] byteASN)
         {
             StorageKeyParam KeyInfo = null;            
             //加气应用主控密钥MCMK
             KeyInfo = new StorageKeyParam("安装应用主控密钥", 0x00, 0xF9, 0xAA, 0x0A, 0x33);
-            KeyInfo.SetParam(byteASN, m_MCMK, m_KeyMain);
+            KeyInfo.SetParam(byteASN, m_MAMK, m_KeyMain);
             if (!storageUserKey(KeyInfo))
-                return false;            
-            //加气消费密钥MPK1
+                return false;
+
+            //加气消费密钥MPK
+            byte[] LeftDiversify = DesCryptography.TripleEncryptData(KeyInfo.ASN, m_MPK);
+            byte[] RightDiversify = DesCryptography.TripleEncryptData(KeyInfo.XorASN, m_MPK);
+            byte[] TempMPK = new byte[16];           //加气消费密钥分散
+            Buffer.BlockCopy(LeftDiversify, 0, TempMPK, 0, 8);
+            Buffer.BlockCopy(RightDiversify, 0, TempMPK, 8, 8);
             KeyInfo = new StorageKeyParam("安装加气消费密钥", 0x01, 0xFE, 0xAA, 0x01, 0x00);
-            KeyInfo.SetParam(byteASN, m_MPK, m_KeyMain);
+            KeyInfo.SetParam(byteASN, TempMPK, m_KeyMain);
             if (!storageUserKey(KeyInfo))
                 return false;
             //应用维护密钥MAMK
             KeyInfo = new StorageKeyParam("安装应用维护密钥", 0x00, 0xF6, 0xAA, 0xFF, 0x33);
-            KeyInfo.SetParam(byteASN, m_MAMK, m_KeyMain);
+            KeyInfo.SetParam(byteASN, m_MAMTK, m_KeyMain);
             if (!storageUserKey(KeyInfo))
                 return false;
             //圈存密钥MLK
@@ -532,25 +570,44 @@ namespace LohApduCtrl
             if (!storageUserKey(KeyInfo))
                 return false;
             //内部认证密钥MIAK
-            KeyInfo = new StorageKeyParam("安装内部认证密钥", 0x01, 0xF9, 0xAA, 0x0A, 0x33);
+            KeyInfo = new StorageKeyParam("安装内部认证密钥", 0x01, 0xF9, 0xAA, 0x0A, 0x33);//同主控密钥
             KeyInfo.SetParam(byteASN, m_MIAK, m_KeyMain);
             if (!storageUserKey(KeyInfo))
                 return false;
+            return true;
+        }
 
-            //6位PIN码
-            byte[] PinVal = new byte[] { 0x99, 0x99, 0x99, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-
-            if (!bDefaultPwd && customPwd.Length == 6)
+        private bool StoragePINFile(bool bDefaultPwd, string strCustomPwd)
+        {
+            byte[] PwdData = new byte[6];
+            if (strCustomPwd.Length == 6)
             {
-                for (int i = 0; i < 3; i++)
-                {                    
-                    PinVal[i] = (byte)((customPwd[i * 2] << 4) | customPwd[i * 2 + 1]);
-                }
+                for (int i = 0; i < 6; i++)
+                    PwdData[i] = Convert.ToByte(strCustomPwd.Substring(i, 1), 10);
             }
-            KeyInfo = new StorageKeyParam("安装PIN码", 0x00, 0xBA, 0xEF, 0x01, 0x33);
-            KeyInfo.SetParam(byteASN, PinVal, m_KeyMain);
-            if (!storageUserKey(KeyInfo))
+            else
+            {
+                for (int i = 0; i < 6; i++)
+                    PwdData[i] = 0x09;
+            }
+            m_CmdProvider.createStoragePINFileCmd(bDefaultPwd, PwdData);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "安装PIN文件失败"));
                 return false;
+            }
+            else
+            {
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                OnTextOutput(new MsgOutEvent(0, "安装PIN文件应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+            }
             return true;
         }
 
@@ -830,7 +887,7 @@ namespace LohApduCtrl
             srcData[4] = BusinessType;
             Buffer.BlockCopy(TermialID, 0, srcData, 5, 6);
             Buffer.BlockCopy(TimeBcd, 0, srcData, 11, 7);
-            byte[] MAC2 = m_CmdProvider.CalcMacVal(srcData, byteKey);
+            byte[] MAC2 = m_CmdProvider.CalcMacVal_DES(srcData, byteKey);
             return MAC2;
         }
 
@@ -939,7 +996,7 @@ namespace LohApduCtrl
             srcData[7] = byteMoney[0];
             srcData[8] = BusinessType;
             Buffer.BlockCopy(TermId, 0, srcData, 9, 6);
-            byte[] MAC1Compare = m_CmdProvider.CalcMacVal(srcData, seslk);
+            byte[] MAC1Compare = m_CmdProvider.CalcMacVal_DES(srcData, seslk);
             if (!PublicFunc.ByteDataEquals(MAC1, MAC1Compare))//MAC1检查
             {
                 string strInfo = string.Format("圈存功能 Output MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(MAC1), BitConverter.ToString(MAC1Compare));
@@ -992,7 +1049,7 @@ namespace LohApduCtrl
             srcData[7] = byteMoney[0];
             srcData[8] = BusinessType;
             Buffer.BlockCopy(TermId, 0, srcData, 9, 6);
-            byte[] MAC1Compare = m_CmdProvider.CalcMacVal(srcData, sesulk);
+            byte[] MAC1Compare = m_CmdProvider.CalcMacVal_DES(srcData, sesulk);
             if (!PublicFunc.ByteDataEquals(MAC1, MAC1Compare))//MAC1检查
             {
                 string strInfo = string.Format("圈提功能 Output MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(MAC1), BitConverter.ToString(MAC1Compare));
@@ -1182,7 +1239,7 @@ namespace LohApduCtrl
             Buffer.BlockCopy(OfflineSn, 0, srcData, 4, 2);           
             srcData[6] = BusinessType;
             Buffer.BlockCopy(TermialID, 0, srcData, 7, 6);
-            byte[] MAC1Compare = m_CmdProvider.CalcMacVal(srcData, sesukk);
+            byte[] MAC1Compare = m_CmdProvider.CalcMacVal_DES(srcData, sesukk);
             if (!PublicFunc.ByteDataEquals(MAC1, MAC1Compare))//MAC1检查
             {
                 string strInfo = string.Format("联机解扣 Output MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(MAC1), BitConverter.ToString(MAC1Compare));
@@ -1334,15 +1391,22 @@ namespace LohApduCtrl
                 dataReader.Close();
                 return false;
             }
+            byte[] byteKey = null;
+            string strKey = "";
             if (dataReader.Read())
             {
-                string strKey = (string)dataReader["MasterKey"];
-                byte[] byteKey = PublicFunc.StringToBCD(strKey);
+                strKey = (string)dataReader["MasterKey"];
+                byteKey = PublicFunc.StringToBCD(strKey);
                 SetMainKeyValue(byteKey, CardCategory.CpuCard);//卡片主控密钥
+
+                strKey = (string)dataReader["MasterTendingKey"];
+                byteKey = PublicFunc.StringToBCD(strKey);
+                SetMaintainKeyValue(byteKey, CardCategory.CpuCard);  //卡片维护密钥
+
                 strKey = (string)dataReader["ApplicatonMasterKey"];
-                StrKeyToByte(strKey, m_MCMK);
-                strKey = (string)dataReader["ApplicationTendingKey"];
                 StrKeyToByte(strKey, m_MAMK);
+                strKey = (string)dataReader["ApplicationTendingKey"];
+                StrKeyToByte(strKey, m_MAMTK);
                 strKey = (string)dataReader["AppInternalAuthKey"];
                 StrKeyToByte(strKey, m_MIAK);
                 strKey = (string)dataReader["PINResetKey"];
@@ -1360,8 +1424,7 @@ namespace LohApduCtrl
                 strKey = (string)dataReader["UnGrayKey"];
                 StrKeyToByte(strKey, m_MUGK);
                 strKey = (string)dataReader["OverdraftKey"];
-                StrKeyToByte(strKey, m_MUK);
-                SetUserAppKeyValue(m_MCMK);
+                StrKeyToByte(strKey, m_MUK);                
             }
             dataReader.Close();
             dataReader = null;
@@ -1767,7 +1830,7 @@ namespace LohApduCtrl
             if (AppTendingKey == null || ExternalAuthKey == null)
             {
                 ExternalAuthKey = m_KeyMain;
-                AppTendingKey = m_MAMK;
+                AppTendingKey = m_MAMTK;
                 Trace.WriteLine("无此卡的记录，用默认密钥修改卡信息。");
             }
             if (!ExternalAuthWithKey(ExternalAuthKey))
@@ -1874,16 +1937,16 @@ namespace LohApduCtrl
                 MessageBox.Show("无此卡的记录，不能重装PIN。");
                 return false;
             }
-            Buffer.BlockCopy(keyReset, 0, m_MRPK, 0, 16);           
+            Buffer.BlockCopy(keyReset, 0, m_MRPK, 0, 16);
 
             byte[] SubKey = new byte[16];
-            byte[] encryptAsn = DesCryptography.TripleEncryptData(ASN, m_MRPK);
+            byte[] LeftDiversify = DesCryptography.TripleEncryptData(ASN, m_MRPK);
             byte[] XorASN = new byte[8];
             for (int i = 0; i < 8; i++)
                 XorASN[i] = (byte)(ASN[i] ^ 0xFF);
-            byte[] encryptXorAsn = DesCryptography.TripleEncryptData(XorASN, m_MRPK);
-            Buffer.BlockCopy(encryptAsn, 0, SubKey, 0, 8);
-            Buffer.BlockCopy(encryptXorAsn, 0, SubKey, 8, 8);
+            byte[] RightDiversify = DesCryptography.TripleEncryptData(XorASN, m_MRPK);
+            Buffer.BlockCopy(LeftDiversify, 0, SubKey, 0, 8);
+            Buffer.BlockCopy(RightDiversify, 0, SubKey, 8, 8);
             //发命令
             m_CmdProvider.createPINResetCmd(SubKey, PwdData);
             byte[] data = m_CmdProvider.GetOutputCmd();
@@ -1910,9 +1973,12 @@ namespace LohApduCtrl
         {
             if (ASN.Length != 8 || strPIN.Length != 6)
                 return false;
-            byte[] randomVal = GetRandomValue(8);
-            if (randomVal == null || randomVal.Length != 8)
+            byte[] randomVal = GetRandomValue(4);
+            if (randomVal == null || randomVal.Length != 4)
                 return false;
+
+            byte[] MacInit = new byte[8];
+            Buffer.BlockCopy(randomVal, 0, MacInit, 0, 4);//４字节随机值＋４字节０
 
             byte[] PwdData = new byte[6];
             for (int i = 0; i < 6; i++)
@@ -1925,17 +1991,17 @@ namespace LohApduCtrl
                 return false;
             }
             Buffer.BlockCopy(keyUnlock, 0, m_MPUK, 0, 16);
-            
+
             byte[] SubKey = new byte[16];
-            byte[] encryptAsn = DesCryptography.TripleEncryptData(ASN, m_MPUK);
+            byte[] LeftDiversify = DesCryptography.TripleEncryptData(ASN, m_MPUK);
             byte[] XorASN = new byte[8];
             for (int i = 0; i < 8; i++)
                 XorASN[i] = (byte)(ASN[i] ^ 0xFF);
-            byte[] encryptXorAsn = DesCryptography.TripleEncryptData(XorASN, m_MPUK);
-            Buffer.BlockCopy(encryptAsn, 0, SubKey, 0, 8);
-            Buffer.BlockCopy(encryptXorAsn, 0, SubKey, 8, 8);
+            byte[] RightDiversify = DesCryptography.TripleEncryptData(XorASN, m_MPUK);
+            Buffer.BlockCopy(LeftDiversify, 0, SubKey, 0, 8);
+            Buffer.BlockCopy(RightDiversify, 0, SubKey, 8, 8);            
             //发命令
-            m_CmdProvider.createPINUnLockCmd(randomVal, SubKey, PwdData);
+            m_CmdProvider.createPINUnLockCmd(MacInit, SubKey, PwdData);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];

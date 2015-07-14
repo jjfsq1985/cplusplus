@@ -150,6 +150,49 @@ namespace ApduCtrl
                 m_LongHuanDomain.IccPowerOff();
         }
 
+        public bool SAMPowerOn(bool bSamSlot,ref string CardAtr)
+        {
+            if (m_Domain == ApduDomain.DaHua)
+                return m_DahuaDomain.IccPowerOn(ref CardAtr);
+            else if (m_Domain == ApduDomain.LongHuan)
+            {
+                if (bSamSlot)
+                    return m_LongHuanDomain.OpenSAM(ref CardAtr);
+                else
+                    return m_LongHuanDomain.IccPowerOn(ref CardAtr);
+            }
+            else
+                return false;
+        }
+
+        public int SAMCmdExchange(bool bSamSlot,byte[] data, int datalen, byte[] outdata, ref int outdatalen)
+        {
+            if (m_Domain == ApduDomain.DaHua)
+                return m_DahuaDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
+            else if (m_Domain == ApduDomain.LongHuan)
+            {
+                if(bSamSlot)
+                    return m_LongHuanDomain.CmdExchangeSam(data, datalen, outdata, ref outdatalen);
+                else
+                    return m_LongHuanDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
+            }
+            else
+                return -1;
+        }
+
+        public void SAMPowerOff(bool bSamSlot)
+        {
+            if (m_Domain == ApduDomain.DaHua)
+                m_DahuaDomain.IccPowerOff();
+            else if (m_Domain == ApduDomain.LongHuan)
+            {
+                if (bSamSlot)
+                    m_LongHuanDomain.CloseSAM();
+                else
+                    m_LongHuanDomain.IccPowerOff();
+            }
+        }
+
         public string hex2asc(byte[] dataSrc, int nSrcLen)
         {
             if (m_Domain == ApduDomain.DaHua)

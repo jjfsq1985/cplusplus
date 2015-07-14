@@ -73,6 +73,8 @@ namespace ApduInterface
         
         bool createChangePINCmd(byte[] oldPwd, byte[] newPwd);
 
-        bool createPINUnLockCmd(byte[] randval, byte[] key, byte[] bytePIN);        
+        bool createPINUnLockCmd(byte[] randval, byte[] key, byte[] bytePIN);
+
+        bool createClearCardFileCmd(byte fileId);
     }
 }

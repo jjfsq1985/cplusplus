@@ -165,17 +165,44 @@ namespace ApduLoh
 
         public bool createStoragePINFileCmd(bool bDefaultPwd, byte[] customPwd)
         {
-            return false;
-        }        
-
-        private byte XorValue(byte[] data)
-        {
-            byte byteRetVal = 0;
-            for (int i = 0; i < data.Length; i++)
+            if (!bDefaultPwd && customPwd.Length != 6)
+                return false;
+            m_CLA = 0x80;
+            m_INS = 0xD4;
+            m_P1 = 0x01;
+            m_P2 = 0x00;
+            int nLen = 21;  //Data Len
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];//  
+            m_Data[0] = 0xBA;
+            m_Data[1] = 0xF0;
+            m_Data[2] = 0xEF;
+            m_Data[3] = 0x01;
+            m_Data[4] = 0x33;
+            //PIN
+            if (bDefaultPwd)
             {
-                byteRetVal ^= data[i];
+                for (int i = 0; i < 16; i++)
+                {
+                    if (i < 3)
+                        m_Data[5 + i] = 0x99;
+                    else
+                        m_Data[5 + i] = 0xFF;
+                }
             }
-            return byteRetVal;
+            else
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    if (i < 3)
+                        m_Data[5 + i] = (byte)((customPwd[i * 2] << 4) | customPwd[i * 2 + 1]);
+                    else
+                        m_Data[5 + i] = 0xFF;
+                }
+            }            
+            m_le = 0;
+            m_nTotalLen = 5 + nLen; //APDU Len
+            return true;
         }
 
         //气票交易密钥
@@ -216,7 +243,11 @@ namespace ApduLoh
             m_Data[2] = Param.KeyPar2;
             m_Data[3] = Param.KeyPar3;
             m_Data[4] = Param.KeyPar4;
-            Buffer.BlockCopy(Param.StorageKey, 0, m_Data, 5, 16);
+            //用户卡所有应用密钥都进行一次分散,消费主密钥共进行两次分散
+            byte[] LeftDiversify = DesCryptography.TripleEncryptData(Param.ASN, Param.StorageKey);
+            byte[] RightDiversify = DesCryptography.TripleEncryptData(Param.XorASN, Param.StorageKey);
+            Buffer.BlockCopy(LeftDiversify, 0, m_Data, 5, 8);
+            Buffer.BlockCopy(RightDiversify, 0, m_Data, 13, 8);
             m_le = 0;
             m_nTotalLen = 5 + nCmdLen;
             return true;
@@ -791,7 +822,7 @@ namespace ApduLoh
             {
                 macKey[i] = (byte)(key[i] ^ key[8 + i]);
             }
-            byte[] mac = CalcMacVal(PinVal, macKey);
+            byte[] mac = CalcMacVal_DES(PinVal, macKey);
             Buffer.BlockCopy(mac, 0, m_Data, 3, 4);
             m_le = 0;
             m_nTotalLen = 12;
@@ -828,8 +859,7 @@ namespace ApduLoh
         public bool createPINUnLockCmd(byte[] randval, byte[] key, byte[] bytePIN)
         {
             if (key.Length != 16 || bytePIN.Length != 6)
-                return false;
-                
+                return false;                
             byte[] PINVal = new byte[8];
             PINVal[0] = 0x03;
             PINVal[1] = (byte)((bytePIN[0] << 4) | bytePIN[1]);
@@ -840,11 +870,11 @@ namespace ApduLoh
             PINVal[6] = 0x00;
             PINVal[7] = 0x00;
 
-            
+          
             m_CLA = 0x84;
             m_INS = 0x24;
             m_P1 = 0x00;
-            m_P2 = 0x00;            
+            m_P2 = 0x01;            
             int nLen = 12;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
@@ -861,6 +891,19 @@ namespace ApduLoh
             Buffer.BlockCopy(mac, 0, m_Data, 8, 4);
             m_le = 0;
             m_nTotalLen = 17;
+            return true;
+        }
+
+        public bool createClearCardFileCmd(byte fileId)
+        {
+            m_CLA = 0x00;
+            m_INS = 0xE4;
+            m_P1 = 0x00;
+            m_P2 = 0x00;
+            m_Lc = 0;
+            m_Data = null;
+            m_le = fileId;
+            m_nTotalLen = 5;
             return true;
         }
     }

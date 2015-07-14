@@ -268,7 +268,7 @@ namespace ApduLoh
         public bool createInitSamGrayLockCmd(byte[] DataVal)
         {
             int nLen = DataVal.Length;
-            if (nLen != 28)
+            if (nLen != 36)
                 return false;
             m_CLA = 0xE0;
             m_INS = 0x40;
@@ -276,9 +276,9 @@ namespace ApduLoh
             m_P2 = 0x00;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
-            Buffer.BlockCopy(DataVal, 0, m_Data, 0, 28);
+            Buffer.BlockCopy(DataVal, 0, m_Data, 0, 36);
             m_le = 0x0C;
-            m_nTotalLen = 34;
+            m_nTotalLen = 42;
             return true;
         }
 

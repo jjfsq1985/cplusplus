@@ -264,7 +264,7 @@ namespace ApduLoh
         }
 
         //用过程密钥计算MAC1，MAC2值
-        public byte[] CalcMacVal(byte[] srcData, byte[] keytoMac)
+        public byte[] CalcMacVal_DES(byte[] srcData, byte[] keytoMac)
         {
             byte[] CryptData = SingleDesCalc(srcData, keytoMac);
 

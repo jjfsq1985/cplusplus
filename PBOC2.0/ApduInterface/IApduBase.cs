@@ -23,8 +23,8 @@ namespace ApduInterface
 
         bool createGetEFFileCmd(byte fileFlag, byte ReponseLen);
 
-        byte[] CalcMacVal(byte[] srcData, byte[] keytoMac);        
+        byte[] CalcMacVal_DES(byte[] srcData, byte[] keytoMac);        
 
-        byte[] CalcPrivateProcessKey(byte[] srcData, byte[] tmpck);        
+        byte[] CalcPrivateProcessKey(byte[] srcData, byte[] tmpck);
     }
 }

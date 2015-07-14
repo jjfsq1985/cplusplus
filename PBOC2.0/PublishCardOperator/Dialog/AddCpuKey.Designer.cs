@@ -204,6 +204,11 @@
             this.AppLoadKey.Text = "圈存密钥";
             this.AppLoadKey.Width = 150;
             // 
+            // AppUnLoadKey
+            // 
+            this.AppUnLoadKey.Text = "圈提密钥";
+            this.AppUnLoadKey.Width = 150;
+            // 
             // AppTacKey
             // 
             this.AppTacKey.Text = "TAC密钥";

@@ -13,6 +13,8 @@ namespace ApduInterface
         
         bool SelectPsamApp();
 
+        bool SamAppSelect(bool bSamSlot);
+
         bool CreateIccInfo(byte[] PsamId, byte[] TermialId);
        
         bool WriteApplicationInfo(IccCardInfoParam psamInfo);
@@ -21,20 +23,19 @@ namespace ApduInterface
         
         bool SetupMainKey();      
 
-        bool InitSamGrayLock(byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData);
+        bool InitSamGrayLock(bool bSamSlot,byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData);
 
-        bool VerifyMAC2(byte[] MAC2);
-        
-        bool CalcGMAC(byte BusinessType, byte[] ASN, int nOffLineSn, int nMoney, byte[] outGMAC);
+        bool VerifyMAC2(bool bSamSlot, byte[] MAC2);
+
+        bool CalcGMAC(bool bSamSlot, byte BusinessType, byte[] ASN, int nOffLineSn, int nMoney, byte[] outGMAC);
         
         bool ReadKeyValueFormDb();
-
         
         bool SavePsamCardInfoToDb(IccCardInfoParam PsamInfoPar);
         
         bool CheckPublishedCard(bool bMainKey, byte[] KeyInit);
         
-        byte[] GetTerminalId();
+        byte[] GetTerminalId(bool bSamSlot);
         
         byte[] GetPsamASN(bool bMessage);
         

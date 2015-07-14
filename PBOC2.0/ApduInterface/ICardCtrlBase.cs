@@ -16,8 +16,6 @@ namespace ApduInterface
     {
         void SetMainKeyValue(byte[] byteKey, CardCategory eCategory);
 
-        void SetUserAppKeyValue(byte[] byteKey);
-
         byte[] CardKeyToDb(bool bOrg, CardCategory eCategory);
 
         byte[] GetKeyVal(bool bMainKey, CardCategory eCategory);

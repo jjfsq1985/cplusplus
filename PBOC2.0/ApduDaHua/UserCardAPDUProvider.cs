@@ -1041,7 +1041,7 @@ namespace ApduDaHua
             {
                 macKey[i] = (byte)(key[i] ^ key[8 + i]);
             }
-            byte[] mac = CalcMacVal(PinVal, macKey);
+            byte[] mac = CalcMacVal_DES(PinVal, macKey);
             Buffer.BlockCopy(mac, 0, m_Data, 3, 4);
             m_le = 0;
             m_nTotalLen = 12;
@@ -1112,6 +1112,11 @@ namespace ApduDaHua
             m_le = 0;
             m_nTotalLen = 17;
             return true;
+        }
+
+        public bool createClearCardFileCmd(byte fileId)
+        {
+            return false;
         }
     }
 }
