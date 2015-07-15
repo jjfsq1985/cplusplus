@@ -1313,5 +1313,10 @@ namespace CardOperating
                 MessageBox.Show("每日限制总加气金额最多1000,000.00元");                
             }
         }
+
+        private void AppUserOperator_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CloseDevice();
+        }
     }
 }

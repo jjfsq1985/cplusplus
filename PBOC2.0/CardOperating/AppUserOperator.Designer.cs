@@ -990,6 +990,7 @@
             this.Name = "AppUserOperator";
             this.Text = "卡信息维护";
             this.Load += new System.EventHandler(this.AppUserOperator_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AppUserOperator_FormClosing);
             this.groupLimit.ResumeLayout(false);
             this.groupLimit.PerformLayout();
             this.CardInfoPanel.Panel1.ResumeLayout(false);
