@@ -1209,7 +1209,7 @@ namespace DaHuaApduCtrl
         {
             if (bReadKeyFromDb)
             {
-                byte[] keyUnLoad = GetApplicationKeyVal(ASN, "AppUnlockKey", 1);//联机解扣、圈提密钥
+                byte[] keyUnLoad = GetApplicationKeyVal(ASN, "AppUnLoadKey", 1);//圈提密钥
                 if (keyUnLoad == null)
                 {
                     MessageBox.Show("无此卡的记录，不能圈提。");
@@ -1401,7 +1401,7 @@ namespace DaHuaApduCtrl
             //获取已发卡的圈存密钥,测试时用数据库存储的默认密钥
             if (bReadKeyFromDb)
             {
-                byte[] keyUnlockGray = GetApplicationKeyVal(ASN, "AppUnlockKey", 1);
+                byte[] keyUnlockGray = GetApplicationKeyVal(ASN, "AppUnGrayKey", 1);
                 if (keyUnlockGray == null)
                 {
                     MessageBox.Show("无此卡的记录，不能解灰。");
