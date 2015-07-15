@@ -49,6 +49,7 @@ namespace FNTMain
                     return;
                 }
                 ObjSql.CloseConnection();
+                ObjSql = null;
             }
             catch (System.Exception ex)
             {

@@ -201,6 +201,7 @@ namespace RechargeManage
                 dataReader.Close();
             }
             ObjSql.CloseConnection();
+            ObjSql = null;
         }
 
         private void btnClose_Click(object sender, EventArgs e)

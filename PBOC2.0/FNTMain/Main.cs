@@ -841,9 +841,9 @@ namespace FNTMain
             }
 
             SqlParameter[] sqlparams = new SqlParameter[1];
-            sqlparams[0] = m_ObjSql.MakeParam("Search", SqlDbType.NVarChar, 50, ParameterDirection.Input, "%" + strClientName + "%");
+            sqlparams[0] = ObjSql.MakeParam("Search", SqlDbType.NVarChar, 50, ParameterDirection.Input, "%" + strClientName + "%");
             SqlDataReader dataReader = null;
-            m_ObjSql.ExecuteCommand("select ClientId,ClientName from Base_Client where ClientName like @Search", sqlparams, out dataReader);
+            ObjSql.ExecuteCommand("select ClientId,ClientName from Base_Client where ClientName like @Search", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows && dataReader.Read())

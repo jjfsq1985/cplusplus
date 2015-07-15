@@ -643,13 +643,6 @@ namespace CardOperating
             listLimitArea.Items.Clear();
             listLimitArea.Enabled = true;
 
-            SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
-            {
-                ObjSql = null;
-                return;
-            }
-
             switch (byteLimitArea)
             {
                 case 0xFF:
@@ -680,9 +673,6 @@ namespace CardOperating
                     }
                     break;
             }
-            ObjSql.CloseConnection();
-            ObjSql = null;
-
         }
 
         private void SetListAreaCodeChecked(string strLimitAreaCode, byte byteLimit)
