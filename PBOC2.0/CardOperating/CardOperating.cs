@@ -328,7 +328,8 @@ namespace CardOperating
             //生成加气数据文件
             if (!m_UserCardCtrl.CreateApplication(m_UserCardId, cardInfo.DefaultPwdFlag, cardInfo.CustomPassword))
                 return;
-            m_UserCardCtrl.UpdateApplicationFile(cardInfo,null);
+            if (!m_UserCardCtrl.UpdateApplicationFile(cardInfo, null))
+                return;
 
             //保存至数据库            
             string strSuccess = m_UserCardCtrl.SaveCpuCardInfoToDb(cardInfo) ? "成功" : "失败";

@@ -55,6 +55,8 @@ CREATE PROCEDURE PROC_PublishCpuCard(
 	declare @OrgKey char(32)
 	declare @MasterKey char(32)
 	
+	declare @SrcKeyGuid  uniqueidentifier
+	
     declare @curTime datetime --时间
     set @curTime = GETDATE()
     declare @KeyGuid uniqueidentifier
@@ -67,7 +69,11 @@ CREATE PROCEDURE PROC_PublishCpuCard(
 		return 2
 	--判断卡号在吗
 	if exists(select * from Base_Card where CardNum=@CardId)
-		return 3
+		begin
+		select @SrcKeyGuid = KeyGuid from Base_Card where CardNum=@CardId;
+		delete from Base_Card where CardNum=@CardId;
+		delete from Base_Card_Key where KeyGuid=@SrcKeyGuid;
+		end
 begin
 		--开始事务
 		begin tran maintran
@@ -79,7 +85,7 @@ begin
 		if(@@ERROR <> 0)
 			begin
 		    rollback tran maintran
-		    return 4
+		    return 3
 		    end	
 		select @OrgKeyId = OrgKeyId,@CpuKeyId = UseKeyID from Config_SysParams; --从配置中获取当前有效的密钥号
 		select @OrgKey = OrgKey from Key_OrgRoot where KeyId = @OrgKeyId and KeyType <> 1;
@@ -88,8 +94,8 @@ begin
 					ApplicationIndex,ApplicationTendingKey,LoadKey,UnLoadKey,
 					UnGrayKey,PINUnlockKey,PINResetKey from Key_CARD_ADF where RelatedKeyId = @CpuKeyId;
 	commit tran miantran
-	return 0
 end
+	return 0
 GO
 
 

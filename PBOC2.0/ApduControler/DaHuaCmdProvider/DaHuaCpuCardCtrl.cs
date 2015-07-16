@@ -1784,11 +1784,25 @@ namespace DaHuaApduCtrl
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return null;
                 byte[] UserCardASN = new byte[8];
-                Buffer.BlockCopy(RecvData, 10, UserCardASN, 0, 8);
-                if (bMessage)
-                    OnTextOutput(new MsgOutEvent(0, "读取到卡号：" + BitConverter.ToString(UserCardASN)));
-                cardStart = DateTime.ParseExact(BitConverter.ToString(RecvData, 18, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
-                cardEnd = DateTime.ParseExact(BitConverter.ToString(RecvData, 22, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+                try
+                {
+                    Buffer.BlockCopy(RecvData, 10, UserCardASN, 0, 8);
+                    string strAsn = BitConverter.ToString(UserCardASN).Replace("-", "");
+                    if (bMessage)
+                        OnTextOutput(new MsgOutEvent(0, "读取到卡号：" + strAsn));
+                    for (int i = 0; i < strAsn.Length; i++)
+                    {
+                        if (!Char.IsDigit(strAsn[i]))
+                            return null;
+                    }
+                    cardStart = DateTime.ParseExact(BitConverter.ToString(RecvData, 18, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+                    cardEnd = DateTime.ParseExact(BitConverter.ToString(RecvData, 22, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+                }
+                catch
+                {
+
+                }
+
                 return UserCardASN;
             }
         }
@@ -1805,24 +1819,31 @@ namespace DaHuaApduCtrl
                 return;
             if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                 return;
-            Trace.Assert(CardInfo.UserCardType == (UserCardInfoParam.CardType)RecvData[0]);
-            int nCount = 0;
-            for (int i = 0; i < 20; i++)
+            try
             {
-                if (RecvData[2 + i] != 0xFF)
-                    nCount++;
-                else
-                    break;
+                Trace.Assert(CardInfo.UserCardType == (UserCardInfoParam.CardType)RecvData[0]);
+                int nCount = 0;
+                for (int i = 0; i < 20; i++)
+                {
+                    if (RecvData[2 + i] != 0xFF)
+                        nCount++;
+                    else
+                        break;
+                }
+                if (nCount > 0)
+                    CardInfo.UserName = Encoding.Unicode.GetString(RecvData, 2, nCount);
+                CardInfo.UserIdentity = Encoding.ASCII.GetString(RecvData, 22, 18);
+                CardInfo.IdType = (UserCardInfoParam.IdentityType)(RecvData[40]);//证件类型
+                string strValue = BitConverter.ToString(RecvData, 51, 2).Replace("-", "");
+                int nDiscountRate = Convert.ToInt32(strValue);
+                DateTime RateExprieValid = DateTime.ParseExact(BitConverter.ToString(RecvData, 53, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+                CardInfo.setDiscountRate(nDiscountRate * 1.0 / 100.0, RateExprieValid);
+                CardInfo.PriceLevel = RecvData[61];
             }
-            if (nCount > 0)
-                CardInfo.UserName = Encoding.Unicode.GetString(RecvData, 2, nCount);
-            CardInfo.UserIdentity = Encoding.ASCII.GetString(RecvData, 22, 18);
-            CardInfo.IdType = (UserCardInfoParam.IdentityType)(RecvData[40]);//证件类型
-            string strValue = BitConverter.ToString(RecvData, 51, 2).Replace("-", "");
-            int nDiscountRate = Convert.ToInt32(strValue);
-            DateTime RateExprieValid = DateTime.ParseExact(BitConverter.ToString(RecvData, 53, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
-            CardInfo.setDiscountRate(nDiscountRate * 1.0 / 100.0, RateExprieValid);
-            CardInfo.PriceLevel = RecvData[61];            
+            catch
+            {
+
+            }
         }
 
         private void GetLimitInfo(UserCardInfoParam CardInfo)
@@ -1837,28 +1858,35 @@ namespace DaHuaApduCtrl
                 return;
             if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                 return;
-            CardInfo.LimitGasType = (ushort)((RecvData[0] << 8) + RecvData[1]);
-            CardInfo.setLimitArea(RecvData[2], BitConverter.ToString(RecvData, 3, 40).Replace("-", ""));
-            int nCount = 0;
-            for (int i = 0; i < 16; i++)
+            try
             {
-                if (RecvData[43 + i] != 0xFF)
-                    nCount++;
+                CardInfo.LimitGasType = (ushort)((RecvData[0] << 8) + RecvData[1]);
+                CardInfo.setLimitArea(RecvData[2], BitConverter.ToString(RecvData, 3, 40).Replace("-", ""));
+                int nCount = 0;
+                for (int i = 0; i < 16; i++)
+                {
+                    if (RecvData[43 + i] != 0xFF)
+                        nCount++;
+                    else
+                        break;
+                }
+                if (nCount > 0)
+                {
+                    CardInfo.LimitCarNo = true;
+                    CardInfo.CarNo = Encoding.Unicode.GetString(RecvData, 43, nCount);
+                }
                 else
-                    break;
+                {
+                    CardInfo.LimitCarNo = false;
+                    CardInfo.CarNo = "";
+                }
+                CardInfo.LimitGasFillCount = RecvData[63];
+                CardInfo.LimitGasFillAmount = (uint)((RecvData[64] << 24) + (RecvData[65] << 16) + (RecvData[66] << 8) + RecvData[67]);
             }
-            if (nCount > 0)
+            catch
             {
-                CardInfo.LimitCarNo = true;
-                CardInfo.CarNo = Encoding.Unicode.GetString(RecvData, 43, nCount);
+
             }
-            else
-            {
-                CardInfo.LimitCarNo = false;
-                CardInfo.CarNo = "";
-            }
-            CardInfo.LimitGasFillCount = RecvData[63];
-            CardInfo.LimitGasFillAmount = (uint)((RecvData[64] << 24) + (RecvData[65] << 16) + (RecvData[66] << 8) + RecvData[67]);            
         }
 
         private void GetCylinderInfo(UserCardInfoParam CardInfo)
@@ -1873,52 +1901,59 @@ namespace DaHuaApduCtrl
                 return;            
             if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                 return;
-            CardInfo.BoalExprie = DateTime.ParseExact(BitConverter.ToString(RecvData, 0, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
-            int nCarNoCount = 0;
-            for (int i = 0; i < 16; i++)
+            try
             {
-                if (RecvData[4 + i] != 0xFF)
-                    nCarNoCount++;
-                else
-                    break;
+                CardInfo.BoalExprie = DateTime.ParseExact(BitConverter.ToString(RecvData, 0, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+                int nCarNoCount = 0;
+                for (int i = 0; i < 16; i++)
+                {
+                    if (RecvData[4 + i] != 0xFF)
+                        nCarNoCount++;
+                    else
+                        break;
+                }
+                if (nCarNoCount > 0)
+                {
+                    CardInfo.CarNo = Encoding.Unicode.GetString(RecvData, 4, nCarNoCount); //装配气瓶的车牌号
+                }
+                int nCount = 0;
+                for (int i = 0; i < 16; i++)
+                {
+                    if (RecvData[20 + i] != 0xFF)
+                        nCount++;
+                    else
+                        break;
+                }
+                if (nCount > 0)
+                    CardInfo.BoalId = Encoding.ASCII.GetString(RecvData, 20, nCount);
+                CardInfo.CylinderNum = (int)RecvData[36];
+                nCount = 0;
+                for (int i = 0; i < 7; i++)
+                {
+                    if (RecvData[37 + i] != 0xFF)
+                        nCount++;
+                    else
+                        break;
+                }
+                if (nCount > 0)
+                    CardInfo.BoalFactoryID = Encoding.ASCII.GetString(RecvData, 37, nCount);
+                CardInfo.CylinderVolume = (ushort)((RecvData[45] << 8) + RecvData[44]);
+                CardInfo.CarType = GetCarCateGorybyByte(RecvData[46]);
+                nCount = 0;
+                for (int i = 0; i < 5; i++)
+                {
+                    if (RecvData[47 + i] != 0xFF)
+                        nCount++;
+                    else
+                        break;
+                }
+                if (nCount > 0)
+                    CardInfo.BusDistance = Encoding.ASCII.GetString(RecvData, 47, nCount);
             }
-            if (nCarNoCount > 0)
+            catch
             {
-                CardInfo.CarNo = Encoding.Unicode.GetString(RecvData, 4, nCarNoCount); //装配气瓶的车牌号
+
             }
-            int nCount = 0;
-            for (int i = 0; i < 16; i++)
-            {
-                if (RecvData[20 + i] != 0xFF)
-                    nCount++;
-                else
-                    break;
-            }
-            if (nCount > 0)
-                CardInfo.BoalId = Encoding.ASCII.GetString(RecvData, 20, nCount);
-            CardInfo.CylinderNum = (int)RecvData[36];
-            nCount = 0;
-            for (int i = 0; i < 7; i++)
-            {
-                if (RecvData[37 + i] != 0xFF)
-                    nCount++;
-                else
-                    break;
-            }
-            if (nCount > 0)
-                CardInfo.BoalFactoryID = Encoding.ASCII.GetString(RecvData, 37, nCount);
-            CardInfo.CylinderVolume = (ushort)((RecvData[45] << 8) + RecvData[44]);
-            CardInfo.CarType = GetCarCateGorybyByte(RecvData[46]);
-            nCount = 0;
-            for (int i = 0; i < 5; i++)
-            {
-                if (RecvData[47 + i] != 0xFF)
-                    nCount++;
-                else
-                    break;
-            }
-            if (nCount > 0)
-                CardInfo.BusDistance = Encoding.ASCII.GetString(RecvData, 47, nCount);            
         }
 
         private string GetCarCateGorybyByte(byte carType)

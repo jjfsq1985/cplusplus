@@ -91,12 +91,14 @@
             this.cmbAreaLimit = new System.Windows.Forms.ComboBox();
             this.LimitArea = new System.Windows.Forms.Label();
             this.LimitGas = new System.Windows.Forms.Label();
+            this.CardIdRefresh = new System.Windows.Forms.Button();
             this.groupUserCardInfo.SuspendLayout();
             this.groupLimit.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupUserCardInfo
             // 
+            this.groupUserCardInfo.Controls.Add(this.CardIdRefresh);
             this.groupUserCardInfo.Controls.Add(this.cmbIdType);
             this.groupUserCardInfo.Controls.Add(this.IdTypeLabel);
             this.groupUserCardInfo.Controls.Add(this.textRemark);
@@ -539,7 +541,7 @@
             // textUserCardId
             // 
             this.textUserCardId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textUserCardId.Location = new System.Drawing.Point(274, 47);
+            this.textUserCardId.Location = new System.Drawing.Point(252, 47);
             this.textUserCardId.MaxLength = 6;
             this.textUserCardId.Name = "textUserCardId";
             this.textUserCardId.ReadOnly = true;
@@ -549,7 +551,7 @@
             // UserCardId
             // 
             this.UserCardId.AutoSize = true;
-            this.UserCardId.Location = new System.Drawing.Point(200, 51);
+            this.UserCardId.Location = new System.Drawing.Point(189, 51);
             this.UserCardId.Name = "UserCardId";
             this.UserCardId.Size = new System.Drawing.Size(53, 12);
             this.UserCardId.TabIndex = 4;
@@ -735,6 +737,18 @@
             this.LimitGas.TabIndex = 3;
             this.LimitGas.Text = "油气限制";
             // 
+            // CardIdRefresh
+            // 
+            this.CardIdRefresh.BackgroundImage = global::CardOperating.Properties.Resources.Refresh;
+            this.CardIdRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.CardIdRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CardIdRefresh.Location = new System.Drawing.Point(410, 47);
+            this.CardIdRefresh.Name = "CardIdRefresh";
+            this.CardIdRefresh.Size = new System.Drawing.Size(22, 21);
+            this.CardIdRefresh.TabIndex = 53;
+            this.CardIdRefresh.UseVisualStyleBackColor = true;
+            this.CardIdRefresh.Click += new System.EventHandler(this.CardIdRefresh_Click);
+            // 
             // UserCardInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -822,5 +836,6 @@
         private System.Windows.Forms.ComboBox cmbLimitGasType;
         private System.Windows.Forms.ComboBox cmbIdType;
         private System.Windows.Forms.Label IdTypeLabel;
+        private System.Windows.Forms.Button CardIdRefresh;
     }
 }

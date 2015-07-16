@@ -68,7 +68,6 @@ CREATE PROCEDURE PROC_PublishPsamCard(
 			set @LogContent	= 	@LogContent + 'Ω” ’∑Ω' + @CompanyTo + ';';				             
 		insert into Log_PublishCard values(@curTime,@LogContent,@ClientId,@PsamCardId);
 	commit tran miantran
-	return 0
 		end
 	else
 		begin
@@ -82,8 +81,8 @@ CREATE PROCEDURE PROC_PublishPsamCard(
 			    return 4
 				end		 
 			commit tran miantran
-			return 0
 		end
+	return 0
 GO
 
 

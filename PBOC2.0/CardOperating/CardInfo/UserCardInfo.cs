@@ -601,6 +601,7 @@ namespace CardOperating
         private void cmbUserCardType_SelectedIndexChanged(object sender, EventArgs e)
         {
             m_CardInfoPar.UserCardType = GetCardType(cmbUserCardType.SelectedIndex);
+            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
             if (m_CardInfoPar.UserCardType != UserCardInfoParam.CardType.PersonalCard && m_CardInfoPar.UserCardType != UserCardInfoParam.CardType.CompanySubCard)
             {
                 LimitCarNo.Checked = false;
@@ -884,6 +885,13 @@ namespace CardOperating
                     break;
             }
             return LimitGasType;
+        }
+
+        private void CardIdRefresh_Click(object sender, EventArgs e)
+        {            
+            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
+            byte nCardType = (byte)m_CardInfoPar.UserCardType;
+            textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
         }
 
     }
