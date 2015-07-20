@@ -46,13 +46,13 @@
             this.BackGroundPic = new System.Windows.Forms.PictureBox();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.FuzzySearch = new System.Windows.Forms.GroupBox();
+            this.ChkSearchPsam = new System.Windows.Forms.CheckBox();
             this.listSearchResult = new System.Windows.Forms.ListView();
             this.btnSearch = new System.Windows.Forms.Button();
             this.textSearchContent = new System.Windows.Forms.TextBox();
             this.LabelTextLike = new System.Windows.Forms.Label();
             this.LabelText = new System.Windows.Forms.Label();
             this.cmbCondition = new System.Windows.Forms.ComboBox();
-            this.ChkSearchPsam = new System.Windows.Forms.CheckBox();
             this.MainMenu.SuspendLayout();
             this.SystemStatus.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BackGroundPic)).BeginInit();
@@ -208,6 +208,17 @@
             this.FuzzySearch.TabIndex = 6;
             this.FuzzySearch.TabStop = false;
             // 
+            // ChkSearchPsam
+            // 
+            this.ChkSearchPsam.AutoSize = true;
+            this.ChkSearchPsam.Location = new System.Drawing.Point(456, 68);
+            this.ChkSearchPsam.Name = "ChkSearchPsam";
+            this.ChkSearchPsam.Size = new System.Drawing.Size(66, 16);
+            this.ChkSearchPsam.TabIndex = 6;
+            this.ChkSearchPsam.Text = "查SAM卡";
+            this.ChkSearchPsam.UseVisualStyleBackColor = true;
+            this.ChkSearchPsam.CheckedChanged += new System.EventHandler(this.ChkSearchPsam_CheckedChanged);
+            // 
             // listSearchResult
             // 
             this.listSearchResult.Location = new System.Drawing.Point(20, 99);
@@ -262,17 +273,6 @@
             this.cmbCondition.TabIndex = 1;
             this.cmbCondition.SelectedIndexChanged += new System.EventHandler(this.cmbCondition_SelectedIndexChanged);
             // 
-            // ChkSearchPsam
-            // 
-            this.ChkSearchPsam.AutoSize = true;
-            this.ChkSearchPsam.Location = new System.Drawing.Point(456, 68);
-            this.ChkSearchPsam.Name = "ChkSearchPsam";
-            this.ChkSearchPsam.Size = new System.Drawing.Size(72, 16);
-            this.ChkSearchPsam.TabIndex = 6;
-            this.ChkSearchPsam.Text = "查SAM卡";
-            this.ChkSearchPsam.UseVisualStyleBackColor = true;
-            this.ChkSearchPsam.CheckedChanged += new System.EventHandler(this.ChkSearchPsam_CheckedChanged);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -281,6 +281,7 @@
             this.Controls.Add(this.splitContainerMain);
             this.Controls.Add(this.SystemStatus);
             this.Controls.Add(this.MainMenu);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MainMenu;
             this.Name = "Main";
             this.Text = "FNT Manage System";

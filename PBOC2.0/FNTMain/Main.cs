@@ -184,7 +184,7 @@ namespace FNTMain
             Type t = AccountObj.GetType();            
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
-            SetAuthority.Invoke(AccountObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.Account_Authority) });
+            SetAuthority.Invoke(AccountObj, new object[] { m_nLoginID, m_nLoginAuthority });
             ShowPluginForm.Invoke(AccountObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });            
         }
 

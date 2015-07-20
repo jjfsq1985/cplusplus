@@ -56,7 +56,7 @@ namespace AccountManage
             this.Parent = parent;
             this.Show();
             this.BringToFront();
-            if (m_nAccountAuthority != GrobalVariable.Account_Authority)
+            if ((m_nAccountAuthority & GrobalVariable.Account_Authority) != GrobalVariable.Account_Authority)
             {
                 btnAdd.Enabled = false;
                 btnDel.Enabled = false;
@@ -196,7 +196,7 @@ namespace AccountManage
             //修改权限和密码 
             AccountEdit modifyForm = new AccountEdit();
             int nIndex = UserGridView.CurrentCell.RowIndex;
-            modifyForm.SetAccountInfo(m_lstUser[nIndex]);
+            modifyForm.SetAccountInfo(m_lstUser[nIndex],m_nAccountAuthority);
             if (modifyForm.ShowDialog(this) != DialogResult.OK)
                 return;
             AccountInfo AccountInfoModify = modifyForm.GetAccountInfo();
@@ -209,7 +209,7 @@ namespace AccountManage
         private void btnAdd_Click(object sender, EventArgs e)
         {
             AddAccount AddForm = new AddAccount();
-            AddForm.SetDbInfo(m_DBInfo);
+            AddForm.SetInfo(m_DBInfo,m_nAccountAuthority);
             if (AddForm.ShowDialog(this) != DialogResult.OK)
                 return;
             AccountInfo newAccount = AddForm.GetAccountInfo();

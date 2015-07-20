@@ -18,6 +18,7 @@ namespace AccountManage
         private const Char Backspace = (Char)8;
 
         private AccountInfo m_AccountInfo = new AccountInfo();
+        private int m_nCurUserAuthority = 0;
 
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
 
@@ -27,9 +28,10 @@ namespace AccountManage
             FillListAuthority();
         }
 
-        public void SetDbInfo(SqlConnectInfo DbInfo)
+        public void SetInfo(SqlConnectInfo DbInfo, int nCurUserAuthority)
         {
             m_DBInfo = DbInfo;
+            m_nCurUserAuthority = nCurUserAuthority;
         }
 
         public AccountInfo GetAccountInfo()
@@ -81,22 +83,42 @@ namespace AccountManage
             int nRet = 0;
             foreach (string itemChecked in ChkLBAuthority.CheckedItems) 
             {
-                int nIndex = ChkLBAuthority.Items.IndexOf(itemChecked);
+                int nIndex = AuthorityIndexof(itemChecked);
                 nRet |= (1 << nIndex);
             }
             return nRet;
         }
 
+        private int AuthorityIndexof(string strVal)
+        {
+            int nRet = 0;
+            int i = 0;
+            foreach (string strAuthority in GrobalVariable.strAuthority)
+            {
+                if (strVal == strAuthority)
+                {
+                    nRet = i;
+                    break;
+                }
+                i++;
+            }
+            return nRet;
+        }
 
         private void FillListAuthority()
         {
             ChkLBAuthority.Items.Clear();
             int index = 0;
+            int nShowIndex = 0;
             foreach (string strAuthority in GrobalVariable.strAuthority)
             {
-                ChkLBAuthority.Items.Add(strAuthority);
-                ChkLBAuthority.SetItemChecked(index, true);
+                int nAuthority = (1 << index);
                 index++;
+                if ((m_nCurUserAuthority & nAuthority) != nAuthority)
+                    continue;
+                ChkLBAuthority.Items.Add(strAuthority);
+                ChkLBAuthority.SetItemChecked(nShowIndex, true);
+                nShowIndex++;
             }
         }
 

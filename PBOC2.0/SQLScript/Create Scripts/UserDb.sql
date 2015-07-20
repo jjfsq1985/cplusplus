@@ -34,6 +34,9 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'状态(0未登录，1登录，2停用)' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'UserDb', @level2type=N'COLUMN',@level2name=N'Status'
 GO
 
---增加初始账户admin,密码admin(MD5格式)
-insert into UserDb values('admin','21232F297A57A5A743894A0E4A801FC3',0x7FFFFFFF,0);
+--内置有制卡权限的账户，密码Funnett!@#$%^(MD5)
+insert into UserDb values('administrator','BF9B57A716704533C18B5084615F3B4D',0x7FFFFFFF,0);
+GO
+--增加初始账户admin,密码admin(MD5格式),无制卡权限
+insert into UserDb values('admin','21232F297A57A5A743894A0E4A801FC3',0x7FFFFFEF,0);
 GO

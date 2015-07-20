@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DbSetting));
             this.labelServer = new System.Windows.Forms.Label();
             this.labelDbName = new System.Windows.Forms.Label();
             this.labelDbUser = new System.Windows.Forms.Label();
@@ -142,6 +143,7 @@
             this.Controls.Add(this.labelDbName);
             this.Controls.Add(this.labelServer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DbSetting";

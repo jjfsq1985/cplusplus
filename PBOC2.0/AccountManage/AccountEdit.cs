@@ -13,6 +13,7 @@ namespace AccountManage
     public partial class AccountEdit : Form
     {
         private AccountInfo m_AccountInfo = new AccountInfo();
+        private int m_nCurUserAuthority = 0;
 
         public AccountEdit()
         {
@@ -20,9 +21,10 @@ namespace AccountManage
             FillListAuthority();
         }
 
-        public void SetAccountInfo(AccountInfo info)
+        public void SetAccountInfo(AccountInfo info, int nCurUserAuthority)
         {
             m_AccountInfo = info;
+            m_nCurUserAuthority = nCurUserAuthority;
         }
 
         public AccountInfo GetAccountInfo()
@@ -67,8 +69,24 @@ namespace AccountManage
             int nRet = 0;
             foreach (string itemChecked in ChkLBAuthority.CheckedItems)
             {
-                int nIndex = ChkLBAuthority.Items.IndexOf(itemChecked);
+                int nIndex = AuthorityIndexof(itemChecked);
                 nRet |= (1 << nIndex);
+            }
+            return nRet;
+        }
+
+        private int AuthorityIndexof(string strVal)
+        {
+            int nRet = 0;
+            int i=0;
+            foreach (string strAuthority in GrobalVariable.strAuthority)
+            {
+                if (strVal == strAuthority)
+                {
+                    nRet = i;
+                    break;
+                }
+                i++;
             }
             return nRet;
         }
@@ -79,13 +97,16 @@ namespace AccountManage
         }
 
         private void FillListAuthority()
-        {
+        {            
             ChkLBAuthority.Items.Clear();
             int index = 0;
             foreach (string strAuthority in GrobalVariable.strAuthority)
             {
-                ChkLBAuthority.Items.Add(strAuthority);
+                int nAuthority = (1<<index);
                 index++;
+                if ((m_nCurUserAuthority & nAuthority) != nAuthority)
+                    continue;
+                ChkLBAuthority.Items.Add(strAuthority);
             }
         }
 
@@ -93,12 +114,17 @@ namespace AccountManage
         {
             textName.Text = m_AccountInfo.strUserName;
             AccountStop.Checked = m_AccountInfo.UserStatus == 2 ? true : false;
+            int nShowIndex = 0;
             for (int i = 0; i < GrobalVariable.Authority_Config_Count; i++)
             {
-                if ((m_AccountInfo.UserAuthority & (1 << i)) == (1 << i))
+                int nAuthority = (1 << i);
+                if ((m_nCurUserAuthority & nAuthority) != nAuthority)
+                    continue;
+                if ((m_AccountInfo.UserAuthority & nAuthority) == nAuthority)
                 {
-                    ChkLBAuthority.SetItemChecked(i, true);
+                    ChkLBAuthority.SetItemChecked(nShowIndex, true);
                 }
+                nShowIndex++;
             }
         }
 
