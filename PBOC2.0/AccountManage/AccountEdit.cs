@@ -18,7 +18,6 @@ namespace AccountManage
         public AccountEdit()
         {
             InitializeComponent();
-            FillListAuthority();
         }
 
         public void SetAccountInfo(AccountInfo info, int nCurUserAuthority)
@@ -112,6 +111,7 @@ namespace AccountManage
 
         private void AccountEdit_Load(object sender, EventArgs e)
         {
+            FillListAuthority();
             textName.Text = m_AccountInfo.strUserName;
             AccountStop.Checked = m_AccountInfo.UserStatus == 2 ? true : false;
             int nShowIndex = 0;

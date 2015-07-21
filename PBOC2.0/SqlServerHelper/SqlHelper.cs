@@ -10,6 +10,11 @@ namespace SqlServerHelper
     {
         private SqlConnection m_Conn = null;
 
+        public static void ClearConnectionPool()
+        {
+            SqlConnection.ClearAllPools();
+        }
+
         public bool OpenSqlServerConnection(string strServerName, string strDbName, string strUser, string strPwd)
         {
             string strConnection= "Persist Security Info=False;Integrated Security=sspi;server=" + strServerName +
@@ -265,7 +270,7 @@ namespace SqlServerHelper
         public bool CloseConnection()
         {
             if (m_Conn != null)
-            {
+            {                
                 m_Conn.Close();
                 m_Conn = null;
             }

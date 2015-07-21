@@ -57,9 +57,9 @@ namespace IFuncPlugin
 
     public class GrobalVariable
     {
-        public static readonly string[] strAuthority = new string[] { "账户管理", "单位管理", "站点管理", "充值记录", "制卡操作", "卡信息维护", "密钥管理", "限制代码管理" };
+        public static readonly string[] strAuthority = new string[] { "账户管理", "单位管理", "站点管理", "充值记录", "制卡操作", "卡信息维护", "密钥管理", "限制代码管理", "数据库管理" };
 
-        public static readonly int Authority_Config_Count = 8;
+        public static readonly int Authority_Config_Count = 9;
         //权限值
         public static readonly int Account_Authority = 1;
         public static readonly int ClientInfo_Authority = 1 << 1;
@@ -69,6 +69,7 @@ namespace IFuncPlugin
         public static readonly int CardPublish_Authority = 1 << 5;
         public static readonly int KeyManage_Authority = 1 << 6;
         public static readonly int CodeTable_Authority = 1 << 7;
+        public static readonly int DbManage_Authority = 1 << 8;
     }
 
     public class SqlConnectInfo
@@ -94,6 +95,7 @@ namespace IFuncPlugin
         eProvinceCode,   //省代码表
         eCityCode,      //地市代码表
         eCompanyCode,   //公司代码表
+        eDbManage       //数据库备份还原
     }
 
     //插件中各个控件的位置

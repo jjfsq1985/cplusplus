@@ -25,7 +25,6 @@ namespace AccountManage
         public AddAccount()
         {
             InitializeComponent();
-            FillListAuthority();
         }
 
         public void SetInfo(SqlConnectInfo DbInfo, int nCurUserAuthority)
@@ -157,6 +156,11 @@ namespace AccountManage
             ObjSql.CloseConnection();
             ObjSql = null;
             return bExist;
+        }
+
+        private void AddAccount_Load(object sender, EventArgs e)
+        {
+            FillListAuthority();
         }
     }
 }

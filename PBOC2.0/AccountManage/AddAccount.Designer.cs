@@ -151,6 +151,7 @@
             this.MinimizeBox = false;
             this.Name = "AddAccount";
             this.Text = "添加账户";
+            this.Load += new System.EventHandler(this.AddAccount_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

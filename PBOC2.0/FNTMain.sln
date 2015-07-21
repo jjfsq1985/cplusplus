@@ -42,6 +42,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApduInterface", "ApduInterf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApduControler", "ApduControler\ApduControler.csproj", "{8474A20B-7BCF-4356-9E63-6CC613CF7CE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbManage", "DbManage\DbManage.csproj", "{99F44602-F33D-438A-AEAB-DAD1D5887C3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -112,6 +114,10 @@ Global
 		{8474A20B-7BCF-4356-9E63-6CC613CF7CE0}.Debug|x86.Build.0 = Debug|x86
 		{8474A20B-7BCF-4356-9E63-6CC613CF7CE0}.Release|x86.ActiveCfg = Release|x86
 		{8474A20B-7BCF-4356-9E63-6CC613CF7CE0}.Release|x86.Build.0 = Release|x86
+		{99F44602-F33D-438A-AEAB-DAD1D5887C3C}.Debug|x86.ActiveCfg = Debug|x86
+		{99F44602-F33D-438A-AEAB-DAD1D5887C3C}.Debug|x86.Build.0 = Debug|x86
+		{99F44602-F33D-438A-AEAB-DAD1D5887C3C}.Release|x86.ActiveCfg = Release|x86
+		{99F44602-F33D-438A-AEAB-DAD1D5887C3C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -35,9 +35,7 @@ namespace FNTMain
         private int m_nLoginID = 0;
         private int m_nLoginAuthority = 0;
         private string m_strLoginName = "";
-        private SqlConnectInfo m_dbConnectInfo = new SqlConnectInfo();
-
-        private SqlHelper m_ObjSql = new SqlHelper();
+        private SqlConnectInfo m_dbConnectInfo = new SqlConnectInfo();        
 
         public Main(int nLoginId,SqlConnectInfo DbInfo)
         {
@@ -129,6 +127,9 @@ namespace FNTMain
                     break;
                 case MenuType.eCompanyCode:
                     OptionMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnCompanyCode_Click));
+                    break;
+                case MenuType.eDbManage:
+                    OptionMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnDbManage_Click));
                     break;
                 default:
                     break;
@@ -356,6 +357,21 @@ namespace FNTMain
             ShowPluginForm.Invoke(CompanyCodeObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
         }
 
+        private void OnDbManage_Click(object sender, EventArgs e)
+        {
+            Guid dbManage = new Guid("6A1B65FB-DA7D-40c4-AD11-B8B5ECB7411A");
+            if (FindChildForm(m_Plugins[dbManage].strPluginName))
+                return;
+            object dbObj = GetObject(dbManage, m_Plugins[dbManage].strPluginPath);
+            if (dbObj == null)
+                return;
+            Type t = dbObj.GetType();
+            MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
+            MethodInfo SetAuthority = t.GetMethod("SetAuthority");
+            SetAuthority.Invoke(dbObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.DbManage_Authority) });
+            ShowPluginForm.Invoke(dbObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });            
+        }
+
         private void AboutMenuItem_Click(object sender, EventArgs e)
         {
             //AboutBox
@@ -365,10 +381,16 @@ namespace FNTMain
 
         private void GetUserAndAuthority(int nUserId)
         {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_dbConnectInfo.strServerName, m_dbConnectInfo.strDbName, m_dbConnectInfo.strUser, m_dbConnectInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
             SqlParameter[] sqlparams = new SqlParameter[1];
-            sqlparams[0] = m_ObjSql.MakeParam("UserID", SqlDbType.Int, 4, ParameterDirection.Input, nUserId);
+            sqlparams[0] = ObjSql.MakeParam("UserID", SqlDbType.Int, 4, ParameterDirection.Input, nUserId);
             SqlDataReader dataReader = null;
-            m_ObjSql.ExecuteCommand("select UserName,Authority from UserDb where UserId = @UserID", sqlparams, out dataReader);
+            ObjSql.ExecuteCommand("select UserName,Authority from UserDb where UserId = @UserID", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows && dataReader.Read())
@@ -378,20 +400,21 @@ namespace FNTMain
                 }
                 dataReader.Close();
             }
+            ObjSql.CloseConnection();
+            ObjSql = null;
         }
 
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
         {
-            //将数据库的用户改成未登录状态
-            SqlParameter[] sqlparams = new SqlParameter[1];
-            sqlparams[0] = m_ObjSql.MakeParam("UserID", SqlDbType.Int, 4, ParameterDirection.Input, m_nLoginID);
-            m_ObjSql.ExecuteCommand("update UserDb set Status = 0 where UserId = @UserID", sqlparams);
-
-
-            if (m_ObjSql != null)
+            SqlHelper ObjSql = new SqlHelper();
+            if (ObjSql.OpenSqlServerConnection(m_dbConnectInfo.strServerName, m_dbConnectInfo.strDbName, m_dbConnectInfo.strUser, m_dbConnectInfo.strUserPwd))
             {
-                m_ObjSql.CloseConnection();
-                m_ObjSql = null;
+                //将数据库的用户改成未登录状态
+                SqlParameter[] sqlparams = new SqlParameter[1];
+                sqlparams[0] = ObjSql.MakeParam("UserID", SqlDbType.Int, 4, ParameterDirection.Input, m_nLoginID);
+                ObjSql.ExecuteCommand("update UserDb set Status = 0 where UserId = @UserID", sqlparams);
+                ObjSql.CloseConnection();
+                ObjSql = null;
             }
         }
 
@@ -467,12 +490,6 @@ namespace FNTMain
 
         private void Main_Load(object sender, EventArgs e)
         {
-            if (!m_ObjSql.OpenSqlServerConnection(m_dbConnectInfo.strServerName, m_dbConnectInfo.strDbName, m_dbConnectInfo.strUser, m_dbConnectInfo.strUserPwd))
-            {
-                m_ObjSql = null;
-                return;
-            }
-
             GetUserAndAuthority(m_nLoginID);
             UserName.Text = "用户：" + m_strLoginName;
 
@@ -640,10 +657,16 @@ namespace FNTMain
 
         private void SearchPsam(string strParamName, string strParamVal)
         {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_dbConnectInfo.strServerName, m_dbConnectInfo.strDbName, m_dbConnectInfo.strUser, m_dbConnectInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
             SqlParameter[] sqlparams = new SqlParameter[1];
-            sqlparams[0] = m_ObjSql.MakeParam("Search", SqlDbType.VarChar, 32, ParameterDirection.Input, "%" + strParamVal + "%");
+            sqlparams[0] = ObjSql.MakeParam("Search", SqlDbType.VarChar, 32, ParameterDirection.Input, "%" + strParamVal + "%");
             SqlDataReader dataReader = null;
-            m_ObjSql.ExecuteCommand("select * from Psam_Card where " + strParamName + " like @Search", sqlparams, out dataReader);
+            ObjSql.ExecuteCommand("select * from Psam_Card where " + strParamName + " like @Search", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows)
@@ -668,15 +691,23 @@ namespace FNTMain
                 }
                 dataReader.Close();
             }
+            ObjSql.CloseConnection();
+            ObjSql = null;
         }
 
         //模糊查询
         private void SearchCommon(string strParamName, string strParamVal)
         {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_dbConnectInfo.strServerName, m_dbConnectInfo.strDbName, m_dbConnectInfo.strUser, m_dbConnectInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
             SqlParameter[] sqlparams = new SqlParameter[1];
-            sqlparams[0] = m_ObjSql.MakeParam("Search", SqlDbType.VarChar, 32, ParameterDirection.Input, "%" + strParamVal + "%");
+            sqlparams[0] = ObjSql.MakeParam("Search", SqlDbType.VarChar, 32, ParameterDirection.Input, "%" + strParamVal + "%");
             SqlDataReader dataReader = null;
-            m_ObjSql.ExecuteCommand("select * from Base_Card where " + strParamName + " like @Search", sqlparams, out dataReader);
+            ObjSql.ExecuteCommand("select * from Base_Card where " + strParamName + " like @Search", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows)
@@ -729,14 +760,22 @@ namespace FNTMain
                 }
                 dataReader.Close();
             }
+            ObjSql.CloseConnection();
+            ObjSql = null;
         }
 
         private void SearchPsamInfoByClient(int nClientID, string strClientName)
         {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_dbConnectInfo.strServerName, m_dbConnectInfo.strDbName, m_dbConnectInfo.strUser, m_dbConnectInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
             SqlParameter[] sqlparams = new SqlParameter[1];
-            sqlparams[0] = m_ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, nClientID);
+            sqlparams[0] = ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, nClientID);
             SqlDataReader dataReader = null;
-            m_ObjSql.ExecuteCommand("select * from Psam_Card where ClientId = @ClientId", sqlparams, out dataReader);
+            ObjSql.ExecuteCommand("select * from Psam_Card where ClientId = @ClientId", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows)
@@ -760,14 +799,22 @@ namespace FNTMain
                 }
                 dataReader.Close();
             }
+            ObjSql.CloseConnection();
+            ObjSql = null;
         }
 
         private void SearchCardInfoByClient(int nClientID, string strClientName)
         {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_dbConnectInfo.strServerName, m_dbConnectInfo.strDbName, m_dbConnectInfo.strUser, m_dbConnectInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
             SqlParameter[] sqlparams = new SqlParameter[1];
-            sqlparams[0] = m_ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, nClientID);
+            sqlparams[0] = ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, nClientID);
             SqlDataReader dataReader = null;
-            m_ObjSql.ExecuteCommand("select * from Base_Card where ClientId = @ClientId", sqlparams, out dataReader);
+            ObjSql.ExecuteCommand("select * from Base_Card where ClientId = @ClientId", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows)
@@ -819,6 +866,8 @@ namespace FNTMain
                 }
                 dataReader.Close();
             }
+            ObjSql.CloseConnection();
+            ObjSql = null;
         }
 
         private void SearchByClientID(int nClientId)
