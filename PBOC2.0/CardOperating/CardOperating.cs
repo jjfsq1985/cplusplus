@@ -86,6 +86,7 @@ namespace CardOperating
             {
                 Card.Enabled = false;
                 ICC_Card.Enabled = false;
+                btnMethod.Visible = false;
                 MessageBox.Show("当前用户无制卡权限");
             }
         }

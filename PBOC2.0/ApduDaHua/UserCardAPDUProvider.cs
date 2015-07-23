@@ -1005,11 +1005,11 @@ namespace ApduDaHua
         }
 
         //加气交易明细记录文件
-        public bool createReadRecordCmd(byte ResponseLen)
+        public bool createReadRecordCmd(byte ResponseLen, int nRecordId)
         {
             m_CLA = 0x00;
             m_INS = 0xB2;
-            m_P1 = 0x01;
+            m_P1 = (byte)nRecordId;//循环记录文件，01是最新的记录，上一条为02，依次类推
             m_P2 = 0xC4;
             m_Lc = 0x00;  //不存在
             m_Data = null; //不存在

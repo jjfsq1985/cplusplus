@@ -386,17 +386,42 @@ namespace CardOperating
 
         public void FillListView(List<CardRecord> lstRecord)
         {
+            RecordInCard.Items.Clear();
             foreach (CardRecord record in lstRecord)
             {
                 ListViewItem item = new ListViewItem();
                 item.Text = record.BusinessSn.ToString();
                 item.SubItems.Add(record.OverdraftMoney.ToString("F2"));
                 item.SubItems.Add(record.Amount.ToString("F2"));
-                item.SubItems.Add(record.BusinessType.ToString());
+                item.SubItems.Add(RecordType(record.BusinessType));
                 item.SubItems.Add(record.TerminalID);
                 item.SubItems.Add(record.BusinessTime);
                 RecordInCard.Items.Add(item);
             }
+        }
+
+        private string RecordType(byte RecordType)
+        {
+            string strT = RecordType.ToString();
+            switch (RecordType)
+            {
+                case 0x01:
+                    strT = "圈存存折";
+                    break;
+                case 0x02:
+                    strT = "圈存钱包";
+                    break;
+                case 0x03:
+                    strT = "圈提存折";
+                    break;
+                case 0x93:
+                    strT = "消费交易";
+                    break;
+                case 0x95:
+                    strT = "联机解扣";
+                    break;
+            }
+            return strT;
         }
 
         private void btnUnload_Click(object sender, EventArgs e)

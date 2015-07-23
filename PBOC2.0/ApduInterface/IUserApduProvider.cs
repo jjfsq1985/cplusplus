@@ -67,7 +67,7 @@ namespace ApduInterface
         
         bool createDebitForUnlockCmd(byte[] DebitData);
 
-        bool createReadRecordCmd(byte ResponseLen);
+        bool createReadRecordCmd(byte ResponseLen, int nRecordId);
 
         bool createPINResetCmd(byte[] key, byte[] bytePIN);
         

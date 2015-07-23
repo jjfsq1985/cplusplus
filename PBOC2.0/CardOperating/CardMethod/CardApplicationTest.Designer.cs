@@ -158,6 +158,7 @@
             // BusinessType
             // 
             this.BusinessType.Text = "交易类型";
+            this.BusinessType.Width = 65;
             // 
             // TermID
             // 

@@ -1762,45 +1762,54 @@ namespace LohApduCtrl
             return strRet;
         }
 
-        //读卡片中的加气记录
-        public List<CardRecord> ReadRecord()
+        private bool ReadSingleRecord(int nRecordId, out CardRecord record)
         {
-            List<CardRecord> lstRet = new List<CardRecord>();
-
-            m_CmdProvider.createReadRecordCmd(0x17);//获取10条加气记录
+            record = null;
+            m_CmdProvider.createReadRecordCmd(0x17, nRecordId);//获取1条加气记录
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
             int nRecvLen = 0;
-            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard,data, datalen, RecvData, ref nRecvLen);
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
                 OnTextOutput(new MsgOutEvent(nRet, "读取加气记录失败"));
-                return lstRet;
+                return false;
             }
-            else
+            string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+            OnTextOutput(new MsgOutEvent(0, "读取加气记录应答：" + strData));
+            if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                return false;
+
+            const int LenPerRecord = 23;
+            int nCount = (nRecvLen - 2) / LenPerRecord;
+            if (nCount == 1)
             {
-                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                OnTextOutput(new MsgOutEvent(0, "读取加气记录应答：" + strData));
-                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
-                    return lstRet;
-                const int LenPerRecord = 23;
-                int nCount = (nRecvLen - 2) / LenPerRecord;
-                for (int i = 0; i < nCount; i++)
-                {
-                    int nOffset = (int)(i * LenPerRecord);
-                    CardRecord record = new CardRecord();
-                    record.BusinessSn = (RecvData[nOffset + 0] << 8) + RecvData[nOffset + 1];
-                    record.OverdraftMoney = ((RecvData[nOffset + 2] << 16) + (RecvData[nOffset + 3] << 8) + RecvData[nOffset + 4]) / 100.0f;
-                    record.Amount = ((RecvData[nOffset + 5] << 24) + (RecvData[nOffset + 6] << 16) + (RecvData[nOffset + 7] << 8) + RecvData[nOffset + 8]) / 100.0f;
-                    record.BusinessType = RecvData[nOffset + 9];
-                    record.TerminalID = BitConverter.ToString(RecvData, nOffset + 10, 6).Replace("-", "");
-                    record.BusinessTime = BitConverter.ToString(RecvData, nOffset + 16, 7).Replace("-", "");
-                    lstRet.Add(record);
-                }
-                
-                return lstRet;
+                record = new CardRecord();
+                record.BusinessSn = (RecvData[0] << 8) + RecvData[1];
+                record.OverdraftMoney = ((RecvData[2] << 16) + (RecvData[3] << 8) + RecvData[4]) / 100.0f;
+                record.Amount = ((RecvData[5] << 24) + (RecvData[6] << 16) + (RecvData[7] << 8) + RecvData[8]) / 100.0f;
+                record.BusinessType = RecvData[9];
+                record.TerminalID = BitConverter.ToString(RecvData, 10, 6).Replace("-", "");
+                record.BusinessTime = BitConverter.ToString(RecvData, 16, 7).Replace("-", "");
             }
+            return true;
+        }
+
+        //读卡片中的加气记录
+        public List<CardRecord> ReadRecord()
+        {
+            List<CardRecord> lstRet = new List<CardRecord>();
+            CardRecord newRecord = null;
+            for (int i = 0; i < 10; i++)
+            {
+                bool bRet = ReadSingleRecord(i + 1, out newRecord);//读最后10条记录
+                if (!bRet)
+                    break;
+                lstRet.Add(newRecord);
+            }
+            return lstRet;
+
         }
 
         //检查数据库中是否有该卡的发卡记录,用于卡片重发
