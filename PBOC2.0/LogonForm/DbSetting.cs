@@ -14,12 +14,14 @@ namespace FNTMain
     public partial class DbSetting : Form
     {
         private SqlConnectInfo m_DbInfo = new SqlConnectInfo();
+        private int SecurityType = 0;
 
         public DbSetting()
         {
             InitializeComponent();
             this.AcceptButton = btnOK;
             this.CancelButton = btnCancel;
+            this.CmbSecurity.SelectedIndex = 0;
         }
 
         public SqlConnectInfo GetDbInfo()
@@ -32,8 +34,19 @@ namespace FNTMain
             m_DbInfo = DbInfo;
             textDbServer.Text = m_DbInfo.strServerName;
             textDbName.Text = m_DbInfo.strDbName;
-            textDbUser.Text = m_DbInfo.strUser;
-            textDbPwd.Text = m_DbInfo.strUserPwd;
+            if (m_DbInfo.strUser == "" && m_DbInfo.strUserPwd == "")
+            {
+                SecurityType = 1;
+                textDbUser.Text = "";
+                textDbPwd.Text = "";
+            }
+            else
+            {
+                SecurityType = 0;
+                textDbUser.Text = m_DbInfo.strUser;
+                textDbPwd.Text = m_DbInfo.strUserPwd;
+            }
+            this.CmbSecurity.SelectedIndex = SecurityType;
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -41,7 +54,11 @@ namespace FNTMain
             SqlHelper ObjSql = new SqlHelper();
             try
             {
-                bool bConnect = ObjSql.OpenSqlServerConnection(textDbServer.Text, textDbName.Text, textDbUser.Text, textDbPwd.Text);
+                bool bConnect = false;
+                if (SecurityType == 0)
+                    bConnect = ObjSql.OpenSqlServerConnection(textDbServer.Text, textDbName.Text, textDbUser.Text, textDbPwd.Text);
+                else
+                    bConnect = ObjSql.OpenSqlServerConnection(textDbServer.Text, textDbName.Text, "", "");
                 if (!bConnect)
                 {
                     ObjSql = null;
@@ -51,7 +68,7 @@ namespace FNTMain
                 ObjSql.CloseConnection();
                 ObjSql = null;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Trace.WriteLine(ex.Message);	
                 MessageBox.Show("数据库连接错误，请检查!");
@@ -60,8 +77,16 @@ namespace FNTMain
             }
             m_DbInfo.strServerName = textDbServer.Text;
             m_DbInfo.strDbName = textDbName.Text;
-            m_DbInfo.strUser = textDbUser.Text;
-            m_DbInfo.strUserPwd = textDbPwd.Text;
+            if (SecurityType == 0)
+            {
+                m_DbInfo.strUser = textDbUser.Text;
+                m_DbInfo.strUserPwd = textDbPwd.Text;
+            }
+            else
+            {
+                m_DbInfo.strUser = "";
+                m_DbInfo.strUserPwd = "";
+            }
             m_DbInfo.m_bConfig = true;
             this.DialogResult = DialogResult.OK;
         }
@@ -69,6 +94,21 @@ namespace FNTMain
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
+        }
+
+        private void CmbSecurity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SecurityType = CmbSecurity.SelectedIndex;
+            if (SecurityType == 0)
+            {
+                textDbUser.Enabled = true;
+                textDbPwd.Enabled = true;
+            }
+            else
+            {
+                textDbUser.Enabled = false;
+                textDbPwd.Enabled = false;
+            }
         }
     }
 }

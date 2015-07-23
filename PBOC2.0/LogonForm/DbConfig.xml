@@ -2,6 +2,6 @@
 <DBConfig Connect="false">
   <Server>(local)</Server>
   <DbName>FunnettStation</DbName>
-  <User>sa</User>
+  <User></User>
   <Pwd></Pwd>    
 </DBConfig>

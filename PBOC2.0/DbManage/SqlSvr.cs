@@ -104,7 +104,7 @@ namespace DbManage
                 m_ObjSql = null;
                 MessageBox.Show("数据库备份成功");
             }
-            catch (SystemException ex)
+            catch (Exception ex)
             {                
                 MessageBox.Show(ex.Message + "\n数据库备份失败");
             }
@@ -126,7 +126,7 @@ namespace DbManage
                 MessageBox.Show("数据库恢复成功,请重新登录本软件。");
                 Application.Exit();
             }
-            catch (SystemException ex)
+            catch (Exception ex)
             {                
                 MessageBox.Show(ex.Message + "\n数据库恢复失败");
             }

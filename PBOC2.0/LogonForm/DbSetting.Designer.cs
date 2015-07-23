@@ -39,12 +39,14 @@
             this.textDbPwd = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.CmbSecurity = new System.Windows.Forms.ComboBox();
+            this.labelSecurity = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelServer
             // 
             this.labelServer.AutoSize = true;
-            this.labelServer.Location = new System.Drawing.Point(27, 27);
+            this.labelServer.Location = new System.Drawing.Point(19, 27);
             this.labelServer.Name = "labelServer";
             this.labelServer.Size = new System.Drawing.Size(65, 12);
             this.labelServer.TabIndex = 0;
@@ -53,7 +55,7 @@
             // labelDbName
             // 
             this.labelDbName.AutoSize = true;
-            this.labelDbName.Location = new System.Drawing.Point(27, 67);
+            this.labelDbName.Location = new System.Drawing.Point(19, 61);
             this.labelDbName.Name = "labelDbName";
             this.labelDbName.Size = new System.Drawing.Size(65, 12);
             this.labelDbName.TabIndex = 1;
@@ -62,7 +64,7 @@
             // labelDbUser
             // 
             this.labelDbUser.AutoSize = true;
-            this.labelDbUser.Location = new System.Drawing.Point(39, 102);
+            this.labelDbUser.Location = new System.Drawing.Point(43, 131);
             this.labelDbUser.Name = "labelDbUser";
             this.labelDbUser.Size = new System.Drawing.Size(41, 12);
             this.labelDbUser.TabIndex = 2;
@@ -71,7 +73,7 @@
             // labelDbPwd
             // 
             this.labelDbPwd.AutoSize = true;
-            this.labelDbPwd.Location = new System.Drawing.Point(45, 141);
+            this.labelDbPwd.Location = new System.Drawing.Point(55, 159);
             this.labelDbPwd.Name = "labelDbPwd";
             this.labelDbPwd.Size = new System.Drawing.Size(29, 12);
             this.labelDbPwd.TabIndex = 3;
@@ -81,35 +83,35 @@
             // 
             this.textDbServer.Location = new System.Drawing.Point(108, 24);
             this.textDbServer.Name = "textDbServer";
-            this.textDbServer.Size = new System.Drawing.Size(100, 21);
+            this.textDbServer.Size = new System.Drawing.Size(119, 21);
             this.textDbServer.TabIndex = 4;
             // 
             // textDbName
             // 
-            this.textDbName.Location = new System.Drawing.Point(108, 67);
+            this.textDbName.Location = new System.Drawing.Point(108, 58);
             this.textDbName.Name = "textDbName";
             this.textDbName.ReadOnly = true;
-            this.textDbName.Size = new System.Drawing.Size(100, 21);
+            this.textDbName.Size = new System.Drawing.Size(119, 21);
             this.textDbName.TabIndex = 5;
             // 
             // textDbUser
             // 
-            this.textDbUser.Location = new System.Drawing.Point(108, 99);
+            this.textDbUser.Location = new System.Drawing.Point(108, 128);
             this.textDbUser.Name = "textDbUser";
-            this.textDbUser.Size = new System.Drawing.Size(100, 21);
+            this.textDbUser.Size = new System.Drawing.Size(119, 21);
             this.textDbUser.TabIndex = 6;
             // 
             // textDbPwd
             // 
-            this.textDbPwd.Location = new System.Drawing.Point(108, 138);
+            this.textDbPwd.Location = new System.Drawing.Point(108, 156);
             this.textDbPwd.Name = "textDbPwd";
             this.textDbPwd.PasswordChar = '#';
-            this.textDbPwd.Size = new System.Drawing.Size(100, 21);
+            this.textDbPwd.Size = new System.Drawing.Size(119, 21);
             this.textDbPwd.TabIndex = 7;
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(41, 177);
+            this.btnOK.Location = new System.Drawing.Point(41, 191);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 8;
@@ -119,7 +121,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(170, 177);
+            this.btnCancel.Location = new System.Drawing.Point(183, 191);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 9;
@@ -127,11 +129,35 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // CmbSecurity
+            // 
+            this.CmbSecurity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CmbSecurity.FormattingEnabled = true;
+            this.CmbSecurity.Items.AddRange(new object[] {
+            "SQL Server身份验证",
+            "Windows 身份验证"});
+            this.CmbSecurity.Location = new System.Drawing.Point(100, 92);
+            this.CmbSecurity.Name = "CmbSecurity";
+            this.CmbSecurity.Size = new System.Drawing.Size(145, 20);
+            this.CmbSecurity.TabIndex = 10;
+            this.CmbSecurity.SelectedIndexChanged += new System.EventHandler(this.CmbSecurity_SelectedIndexChanged);
+            // 
+            // labelSecurity
+            // 
+            this.labelSecurity.AutoSize = true;
+            this.labelSecurity.Location = new System.Drawing.Point(31, 95);
+            this.labelSecurity.Name = "labelSecurity";
+            this.labelSecurity.Size = new System.Drawing.Size(53, 12);
+            this.labelSecurity.TabIndex = 11;
+            this.labelSecurity.Text = "验证方式";
+            // 
             // DbSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 205);
+            this.ClientSize = new System.Drawing.Size(282, 225);
+            this.Controls.Add(this.labelSecurity);
+            this.Controls.Add(this.CmbSecurity);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.textDbPwd);
@@ -166,5 +192,7 @@
         private System.Windows.Forms.TextBox textDbPwd;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.ComboBox CmbSecurity;
+        private System.Windows.Forms.Label labelSecurity;
     }
 }

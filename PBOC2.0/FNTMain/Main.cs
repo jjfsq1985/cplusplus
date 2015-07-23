@@ -72,7 +72,7 @@ namespace FNTMain
                         }
 
                     }                    
-                    catch (System.Exception ex)
+                    catch (Exception ex)
                     {
                         Trace.WriteLine(ex.Message);	
                     }

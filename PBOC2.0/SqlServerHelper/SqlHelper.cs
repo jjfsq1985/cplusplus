@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace SqlServerHelper
 {
@@ -17,15 +18,25 @@ namespace SqlServerHelper
 
         public bool OpenSqlServerConnection(string strServerName, string strDbName, string strUser, string strPwd)
         {
-            string strConnection= "Persist Security Info=False;Integrated Security=sspi;server=" + strServerName +
+            string strConnection = "";
+            if (strUser == "" && strPwd == "")
+            {
+                strConnection = "Persist Security Info=false;Integrated Security=sspi;server=" + strServerName +
+                                ";Initial Catalog=" + strDbName;
+            }
+            else
+            {
+                strConnection = "Persist Security Info=false;Integrated Security=false;server=" + strServerName +
                                                 ";Initial Catalog=" + strDbName + ";User ID=" + strUser + ";Password=" + strPwd;
+            }
             try
             {
                 m_Conn = new SqlConnection(strConnection);
                 m_Conn.Open();
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.WriteLine(ex.Message);
                 m_Conn = null;
             }
 

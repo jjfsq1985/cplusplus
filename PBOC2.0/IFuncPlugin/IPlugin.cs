@@ -77,7 +77,7 @@ namespace IFuncPlugin
         public bool m_bConfig = false;
         public string strServerName = "(local)";
         public string strDbName = "FunnettStation";
-        public string strUser = "sa";
+        public string strUser = "";
         public string strUserPwd = "";
     }
 
