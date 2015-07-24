@@ -11,6 +11,7 @@ namespace ApduCtrl
         private ApduDomain m_Domain = ApduDomain.Unknown;
         private DaHuaDomain m_DahuaDomain = null;
         private LongHuanDomain m_LongHuanDomain = null;
+        private LohMTDomain m_LohMTDomain = null;
         private bool m_bDeviceOpen = false;
 
 
@@ -21,6 +22,9 @@ namespace ApduCtrl
                 m_DahuaDomain = new DaHuaDomain();
             else if (m_Domain == ApduDomain.LongHuan)
                 m_LongHuanDomain = new LongHuanDomain();
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                m_LohMTDomain = new LohMTDomain();
+                
         }
 
         public ISamApduProvider GetPsamApduProvider()
@@ -29,6 +33,8 @@ namespace ApduCtrl
                 return m_DahuaDomain.GetPsamApduProvider();
             else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.GetPsamApduProvider();
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.GetPsamApduProvider();
             else
                 return null;
         }
@@ -39,6 +45,8 @@ namespace ApduCtrl
                 return m_DahuaDomain.GetUserApduProvider();
             else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.GetUserApduProvider();
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.GetUserApduProvider();
             else
                 return null;
         }
@@ -54,6 +62,8 @@ namespace ApduCtrl
                 m_bDeviceOpen = m_DahuaDomain.Open_Device();
             else if (m_Domain == ApduDomain.LongHuan)
                 m_bDeviceOpen = m_LongHuanDomain.Open_Device();
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                m_bDeviceOpen = m_LohMTDomain.Open_Device();
             else
                 m_bDeviceOpen = false;
             return m_bDeviceOpen;
@@ -66,6 +76,8 @@ namespace ApduCtrl
                 m_DahuaDomain.Close_Device();
             else if (m_Domain == ApduDomain.LongHuan)
                 m_LongHuanDomain.Close_Device();
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                m_LohMTDomain.Close_Device();
         }
 
         public bool OpenCard(ref string CardAtr)
@@ -74,6 +86,8 @@ namespace ApduCtrl
                 return m_DahuaDomain.OpenCard(ref CardAtr);
             else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.OpenCard(ref CardAtr);
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.OpenCard(ref CardAtr);
             else
                 return false;
         }
@@ -94,6 +108,13 @@ namespace ApduCtrl
                 else
                     return m_LongHuanDomain.CmdExchange(data, datalen, outdata, ref outdatalen);
             }
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+            {
+                if (bContact)
+                    return -1;
+                else
+                    return m_LohMTDomain.CmdExchange(data, datalen, outdata, ref outdatalen);
+            }
             else
             {
                 return -1;
@@ -106,6 +127,8 @@ namespace ApduCtrl
                 m_DahuaDomain.CloseCard();
             else if (m_Domain == ApduDomain.LongHuan)
                 m_LongHuanDomain.CloseCard();
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                m_LohMTDomain.CloseCard();
         }
 
         public bool OpenContactCard(ref string CardAtr)
@@ -128,6 +151,8 @@ namespace ApduCtrl
                 return m_DahuaDomain.IccPowerOn(ref CardAtr);
             else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.IccPowerOn(ref CardAtr);
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.IccPowerOn(ref CardAtr);
             else
                 return false;
         }
@@ -138,6 +163,8 @@ namespace ApduCtrl
                 return m_DahuaDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
             else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
             else
                 return -1;
         }
@@ -148,12 +175,16 @@ namespace ApduCtrl
                 m_DahuaDomain.IccPowerOff();
             else if (m_Domain == ApduDomain.LongHuan)
                 m_LongHuanDomain.IccPowerOff();
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                m_LohMTDomain.IccPowerOff();
         }
 
         public bool SAMPowerOn(bool bSamSlot,ref string CardAtr)
         {
             if (m_Domain == ApduDomain.DaHua)
                 return m_DahuaDomain.IccPowerOn(ref CardAtr);
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.IccPowerOn(ref CardAtr);
             else if (m_Domain == ApduDomain.LongHuan)
             {
                 if (bSamSlot)
@@ -169,6 +200,8 @@ namespace ApduCtrl
         {
             if (m_Domain == ApduDomain.DaHua)
                 return m_DahuaDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
             else if (m_Domain == ApduDomain.LongHuan)
             {
                 if(bSamSlot)
@@ -184,6 +217,8 @@ namespace ApduCtrl
         {
             if (m_Domain == ApduDomain.DaHua)
                 m_DahuaDomain.IccPowerOff();
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                m_LohMTDomain.IccPowerOff();
             else if (m_Domain == ApduDomain.LongHuan)
             {
                 if (bSamSlot)
@@ -199,6 +234,8 @@ namespace ApduCtrl
                 return m_DahuaDomain.hex2asc(dataSrc, nSrcLen);
             else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.hex2asc(dataSrc, nSrcLen);
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.hex2asc(dataSrc, nSrcLen);
             else
                 return "";
         }
@@ -231,6 +268,8 @@ namespace ApduCtrl
                 return m_DahuaDomain.SamCardConstructor(this,DbInfo);
             else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.SamCardConstructor(this, DbInfo);
+            else if(m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.SamCardConstructor(this, DbInfo);
             else
                 return null;
         }
@@ -241,6 +280,8 @@ namespace ApduCtrl
                 return m_DahuaDomain.UserCardConstructor(this, bContact, DbInfo);
             else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.UserCardConstructor(this, bContact, DbInfo);
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.UserCardConstructor(this, bContact, DbInfo);
             else
                 return null;
         }

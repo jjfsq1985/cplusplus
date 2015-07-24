@@ -45,10 +45,12 @@
     <Compile Include="DaHuaCmdProvider\DaHuaCardCtrlBase.cs" />
     <Compile Include="DaHuaCmdProvider\DaHuaIccCardCtrl.cs" />
     <Compile Include="DaHuaCmdProvider\DaHuaCpuCardCtrl.cs" />
+    <Compile Include="DllExportMT.cs" />
     <Compile Include="LohCmdProvider\LohCardCtrlBase.cs" />
     <Compile Include="LohCmdProvider\LohPsamCardControl.cs" />
     <Compile Include="LohCmdProvider\LohUserCardControl.cs" />
     <Compile Include="DaHuaDomain.cs" />
+    <Compile Include="LohMTDomain.cs" />
     <Compile Include="LongHuanDomain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -77,6 +79,11 @@
       <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
       <Name>SqlServerHelper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="mt_32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -8,6 +8,7 @@ namespace ApduCtrl
     {
         Unknown = 0,
         DaHua = 1,
-        LongHuan = 2
+        LongHuan = 2,
+        LoH_at_MT = 3
     }
 }

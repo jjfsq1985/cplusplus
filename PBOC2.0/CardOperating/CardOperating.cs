@@ -543,6 +543,12 @@ namespace CardOperating
                 ContactCard.Checked = false;
                 ContactCard.Enabled = true;
             }
+            else if (nSel == 2)
+            {
+                m_DevControl = new ApduController(ApduDomain.LoH_at_MT);
+                ContactCard.Checked = false;
+                ContactCard.Enabled = false;
+            }
             else
             {
                 m_DevControl = null;

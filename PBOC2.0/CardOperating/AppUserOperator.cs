@@ -1216,6 +1216,14 @@ namespace CardOperating
                 ContactCard.Enabled = true;
                 OpenDevice();
             }
+            else if (nSel == 2)
+            {
+                CloseDevice();
+                m_DevControl = new ApduController(ApduDomain.LoH_at_MT);
+                ContactCard.Checked = false;
+                ContactCard.Enabled = false;
+                OpenDevice();
+            }
             else
             {
                 m_DevControl = null;

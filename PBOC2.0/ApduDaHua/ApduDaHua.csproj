@@ -40,15 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApduDaHuaBase.cs" />
-    <Compile Include="DllExportMT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PSAMCardAPDUProvider.cs" />
     <Compile Include="UserCardAPDUProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="mt_32.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ApduInterface\ApduInterface.csproj">

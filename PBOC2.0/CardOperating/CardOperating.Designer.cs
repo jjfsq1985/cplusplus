@@ -315,8 +315,9 @@
             this.cmbDevType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDevType.FormattingEnabled = true;
             this.cmbDevType.Items.AddRange(new object[] {
-            "达华卡",
-            "龙寰卡"});
+            "达华-MingTech MT3-DH",
+            "龙寰-Duali DE-620",
+            "龙寰-MingTech MT3"});
             this.cmbDevType.Location = new System.Drawing.Point(12, 12);
             this.cmbDevType.Name = "cmbDevType";
             this.cmbDevType.Size = new System.Drawing.Size(107, 20);

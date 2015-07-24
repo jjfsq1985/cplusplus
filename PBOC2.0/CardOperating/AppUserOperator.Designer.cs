@@ -948,8 +948,9 @@
             this.cmbDevType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDevType.FormattingEnabled = true;
             this.cmbDevType.Items.AddRange(new object[] {
-            "达华卡",
-            "龙寰卡"});
+            "达华-MingTech MT3-DH",
+            "龙寰-Duali DE-620",
+            "龙寰-MingTech MT3"});
             this.cmbDevType.Location = new System.Drawing.Point(130, 5);
             this.cmbDevType.Name = "cmbDevType";
             this.cmbDevType.Size = new System.Drawing.Size(107, 20);
@@ -960,9 +961,9 @@
             this.CardReader.AutoSize = true;
             this.CardReader.Location = new System.Drawing.Point(70, 10);
             this.CardReader.Name = "CardReader";
-            this.CardReader.Size = new System.Drawing.Size(29, 12);
+            this.CardReader.Size = new System.Drawing.Size(41, 12);
             this.CardReader.TabIndex = 105;
-            this.CardReader.Text = "卡商";
+            this.CardReader.Text = "卡类型";
             // 
             // ContactCard
             // 
