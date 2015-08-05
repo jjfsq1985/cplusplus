@@ -110,7 +110,7 @@ namespace ApduLoh
             return true;
         }
 
-        public bool createGenerateADFCmd(byte[] ADFName)
+        public bool createGenerateADFCmd(int nAppIndex, byte[] ADFName)
         {
             return false;
         }        
@@ -585,7 +585,7 @@ namespace ApduLoh
         public bool createUpdateEF10FileCmd(byte[] key, byte[] RandomVal)
         {
             return false;
-        }
+        }        
 
         public bool createInitializeLoadCmd(int nMoney, byte[] TermialID)
         {

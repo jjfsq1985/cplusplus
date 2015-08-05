@@ -8,7 +8,6 @@ namespace ApduInterface
     public enum CardCategory
     {
         CpuCard = 0,  //CPU卡
-        ContactCard, //接触式CPU卡
         PsamCard  //PSAM卡
     }
 

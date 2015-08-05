@@ -57,19 +57,18 @@ namespace IFuncPlugin
 
     public class GrobalVariable
     {
-        public static readonly string[] strAuthority = new string[] { "账户管理", "单位管理", "站点管理", "充值记录", "制卡操作", "卡信息维护", "密钥管理", "限制代码管理", "数据库管理" };
+        public static readonly string[] strAuthority = new string[] { "账户管理", "单位管理", "站点管理", "充值记录", "制卡密钥管理", "卡信息维护", "限制代码管理", "数据库管理" };
 
-        public static readonly int Authority_Config_Count = 9;
+        public static readonly int Authority_Config_Count = 8;
         //权限值
         public static readonly int Account_Authority = 1;
         public static readonly int ClientInfo_Authority = 1 << 1;
         public static readonly int StationInfo_Authority = 1 << 2;
         public static readonly int RechargeList_Authority = 1 << 3;
-        public static readonly int CardOperating_Authority = 1 << 4;
-        public static readonly int CardPublish_Authority = 1 << 5;
-        public static readonly int KeyManage_Authority = 1 << 6;
-        public static readonly int CodeTable_Authority = 1 << 7;
-        public static readonly int DbManage_Authority = 1 << 8;
+        public static readonly int CardOp_KeyManage_Authority = 1 << 4;
+        public static readonly int CardPublish_Authority = 1 << 5;        
+        public static readonly int CodeTable_Authority = 1 << 6;
+        public static readonly int DbManage_Authority = 1 << 7;
     }
 
     public class SqlConnectInfo
@@ -92,6 +91,7 @@ namespace IFuncPlugin
         eOrgKeyManage, //初始卡密钥
         ePsamKeyManage,  //PSAM卡密钥
         eUserKeysManage, //密钥管理
+        eExportKeyXml,   //密钥导出成XML
         eProvinceCode,   //省代码表
         eCityCode,      //地市代码表
         eCompanyCode,   //公司代码表

@@ -47,6 +47,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.textKeyDetail = new System.Windows.Forms.TextBox();
             this.KeyDetail = new System.Windows.Forms.Label();
+            this.btnGenerate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // MasterLabel
@@ -180,7 +181,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(62, 447);
+            this.btnOK.Location = new System.Drawing.Point(142, 447);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 15;
@@ -190,7 +191,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(223, 447);
+            this.btnCancel.Location = new System.Drawing.Point(249, 447);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 16;
@@ -216,11 +217,22 @@
             this.KeyDetail.TabIndex = 37;
             this.KeyDetail.Text = "密钥描述";
             // 
+            // btnGenerate
+            // 
+            this.btnGenerate.Location = new System.Drawing.Point(35, 447);
+            this.btnGenerate.Name = "btnGenerate";
+            this.btnGenerate.Size = new System.Drawing.Size(75, 22);
+            this.btnGenerate.TabIndex = 39;
+            this.btnGenerate.Text = "生成";
+            this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
+            // 
             // AddPsamKey
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(376, 475);
+            this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.textKeyDetail);
             this.Controls.Add(this.KeyDetail);
             this.Controls.Add(this.btnCancel);
@@ -271,5 +283,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.TextBox textKeyDetail;
         private System.Windows.Forms.Label KeyDetail;
+        private System.Windows.Forms.Button btnGenerate;
     }
 }

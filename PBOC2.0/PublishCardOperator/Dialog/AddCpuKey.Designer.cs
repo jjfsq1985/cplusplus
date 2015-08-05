@@ -55,6 +55,7 @@
             this.BtnAddKey = new System.Windows.Forms.Button();
             this.KeyDetail = new System.Windows.Forms.Label();
             this.textKeyDetail = new System.Windows.Forms.TextBox();
+            this.KeyRefresh = new System.Windows.Forms.Button();
             this.groupAppKey.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -132,7 +133,7 @@
             // IsValid
             // 
             this.IsValid.AutoSize = true;
-            this.IsValid.Location = new System.Drawing.Point(451, 24);
+            this.IsValid.Location = new System.Drawing.Point(508, 58);
             this.IsValid.Name = "IsValid";
             this.IsValid.Size = new System.Drawing.Size(72, 16);
             this.IsValid.TabIndex = 30;
@@ -157,7 +158,7 @@
             this.listAppKey.FullRowSelect = true;
             this.listAppKey.GridLines = true;
             this.listAppKey.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listAppKey.Location = new System.Drawing.Point(45, 31);
+            this.listAppKey.Location = new System.Drawing.Point(51, 44);
             this.listAppKey.MultiSelect = false;
             this.listAppKey.Name = "listAppKey";
             this.listAppKey.Size = new System.Drawing.Size(607, 156);
@@ -273,11 +274,25 @@
             this.textKeyDetail.Size = new System.Drawing.Size(410, 21);
             this.textKeyDetail.TabIndex = 34;
             // 
+            // Refresh
+            // 
+            this.KeyRefresh.BackgroundImage = global::PublishCardOperator.Properties.Resources.Refresh;
+            this.KeyRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.KeyRefresh.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.KeyRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.KeyRefresh.Location = new System.Drawing.Point(508, 22);
+            this.KeyRefresh.Name = "Refresh";
+            this.KeyRefresh.Size = new System.Drawing.Size(22, 21);
+            this.KeyRefresh.TabIndex = 54;
+            this.KeyRefresh.UseVisualStyleBackColor = true;
+            this.KeyRefresh.Click += new System.EventHandler(this.KeyRefresh_Click);
+            // 
             // AddCpuKey
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(681, 428);
+            this.ClientSize = new System.Drawing.Size(684, 426);
+            this.Controls.Add(this.KeyRefresh);
             this.Controls.Add(this.textKeyDetail);
             this.Controls.Add(this.KeyDetail);
             this.Controls.Add(this.groupAppKey);
@@ -330,5 +345,6 @@
         private System.Windows.Forms.Button BtnAddKey;
         private System.Windows.Forms.Label KeyDetail;
         private System.Windows.Forms.TextBox textKeyDetail;
+        private System.Windows.Forms.Button KeyRefresh;
     }
 }

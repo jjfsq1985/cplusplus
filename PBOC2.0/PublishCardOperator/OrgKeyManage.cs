@@ -9,6 +9,7 @@ using IFuncPlugin;
 using SqlServerHelper;
 using System.Data.SqlClient;
 using PublishCardOperator.Dialog;
+using System.Diagnostics;
 
 namespace PublishCardOperator
 {
@@ -25,8 +26,6 @@ namespace PublishCardOperator
         }
 
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
-        private int m_nKeyManageAuthority = 0;
-
 
         public OrgKeyManage()
         {
@@ -61,18 +60,11 @@ namespace PublishCardOperator
             this.Parent = parent;
             this.Show();
             this.BringToFront();
-            if (m_nKeyManageAuthority != GrobalVariable.KeyManage_Authority)
-            {
-                btnAddOrgKey.Enabled = false;
-                btnDelOrgKey.Enabled = false;
-                btnModifyOrgKey.Enabled = false;
-                btnSaveEdit.Enabled = false;
-            }
         }
 
         public void SetAuthority(int nLoginUserId, int nAuthority)
         {
-            m_nKeyManageAuthority = nAuthority;
+            Trace.Assert(nAuthority == GrobalVariable.CardOp_KeyManage_Authority);  //必然有密钥管理权限          
         }
 
         private int GetOrgKeyTypeIndex(string strText)

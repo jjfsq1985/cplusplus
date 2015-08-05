@@ -218,7 +218,7 @@ namespace ApduDaHua
             return true;
         }
 
-        public bool createGenerateADFCmd(byte[] ADFName)
+        public bool createGenerateADFCmd(int nAppIndex, byte[] ADFName)
         {
             if (ADFName.Length < 5 || ADFName.Length > 16)
                 return false;
@@ -232,7 +232,7 @@ namespace ApduDaHua
             m_Data = new byte[nLen];
             //File ID
             m_Data[0] = 0xDF;
-            m_Data[1] = 0x01;
+            m_Data[1] = (byte)nAppIndex;
             //File Type
             m_Data[2] = 0x39;
             //
@@ -804,7 +804,7 @@ namespace ApduDaHua
             m_le = 0;
             m_nTotalLen = 49;
             return true;
-        }
+        }        
 
         public bool createInitializeLoadCmd(int nMoney, byte[] TermialID)
         {

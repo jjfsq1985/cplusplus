@@ -33,7 +33,6 @@
             this.SystemMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RechargeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CardOperatingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.KeyManageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OptionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,8 +66,7 @@
             this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SystemMenuItem,
             this.RechargeMenuItem,
-            this.CardOperatingMenuItem,
-            this.KeyManageMenuItem,
+            this.CardOperatingMenuItem,            
             this.OptionMenuItem,
             this.HelpMenuItem});
             this.MainMenu.Location = new System.Drawing.Point(0, 0);
@@ -94,12 +92,6 @@
             this.CardOperatingMenuItem.Name = "CardOperatingMenuItem";
             this.CardOperatingMenuItem.Size = new System.Drawing.Size(68, 21);
             this.CardOperatingMenuItem.Text = "IC卡操作";
-            // 
-            // KeyManageMenuItem
-            // 
-            this.KeyManageMenuItem.Name = "KeyManageMenuItem";
-            this.KeyManageMenuItem.Size = new System.Drawing.Size(68, 21);
-            this.KeyManageMenuItem.Text = "密钥管理";
             // 
             // OptionMenuItem
             // 
@@ -311,7 +303,6 @@
         private System.Windows.Forms.ToolStripMenuItem HelpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AboutMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CardOperatingMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem KeyManageMenuItem;
         private System.Windows.Forms.StatusStrip SystemStatus;
         private System.Windows.Forms.ToolStripStatusLabel CompanyNameLabel;
         private System.Windows.Forms.ToolStripStatusLabel UserName;

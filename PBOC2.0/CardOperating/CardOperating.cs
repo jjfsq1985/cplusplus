@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using ApduParam;
 using ApduCtrl;
 using ApduInterface;
+using System.Diagnostics;
 
 namespace CardOperating
 {
@@ -30,7 +31,6 @@ namespace CardOperating
         private CardApplicationTest m_CardMethod = new CardApplicationTest();
 
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
-        private int m_nCardOperatorAuthority = 0;
 
         public CardOperating()
         {
@@ -68,7 +68,7 @@ namespace CardOperating
 
         public string PluginMenu()
         {
-            return "制发卡操作";
+            return "制卡操作";
         }
 
         public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
@@ -82,18 +82,11 @@ namespace CardOperating
             this.Parent = parent;
             this.Show();
             this.BringToFront();
-            if (m_nCardOperatorAuthority != GrobalVariable.CardOperating_Authority)
-            {
-                Card.Enabled = false;
-                ICC_Card.Enabled = false;
-                btnMethod.Visible = false;
-                MessageBox.Show("当前用户无制卡权限");
-            }
         }
 
         public void SetAuthority(int nLoginUserId, int nAuthority)
         {
-            m_nCardOperatorAuthority = nAuthority;
+            Trace.Assert(nAuthority == GrobalVariable.CardOp_KeyManage_Authority);//必然有制卡的权限，密钥从数据库读取
         }
 
         private void CardOperating_FormClosing(object sender, FormClosingEventArgs e)
@@ -234,8 +227,8 @@ namespace CardOperating
 
             m_UserCardCtrl = m_DevControl.UserCardConstructor(ContactCard.Checked,m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
-            if (!m_UserCardCtrl.ReadKeyValueFormDb())
-                WriteMsg(0, "未读到密钥，请检查数据库是否正常。");            
+            if (!m_UserCardCtrl.ReadKeyValueFromSource())
+                WriteMsg(0, "读取用户卡密钥失败，请检查。");            
         }
 
         private void btnCloseCard_Click(object sender, EventArgs e)
@@ -304,7 +297,7 @@ namespace CardOperating
         {
             if (!m_DevControl.IsDeviceOpen() || m_UserCardCtrl == null)
                 return;
-            if (!m_UserCardCtrl.CreateDIR())
+            if (!m_UserCardCtrl.CreateEFInMF())
                 return;
             m_UserCardCtrl.CreateKey();
         }
@@ -324,7 +317,7 @@ namespace CardOperating
             WriteMsg(0, "用户卡号：" + BitConverter.ToString(m_UserCardId));
 
             //建立应用目录
-            if (!m_UserCardCtrl.CreateADFApp())
+            if (!m_UserCardCtrl.CreateADFApp(1))
                 return;
             //生成加气数据文件
             if (!m_UserCardCtrl.CreateApplication(m_UserCardId, cardInfo.DefaultPwdFlag, cardInfo.CustomPassword))
@@ -361,8 +354,8 @@ namespace CardOperating
             m_IccCardCtrl = m_DevControl.SamCardConstructor(m_DBInfo);
             m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
 
-            if (!m_IccCardCtrl.ReadKeyValueFormDb())
-                WriteMsg(0, "未读到密钥，请检查数据库是否正常。");            
+            if (!m_IccCardCtrl.ReadKeyValueFromSource())
+                WriteMsg(0, "读取PSAM卡密钥失败，请检查。");            
         }
 
         private void btnCloseIccCard_Click(object sender, EventArgs e)
@@ -561,6 +554,37 @@ namespace CardOperating
         {
             m_DevControl = new ApduController(ApduDomain.DaHua);
             cmbDevType.SelectedIndexChanged += new System.EventHandler(this.cmbDevType_SelectedIndexChanged);
+        }
+
+        private void btnLoyalty_Click(object sender, EventArgs e)
+        {
+            if (!m_DevControl.IsDeviceOpen() || m_UserCardCtrl == null)
+                return;
+            UserCardInfoParam cardInfo = m_CardUser.GetUserCardParam();
+            if (cardInfo.UserCardType != UserCardInfoParam.CardType.PersonalCard
+                && cardInfo.UserCardType != UserCardInfoParam.CardType.CompanySubCard
+                && cardInfo.UserCardType != UserCardInfoParam.CardType.CompanyMotherCard)
+            {
+                WriteMsg(0, "只有加气卡才有积分应用。");
+                return;
+            }
+            m_UserCardId = cardInfo.GetUserCardID();
+            if (m_UserCardId == null)
+            {
+                WriteMsg(0, "用户卡号为空，请先进行信息设置。");
+                return;
+            }
+            WriteMsg(0, "用户卡号：" + BitConverter.ToString(m_UserCardId));
+
+            //建立应用目录
+            if (!m_UserCardCtrl.CreateADFApp(2))
+                return;
+            //生成积分数据文件
+            if (!m_UserCardCtrl.CreateLoyaltyApp(m_UserCardId, cardInfo.DefaultPwdFlag, cardInfo.CustomPassword))
+                return;
+            if (!m_UserCardCtrl.UpdateLoyaltyApp(cardInfo, null))
+                return;
+            WriteMsg(0, "积分应用写入成功");
         }
 
     }

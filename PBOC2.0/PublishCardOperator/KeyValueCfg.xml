@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+  <Source>2</Source>
+  <xmlPath></xmlPath>
+  <Describ>从数据库读取密钥：1; 从XML文件读取密钥：2.</Describ>  
+</Config>

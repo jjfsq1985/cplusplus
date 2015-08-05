@@ -12,9 +12,13 @@ namespace PublishCardOperator.Dialog
     public partial class AddPsamKey : Form
     {
         private PsamKeyValue m_PsamKey = new PsamKeyValue();
-        public AddPsamKey()
+
+        private byte[] m_RelatedConsumerKey = new byte[16];
+
+        public AddPsamKey(byte[] RelatedKey)
         {
             InitializeComponent();
+            Buffer.BlockCopy(RelatedKey, 0, m_RelatedConsumerKey, 0, 16);
             IsValid.Checked = false;
         }
 
@@ -67,6 +71,55 @@ namespace PublishCardOperator.Dialog
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void btnGenerate_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("是否使用与用户卡一致的消费密钥？", "生成", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                InitKey(false);
+            else
+                InitKey(true);
+        }
+
+        private void InitKey(bool bNewConsumerKey)
+        {
+            Guid temp = Guid.Empty;
+            string strKey = "";
+
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-", "");
+            textMasterKey.Text = strKey;
+
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-", "");
+            textMasterTendingKey.Text = strKey;
+
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-", "");
+            textAppMasterKey.Text = strKey;
+
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-", "");
+            textAppTendingKey.Text = strKey;
+
+            if (bNewConsumerKey)
+            {
+                temp = Guid.NewGuid();
+                strKey = temp.ToString().Replace("-", "");
+                textConsumerMasterKey.Text = strKey;
+            }
+            else
+            {
+                textConsumerMasterKey.Text = BitConverter.ToString(m_RelatedConsumerKey).Replace("-", "");
+            }
+
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-", "");
+            textGrayLockKey.Text = strKey;
+
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-", "");
+            textMACEncryptKey.Text = strKey;
         }
     }
 }

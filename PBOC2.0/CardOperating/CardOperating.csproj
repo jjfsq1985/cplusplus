@@ -39,6 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardMethod\ApplicationPage1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CardMethod\ApplicationPage2.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AppUserOperator.cs">
       <SubType>Form</SubType>
     </Compile>

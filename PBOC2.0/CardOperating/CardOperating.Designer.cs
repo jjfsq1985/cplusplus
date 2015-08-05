@@ -34,6 +34,7 @@
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.OutputText = new System.Windows.Forms.TextBox();
             this.Card = new System.Windows.Forms.GroupBox();
+            this.btnLoyalty = new System.Windows.Forms.Button();
             this.ContactCard = new System.Windows.Forms.CheckBox();
             this.btnUserCardReset = new System.Windows.Forms.Button();
             this.UserCardSetting = new System.Windows.Forms.Button();
@@ -79,7 +80,7 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(141, 12);
+            this.btnConnect.Location = new System.Drawing.Point(159, 12);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 23);
             this.btnConnect.TabIndex = 1;
@@ -110,6 +111,7 @@
             // Card
             // 
             this.Card.BackColor = System.Drawing.SystemColors.Control;
+            this.Card.Controls.Add(this.btnLoyalty);
             this.Card.Controls.Add(this.ContactCard);
             this.Card.Controls.Add(this.btnUserCardReset);
             this.Card.Controls.Add(this.UserCardSetting);
@@ -120,10 +122,20 @@
             this.Card.Controls.Add(this.btnInitCard);
             this.Card.Location = new System.Drawing.Point(4, 45);
             this.Card.Name = "Card";
-            this.Card.Size = new System.Drawing.Size(115, 272);
+            this.Card.Size = new System.Drawing.Size(115, 291);
             this.Card.TabIndex = 4;
             this.Card.TabStop = false;
             this.Card.Text = "用户卡";
+            // 
+            // btnLoyalty
+            // 
+            this.btnLoyalty.Location = new System.Drawing.Point(17, 233);
+            this.btnLoyalty.Name = "btnLoyalty";
+            this.btnLoyalty.Size = new System.Drawing.Size(75, 23);
+            this.btnLoyalty.TabIndex = 10;
+            this.btnLoyalty.Text = "积分应用";
+            this.btnLoyalty.UseVisualStyleBackColor = true;
+            this.btnLoyalty.Click += new System.EventHandler(this.btnLoyalty_Click);
             // 
             // ContactCard
             // 
@@ -178,7 +190,7 @@
             // 
             // btnCloseCard
             // 
-            this.btnCloseCard.Location = new System.Drawing.Point(17, 236);
+            this.btnCloseCard.Location = new System.Drawing.Point(17, 262);
             this.btnCloseCard.Name = "btnCloseCard";
             this.btnCloseCard.Size = new System.Drawing.Size(75, 23);
             this.btnCloseCard.TabIndex = 8;
@@ -205,7 +217,7 @@
             this.ICC_Card.Controls.Add(this.btnCloseIccCard);
             this.ICC_Card.Controls.Add(this.btnOpenIccCard);
             this.ICC_Card.Controls.Add(this.btnInitIccCard);
-            this.ICC_Card.Location = new System.Drawing.Point(4, 323);
+            this.ICC_Card.Location = new System.Drawing.Point(4, 342);
             this.ICC_Card.Name = "ICC_Card";
             this.ICC_Card.Size = new System.Drawing.Size(115, 258);
             this.ICC_Card.TabIndex = 5;
@@ -315,12 +327,12 @@
             this.cmbDevType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDevType.FormattingEnabled = true;
             this.cmbDevType.Items.AddRange(new object[] {
-            "达华-MingTech MT3-DH",
+            "达华-明泰 MT3",
             "龙寰-Duali DE-620",
-            "龙寰-MingTech MT3"});
-            this.cmbDevType.Location = new System.Drawing.Point(12, 12);
+            "龙寰-明泰 MT3"});
+            this.cmbDevType.Location = new System.Drawing.Point(12, 13);
             this.cmbDevType.Name = "cmbDevType";
-            this.cmbDevType.Size = new System.Drawing.Size(107, 20);
+            this.cmbDevType.Size = new System.Drawing.Size(141, 20);
             this.cmbDevType.TabIndex = 0;
             // 
             // CardOperating
@@ -342,7 +354,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "CardOperating";
-            this.Text = "制发卡操作";
+            this.Text = "制卡操作";
             this.Load += new System.EventHandler(this.CardOperating_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CardOperating_FormClosing);
             this.Card.ResumeLayout(false);
@@ -380,5 +392,6 @@
         private System.Windows.Forms.Button btnMethod;
         private System.Windows.Forms.ComboBox cmbDevType;
         private System.Windows.Forms.CheckBox ContactCard;
+        private System.Windows.Forms.Button btnLoyalty;
     }
 }

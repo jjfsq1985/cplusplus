@@ -35,7 +35,9 @@ namespace FNTMain
         private int m_nLoginID = 0;
         private int m_nLoginAuthority = 0;
         private string m_strLoginName = "";
-        private SqlConnectInfo m_dbConnectInfo = new SqlConnectInfo();        
+        private SqlConnectInfo m_dbConnectInfo = new SqlConnectInfo();
+
+        private ToolStripMenuItem KeyManageMenuItem = new ToolStripMenuItem(); //动态添加密钥管理菜单
 
         public Main(int nLoginId,SqlConnectInfo DbInfo)
         {
@@ -43,10 +45,12 @@ namespace FNTMain
             m_dbConnectInfo = DbInfo;
             InitializeComponent();
 
-            DbName.Text = "数据库：" + m_dbConnectInfo.strDbName;
+            KeyManageMenuItem.Name = "KeyManageMenuItem";
+            KeyManageMenuItem.Size = new System.Drawing.Size(68, 21);
+            KeyManageMenuItem.Text = "密钥管理";
 
-            //搜索所有插件并显示菜单
-            LoadPlugin();
+
+            DbName.Text = "数据库：" + m_dbConnectInfo.strDbName;
         }
 
 
@@ -104,21 +108,14 @@ namespace FNTMain
                     RechargeMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnRechargeInfoManage_Click));
                     break;
                 case MenuType.eCardOperating:
-                    CardOperatingMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnCardOperating_Click));
+                    if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) == GrobalVariable.CardOp_KeyManage_Authority)
+                    {
+                        CardOperatingMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnCardOperating_Click));
+                    }                    
                     break;
                 case MenuType.eCardPublish:
                     CardOperatingMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnCardPublish_Click));
                     break;
-                case MenuType.eOrgKeyManage:
-                    KeyManageMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnOrgKeyManage_Click));
-                    break;
-                case MenuType.eUserKeysManage:
-                    KeyManageMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnCpuKeyManage_Click));
-                    break;
-                case MenuType.ePsamKeyManage:
-                    KeyManageMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnPsamKeyManage_Click));
-                    break;
-
                 case MenuType.eProvinceCode:
                     OptionMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnProvinceCode_Click));
                     break;
@@ -134,6 +131,46 @@ namespace FNTMain
                 default:
                     break;
             }
+
+            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) == GrobalVariable.CardOp_KeyManage_Authority)
+            {
+                 if(!MainMenu.Items.Contains(KeyManageMenuItem))
+                 {
+                     int nIndex = MainMenu.Items.IndexOf(OptionMenuItem);
+                     MainMenu.Items.Insert(nIndex, KeyManageMenuItem); //密钥管理模块插在选项菜单前面                     
+                 }
+                 else
+                 {
+                     switch(eMenu)
+                     {
+                         case MenuType.eExportKeyXml:
+                             KeyManageMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnExportKey_Click)); //index 3
+                             break;
+                         case MenuType.eUserKeysManage:
+                             {
+                                 ToolStripMenuItem item = new ToolStripMenuItem(strMenu, null, new EventHandler(OnCpuKeyManage_Click));
+                                 KeyManageMenuItem.DropDownItems.Insert(0, item);     ////index 0
+                             }
+                             break;
+                         case MenuType.eOrgKeyManage:
+                             {
+                                 ToolStripMenuItem item = new ToolStripMenuItem(strMenu, null, new EventHandler(OnOrgKeyManage_Click));
+                                 KeyManageMenuItem.DropDownItems.Insert(1, item); ////index 2
+                             }
+                             break;
+                        case MenuType.ePsamKeyManage:
+                            {
+                                ToolStripMenuItem item = new ToolStripMenuItem(strMenu, null, new EventHandler(OnPsamKeyManage_Click));
+                                KeyManageMenuItem.DropDownItems.Insert(1, item);  ////index 1
+                            }
+                            break;
+                        default:
+                             break;
+                     }
+
+                 }
+            }
+
             MethodInfo PluginGuid = t.GetMethod("PluginGuid");
             Guid plugGuid = (Guid)PluginGuid.Invoke(pluginObj, null);
             m_Plugins.Add(plugGuid, new PluginInfo(t.Assembly.Location, strPluginName));         
@@ -177,6 +214,8 @@ namespace FNTMain
         private void OnAccountManage_Click(object sender, EventArgs e)
         {
             Guid account = new Guid("9A91172D-C36D-42f1-9320-78F3461FE0CD");
+            if (!m_Plugins.ContainsKey(account))
+                return;
             if (FindChildForm(m_Plugins[account].strPluginName))
                 return;
             object AccountObj = GetObject(account,m_Plugins[account].strPluginPath);
@@ -192,6 +231,8 @@ namespace FNTMain
         private void OnClientInfo_Click(object sender, EventArgs e)
         {
             Guid clientinfo = new Guid("FFC0BC06-C24E-4067-A911-352673F74931");
+            if (!m_Plugins.ContainsKey(clientinfo))
+                return;
             if (FindChildForm(m_Plugins[clientinfo].strPluginName))
                 return;
             object clientObj = GetObject(clientinfo, m_Plugins[clientinfo].strPluginPath);
@@ -208,6 +249,8 @@ namespace FNTMain
         private void OnStationInfo_Click(object sender, EventArgs e)
         {
             Guid stationinfo = new Guid("0E306A49-C0F3-4e6e-A986-BD27251D5196");
+            if (!m_Plugins.ContainsKey(stationinfo))
+                return;
             if (FindChildForm(m_Plugins[stationinfo].strPluginName))
                 return;
             object stationObj = GetObject(stationinfo, m_Plugins[stationinfo].strPluginPath);
@@ -223,6 +266,8 @@ namespace FNTMain
         private void OnRechargeInfoManage_Click(object sender, EventArgs e)
         {
             Guid rechargeinfo = new Guid("5315D784-78EC-4bf7-AE8B-E639BE54B784");
+            if (!m_Plugins.ContainsKey(rechargeinfo))
+                return;
             if (FindChildForm(m_Plugins[rechargeinfo].strPluginName))
                 return;
             object RechargeInfoObj = GetObject(rechargeinfo, m_Plugins[rechargeinfo].strPluginPath);
@@ -237,24 +282,47 @@ namespace FNTMain
 
         private void OnCardOperating_Click(object sender, EventArgs e)
         {
+            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+                return;
+
             Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");
+            Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");
+            if (!m_Plugins.ContainsKey(CardOperating))
+                return;
             if (FindChildForm(m_Plugins[CardOperating].strPluginName))
                 return;
+
+            if (m_Plugins.ContainsKey(CardPublish) && FindChildForm(m_Plugins[CardPublish].strPluginName))
+            {
+                MessageBox.Show("请先关闭卡信息维护界面，然后才能打开制发卡界面","注意");
+                return;
+            }
+
             object CardOperatingObj = GetObject(CardOperating, m_Plugins[CardOperating].strPluginPath);
             if (CardOperatingObj == null)
                 return;
             Type t = CardOperatingObj.GetType();
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
-            SetAuthority.Invoke(CardOperatingObj, new object[] {  m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOperating_Authority) });
+            SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
             ShowPluginForm.Invoke(CardOperatingObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });    
         }
 
         private void OnCardPublish_Click(object sender, EventArgs e)
         {
+            Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");
             Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");
+            if (!m_Plugins.ContainsKey(CardPublish))
+                return;
             if (FindChildForm(m_Plugins[CardPublish].strPluginName))
                 return;
+
+            if (m_Plugins.ContainsKey(CardOperating) && FindChildForm(m_Plugins[CardOperating].strPluginName))
+            {
+                MessageBox.Show("请先关闭制发卡界面，然后才能打开卡信息维护界面", "注意");
+                return;
+            }
+
             object CardPublishObj = GetObject(CardPublish, m_Plugins[CardPublish].strPluginPath);
             if (CardPublishObj == null)
                 return;
@@ -267,7 +335,11 @@ namespace FNTMain
 
         private void OnOrgKeyManage_Click(object sender, EventArgs e)
         {
+            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+                return;
             Guid CardOperating = new Guid("439DF630-0D7E-4cb8-B633-24CBCFB31499");
+            if (!m_Plugins.ContainsKey(CardOperating))
+                return;
             if (FindChildForm(m_Plugins[CardOperating].strPluginName))
                 return;
             object CardOperatingObj = GetObject(CardOperating, m_Plugins[CardOperating].strPluginPath);
@@ -276,13 +348,17 @@ namespace FNTMain
             Type t = CardOperatingObj.GetType();
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
-            SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.KeyManage_Authority) });
+            SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
             ShowPluginForm.Invoke(CardOperatingObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
          }
 
         private void OnCpuKeyManage_Click(object sender, EventArgs e)
         {
+            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+                return;
             Guid CardOperating = new Guid("A24CEFE8-E4ED-4808-891B-E3DBB203C600");
+            if (!m_Plugins.ContainsKey(CardOperating))
+                return;
             if (FindChildForm(m_Plugins[CardOperating].strPluginName))
                 return;
             object CardOperatingObj = GetObject(CardOperating, m_Plugins[CardOperating].strPluginPath);
@@ -291,13 +367,17 @@ namespace FNTMain
             Type t = CardOperatingObj.GetType();
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
-            SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.KeyManage_Authority) });
+            SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
             ShowPluginForm.Invoke(CardOperatingObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
         }
 
         private void OnPsamKeyManage_Click(object sender, EventArgs e)
         {
+            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+                return;
             Guid CardOperating = new Guid("C670EAFE-5966-4aef-944E-F10D5790F0F8");
+            if (!m_Plugins.ContainsKey(CardOperating))
+                return;
             if (FindChildForm(m_Plugins[CardOperating].strPluginName))
                 return;
             object CardOperatingObj = GetObject(CardOperating, m_Plugins[CardOperating].strPluginPath);
@@ -306,13 +386,36 @@ namespace FNTMain
             Type t = CardOperatingObj.GetType();
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
-            SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.KeyManage_Authority) });
+            SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
             ShowPluginForm.Invoke(CardOperatingObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
+        }
+
+        //将当前使用的密钥导出
+        private void OnExportKey_Click(object sender, EventArgs e)
+        {
+            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+                return;
+            Guid CardOperating = new Guid("D122EE72-2338-456c-88BD-531F2D2415CD");
+            if (!m_Plugins.ContainsKey(CardOperating))
+                return;
+            if (FindChildForm(m_Plugins[CardOperating].strPluginName))
+                return;
+            object CardOperatingObj = GetObject(CardOperating, m_Plugins[CardOperating].strPluginPath);
+            if (CardOperatingObj == null)
+                return;
+            Type t = CardOperatingObj.GetType();
+            MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
+            MethodInfo SetAuthority = t.GetMethod("SetAuthority");
+            SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
+            ShowPluginForm.Invoke(CardOperatingObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
+
         }
 
         private void OnProvinceCode_Click(object sender, EventArgs e)
         {
             Guid ProvCode = new Guid("2F016FD9-8E92-4f30-989D-8687E22D76EB");
+            if (!m_Plugins.ContainsKey(ProvCode))
+                return;
             if (FindChildForm(m_Plugins[ProvCode].strPluginName))
                 return;
             object ProvCodeObj = GetObject(ProvCode, m_Plugins[ProvCode].strPluginPath);
@@ -329,6 +432,8 @@ namespace FNTMain
         private void OnCityCode_Click(object sender, EventArgs e)
         {
             Guid CityCode = new Guid("7094543C-D6FC-4453-84D7-0C9962FC7052");
+            if (!m_Plugins.ContainsKey(CityCode))
+                return;
             if (FindChildForm(m_Plugins[CityCode].strPluginName))
                 return;
             object CityCodeObj = GetObject(CityCode, m_Plugins[CityCode].strPluginPath);
@@ -345,6 +450,8 @@ namespace FNTMain
         private void OnCompanyCode_Click(object sender, EventArgs e)
         {
             Guid CompanyCode = new Guid("E37D8675-AB62-4804-A8BC-306ADEE68E58");
+            if (!m_Plugins.ContainsKey(CompanyCode))
+                return;
             if (FindChildForm(m_Plugins[CompanyCode].strPluginName))
                 return;
             object CompanyCodeObj = GetObject(CompanyCode, m_Plugins[CompanyCode].strPluginPath);
@@ -360,6 +467,8 @@ namespace FNTMain
         private void OnDbManage_Click(object sender, EventArgs e)
         {
             Guid dbManage = new Guid("6A1B65FB-DA7D-40c4-AD11-B8B5ECB7411A");
+            if (!m_Plugins.ContainsKey(dbManage))
+                return;
             if (FindChildForm(m_Plugins[dbManage].strPluginName))
                 return;
             object dbObj = GetObject(dbManage, m_Plugins[dbManage].strPluginPath);
@@ -511,6 +620,8 @@ namespace FNTMain
             listSearchResult.Columns.Add("联系电话", 100);
             listSearchResult.Columns.Add("卡余额", 60);
 
+            //搜索所有插件并显示菜单
+            LoadPlugin();
         }
 
         private void cmbCondition_SelectedIndexChanged(object sender, EventArgs e)

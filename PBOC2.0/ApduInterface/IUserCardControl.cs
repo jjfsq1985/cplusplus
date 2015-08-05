@@ -10,24 +10,32 @@ namespace ApduInterface
         event MessageOutput TextOutput;
 
         int InitCard(bool bMainKey);
-        
-        bool CreateDIR();        
+
+        bool CreateEFInMF();        
 
         void CreateKey();
 
-        bool CreateADFApp();
+        bool CreateADFApp(int nAppIndex);
 
-        bool CreateApplication(byte[] byteASN, bool bDefaultPwd, string strCustomPwd);        
+        bool CreateApplication(byte[] byteASN, bool bDefaultPwd, string strCustomPwd);
 
-        bool UpdateApplicationFile(UserCardInfoParam UserCardInfoPar, byte[] AppTendingKey);        
+        bool CreateLoyaltyApp(byte[] byteASN, bool bDefaultPwd, string strCustomPwd);
+
+        bool UpdateApplicationFile(UserCardInfoParam UserCardInfoPar, byte[] AppTendingKey);
+
+        bool UpdateLoyaltyApp(UserCardInfoParam UserCardInfoPar, byte[] AppTendingKey);
 
         bool DebitFoUnLoad(byte[] byteMAC2, byte[] TimeBcd);        
 
-        bool SelectCardApp();        
+        bool SelectCardApp(int nAppIndex);        
 
         int VerifyUserPin(string strPIN);        
         
-        bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKeyFromDb);        
+        //金额圈存
+        bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKeyFromDb);  
+      
+        //积分圈存
+        bool LoyaltyLoad(byte[] ASN, byte[] TermId, int nLoyaltyValue, bool bReadKeyFromDb);
 
         bool UserCardUnLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKeyFromDb);
 
@@ -45,11 +53,11 @@ namespace ApduInterface
         
         bool DebitForUnlock(byte[] byteData);        
 
-        bool ClearTACUF();        
+        bool ClearTACUF();
 
-        bool ReadKeyValueFormDb();        
+        bool ReadKeyValueFromSource();        
 
-        bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar);        
+        bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar);
 
         bool UpdateCardInfoToDb(UserCardInfoParam UserCardInfoPar);        
 

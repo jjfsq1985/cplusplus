@@ -10,6 +10,7 @@ using ApduParam;
 using ApduInterface;
 using ApduCtrl;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace LohApduCtrl
 {
@@ -23,7 +24,7 @@ namespace LohApduCtrl
 
         private static byte[] m_PSE = new byte[] { 0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31 };//"1PAY.SYS.DDF01"
         private static byte[] m_ADF01 = new byte[] { 0x86, 0x98, 0x07, 0x01};
-        private static byte[] m_ADF02 = new byte[] { 0x86, 0x98, 0x07, 0x02 };
+        private static byte[] m_ADF02 = new byte[] { 0x86, 0x98, 0x07, 0x02 };        
 
         //加气应用主控密钥MAMK
         private static byte[] m_MAMK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
@@ -322,7 +323,7 @@ namespace LohApduCtrl
             return true;
         }
 
-        public bool CreateDIR()
+        public bool CreateEFInMF()
         {
             return true;
         }
@@ -334,7 +335,7 @@ namespace LohApduCtrl
             if (!CreateFCI())
                 return false;
             UpdateDir(1, m_ADF01);
-            UpdateDir(2, m_ADF02);
+            UpdateDir(2, m_ADF02);            
             return true;
         }
 
@@ -447,7 +448,7 @@ namespace LohApduCtrl
         }
 
         //创建加气应用ADF01
-        public bool CreateADFApp()
+      public bool CreateADFApp(int nAppIndex)
         {
             return CreateDF();                     
         }
@@ -939,12 +940,18 @@ namespace LohApduCtrl
             return true;
         }
 
-        public bool SelectCardApp()
+        public bool SelectCardApp(int nAppIndex)
         {
             if (!SelectFile(m_PSE, null))
                 return false;            
             byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
-            if (!SelectFile(m_ADF01, prefix))
+
+            byte[] Adf = null;
+            if (nAppIndex == 1)
+                Adf = m_ADF01;
+            else if (nAppIndex == 2)
+                Adf = m_ADF02;
+            if (!SelectFile(Adf, prefix))
                 return false;
             return true;
         }
@@ -952,6 +959,11 @@ namespace LohApduCtrl
         public int VerifyUserPin(string strPIN)
         {
             return VerifyPIN(false, strPIN);
+        }
+
+        public bool LoyaltyLoad(byte[] ASN, byte[] TermId, int nLoyaltyValue, bool bReadKeyFromDb)
+        {
+            return false;
         }
 
         //圈存功能
@@ -1322,32 +1334,7 @@ namespace LohApduCtrl
             return true;
         }
 
-        private bool GetConfigKeyIdValid(ref int nOrgkeyId, ref int nUserKeyID, SqlHelper sqlHelp)
-        {
-            SqlDataReader dataReader = null;
-            sqlHelp.ExecuteCommand("select OrgKeyId,UseKeyID from Config_SysParams", out dataReader);
-            if (dataReader != null)
-            {
-                if (!dataReader.HasRows)
-                {
-                    dataReader.Close();
-                    return false;
-                }
-                else
-                {
-                    if (dataReader.Read())
-                    {
-                        nOrgkeyId = (int)dataReader["OrgKeyId"];
-                        nUserKeyID = (int)dataReader["UseKeyID"];
-                    }
-                    dataReader.Close();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool ReadKeyValueFormDb()
+        private bool ReadKeyFromDb()
         {
             SqlHelper ObjSql = new SqlHelper();
             if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
@@ -1355,15 +1342,15 @@ namespace LohApduCtrl
                 ObjSql = null;
                 return false;
             }
-            
-            if(!GetUserKeyValue(ObjSql))
+
+            if (!GetDbUserKeyValue(ObjSql, 1))
             {
                 ObjSql.CloseConnection();
                 ObjSql = null;
                 return false;
             }
 
-            byte[] ConsumerKey = GetRelatedKey(ObjSql, CardCategory.PsamCard);
+            byte[] ConsumerKey = GetDbPsamConsumerKey(ObjSql);
             if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
             {
                 OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
@@ -1375,13 +1362,23 @@ namespace LohApduCtrl
             return true;
         }
 
+        public bool ReadKeyValueFromSource()
+        {
+            if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
+                return ReadKeyFromXml();
+            else
+                return ReadKeyFromDb();
+
+
+        }
+
         //还用不上的密钥没有读出
-        private bool GetUserKeyValue(SqlHelper sqlHelp)
+        private bool GetDbUserKeyValue(SqlHelper sqlHelp, int nAppIndex)
         {
             //读卡密钥和加气应用密钥
             SqlDataReader dataReader = null;
             SqlParameter[] sqlparam = new SqlParameter[1];
-            sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex",SqlDbType.Int,4,ParameterDirection.Input,1);                           
+            sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, nAppIndex);                           
             sqlHelp.ExecuteProc("PROC_GetCpuKey",sqlparam, out dataReader);
             if (dataReader == null)
                 return false;
@@ -1417,12 +1414,12 @@ namespace LohApduCtrl
                 StrKeyToByte(strKey, m_MPK);
                 strKey = (string)dataReader["LoadKey"];
                 StrKeyToByte(strKey, m_MLK);
-                strKey = (string)dataReader["UnLoadKey"];
-                StrKeyToByte(strKey, m_MULK);
                 strKey = (string)dataReader["TacMasterKey"];
                 StrKeyToByte(strKey, m_MTK);
                 strKey = (string)dataReader["UnGrayKey"];
                 StrKeyToByte(strKey, m_MUGK);
+                strKey = (string)dataReader["UnLoadKey"];
+                StrKeyToByte(strKey, m_MULK);
                 strKey = (string)dataReader["OverdraftKey"];
                 StrKeyToByte(strKey, m_MUK);                
             }
@@ -1533,7 +1530,7 @@ namespace LohApduCtrl
                 ExternalAuthKey = m_KeyMain;
             if (!ExternalAuthWithKey(ExternalAuthKey))
                 return;
-            if (SelectCardApp())
+            if (SelectCardApp(1))
             {
                 GetBaseInfo(CardInfo);
                 GetLimitInfo(CardInfo);
@@ -1815,7 +1812,7 @@ namespace LohApduCtrl
         //检查数据库中是否有该卡的发卡记录,用于卡片重发
         public bool CheckPublishedCard(bool bMainKey, byte[] KeyInit)
         {
-            if (!SelectCardApp())//用户卡需要进应用后才能获取卡号
+            if (!SelectCardApp(1))//用户卡需要进应用后才能获取卡号
                 return false;
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
@@ -1890,7 +1887,7 @@ namespace LohApduCtrl
             SqlDataReader dataReader = null;
             SqlParameter[] sqlparam = new SqlParameter[2];
             sqlparam[0] = ObjSql.MakeParam("CardNum", SqlDbType.Char, 16, ParameterDirection.Input, strDbAsn);
-            sqlparam[1] = ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, 1);
+            sqlparam[1] = ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, nAppIndex);
             ObjSql.ExecuteProc("PROC_GetPublishedCard", sqlparam, out dataReader);
             string strKeyUsed = "";
             byte[] KeyValue = null;
@@ -2156,10 +2153,153 @@ namespace LohApduCtrl
             return true;
         }
 
+        private byte[] GetDbPsamConsumerKey(SqlHelper sqlHelp)
+        {
+            SqlDataReader dataReader = null;
+            sqlHelp.ExecuteProc("PROC_GetPsamKey", out dataReader);
+            if (dataReader == null)
+                return null;
+            if (!dataReader.HasRows || !dataReader.Read())
+            {
+                dataReader.Close();
+                return null;
+            }
+            byte[] ConsumerKey = new byte[16];
+            string strKey = (string)dataReader["ConsumerMasterKey"];
+            StrKeyToByte(strKey, ConsumerKey);
+
+            dataReader.Close();
+            return ConsumerKey;
+        }
+
         private void InitWhiteCard()
         {
             CreateMF();
             //ClearDF();            
         }
+
+        private bool ReadKeyFromXml()
+        {
+            string strXmlPath = m_ctrlApdu.m_strCardKeyPath;
+            try
+            {
+                XmlNode node = null;
+                XmlDocument xml = new XmlDocument();
+                xml.Load(strXmlPath);//按路径读xml文件
+                XmlNode root = xml.DocumentElement;//指向根节点
+                node = root.SelectSingleNode("Seed");
+                byte[] InitData = PublicFunc.StringToBCD(node.InnerText);
+                node = root.SelectSingleNode("InitKey");
+                byte[] InitKey = PublicFunc.StringToBCD(node.InnerText);
+
+                byte[] Left = DesCryptography.TripleEncryptData(InitData, InitKey);
+                byte[] Right = DesCryptography.TripleDecryptData(InitData, InitKey);
+                byte[] EncryptKey = new byte[16];
+                Buffer.BlockCopy(Left, 0, EncryptKey, 0, 8);
+                Buffer.BlockCopy(Right, 0, EncryptKey, 8, 8);
+
+                GetXmlUserKeyValue(root, EncryptKey, 1);
+
+                byte[] ConsumerKey = GetXmlPsamConsumerKey(root, EncryptKey);
+                if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
+                {
+                    OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
+                    MessageBox.Show("加气消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private byte[] GetXmlPsamConsumerKey(XmlNode ParentNode, byte[] EncryptKey)
+        {
+            XmlNode PsamKeyNode = ParentNode.SelectSingleNode("PsamKeyValue");
+            XmlNode node = PsamKeyNode.SelectSingleNode("ConsumerMasterKey");
+            byte[] byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            return byteKey;
+        }
+
+        private bool GetXmlUserKeyValue(XmlNode ParentNode, byte[] EncryptKey, int nAppIndex)
+        {
+            XmlNode node = null;
+            byte[] byteKey = null;
+            string strName = string.Format("UserKeyValue_App%d", nAppIndex);
+            XmlNode UserKeyNode = ParentNode.SelectSingleNode(strName);
+
+            node = UserKeyNode.SelectSingleNode("MasterKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            SetMainKeyValue(byteKey, CardCategory.CpuCard);  //卡片主控密钥   
+
+            node = UserKeyNode.SelectSingleNode("MasterTendingKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            SetMaintainKeyValue(byteKey, CardCategory.CpuCard);  //卡片维护密钥
+
+            node = UserKeyNode.SelectSingleNode("ApplicatonMasterKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MAMK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("ApplicationTendingKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MAMTK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("AppInternalAuthKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MIAK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("PINResetKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MRPK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("PINUnlockKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MPUK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("ConsumerMasterKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MPK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("LoadKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MLK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("TacMasterKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MTK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("UnGrayKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MUGK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("UnLoadKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MULK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("OverdraftKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MUK, 0, 16);
+
+            return true;
+        }
+
+        public bool CreateLoyaltyApp(byte[] byteASN, bool bDefaultPwd, string strCustomPwd)
+        {
+            return false;
+        }
+
+        public bool UpdateLoyaltyApp(UserCardInfoParam UserCardInfoPar, byte[] AppTendingKey)
+        {
+            return false;
+        }
+
+        private bool StorageLoyaltyKey(byte[] byteASN)
+        {
+            return false;
+        }
+
     }
 }

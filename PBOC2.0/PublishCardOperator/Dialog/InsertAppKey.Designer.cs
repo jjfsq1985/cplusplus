@@ -52,24 +52,25 @@
             this.TACLabel = new System.Windows.Forms.Label();
             this.textAppUnLoadKey = new System.Windows.Forms.TextBox();
             this.ULMLabel = new System.Windows.Forms.Label();
+            this.btnGenerate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(279, 515);
+            this.btnCancel.Location = new System.Drawing.Point(252, 514);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 21;
+            this.btnCancel.TabIndex = 24;
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(83, 515);
+            this.btnOK.Location = new System.Drawing.Point(142, 514);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 20;
+            this.btnOK.TabIndex = 23;
             this.btnOK.Text = "确定";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -80,7 +81,7 @@
             this.textAppLoadKey.MaxLength = 32;
             this.textAppLoadKey.Name = "textAppLoadKey";
             this.textAppLoadKey.Size = new System.Drawing.Size(229, 21);
-            this.textAppLoadKey.TabIndex = 16;
+            this.textAppLoadKey.TabIndex = 17;
             // 
             // LMLabel
             // 
@@ -97,7 +98,7 @@
             this.textCMKey.MaxLength = 32;
             this.textCMKey.Name = "textCMKey";
             this.textCMKey.Size = new System.Drawing.Size(229, 21);
-            this.textCMKey.TabIndex = 15;
+            this.textCMKey.TabIndex = 16;
             // 
             // CMLabel
             // 
@@ -114,7 +115,7 @@
             this.textPinUnlockKey.MaxLength = 32;
             this.textPinUnlockKey.Name = "textPinUnlockKey";
             this.textPinUnlockKey.Size = new System.Drawing.Size(229, 21);
-            this.textPinUnlockKey.TabIndex = 14;
+            this.textPinUnlockKey.TabIndex = 15;
             // 
             // PINUNLOCKLabel
             // 
@@ -131,7 +132,7 @@
             this.textPinResetKey.MaxLength = 32;
             this.textPinResetKey.Name = "textPinResetKey";
             this.textPinResetKey.Size = new System.Drawing.Size(229, 21);
-            this.textPinResetKey.TabIndex = 13;
+            this.textPinResetKey.TabIndex = 14;
             // 
             // textAIAuthKey
             // 
@@ -139,7 +140,7 @@
             this.textAIAuthKey.MaxLength = 32;
             this.textAIAuthKey.Name = "textAIAuthKey";
             this.textAIAuthKey.Size = new System.Drawing.Size(229, 21);
-            this.textAIAuthKey.TabIndex = 12;
+            this.textAIAuthKey.TabIndex = 13;
             // 
             // textAMTendingKey
             // 
@@ -147,7 +148,7 @@
             this.textAMTendingKey.MaxLength = 32;
             this.textAMTendingKey.Name = "textAMTendingKey";
             this.textAMTendingKey.Size = new System.Drawing.Size(229, 21);
-            this.textAMTendingKey.TabIndex = 11;
+            this.textAMTendingKey.TabIndex = 12;
             // 
             // textAMKey
             // 
@@ -155,7 +156,7 @@
             this.textAMKey.MaxLength = 32;
             this.textAMKey.Name = "textAMKey";
             this.textAMKey.Size = new System.Drawing.Size(229, 21);
-            this.textAMKey.TabIndex = 10;
+            this.textAMKey.TabIndex = 11;
             // 
             // PINRESETLabel
             // 
@@ -195,16 +196,16 @@
             // 
             // textUnGrayKey
             // 
-            this.textUnGrayKey.Location = new System.Drawing.Point(143, 418);
+            this.textUnGrayKey.Location = new System.Drawing.Point(143, 375);
             this.textUnGrayKey.MaxLength = 32;
             this.textUnGrayKey.Name = "textUnGrayKey";
             this.textUnGrayKey.Size = new System.Drawing.Size(229, 21);
-            this.textUnGrayKey.TabIndex = 18;
+            this.textUnGrayKey.TabIndex = 19;
             // 
             // UnGrayLabel
             // 
             this.UnGrayLabel.AutoSize = true;
-            this.UnGrayLabel.Location = new System.Drawing.Point(42, 421);
+            this.UnGrayLabel.Location = new System.Drawing.Point(42, 378);
             this.UnGrayLabel.Name = "UnGrayLabel";
             this.UnGrayLabel.Size = new System.Drawing.Size(77, 12);
             this.UnGrayLabel.TabIndex = 8;
@@ -216,7 +217,7 @@
             this.textOverdraftKey.MaxLength = 32;
             this.textOverdraftKey.Name = "textOverdraftKey";
             this.textOverdraftKey.Size = new System.Drawing.Size(229, 21);
-            this.textOverdraftKey.TabIndex = 19;
+            this.textOverdraftKey.TabIndex = 21;
             // 
             // ODLabel
             // 
@@ -224,21 +225,21 @@
             this.ODLabel.Location = new System.Drawing.Point(30, 464);
             this.ODLabel.Name = "ODLabel";
             this.ODLabel.Size = new System.Drawing.Size(101, 12);
-            this.ODLabel.TabIndex = 9;
+            this.ODLabel.TabIndex = 10;
             this.ODLabel.Text = "修改透支限额密钥";
             // 
             // textTacKey
             // 
-            this.textTacKey.Location = new System.Drawing.Point(143, 375);
+            this.textTacKey.Location = new System.Drawing.Point(143, 332);
             this.textTacKey.MaxLength = 32;
             this.textTacKey.Name = "textTacKey";
             this.textTacKey.Size = new System.Drawing.Size(229, 21);
-            this.textTacKey.TabIndex = 17;
+            this.textTacKey.TabIndex = 18;
             // 
             // TACLabel
             // 
             this.TACLabel.AutoSize = true;
-            this.TACLabel.Location = new System.Drawing.Point(57, 378);
+            this.TACLabel.Location = new System.Drawing.Point(57, 335);
             this.TACLabel.Name = "TACLabel";
             this.TACLabel.Size = new System.Drawing.Size(47, 12);
             this.TACLabel.TabIndex = 7;
@@ -246,26 +247,37 @@
             // 
             // textAppUnLoadKey
             // 
-            this.textAppUnLoadKey.Location = new System.Drawing.Point(143, 332);
+            this.textAppUnLoadKey.Location = new System.Drawing.Point(143, 418);
             this.textAppUnLoadKey.MaxLength = 32;
             this.textAppUnLoadKey.Name = "textAppUnLoadKey";
             this.textAppUnLoadKey.Size = new System.Drawing.Size(229, 21);
-            this.textAppUnLoadKey.TabIndex = 23;
+            this.textAppUnLoadKey.TabIndex = 20;
             // 
             // ULMLabel
             // 
             this.ULMLabel.AutoSize = true;
-            this.ULMLabel.Location = new System.Drawing.Point(54, 335);
+            this.ULMLabel.Location = new System.Drawing.Point(54, 421);
             this.ULMLabel.Name = "ULMLabel";
             this.ULMLabel.Size = new System.Drawing.Size(53, 12);
-            this.ULMLabel.TabIndex = 22;
+            this.ULMLabel.TabIndex = 9;
             this.ULMLabel.Text = "圈提密钥";
+            // 
+            // btnGenerate
+            // 
+            this.btnGenerate.Location = new System.Drawing.Point(32, 514);
+            this.btnGenerate.Name = "btnGenerate";
+            this.btnGenerate.Size = new System.Drawing.Size(75, 23);
+            this.btnGenerate.TabIndex = 22;
+            this.btnGenerate.Text = "生成";
+            this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // InsertAppKey
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(426, 562);
+            this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.textAppUnLoadKey);
             this.Controls.Add(this.ULMLabel);
             this.Controls.Add(this.textTacKey);
@@ -326,5 +338,6 @@
         private System.Windows.Forms.Label TACLabel;
         private System.Windows.Forms.TextBox textAppUnLoadKey;
         private System.Windows.Forms.Label ULMLabel;
+        private System.Windows.Forms.Button btnGenerate;
     }
 }

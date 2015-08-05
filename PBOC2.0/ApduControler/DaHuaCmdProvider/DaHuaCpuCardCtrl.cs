@@ -10,6 +10,7 @@ using ApduParam;
 using ApduInterface;
 using ApduCtrl;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace DaHuaApduCtrl
 {
@@ -28,14 +29,10 @@ namespace DaHuaApduCtrl
 
         //加气应用主控密钥MAMK
         private static byte[] m_MAMK = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
-        //加气消费密钥MPK1
-        private static byte[] m_MPK1 = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
-        //加气消费密钥MPK2
-        private static byte[] m_MPK2 = new byte[] { 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22 };
-        //圈存主密钥MLK1
-        private static byte[] m_MLK1 = new byte[] { 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66 };
-        //圈存主密钥MLK2
-        private static byte[] m_MLK2 = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
+        //加气消费密钥MPK
+        private static byte[] m_MPK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
+        //圈存主密钥MLK
+        private static byte[] m_MLK = new byte[] { 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66 };
         //TAC主密钥MTK
         private static byte[] m_MTK = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
         //圈提主密钥MULK
@@ -52,6 +49,28 @@ namespace DaHuaApduCtrl
         private static byte[] m_MAMTK = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
         //内部认证主密钥MIAK
         private static byte[] m_MIAK = new byte[] { 0xF2, 0x11, 0x20, 0x6C, 0x05, 0x68, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xBB };
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //积分应用主控密钥MAMK
+        private static byte[] m_MAMK_Ly = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
+        //积分消费密钥MPK
+        private static byte[] m_MPK_Ly = new byte[] { 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22 };
+        //积分圈存密钥MLK
+        private static byte[] m_MLK_Ly = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
+        //TAC主密钥MTK
+        private static byte[] m_MTK_Ly = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
+        //联机解扣主密钥
+        private static byte[] m_MUGK_Ly = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
+        //PIN解锁主密钥MPUK
+        private static byte[] m_MPUK_Ly = new byte[] { 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88 };
+        //密码重装主密钥MRPK
+        private static byte[] m_MRPK_Ly = new byte[] { 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99 };
+        //积分维护主密钥MAMK
+        private static byte[] m_MAMTK_Ly = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
+        //内部认证主密钥MIAK
+        private static byte[] m_MIAK_Ly = new byte[] { 0xF2, 0x11, 0x20, 0x6C, 0x05, 0x68, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xBB };
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public DaHuaCpuCardCtrl(ApduController ApduCtrlObj, bool bContactCard, SqlConnectInfo DbInfo)
         {
@@ -219,14 +238,18 @@ namespace DaHuaApduCtrl
             if (strName == m_strPSE)
                 return "MF";
             else if (strName == m_strDIR1)
-                return "ADF";
+                return "加气应用ADF";
+            else if (strName == m_strDIR2)
+                return "积分应用ADF";
+            else if (strName == m_strDIR3)
+                return "监管应用ADF";
             return "";
         }
 
         public int InitCard(bool bMainKey)
         {
             byte[] KeyInit = new byte[16];
-            bool bPublished = CheckPublishedCard(bMainKey, KeyInit); 
+            bool bPublished = CheckPublishedCard(bMainKey,KeyInit); 
             if (bPublished)
             {
                 //在应用内获取卡号后回到MF下   
@@ -239,7 +262,6 @@ namespace DaHuaApduCtrl
             }
             else
             {
-                //新建立MF不需要外部认证
                 if (SelectFile(m_strPSE, null))
                 {
                     if (!ExternalAuthentication(bMainKey))
@@ -298,7 +320,7 @@ namespace DaHuaApduCtrl
         }
 
 
-        public bool CreateDIR()
+        public bool CreateEFInMF()
         {
             if (!SelectFile(m_strPSE, null))
                 return false;
@@ -310,14 +332,14 @@ namespace DaHuaApduCtrl
             byte[] AidName = Encoding.ASCII.GetBytes(m_strPSE);
             if (!StorageFCI(AidName, param, null))
                 return false;
-            if (!CreateEFDir())
+            if (!CreateEF01())
                 return false;
             bool bRet = true;
             string[] strDirName = new string[] { m_strDIR1, m_strDIR2, m_strDIR3 };
             for (int i = 0; i < 3; i++)
             {
                 byte[] DirAid = Encoding.ASCII.GetBytes(strDirName[i]);
-                if (!UpdateDir(i + 1, DirAid))
+                if (!UpdateEF01(i + 1, DirAid))
                 {
                     bRet = false;
                     break;
@@ -327,7 +349,7 @@ namespace DaHuaApduCtrl
         }
 
         //EF01
-        private bool CreateEFDir()
+        private bool CreateEF01()
         {
             m_CmdProvider.createGenerateEFCmd(0xEF01, 0x44, 0x40, 0x00, 0, 0, 0, 0);
             byte[] data = m_CmdProvider.GetOutputCmd();
@@ -350,7 +372,7 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        private bool UpdateDir(int nIndex, byte[] AidName)
+        private bool UpdateEF01(int nIndex, byte[] AidName)
         {
             m_CmdProvider.createUpdateEF01Cmd((byte)nIndex, AidName);
             byte[] data = m_CmdProvider.GetOutputCmd();
@@ -378,6 +400,8 @@ namespace DaHuaApduCtrl
         //安装密钥
         public void CreateKey()
         {
+            if (!ExternalAuthentication(false))
+                return;
             if (!CreateKeyFile())
                 return;
             WriteKeyMK();
@@ -543,9 +567,9 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        private bool GenerateADF(byte[] ADFName)
+        private bool GenerateADF(int nAppIndex, byte[] ADFName)
         {
-            m_CmdProvider.createGenerateADFCmd(ADFName);
+            m_CmdProvider.createGenerateADFCmd(nAppIndex,ADFName);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -568,22 +592,37 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        //创建加气应用ADF01
-        public bool CreateADFApp()
+        private bool CreateDF(int nAppIndex,string strDFName)
         {
-            byte[] AdfName = Encoding.ASCII.GetBytes(m_strDIR1);
-            if (!GenerateADF(AdfName))
+            if (!SelectFile(m_strPSE, null))
+                return false;
+            if (!ExternalAuthentication(true))
+                return false;
+            byte[] byteName = Encoding.ASCII.GetBytes(strDFName);
+            if (!GenerateADF(nAppIndex, byteName))
                 return false;
             byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
-            if (!SelectFile(m_strDIR1, prefix))
+            if (!SelectFile(strDFName, prefix))
                 return false;
-            if (!ExternalAuthentication(false))//外部认证,未离开MF主目录(1PAY.SYS.DDF01)，不使用刚安装的主控密钥
-                return false;
+            if (!ExternalAuthentication(false))//应用目录下创建文件，外部认证使用原始密钥
+               return false;
             if (!CreateFCI())
                 return false;
             byte[] param = new byte[] { 0x9F, 0x08, 0x01, 0x01, 0xBF, 0x0C, 0x02, 0x55, 0x66 };
-            byte[] AidName = Encoding.ASCII.GetBytes(m_strDIR1);
-            if (!StorageFCI(AidName, param, prefix))
+            if (!StorageFCI(Encoding.ASCII.GetBytes(strDFName), param, prefix))
+                return false;
+            return true;
+        }
+
+        //创建加气应用ADF
+        public bool CreateADFApp(int nAppIndex)
+        {
+            string strADFName = "";
+            if (nAppIndex == 1)            
+                strADFName = m_strDIR1;
+            else if (nAppIndex == 2)
+                strADFName = m_strDIR2;            
+            if (!CreateDF(nAppIndex,strADFName))
                 return false;
             return true;
         }
@@ -605,7 +644,7 @@ namespace DaHuaApduCtrl
             //定长记录文件EF05
             if (!CreateRecordFile(0xEF05, 0x8A, 0x01, 0x1D, 0x02, 0x7FFF))
                 return false;
-            StroageApplicationFile();//存盘
+            StroageApplicationFile();//更新定长记录文件
             //创建灰锁文件
             if (!CreateEFFile(0xEF10, 0x89, 0x28, 0x41, 0, 0))
                 return false;
@@ -654,34 +693,22 @@ namespace DaHuaApduCtrl
             StorageKeyParam KeyInfo = null;
             byte[] keyDiversify = StorageKeyParam.GetDiversify(byteASN, m_MAMK);
             if (keyDiversify == null)
-                return false;            
-            //加气应用主控密钥MCMK
-            KeyInfo = new StorageKeyParam("安装应用主控密钥", 0x02, 0x49, 0x00, 0xFF, 0x01);
+                return false;
+            //加气应用主控密钥MAMK
+            KeyInfo = new StorageKeyParam("安装加气主控密钥", 0x02, 0x49, 0x00, 0xFF, 0x01);
             KeyInfo.SetParam(byteASN, m_MAMK, m_KeyOrg);
             if (!storageUserKey(KeyInfo))
                 return false;
             //主控密钥安装后命令的MAC需要使用主控密钥的分散密钥计算
-            //加气消费密钥MPK1,并将卡号写入EF15文件
-            KeyInfo = new StorageKeyParam("安装加气消费密钥1", 0x01, 0x40, 0x01, 0x33, 0x00);
-            KeyInfo.SetParam(byteASN, m_MPK1, m_KeyOrg);
+            //加气消费密钥MPK,并将卡号写入EF15文件
+            KeyInfo = new StorageKeyParam("安装加气消费密钥", 0x01, 0x40, 0x01, 0x33, 0x00);
+            KeyInfo.SetParam(byteASN, m_MPK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
-            //加气消费密钥MPK2
-            KeyInfo = new StorageKeyParam("安装加气消费密钥2", 0x03, 0x40, 0x02, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MPK2, m_KeyOrg);
-            KeyInfo.SetDiversify(keyDiversify);
-            if (!storageUserKey(KeyInfo))
-                return false;
-            //圈存主密钥MLK1
-            KeyInfo = new StorageKeyParam("安装圈存密钥1", 0x03, 0x41, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MLK1, m_KeyOrg);
-            KeyInfo.SetDiversify(keyDiversify);
-            if (!storageUserKey(KeyInfo))
-                return false;
-            //圈存主密钥MLK2
-            KeyInfo = new StorageKeyParam("安装圈存密钥2", 0x04, 0x41, 0x02, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MLK2, m_KeyOrg);
+            //圈存主密钥MLK
+            KeyInfo = new StorageKeyParam("安装圈存密钥", 0x03, 0x41, 0x01, 0xFF, 0x00);
+            KeyInfo.SetParam(byteASN, m_MLK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
@@ -709,8 +736,8 @@ namespace DaHuaApduCtrl
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
-            //密码重装主密钥MRPK
-            KeyInfo = new StorageKeyParam("安装密码重装主密钥", 0x09, 0x44, 0x01, 0xFF, 0x00);
+            //PIN重装主密钥MRPK
+            KeyInfo = new StorageKeyParam("安装PIN重装主密钥", 0x09, 0x44, 0x01, 0xFF, 0x00);
             KeyInfo.SetParam(byteASN, m_MRPK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
@@ -727,14 +754,8 @@ namespace DaHuaApduCtrl
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
-            //内部认证加气消费密钥MPK1
-            KeyInfo = new StorageKeyParam("内部认证加气消费密钥1", 0x0C, 0x4F, 0x01, 0x33, 0x00);
-            KeyInfo.SetParam(byteASN, m_MPK1, m_KeyOrg);
-            KeyInfo.SetDiversify(keyDiversify);
-            if (!storageUserKey(KeyInfo))
-                return false;
             //完成密钥安装，生命周期转换
-            SetUserCardStatus(keyDiversify);
+            //SetUserCardStatus(keyDiversify);
             return true;
         }
 
@@ -1017,11 +1038,8 @@ namespace DaHuaApduCtrl
             //灰锁文件
             if (!UpdateEF10File(keyUpdate))
                 return false;
-            //切换生命周期
-            SelectFile(m_strPSE, null);
-            SetUserCardStatus(m_KeyMain);
             return true;
-        }
+        }        
 
         private bool InitializeForLoad(int nMoney, byte[] TermId, byte[] outData)
         {
@@ -1135,12 +1153,17 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        public bool SelectCardApp()
+        public bool SelectCardApp(int nAppIndex)
         {
             if (!SelectFile(m_strPSE, null))
                 return false;
             byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
-            if (!SelectFile(m_strDIR1, prefix))
+            string strApp = "";
+            if (nAppIndex == 1)
+                strApp = m_strDIR1;
+            else if(nAppIndex == 2)
+                strApp = m_strDIR2;
+            if (!SelectFile(strApp, prefix))
                 return false;
             return true;
         }
@@ -1148,6 +1171,11 @@ namespace DaHuaApduCtrl
         public int VerifyUserPin(string strPIN)
         {
             return VerifyPIN(false, strPIN);
+        }
+
+        public bool LoyaltyLoad(byte[] ASN, byte[] TermId, int nLoyaltyValue, bool bReadKeyFromDb)
+        {
+            return false;
         }
 
         //圈存功能
@@ -1162,7 +1190,7 @@ namespace DaHuaApduCtrl
                     MessageBox.Show("无此卡的记录，不能圈存。");
                     return false;
                 }
-                Buffer.BlockCopy(keyLoad, 0, m_MLK1, 0, 16);
+                Buffer.BlockCopy(keyLoad, 0, m_MLK, 0, 16);
             }
             const byte BusinessType = 0x01; //交易类型标识：圈存存折0x01 圈存钱包0x02
             byte[] outData = new byte[16];
@@ -1180,7 +1208,7 @@ namespace DaHuaApduCtrl
             byte[] MAC1 = new byte[4];
             Buffer.BlockCopy(outData, 12, MAC1, 0, 4);
             //判断MAC1是否正确
-            byte[] seslk = GetProcessKey(ASN, m_MLK1, rand, OnlineSn);//m_MLK1圈存主密钥1（DLK）
+            byte[] seslk = GetProcessKey(ASN, m_MLK, rand, OnlineSn);//m_MLK1圈存主密钥1（DLK）
             if (seslk == null)
                 return false;
             byte[] srcData = new byte[15];//用于计算MAC1的原始数据
@@ -1518,32 +1546,7 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        private bool GetConfigKeyIdValid(ref int nOrgkeyId, ref int nUserKeyID, SqlHelper sqlHelp)
-        {
-            SqlDataReader dataReader = null;
-            sqlHelp.ExecuteCommand("select OrgKeyId,UseKeyID from Config_SysParams", out dataReader);
-            if (dataReader != null)
-            {
-                if (!dataReader.HasRows)
-                {
-                    dataReader.Close();
-                    return false;
-                }
-                else
-                {
-                    if (dataReader.Read())
-                    {
-                        nOrgkeyId = (int)dataReader["OrgKeyId"];
-                        nUserKeyID = (int)dataReader["UseKeyID"];
-                    }
-                    dataReader.Close();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool ReadKeyValueFormDb()
+        private bool ReadKeyFromDb()
         {
             SqlHelper ObjSql = new SqlHelper();
             if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
@@ -1552,25 +1555,25 @@ namespace DaHuaApduCtrl
                 return false;
             }
 
-            if (!GetOrgKeyValue(ObjSql))
-            {
-                ObjSql.CloseConnection();
-                ObjSql = null;
-                return false;
-            }
-            
-            if(!GetUserKeyValue(ObjSql))
+            if (!GetDbOrgKeyValue(ObjSql))
             {
                 ObjSql.CloseConnection();
                 ObjSql = null;
                 return false;
             }
 
-            byte[] ConsumerKey = GetRelatedKey(ObjSql, CardCategory.PsamCard);
-            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK1))
+            if (!GetDbUserKeyValue(ObjSql, 1))
+            {
+                ObjSql.CloseConnection();
+                ObjSql = null;
+                return false;
+            }
+
+            byte[] ConsumerKey = GetDbPsamConsumerKey(ObjSql);
+            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
             {
                 OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
-                MessageBox.Show("加气消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("加气或积分消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             ObjSql.CloseConnection();
@@ -1578,13 +1581,21 @@ namespace DaHuaApduCtrl
             return true;
         }
 
+        public bool ReadKeyValueFromSource()
+        {
+            if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
+                return ReadKeyFromXml();
+            else
+                return ReadKeyFromDb();
+        }
+
         //还用不上的密钥没有读出
-        private bool GetUserKeyValue(SqlHelper sqlHelp)
+        private bool GetDbUserKeyValue(SqlHelper sqlHelp, int AppIndex)
         {
             //读卡密钥和加气应用密钥
             SqlDataReader dataReader = null;
             SqlParameter[] sqlparam = new SqlParameter[1];
-            sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex",SqlDbType.Int,4,ParameterDirection.Input,1);                           
+            sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, AppIndex);                           
             sqlHelp.ExecuteProc("PROC_GetCpuKey",sqlparam, out dataReader);
             if (dataReader == null)
                 return false;
@@ -1617,15 +1628,15 @@ namespace DaHuaApduCtrl
                 strKey = (string)dataReader["PINUnlockKey"];
                 StrKeyToByte(strKey, m_MPUK);
                 strKey = (string)dataReader["ConsumerMasterKey"];
-                StrKeyToByte(strKey, m_MPK1);
+                StrKeyToByte(strKey, m_MPK);
                 strKey = (string)dataReader["LoadKey"];
-                StrKeyToByte(strKey, m_MLK1);
-                strKey = (string)dataReader["UnLoadKey"];
-                StrKeyToByte(strKey, m_MULK);
+                StrKeyToByte(strKey, m_MLK);
                 strKey = (string)dataReader["TacMasterKey"];
                 StrKeyToByte(strKey, m_MTK);
                 strKey = (string)dataReader["UnGrayKey"];
                 StrKeyToByte(strKey, m_MUGK);
+                strKey = (string)dataReader["UnLoadKey"];
+                StrKeyToByte(strKey, m_MULK);
                 strKey = (string)dataReader["OverdraftKey"];
                 StrKeyToByte(strKey, m_MUK);                
             }
@@ -1634,7 +1645,26 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        private bool GetOrgKeyValue(SqlHelper sqlHelp)
+        private byte[] GetDbPsamConsumerKey(SqlHelper sqlHelp)
+        {
+            SqlDataReader dataReader = null;
+            sqlHelp.ExecuteProc("PROC_GetPsamKey", out dataReader);
+            if (dataReader == null)
+                return null;
+            if (!dataReader.HasRows || !dataReader.Read())
+            {
+                dataReader.Close();
+                return null;
+            }
+            byte[] ConsumerKey = new byte[16];
+            string strKey = (string)dataReader["ConsumerMasterKey"];
+            StrKeyToByte(strKey, ConsumerKey);
+
+            dataReader.Close();
+            return ConsumerKey;
+        }
+
+        private bool GetDbOrgKeyValue(SqlHelper sqlHelp)
         {
             SqlDataReader dataReader = null;
             //OrgKeyType 0-CPU卡，1-PSAM卡
@@ -2033,7 +2063,7 @@ namespace DaHuaApduCtrl
         //检查数据库中是否有该卡的发卡记录,用于卡片重发
         public bool CheckPublishedCard(bool bMainKey, byte[] KeyInit)
         {
-            if (!SelectCardApp())//用户卡需要进应用后才能获取卡号
+            if (!SelectCardApp(1))//用户卡需要进应用后才能获取卡号
                 return false;
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
@@ -2111,7 +2141,7 @@ namespace DaHuaApduCtrl
             SqlDataReader dataReader = null;
             SqlParameter[] sqlparam = new SqlParameter[2];
             sqlparam[0] = ObjSql.MakeParam("CardNum", SqlDbType.Char, 16, ParameterDirection.Input, strDbAsn);
-            sqlparam[1] = ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, 1);
+            sqlparam[1] = ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, nAppIndex);
             ObjSql.ExecuteProc("PROC_GetPublishedCard", sqlparam, out dataReader);
             string strKeyUsed = "";
             byte[] KeyValue = null;
@@ -2280,5 +2310,228 @@ namespace DaHuaApduCtrl
             return true;
 
         }
+
+        public bool CreateLoyaltyApp(byte[] byteASN, bool bDefaultPwd, string strCustomPwd)
+        {
+            //公共应用基本数据文件
+            if (!CreateEFFile(0xEF15, 0x01, 0x1C, 0x41, 0, 0))
+                return false;
+            //交易明细文件EF18 循环记录文件
+            if (!CreateRecordFile(0xEF18, 0x07, 0xC8, 0x17, 0x02, 0xFFFF))
+                return false;
+            //定长记录文件EF05(余额文件)
+            if (!CreateRecordFile(0xEF05, 0x8A, 0x01, 0x1D, 0x02, 0x7FFF))
+                return false;
+            StroageApplicationFile();//更新定长记录文件
+            //创建灰锁文件
+            if (!CreateEFFile(0xEF10, 0x89, 0x28, 0x41, 0, 0))
+                return false;
+            //创建PIN文件
+            if (!CreateEFFile(0xEF03, 0x2A, 0x010F, 0, 0, 0))
+                return false;
+            StoragePINFile(bDefaultPwd, strCustomPwd);//PIN安装
+            //气票交易密钥
+            if (!CreateEFKeyFile())
+                return false;
+            return StorageLoyaltyKey(byteASN);
+        }
+
+        public bool UpdateLoyaltyApp(UserCardInfoParam UserCardInfoPar, byte[] AppTendingKey)
+        {
+            //选择ADF02
+            byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
+            if (!SelectFile(m_strDIR2, prefix))
+                return false;
+            byte[] byteCardId = UserCardInfoPar.GetUserCardID();
+            //卡信息更新时使用外部提供的密钥
+            if (AppTendingKey != null)
+                Buffer.BlockCopy(AppTendingKey, 0, m_MAMTK, 0, 16);
+            byte[] keyUpdate = StorageKeyParam.GetUpdateEFKey(m_MAMTK, byteCardId);
+            if (keyUpdate == null)
+                return false;
+            //更新公共应用基本数据文件EF15
+            if (!UpdateEF15File(keyUpdate, byteCardId, UserCardInfoPar.ValidCardBegin, UserCardInfoPar.ValidCardEnd))
+                return false;
+            //验证PIN
+            if (VerifyPIN(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.CustomPassword) != 1)
+                return false;
+            //灰锁文件
+            if (!UpdateEF10File(keyUpdate))
+                return false;
+            return true;
+        }
+
+        //安装各种密钥
+        private bool StorageLoyaltyKey(byte[] byteASN)
+        {
+            StorageKeyParam KeyInfo = null;
+            byte[] keyDiversify = StorageKeyParam.GetDiversify(byteASN, m_MAMK_Ly);
+            if (keyDiversify == null)
+                return false;
+            //积分主控密钥MAMK
+            KeyInfo = new StorageKeyParam("安装积分主控密钥", 0x02, 0x49, 0x00, 0xFF, 0x01);
+            KeyInfo.SetParam(byteASN, m_MAMK_Ly, m_KeyOrg);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //主控密钥安装后命令的MAC需要使用主控密钥的分散密钥计算
+            //积分消费密钥MPK,并将卡号写入EF15文件
+            KeyInfo = new StorageKeyParam("安装积分消费密钥", 0x01, 0x40, 0x01, 0x33, 0x00);
+            KeyInfo.SetParam(byteASN, m_MPK_Ly, m_KeyOrg);
+            KeyInfo.SetDiversify(keyDiversify);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //圈存密钥MLK
+            KeyInfo = new StorageKeyParam("安装积分圈存密钥", 0x03, 0x41, 0x01, 0xFF, 0x00);
+            KeyInfo.SetParam(byteASN, m_MLK_Ly, m_KeyOrg);
+            KeyInfo.SetDiversify(keyDiversify);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //TAC主密钥MTK
+            KeyInfo = new StorageKeyParam("安装积分TAC密钥", 0x05, 0x42, 0x01, 0xFF, 0x00);
+            KeyInfo.SetParam(byteASN, m_MTK_Ly, m_KeyOrg);
+            KeyInfo.SetDiversify(keyDiversify);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //PIN解锁主密钥MPUK
+            KeyInfo = new StorageKeyParam("安装积分PIN解锁主密钥", 0x08, 0x43, 0x01, 0xFF, 0x00);
+            KeyInfo.SetParam(byteASN, m_MPUK_Ly, m_KeyOrg);
+            KeyInfo.SetDiversify(keyDiversify);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //PIN重装主密钥MRPK
+            KeyInfo = new StorageKeyParam("安装积分PIN重装主密钥", 0x09, 0x44, 0x01, 0xFF, 0x00);
+            KeyInfo.SetParam(byteASN, m_MRPK_Ly, m_KeyOrg);
+            KeyInfo.SetDiversify(keyDiversify);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //积分应用维护密钥MAMK
+            KeyInfo = new StorageKeyParam("安装积分应用维护密钥", 0x0A, 0x45, 0x01, 0xFF, 0x00);
+            KeyInfo.SetParam(byteASN, m_MAMTK_Ly, m_KeyOrg);
+            KeyInfo.SetDiversify(keyDiversify);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //积分内部认证密钥MIAK
+            KeyInfo = new StorageKeyParam("安装积分内部认证密钥", 0x0B, 0x48, 0x01, 0xFF, 0x00);
+            KeyInfo.SetParam(byteASN, m_MIAK_Ly, m_KeyOrg);
+            KeyInfo.SetDiversify(keyDiversify);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //完成密钥安装，生命周期转换
+            //SetUserCardStatus(keyDiversify);
+            return true;
+        }
+
+        private bool ReadKeyFromXml()
+        {
+            string strXmlPath = m_ctrlApdu.m_strCardKeyPath;
+            try
+            {
+                XmlNode node = null;
+                XmlDocument xml = new XmlDocument();
+                xml.Load(strXmlPath);//按路径读xml文件
+                XmlNode root = xml.DocumentElement;//指向根节点
+                node = root.SelectSingleNode("Seed");
+                byte[] InitData = PublicFunc.StringToBCD(node.InnerText);
+                node = root.SelectSingleNode("InitKey");
+                byte[] InitKey = PublicFunc.StringToBCD(node.InnerText);
+
+                byte[] Left = DesCryptography.TripleEncryptData(InitData, InitKey);
+                byte[] Right = DesCryptography.TripleDecryptData(InitData, InitKey);
+                byte[] EncryptKey = new byte[16];
+                Buffer.BlockCopy(Left, 0, EncryptKey, 0, 8);
+                Buffer.BlockCopy(Right, 0, EncryptKey, 8, 8);
+
+                node = root.SelectSingleNode("UserOrgKey");
+                byte[] UserOrgKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+                SetOrgKeyValue(UserOrgKey, CardCategory.CpuCard);
+
+                GetXmlUserKeyValue(root, EncryptKey, 1);
+
+                byte[] ConsumerKey = GetXmlPsamConsumerKey(root, EncryptKey);
+                if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
+                {
+                    OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
+                    MessageBox.Show("加气或积分消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private byte[] GetXmlPsamConsumerKey(XmlNode ParentNode, byte[] EncryptKey)
+        {            
+            XmlNode PsamKeyNode = ParentNode.SelectSingleNode("PsamKeyValue");
+            XmlNode node = PsamKeyNode.SelectSingleNode("ConsumerMasterKey");
+            byte[] byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            return byteKey;
+        }
+
+        private bool GetXmlUserKeyValue(XmlNode ParentNode, byte[] EncryptKey, int nAppIndex)
+        {
+            XmlNode node = null;
+            byte[] byteKey = null;
+            string strName = string.Format("UserKeyValue_App%d", nAppIndex);
+            XmlNode UserKeyNode = ParentNode.SelectSingleNode(strName);
+
+            node = UserKeyNode.SelectSingleNode("MasterKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            SetMainKeyValue(byteKey, CardCategory.CpuCard);  //卡片主控密钥   
+
+            node = UserKeyNode.SelectSingleNode("MasterTendingKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            SetMaintainKeyValue(byteKey, CardCategory.CpuCard);  //卡片维护密钥
+
+            node = UserKeyNode.SelectSingleNode("ApplicatonMasterKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MAMK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("ApplicationTendingKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MAMTK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("AppInternalAuthKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MIAK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("PINResetKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MRPK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("PINUnlockKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MPUK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("ConsumerMasterKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MPK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("LoadKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MLK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("TacMasterKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MTK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("UnGrayKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MUGK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("UnLoadKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MULK, 0, 16);
+
+            node = UserKeyNode.SelectSingleNode("OverdraftKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_MUK, 0, 16);
+
+            return true;
+        }
+
     }
 }

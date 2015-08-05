@@ -1,7 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
-<DBConfig Connect="false">
-  <Server>(local)</Server>
-  <DbName>FunnettStation</DbName>
-  <User></User>
-  <Pwd></Pwd>    
-</DBConfig>
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Root>
+  <DBConfig Connect="false">
+    <Server>(local)</Server>
+    <DbName>FunnettStation</DbName>
+    <User></User>
+    <Pwd></Pwd>    
+  </DBConfig>
+</Root>

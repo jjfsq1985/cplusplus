@@ -67,6 +67,12 @@
     <Compile Include="Dialog\InsertAppKey.Designer.cs">
       <DependentUpon>InsertAppKey.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExportKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportKey.Designer.cs">
+      <DependentUpon>ExportKey.cs</DependentUpon>
+    </Compile>
     <Compile Include="KeyManage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +84,11 @@
     </Compile>
     <Compile Include="OrgKeyManage.Designer.cs">
       <DependentUpon>OrgKeyManage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="PSAMKeyManage.cs">
       <SubType>Form</SubType>
@@ -102,6 +113,9 @@
     <EmbeddedResource Include="Dialog\InsertAppKey.resx">
       <DependentUpon>InsertAppKey.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExportKey.resx">
+      <DependentUpon>ExportKey.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="KeyManage.resx">
       <SubType>Designer</SubType>
       <DependentUpon>KeyManage.cs</DependentUpon>
@@ -110,12 +124,20 @@
       <SubType>Designer</SubType>
       <DependentUpon>OrgKeyManage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="PSAMKeyManage.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PSAMKeyManage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ApduParam\ApduParam.csproj">
+      <Project>{0391A3A8-5A8C-4ADA-9DEC-788C2244072A}</Project>
+      <Name>ApduParam</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IFuncPlugin\IFuncPlugin.csproj">
       <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
       <Name>IFuncPlugin</Name>
@@ -124,6 +146,14 @@
       <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
       <Name>SqlServerHelper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="KeyValueCfg.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

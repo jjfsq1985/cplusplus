@@ -17,7 +17,7 @@ namespace ApduInterface
         
         bool createStorageKeyCmd(byte[] StorageKey, byte[] param1, byte[] param2);
 
-        bool createGenerateADFCmd(byte[] ADFName);
+        bool createGenerateADFCmd(int nAppIndex, byte[] ADFName);
 
         bool createGenerateEFCmd(ushort fileID, byte fileType, ushort fileLen, byte keyIndex, byte RecordNum, byte RecordLen, ushort ACr, ushort ACw);
 
@@ -49,7 +49,7 @@ namespace ApduInterface
 
         bool createInitializeUnLoadCmd(int nMoney, byte[] TermialID);        
 
-        bool createCreditLoadCmd(byte[] byteMAC2, byte[] TimeBcd);        
+        bool createCreditLoadCmd(byte[] byteMAC2, byte[] TimeBcd);
 
         bool createDebitUnLoadCmd(byte[] byteMAC2, byte[] TimeBcd);        
 

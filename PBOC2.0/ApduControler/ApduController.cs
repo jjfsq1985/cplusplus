@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using System.Text;
 using ApduInterface;
 using IFuncPlugin;
+using System.Xml;
+using System.Windows.Forms;
 
 namespace ApduCtrl
 {
+    public enum CardKeySource
+    {
+        CardKeyFromDB = 1,  //从数据库读取密钥
+        CardKeyFromXml  //从Xml文件读取密钥
+    }
+
     public class ApduController
     {
+        public CardKeySource m_CardKeyFrom = CardKeySource.CardKeyFromDB;
+        public string m_strCardKeyPath = "";
         private ApduDomain m_Domain = ApduDomain.Unknown;
         private DaHuaDomain m_DahuaDomain = null;
         private LongHuanDomain m_LongHuanDomain = null;
         private LohMTDomain m_LohMTDomain = null;
         private bool m_bDeviceOpen = false;
-
 
         public ApduController(ApduDomain eDomain)
         {
@@ -24,7 +33,28 @@ namespace ApduCtrl
                 m_LongHuanDomain = new LongHuanDomain();
             else if (m_Domain == ApduDomain.LoH_at_MT)
                 m_LohMTDomain = new LohMTDomain();
-                
+
+            try
+            {
+                XmlNode node = null;
+                XmlDocument xml = new XmlDocument();
+                string strXmlPath = Application.StartupPath + @"\plugins\KeyValueCfg.xml";
+                xml.Load(strXmlPath);//按路径读xml文件
+                XmlNode root = xml.DocumentElement;//指向根节点                
+                node = root.SelectSingleNode("Source");
+                if(node.InnerText == "2")
+                    m_CardKeyFrom = CardKeySource.CardKeyFromXml;
+                else
+                    m_CardKeyFrom = CardKeySource.CardKeyFromDB;
+                node = root.SelectSingleNode("xmlPath");
+                m_strCardKeyPath = node.InnerText;
+                if(string.IsNullOrEmpty(m_strCardKeyPath))
+                    m_CardKeyFrom = CardKeySource.CardKeyFromDB;
+            }
+            catch
+            {
+
+            }
         }
 
         public ISamApduProvider GetPsamApduProvider()

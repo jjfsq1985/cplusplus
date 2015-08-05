@@ -14,10 +14,18 @@ namespace PublishCardOperator.Dialog
         private CpuKeyValue m_CpuKey = new CpuKeyValue();
 
         private int m_nMaxAppCount = 0;
-        public AddCpuKey()
+
+        private byte[] m_RelatedConsumerKey = new byte[16];
+
+        public AddCpuKey(byte[] RelatedKey)
         {
             InitializeComponent();
+
+            Buffer.BlockCopy(RelatedKey, 0, m_RelatedConsumerKey, 0, 16);
+
             m_CpuKey.bValid = false;
+
+            InitKey();
         }        
 
         public CpuKeyValue GetCpuKeyValue()
@@ -76,7 +84,7 @@ namespace PublishCardOperator.Dialog
                 MessageBox.Show(strMsg);
                 return;
             }
-            InsertAppKey InsertForm = new InsertAppKey();
+            InsertAppKey InsertForm = new InsertAppKey(m_RelatedConsumerKey);            
             if (InsertForm.ShowDialog(this) != DialogResult.OK)
                 return;
             AppKeyValueGroup newAppKey = InsertForm.GetAppKeyValue();
@@ -92,9 +100,9 @@ namespace PublishCardOperator.Dialog
             item.SubItems.Add(BitConverter.ToString(newAppKey.PINUnlockKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.ConsumerMasterKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.LoadKey).Replace("-", ""));
-            item.SubItems.Add(BitConverter.ToString(newAppKey.UnLoadKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.TacMasterKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.UnGrayKey).Replace("-", ""));
+            item.SubItems.Add(BitConverter.ToString(newAppKey.UnLoadKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.OverdraftKey).Replace("-", ""));            
             listAppKey.Items.Add(item);
         }
@@ -106,6 +114,30 @@ namespace PublishCardOperator.Dialog
                 return;
             listAppKey.Items.RemoveAt(nCount - 1);
             m_CpuKey.LstAppKeyGroup.RemoveAt(nCount - 1);
+        }
+
+        private void InitKey()
+        {
+            Guid temp = Guid.Empty;
+            string strKey = "";
+            
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-","");
+            textAppMasterKey.Text = strKey;
+
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-", "");
+            textTendingKey.Text = strKey;
+
+
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-", "");
+            textAuthKey.Text = strKey;
+        }
+
+        private void KeyRefresh_Click(object sender, EventArgs e)
+        {
+            InitKey();
         }
     }
 }

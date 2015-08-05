@@ -29,7 +29,7 @@ namespace ApduInterface
 
         bool CalcGMAC(bool bSamSlot, byte BusinessType, byte[] ASN, int nOffLineSn, int nMoney, byte[] outGMAC);
         
-        bool ReadKeyValueFormDb();
+        bool ReadKeyValueFromSource();
         
         bool SavePsamCardInfoToDb(IccCardInfoParam PsamInfoPar);
         

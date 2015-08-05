@@ -466,7 +466,7 @@ namespace CardOperating
 
         private void ReadCardInfo(UserCardInfoParam CardInfo)
         {
-            if (!m_UserCardCtrl.SelectCardApp())
+            if (!m_UserCardCtrl.SelectCardApp(1))
                 return;            
             m_UserCardCtrl.GetUserCardInfo(CardInfo);
         }
@@ -860,7 +860,7 @@ namespace CardOperating
         {
             if (!OpenUserCard())
                 return;
-            if (!m_UserCardCtrl.SelectCardApp())
+            if (!m_UserCardCtrl.SelectCardApp(1))
                 return;
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
@@ -920,7 +920,7 @@ namespace CardOperating
         {
             if (!OpenUserCard())
                 return;
-            if (!m_UserCardCtrl.SelectCardApp())
+            if (!m_UserCardCtrl.SelectCardApp(1))
                 return;
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
@@ -985,7 +985,7 @@ namespace CardOperating
             //未灰状态不可强制解灰
             if (!m_bGray || !OpenUserCard())
                 return;
-            if (!m_UserCardCtrl.SelectCardApp())
+            if (!m_UserCardCtrl.SelectCardApp(1))
                 return;
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
@@ -1028,7 +1028,7 @@ namespace CardOperating
                 return;
             }
 
-            if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp())
+            if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp(1))
                 return;
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
@@ -1058,7 +1058,7 @@ namespace CardOperating
                 MessageBox.Show("请输入重新装入的新PIN码");
                 return;
             }
-            if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp())
+            if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp(1))
                 return;
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
@@ -1085,7 +1085,7 @@ namespace CardOperating
         {
             if(textOldPIN.Text.Length != 6 || textNewPIN.Text.Length != 6)
                 return;
-            if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp())
+            if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp(1))
                 return;
             if (m_UserCardCtrl.ChangePIN(textOldPIN.Text, textNewPIN.Text))
             {
