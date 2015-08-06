@@ -80,8 +80,17 @@ namespace CardOperating
                 return false;
             m_SamCardCtrl = m_DevControl.SamCardConstructor(m_DBInfo);
             m_SamCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
-            if (!m_SamCardCtrl.ReadKeyValueFromSource())
-                OnMessageOutput(new MsgOutEvent(0, "读取PSAM卡密钥失败，请检查。"));
+            int nResult = m_SamCardCtrl.ReadKeyValueFromSource();
+            if (nResult == 1)
+            {
+                MessageBox.Show("从数据库读取PSAM卡密钥失败，请检查。");
+                return false;
+            }
+            else if(nResult == 2)
+            {
+                MessageBox.Show("从XML文件读取PSAM卡密钥失败，请检查。");
+                return false;
+            }
                         
             string strCardInfo = "";
             bool bRet = m_DevControl.SAMPowerOn(bSamSlot, ref strCardInfo);
@@ -118,11 +127,18 @@ namespace CardOperating
                 return false;
             m_UserCardCtrl = m_DevControl.UserCardConstructor(m_bContactCard, m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
-            if (!m_UserCardCtrl.ReadKeyValueFromSource())
+            int nResult = m_UserCardCtrl.ReadKeyValueFromSource();
+            if (nResult == 1)
             {
-                MessageBox.Show("读取用户卡密钥失败，请检查。");
+                MessageBox.Show("从数据库读取用户卡密钥失败，请检查。");
                 return false;
             }
+            else if (nResult == 2)
+            {
+                MessageBox.Show("从XML文件读取用户卡密钥失败，请检查。");
+                return false;
+            }
+
             string cardInfo = "";
             if (m_bContactCard)
             {

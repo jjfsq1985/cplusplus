@@ -1581,12 +1581,20 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        public bool ReadKeyValueFromSource()
+        public int ReadKeyValueFromSource()
         {
+            int nRet = 0;
             if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
-                return ReadKeyFromXml();
+            {
+                if (!ReadKeyFromXml())
+                    nRet = 2;
+            }
             else
-                return ReadKeyFromDb();
+            {
+                if (!ReadKeyFromDb())
+                    nRet = 1;
+            }
+            return nRet;
         }
 
         //还用不上的密钥没有读出
@@ -2475,7 +2483,7 @@ namespace DaHuaApduCtrl
         {
             XmlNode node = null;
             byte[] byteKey = null;
-            string strName = string.Format("UserKeyValue_App%d", nAppIndex);
+            string strName = string.Format("UserKeyValue_App{0}", nAppIndex);
             XmlNode UserKeyNode = ParentNode.SelectSingleNode(strName);
 
             node = UserKeyNode.SelectSingleNode("MasterKey");

@@ -227,8 +227,11 @@ namespace CardOperating
 
             m_UserCardCtrl = m_DevControl.UserCardConstructor(ContactCard.Checked,m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
-            if (!m_UserCardCtrl.ReadKeyValueFromSource())
-                WriteMsg(0, "读取用户卡密钥失败，请检查。");            
+            int nResult = m_UserCardCtrl.ReadKeyValueFromSource();
+            if (nResult == 1)
+                MessageBox.Show("从数据库读取用户卡密钥失败，请检查。");
+            else if (nResult == 2)
+                MessageBox.Show("从XML文件读取用户卡密钥失败，请检查。");
         }
 
         private void btnCloseCard_Click(object sender, EventArgs e)
@@ -354,8 +357,11 @@ namespace CardOperating
             m_IccCardCtrl = m_DevControl.SamCardConstructor(m_DBInfo);
             m_IccCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
 
-            if (!m_IccCardCtrl.ReadKeyValueFromSource())
-                WriteMsg(0, "读取PSAM卡密钥失败，请检查。");            
+            int nResult = m_IccCardCtrl.ReadKeyValueFromSource();
+            if (nResult == 1)
+                MessageBox.Show("从数据库读取PSAM卡密钥失败，请检查。");
+            else if (nResult == 2)
+                MessageBox.Show("从XML文件读取PSAM卡密钥失败，请检查。");
         }
 
         private void btnCloseIccCard_Click(object sender, EventArgs e)

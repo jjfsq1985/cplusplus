@@ -191,6 +191,8 @@ namespace FNTMain
             {
                 Root = xml.CreateElement("Root");
                 xml.AppendChild(Root);
+                XmlDeclaration xmldecl = xml.CreateXmlDeclaration("1.0", "utf-8", null);
+                xml.InsertBefore(xmldecl, Root);
             }
 
             XmlNode dbRoot = null;            
@@ -286,6 +288,8 @@ namespace FNTMain
             {
                 Root = xml.CreateElement("Root");
                 xml.AppendChild(Root);
+                XmlDeclaration xmldecl = xml.CreateXmlDeclaration("1.0", "utf-8", null);
+                xml.InsertBefore(xmldecl, Root);
             }
 
             XmlNode loginRoot = null;            

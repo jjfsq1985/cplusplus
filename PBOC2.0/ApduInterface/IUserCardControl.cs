@@ -55,7 +55,7 @@ namespace ApduInterface
 
         bool ClearTACUF();
 
-        bool ReadKeyValueFromSource();        
+        int ReadKeyValueFromSource();        
 
         bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar);
 

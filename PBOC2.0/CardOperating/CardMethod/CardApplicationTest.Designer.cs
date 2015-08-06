@@ -627,9 +627,9 @@
             this.Infomation.ForeColor = System.Drawing.Color.Red;
             this.Infomation.Location = new System.Drawing.Point(171, 23);
             this.Infomation.Name = "Infomation";
-            this.Infomation.Size = new System.Drawing.Size(174, 12);
+            this.Infomation.Size = new System.Drawing.Size(161, 12);
             this.Infomation.TabIndex = 1;
-            this.Infomation.Text = "！使用数据库默认密钥操作！";
+            this.Infomation.Text = "！使用当前制卡密钥操作！";
             // 
             // CardApplicationTest
             // 

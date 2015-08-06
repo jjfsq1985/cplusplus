@@ -96,8 +96,12 @@ namespace PublishCardOperator
         {
             XmlNode node = null;
             XmlDocument xml = new XmlDocument();
+
             XmlElement Root = xml.CreateElement("Root");
             xml.AppendChild(Root);
+
+            XmlDeclaration xmldecl = xml.CreateXmlDeclaration("1.0", "utf-8", null);
+            xml.InsertBefore(xmldecl, Root);
 
             node = xml.CreateNode(XmlNodeType.Element, "Seed", "");
             node.InnerText = BitConverter.ToString(InitData).Replace("-", "");
@@ -127,6 +131,16 @@ namespace PublishCardOperator
                 {
                     //卡应用1
                     XmlNode CpuKeyRoot = xml.CreateNode(XmlNodeType.Element, "UserKeyValue_App1", "");
+                                        
+                    XmlNode DescribeNode = xml.CreateNode(XmlNodeType.Element, "Describe", "");
+                    string strData = DateTime.Now.ToString("F") + (string)dataReader["InfoRemark"];
+                    DescribeNode.InnerText = strData;
+                    CpuKeyRoot.AppendChild(DescribeNode);
+
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "MasterKey", EncryptKey);
+                    node = xml.CreateNode(XmlNodeType.Element, "Describe", "");
+                    node.InnerText = BitConverter.ToString(InitKey).Replace("-", "");
+                    Root.AppendChild(node);
 
                     KeyToXmlNode(dataReader,xml, CpuKeyRoot, "MasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "MasterTendingKey", EncryptKey);
@@ -155,6 +169,11 @@ namespace PublishCardOperator
                 if(dataReader.HasRows && dataReader.Read())
                 {
                     XmlNode PsamKeyRoot = xml.CreateNode(XmlNodeType.Element, "PsamKeyValue", "");
+
+                    XmlNode DescribeNode = xml.CreateNode(XmlNodeType.Element, "Describe", "");
+                    string strData = DateTime.Now.ToString("F") + (string)dataReader["InfoRemark"];
+                    DescribeNode.InnerText = strData;
+                    PsamKeyRoot.AppendChild(DescribeNode);
 
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "MasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "MasterTendingKey", EncryptKey);
@@ -187,14 +206,15 @@ namespace PublishCardOperator
                 XmlDocument xml = new XmlDocument();
                 string strXmlPath = Application.StartupPath + @"\plugins\KeyValueCfg.xml";
                 xml.Load(strXmlPath);//按路径读xml文件
-                XmlNode root = xml.DocumentElement;
-                XmlNode DbNode = root.SelectSingleNode("Config");//指向根节点
-                node = DbNode.SelectSingleNode("Source");
+                XmlNode root = xml.DocumentElement;//指向根节点
+                if (root.Name != "Config")
+                    return;
+                node = root.SelectSingleNode("Source");
                 if (node.InnerText == "2")
                     ReadXml.Checked = true;
                 else
                     ReadXml.Checked = false;
-                node = DbNode.SelectSingleNode("xmlPath");
+                node = root.SelectSingleNode("xmlPath");
                 textXmlPath.Text = node.InnerText;
             }
             catch
@@ -236,7 +256,7 @@ namespace PublishCardOperator
         {
             if (textData.Text.Length != 16 || textKey.Text.Length != 32)
             {
-                MessageBox.Show("请输入16位初始数据和32位初始密钥，用于加密卡片密钥");
+                MessageBox.Show("请输入或自动生成16位初始数据和32位初始密钥，用于加密卡片密钥");
                 return;
             }
 
@@ -269,12 +289,18 @@ namespace PublishCardOperator
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
+            if (ReadXml.Checked && string.IsNullOrEmpty(textXmlPath.Text))
+            {
+                MessageBox.Show("请设置制卡密钥的XML文件路径");
+                return;
+            }
             XmlNode node = null;
             XmlDocument xml = new XmlDocument();
             string strXmlPath = Application.StartupPath + @"\plugins\KeyValueCfg.xml";
             XmlElement Root = xml.CreateElement("Config");
             xml.AppendChild(Root);
-
+            XmlDeclaration xmldecl = xml.CreateXmlDeclaration("1.0", "utf-8", null);
+            xml.InsertBefore(xmldecl, Root);
 
             node = xml.CreateNode(XmlNodeType.Element, "Source", "");
             node.InnerText = ReadXml.Checked == true ? "2" : "1";

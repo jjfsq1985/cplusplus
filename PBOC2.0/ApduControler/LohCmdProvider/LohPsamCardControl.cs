@@ -887,12 +887,20 @@ namespace LohApduCtrl
             return ConsumerKey;
         }
 
-        public bool ReadKeyValueFromSource()
+        public int ReadKeyValueFromSource()
         {
+            int nRet = 0;
             if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
-                return ReadKeyFromXml();
+            {
+                if (!ReadKeyFromXml())
+                    nRet = 2;
+            }
             else
-                return ReadKeyFromDb();
+            {
+                if (!ReadKeyFromDb())
+                    nRet = 1;
+            }
+            return nRet;
         }
 
         //还用不上的密钥没有读出
@@ -1250,7 +1258,7 @@ namespace LohApduCtrl
 
         private byte[] GetXmlUserConsumerKey(XmlNode ParentNode, byte[] EncryptKey, int nAppIndex)
         {
-            string strName = string.Format("UserKeyValue_App%d", nAppIndex);
+            string strName = string.Format("UserKeyValue_App{0}", nAppIndex);
             XmlNode UserKeyNode = ParentNode.SelectSingleNode(strName);
             XmlNode node = UserKeyNode.SelectSingleNode("ConsumerMasterKey");
             byte[] byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);

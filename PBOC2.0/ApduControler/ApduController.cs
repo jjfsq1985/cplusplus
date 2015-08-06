@@ -48,8 +48,6 @@ namespace ApduCtrl
                     m_CardKeyFrom = CardKeySource.CardKeyFromDB;
                 node = root.SelectSingleNode("xmlPath");
                 m_strCardKeyPath = node.InnerText;
-                if(string.IsNullOrEmpty(m_strCardKeyPath))
-                    m_CardKeyFrom = CardKeySource.CardKeyFromDB;
             }
             catch
             {
