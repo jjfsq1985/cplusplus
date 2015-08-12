@@ -5,7 +5,7 @@ if exists (select * from sysobjects where id = object_id(N'PROC_RewriteCpuCard')
 drop procedure PROC_RewriteCpuCard
 
 /****** 用户卡制卡，发卡 ******/
-SET ANSI_NULLS OFF
+SET ANSI_NULLS ON
 GO
 
 

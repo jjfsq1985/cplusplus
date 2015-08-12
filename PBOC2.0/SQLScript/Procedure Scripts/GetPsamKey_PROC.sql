@@ -4,7 +4,7 @@ GO
 if exists (select * from sysobjects where id = object_id(N'PROC_GetPsamKey') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
 drop procedure PROC_GetPsamKey
 
-SET ANSI_NULLS OFF
+SET ANSI_NULLS ON
 GO
 
 

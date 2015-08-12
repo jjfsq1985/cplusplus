@@ -86,7 +86,7 @@
             // Remark
             // 
             this.Remark.AutoSize = true;
-            this.Remark.Location = new System.Drawing.Point(71, 233);
+            this.Remark.Location = new System.Drawing.Point(26, 233);
             this.Remark.Name = "Remark";
             this.Remark.Size = new System.Drawing.Size(29, 12);
             this.Remark.TabIndex = 51;
@@ -104,7 +104,7 @@
             // ClientName
             // 
             this.ClientName.AutoSize = true;
-            this.ClientName.Location = new System.Drawing.Point(47, 33);
+            this.ClientName.Location = new System.Drawing.Point(26, 33);
             this.ClientName.Name = "ClientName";
             this.ClientName.Size = new System.Drawing.Size(53, 12);
             this.ClientName.TabIndex = 14;
@@ -136,7 +136,7 @@
             // AppValid
             // 
             this.AppValid.AutoSize = true;
-            this.AppValid.Location = new System.Drawing.Point(35, 198);
+            this.AppValid.Location = new System.Drawing.Point(26, 198);
             this.AppValid.Name = "AppValid";
             this.AppValid.Size = new System.Drawing.Size(65, 12);
             this.AppValid.TabIndex = 10;
@@ -165,7 +165,7 @@
             // CompanyTo
             // 
             this.CompanyTo.AutoSize = true;
-            this.CompanyTo.Location = new System.Drawing.Point(11, 165);
+            this.CompanyTo.Location = new System.Drawing.Point(26, 165);
             this.CompanyTo.Name = "CompanyTo";
             this.CompanyTo.Size = new System.Drawing.Size(89, 12);
             this.CompanyTo.TabIndex = 7;
@@ -174,7 +174,7 @@
             // CompanyFrom
             // 
             this.CompanyFrom.AutoSize = true;
-            this.CompanyFrom.Location = new System.Drawing.Point(11, 132);
+            this.CompanyFrom.Location = new System.Drawing.Point(26, 132);
             this.CompanyFrom.Name = "CompanyFrom";
             this.CompanyFrom.Size = new System.Drawing.Size(89, 12);
             this.CompanyFrom.TabIndex = 6;
@@ -192,7 +192,7 @@
             // TermialID
             // 
             this.TermialID.AutoSize = true;
-            this.TermialID.Location = new System.Drawing.Point(35, 99);
+            this.TermialID.Location = new System.Drawing.Point(26, 99);
             this.TermialID.Name = "TermialID";
             this.TermialID.Size = new System.Drawing.Size(65, 12);
             this.TermialID.TabIndex = 3;
@@ -210,7 +210,7 @@
             // IccCardNo
             // 
             this.IccCardNo.AutoSize = true;
-            this.IccCardNo.Location = new System.Drawing.Point(35, 66);
+            this.IccCardNo.Location = new System.Drawing.Point(26, 66);
             this.IccCardNo.Name = "IccCardNo";
             this.IccCardNo.Size = new System.Drawing.Size(59, 12);
             this.IccCardNo.TabIndex = 1;

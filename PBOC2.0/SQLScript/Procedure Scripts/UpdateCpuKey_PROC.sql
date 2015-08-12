@@ -9,7 +9,7 @@ if exists (select * from sysobjects where id = object_id(N'PROC_UpdateCpuAppKey'
 drop procedure PROC_UpdateCpuAppKey
 
 /****** CPU¿¨ÃÜÔ¿¼ÇÂ¼ ******/
-SET ANSI_NULLS OFF
+SET ANSI_NULLS ON
 GO
 
 

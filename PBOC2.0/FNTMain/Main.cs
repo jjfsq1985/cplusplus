@@ -81,8 +81,16 @@ namespace FNTMain
                         Trace.WriteLine(ex.Message);	
                     }
                 }
-            }
-            
+            }   
+        }
+
+        private bool HaveManagementCardAuthority()
+        {
+            if (m_nLoginID != 0 || m_strLoginName.ToLower() != "administrator")
+                return false;
+            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+                return false;
+            return true;
         }
 
         void InsertToMainForm(object pluginObj,Type t)
@@ -108,7 +116,7 @@ namespace FNTMain
                     RechargeMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnRechargeInfoManage_Click));
                     break;
                 case MenuType.eCardOperating:
-                    if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) == GrobalVariable.CardOp_KeyManage_Authority)
+                    if (HaveManagementCardAuthority())
                     {
                         CardOperatingMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnCardOperating_Click));
                     }                    
@@ -128,11 +136,14 @@ namespace FNTMain
                 case MenuType.eDbManage:
                     OptionMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnDbManage_Click));
                     break;
+                case MenuType.eImportKeyXml:
+                    OptionMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnImportKey_Click));
+                    break;
                 default:
                     break;
             }
 
-            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) == GrobalVariable.CardOp_KeyManage_Authority)
+            if (HaveManagementCardAuthority())
             {
                  if(!MainMenu.Items.Contains(KeyManageMenuItem))
                  {
@@ -144,9 +155,9 @@ namespace FNTMain
                      switch(eMenu)
                      {
                          case MenuType.eExportKeyXml:
-                             KeyManageMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnExportKey_Click)); //index 3
+                             KeyManageMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnExportKey_Click));
                              break;
-                         case MenuType.eUserKeysManage:
+                          case MenuType.eUserKeysManage:
                              {
                                  ToolStripMenuItem item = new ToolStripMenuItem(strMenu, null, new EventHandler(OnCpuKeyManage_Click));
                                  KeyManageMenuItem.DropDownItems.Insert(0, item);     ////index 0
@@ -203,7 +214,7 @@ namespace FNTMain
         //相同的窗体只打开一个，需要窗体Name与PluginName函数返回的一致
         private bool FindChildForm(string strFormName)
         {
-            foreach (Control children in this.splitContainerMain.Panel1.Controls)
+            foreach (Control children in this.MainPanel.Controls)
             {
                 if (children.Name == strFormName)
                     return true;
@@ -225,7 +236,7 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(AccountObj, new object[] { m_nLoginID, m_nLoginAuthority });
-            ShowPluginForm.Invoke(AccountObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });            
+            ShowPluginForm.Invoke(AccountObj, new object[] { MainPanel, m_dbConnectInfo });            
         }
 
         private void OnClientInfo_Click(object sender, EventArgs e)
@@ -242,7 +253,7 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(clientObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.ClientInfo_Authority) });
-            ShowPluginForm.Invoke(clientObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });          
+            ShowPluginForm.Invoke(clientObj, new object[] { MainPanel, m_dbConnectInfo });          
 
         }
 
@@ -260,7 +271,7 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(stationObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.StationInfo_Authority) });
-            ShowPluginForm.Invoke(stationObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });  
+            ShowPluginForm.Invoke(stationObj, new object[] { MainPanel, m_dbConnectInfo });  
         }
 
         private void OnRechargeInfoManage_Click(object sender, EventArgs e)
@@ -277,12 +288,12 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(RechargeInfoObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.RechargeList_Authority) });
-            ShowPluginForm.Invoke(RechargeInfoObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });    
+            ShowPluginForm.Invoke(RechargeInfoObj, new object[] { MainPanel, m_dbConnectInfo });    
         }
 
         private void OnCardOperating_Click(object sender, EventArgs e)
         {
-            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+            if (!HaveManagementCardAuthority())
                 return;
 
             Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");
@@ -305,7 +316,7 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
-            ShowPluginForm.Invoke(CardOperatingObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });    
+            ShowPluginForm.Invoke(CardOperatingObj, new object[] { MainPanel, m_dbConnectInfo });    
         }
 
         private void OnCardPublish_Click(object sender, EventArgs e)
@@ -330,12 +341,12 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(CardPublishObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardPublish_Authority) });
-            ShowPluginForm.Invoke(CardPublishObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo }); 
+            ShowPluginForm.Invoke(CardPublishObj, new object[] { MainPanel, m_dbConnectInfo }); 
         }
 
         private void OnOrgKeyManage_Click(object sender, EventArgs e)
         {
-            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+            if (!HaveManagementCardAuthority())
                 return;
             Guid CardOperating = new Guid("439DF630-0D7E-4cb8-B633-24CBCFB31499");
             if (!m_Plugins.ContainsKey(CardOperating))
@@ -349,12 +360,12 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
-            ShowPluginForm.Invoke(CardOperatingObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
+            ShowPluginForm.Invoke(CardOperatingObj, new object[] { MainPanel, m_dbConnectInfo });
          }
 
         private void OnCpuKeyManage_Click(object sender, EventArgs e)
         {
-            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+            if (!HaveManagementCardAuthority())
                 return;
             Guid CardOperating = new Guid("A24CEFE8-E4ED-4808-891B-E3DBB203C600");
             if (!m_Plugins.ContainsKey(CardOperating))
@@ -368,12 +379,12 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
-            ShowPluginForm.Invoke(CardOperatingObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
+            ShowPluginForm.Invoke(CardOperatingObj, new object[] { MainPanel, m_dbConnectInfo });
         }
 
         private void OnPsamKeyManage_Click(object sender, EventArgs e)
         {
-            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+            if (!HaveManagementCardAuthority())
                 return;
             Guid CardOperating = new Guid("C670EAFE-5966-4aef-944E-F10D5790F0F8");
             if (!m_Plugins.ContainsKey(CardOperating))
@@ -387,28 +398,45 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
-            ShowPluginForm.Invoke(CardOperatingObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
+            ShowPluginForm.Invoke(CardOperatingObj, new object[] { MainPanel, m_dbConnectInfo });
+        }
+
+        //指定制卡使用的XML文件
+        private void OnImportKey_Click(object sender, EventArgs e)
+        {
+            Guid KeyImport = new Guid("04CD1292-9AC4-437f-BDD1-918E78846EFD");
+            if (!m_Plugins.ContainsKey(KeyImport))
+                return;
+            if (FindChildForm(m_Plugins[KeyImport].strPluginName))
+                return;
+            object KeyImportObj = GetObject(KeyImport, m_Plugins[KeyImport].strPluginPath);
+            if (KeyImportObj == null)
+                return;
+            Type t = KeyImportObj.GetType();
+            MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
+            MethodInfo SetAuthority = t.GetMethod("SetAuthority");
+            SetAuthority.Invoke(KeyImportObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardPublish_Authority) });
+            ShowPluginForm.Invoke(KeyImportObj, new object[] { MainPanel, m_dbConnectInfo });
         }
 
         //将当前使用的密钥导出
         private void OnExportKey_Click(object sender, EventArgs e)
         {
-            if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+            if (!HaveManagementCardAuthority())
                 return;
-            Guid CardOperating = new Guid("D122EE72-2338-456c-88BD-531F2D2415CD");
-            if (!m_Plugins.ContainsKey(CardOperating))
+            Guid KeyExport = new Guid("D122EE72-2338-456c-88BD-531F2D2415CD");
+            if (!m_Plugins.ContainsKey(KeyExport))
                 return;
-            if (FindChildForm(m_Plugins[CardOperating].strPluginName))
+            if (FindChildForm(m_Plugins[KeyExport].strPluginName))
                 return;
-            object CardOperatingObj = GetObject(CardOperating, m_Plugins[CardOperating].strPluginPath);
-            if (CardOperatingObj == null)
+            object KeyExportObj = GetObject(KeyExport, m_Plugins[KeyExport].strPluginPath);
+            if (KeyExportObj == null)
                 return;
-            Type t = CardOperatingObj.GetType();
+            Type t = KeyExportObj.GetType();
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
-            SetAuthority.Invoke(CardOperatingObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
-            ShowPluginForm.Invoke(CardOperatingObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
-
+            SetAuthority.Invoke(KeyExportObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
+            ShowPluginForm.Invoke(KeyExportObj, new object[] { MainPanel, m_dbConnectInfo });
         }
 
         private void OnProvinceCode_Click(object sender, EventArgs e)
@@ -425,7 +453,7 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(ProvCodeObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CodeTable_Authority) });
-            ShowPluginForm.Invoke(ProvCodeObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
+            ShowPluginForm.Invoke(ProvCodeObj, new object[] { MainPanel, m_dbConnectInfo });
         }
 
 
@@ -443,7 +471,7 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(CityCodeObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CodeTable_Authority) });
-            ShowPluginForm.Invoke(CityCodeObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
+            ShowPluginForm.Invoke(CityCodeObj, new object[] { MainPanel, m_dbConnectInfo });
         }
 
 
@@ -461,7 +489,7 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(CompanyCodeObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CodeTable_Authority) });
-            ShowPluginForm.Invoke(CompanyCodeObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });
+            ShowPluginForm.Invoke(CompanyCodeObj, new object[] { MainPanel, m_dbConnectInfo });
         }
 
         private void OnDbManage_Click(object sender, EventArgs e)
@@ -478,7 +506,7 @@ namespace FNTMain
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
             SetAuthority.Invoke(dbObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.DbManage_Authority) });
-            ShowPluginForm.Invoke(dbObj, new object[] { splitContainerMain.Panel1, m_dbConnectInfo });            
+            ShowPluginForm.Invoke(dbObj, new object[] { MainPanel, m_dbConnectInfo });            
         }
 
         private void AboutMenuItem_Click(object sender, EventArgs e)

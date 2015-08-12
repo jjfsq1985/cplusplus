@@ -5,7 +5,7 @@ if exists (select * from sysobjects where id = object_id(N'PROC_PublishPsamCard'
 drop procedure PROC_PublishPsamCard
 
 /****** PSAM¿¨ÖÆ¿¨£¬·¢¿¨ ******/
-SET ANSI_NULLS OFF
+SET ANSI_NULLS ON
 GO
 
 

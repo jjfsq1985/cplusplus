@@ -5,7 +5,7 @@ if exists (select * from sysobjects where id = object_id(N'PROC_PublishCpuCard')
 drop procedure PROC_PublishCpuCard
 
 /****** 用户卡制卡，发卡 ******/
-SET ANSI_NULLS OFF
+SET ANSI_NULLS ON
 GO
 
 

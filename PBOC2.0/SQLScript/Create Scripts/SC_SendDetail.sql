@@ -1,0 +1,30 @@
+USE [FunnettStation]
+GO
+
+/****** Object:  Table [dbo].[SC_SendDetail]    Script Date: 08/07/2015 08:44:23 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[SC_SendDetail](
+	[FGUID] [varchar](36) NOT NULL,
+	[FGunNo] [int] NULL,
+	[FSerialNo] [int] NULL,
+	[RawData] [varchar](600) NULL,
+ CONSTRAINT [PK_TSendGas] PRIMARY KEY CLUSTERED 
+(
+	[FGUID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+

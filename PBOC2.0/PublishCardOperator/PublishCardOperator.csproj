@@ -73,6 +73,12 @@
     <Compile Include="ExportKey.Designer.cs">
       <DependentUpon>ExportKey.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImportKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportKey.Designer.cs">
+      <DependentUpon>ImportKey.cs</DependentUpon>
+    </Compile>
     <Compile Include="KeyManage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExportKey.resx">
       <DependentUpon>ExportKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImportKey.resx">
+      <DependentUpon>ImportKey.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="KeyManage.resx">
       <SubType>Designer</SubType>

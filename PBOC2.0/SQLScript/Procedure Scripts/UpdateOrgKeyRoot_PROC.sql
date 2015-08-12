@@ -5,7 +5,7 @@ if exists (select * from sysobjects where id = object_id(N'PROC_UpdateOrgKeyRoot
 drop procedure PROC_UpdateOrgKeyRoot
 
 /****** 厂商初始卡密钥记录 ******/
-SET ANSI_NULLS OFF
+SET ANSI_NULLS ON
 GO
 
 

@@ -42,8 +42,6 @@
             this.UserName = new System.Windows.Forms.ToolStripStatusLabel();
             this.Split2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.DbName = new System.Windows.Forms.ToolStripStatusLabel();
-            this.BackGroundPic = new System.Windows.Forms.PictureBox();
-            this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.FuzzySearch = new System.Windows.Forms.GroupBox();
             this.ChkSearchPsam = new System.Windows.Forms.CheckBox();
             this.listSearchResult = new System.Windows.Forms.ListView();
@@ -52,13 +50,11 @@
             this.LabelTextLike = new System.Windows.Forms.Label();
             this.LabelText = new System.Windows.Forms.Label();
             this.cmbCondition = new System.Windows.Forms.ComboBox();
+            this.MainPanel = new System.Windows.Forms.Panel();
             this.MainMenu.SuspendLayout();
             this.SystemStatus.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.BackGroundPic)).BeginInit();
-            this.splitContainerMain.Panel1.SuspendLayout();
-            this.splitContainerMain.Panel2.SuspendLayout();
-            this.splitContainerMain.SuspendLayout();
             this.FuzzySearch.SuspendLayout();
+            this.MainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainMenu
@@ -66,12 +62,12 @@
             this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SystemMenuItem,
             this.RechargeMenuItem,
-            this.CardOperatingMenuItem,            
+            this.CardOperatingMenuItem,
             this.OptionMenuItem,
             this.HelpMenuItem});
             this.MainMenu.Location = new System.Drawing.Point(0, 0);
             this.MainMenu.Name = "MainMenu";
-            this.MainMenu.Size = new System.Drawing.Size(1170, 25);
+            this.MainMenu.Size = new System.Drawing.Size(1072, 25);
             this.MainMenu.TabIndex = 0;
             this.MainMenu.Text = "MainMenu";
             // 
@@ -122,9 +118,9 @@
             this.UserName,
             this.Split2,
             this.DbName});
-            this.SystemStatus.Location = new System.Drawing.Point(0, 687);
+            this.SystemStatus.Location = new System.Drawing.Point(0, 681);
             this.SystemStatus.Name = "SystemStatus";
-            this.SystemStatus.Size = new System.Drawing.Size(1170, 22);
+            this.SystemStatus.Size = new System.Drawing.Size(1072, 22);
             this.SystemStatus.TabIndex = 2;
             // 
             // CompanyNameLabel
@@ -157,34 +153,6 @@
             this.DbName.Size = new System.Drawing.Size(68, 17);
             this.DbName.Text = "数据库信息";
             // 
-            // BackGroundPic
-            // 
-            this.BackGroundPic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BackGroundPic.Image = ((System.Drawing.Image)(resources.GetObject("BackGroundPic.Image")));
-            this.BackGroundPic.Location = new System.Drawing.Point(3, 478);
-            this.BackGroundPic.Name = "BackGroundPic";
-            this.BackGroundPic.Size = new System.Drawing.Size(164, 181);
-            this.BackGroundPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.BackGroundPic.TabIndex = 4;
-            this.BackGroundPic.TabStop = false;
-            // 
-            // splitContainerMain
-            // 
-            this.splitContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerMain.Location = new System.Drawing.Point(0, 25);
-            this.splitContainerMain.Name = "splitContainerMain";
-            // 
-            // splitContainerMain.Panel1
-            // 
-            this.splitContainerMain.Panel1.Controls.Add(this.FuzzySearch);
-            // 
-            // splitContainerMain.Panel2
-            // 
-            this.splitContainerMain.Panel2.Controls.Add(this.BackGroundPic);
-            this.splitContainerMain.Size = new System.Drawing.Size(1170, 662);
-            this.splitContainerMain.SplitterDistance = 996;
-            this.splitContainerMain.TabIndex = 6;
-            // 
             // FuzzySearch
             // 
             this.FuzzySearch.Controls.Add(this.ChkSearchPsam);
@@ -194,9 +162,10 @@
             this.FuzzySearch.Controls.Add(this.LabelTextLike);
             this.FuzzySearch.Controls.Add(this.LabelText);
             this.FuzzySearch.Controls.Add(this.cmbCondition);
+            this.FuzzySearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FuzzySearch.Location = new System.Drawing.Point(0, 0);
             this.FuzzySearch.Name = "FuzzySearch";
-            this.FuzzySearch.Size = new System.Drawing.Size(997, 662);
+            this.FuzzySearch.Size = new System.Drawing.Size(1072, 656);
             this.FuzzySearch.TabIndex = 6;
             this.FuzzySearch.TabStop = false;
             // 
@@ -215,7 +184,7 @@
             // 
             this.listSearchResult.Location = new System.Drawing.Point(20, 99);
             this.listSearchResult.Name = "listSearchResult";
-            this.listSearchResult.Size = new System.Drawing.Size(865, 519);
+            this.listSearchResult.Size = new System.Drawing.Size(1041, 546);
             this.listSearchResult.TabIndex = 5;
             this.listSearchResult.UseCompatibleStateImageBehavior = false;
             this.listSearchResult.View = System.Windows.Forms.View.Details;
@@ -265,12 +234,21 @@
             this.cmbCondition.TabIndex = 1;
             this.cmbCondition.SelectedIndexChanged += new System.EventHandler(this.cmbCondition_SelectedIndexChanged);
             // 
+            // MainPanel
+            // 
+            this.MainPanel.Controls.Add(this.FuzzySearch);
+            this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainPanel.Location = new System.Drawing.Point(0, 25);
+            this.MainPanel.Name = "MainPanel";
+            this.MainPanel.Size = new System.Drawing.Size(1072, 656);
+            this.MainPanel.TabIndex = 3;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1170, 709);
-            this.Controls.Add(this.splitContainerMain);
+            this.ClientSize = new System.Drawing.Size(1072, 703);
+            this.Controls.Add(this.MainPanel);
             this.Controls.Add(this.SystemStatus);
             this.Controls.Add(this.MainMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -283,12 +261,9 @@
             this.MainMenu.PerformLayout();
             this.SystemStatus.ResumeLayout(false);
             this.SystemStatus.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.BackGroundPic)).EndInit();
-            this.splitContainerMain.Panel1.ResumeLayout(false);
-            this.splitContainerMain.Panel2.ResumeLayout(false);
-            this.splitContainerMain.ResumeLayout(false);
             this.FuzzySearch.ResumeLayout(false);
             this.FuzzySearch.PerformLayout();
+            this.MainPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -307,10 +282,8 @@
         private System.Windows.Forms.ToolStripStatusLabel CompanyNameLabel;
         private System.Windows.Forms.ToolStripStatusLabel UserName;
         private System.Windows.Forms.ToolStripStatusLabel Split1;
-        private System.Windows.Forms.PictureBox BackGroundPic;
         private System.Windows.Forms.ToolStripStatusLabel DbName;
         private System.Windows.Forms.ToolStripStatusLabel Split2;
-        private System.Windows.Forms.SplitContainer splitContainerMain;
         private System.Windows.Forms.Label LabelText;
         private System.Windows.Forms.ComboBox cmbCondition;
         private System.Windows.Forms.Button btnSearch;
@@ -319,6 +292,7 @@
         private System.Windows.Forms.ListView listSearchResult;
         private System.Windows.Forms.GroupBox FuzzySearch;
         private System.Windows.Forms.CheckBox ChkSearchPsam;
+        private System.Windows.Forms.Panel MainPanel;
     }
 }
 

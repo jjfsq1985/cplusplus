@@ -5,7 +5,7 @@ if exists (select * from sysobjects where id = object_id(N'PROC_UpdatePsamKey') 
 drop procedure PROC_UpdatePsamKey
 
 /****** PSAM¿¨ÃÜÔ¿¼ÇÂ¼ ******/
-SET ANSI_NULLS OFF
+SET ANSI_NULLS ON
 GO
 
 

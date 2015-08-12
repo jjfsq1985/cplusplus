@@ -5,7 +5,7 @@ if exists (select * from sysobjects where id = object_id(N'PROC_UpdateClientInfo
 drop procedure PROC_UpdateClientInfo
 
 /****** 单位信息记录 ******/
-SET ANSI_NULLS OFF
+SET ANSI_NULLS ON
 GO
 
 
