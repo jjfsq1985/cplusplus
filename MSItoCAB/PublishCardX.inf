@@ -1,0 +1,9 @@
+[version]
+signature="$CHICAGO$"
+AdvancedINF=2.0
+
+[Setup Hooks]
+PublishCardX=PublishCardX
+
+[PublishCardX]
+run=msiexec.exe /i "%EXTRACT_DIR%\PublishCardX.msi" /qn

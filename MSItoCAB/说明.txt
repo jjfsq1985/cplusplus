@@ -1,0 +1,22 @@
+说明
+生成的证书安装到受信任的根证书颁发机构
+生成证书时使用的密码： jjf2014
+发布者密码：jjf2014
+PublishCardX.msi中包含PublishCardX.dll 和依赖文件mt_32.dll
+
+
+//cab包步骤
+1、将PublishCardX.dll使用与cab相同的证书签名
+2、生成PublishCardX.msi
+3、运行tocab.bat 将PublishCardX.msi PublishCardX.inf打
+	包PublishCardX.cab，并对cab包进行签名。
+
+
+自动升级步骤(msi文件也有版本，msi文件版本与此无关) 
+1、将Funnett证书导入“受信任的根证书颁发机构”
+2、PublishCardX.dll版本提高
+3、html文件中
+<object id="PublishOperator" classid="clsid:8FA99275-798D-454b-AC7E-DEC997B99042" codebase="PublishCardX.cab#version=1,0,0,1"></object>
+version后的值与PublishCardX.dll版本一致，IE浏览器检查到系统已装版本较低时就会自动升级安装，已装版本>= version后的值则不安装。
+
+

@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<head>
+    <title>C# ActiveX测试页</title>
+</head>
+<body>
+
+<script language="javascript">
+    function ReadCard() 
+    {
+        var info = new ActiveXObject("PublishCardX.UserCardInfoParam");
+        PublishOperator.ReadUserCardInfo(info);
+
+        var CardId = info.GetStringUserCardID();
+        var CardName = info.UserName;
+        alert("卡号:" + CardId + "持卡人:" + CardName);
+    }
+
+    function WriteCard() 
+    {
+        var info = new ActiveXObject("PublishCardX.UserCardInfoParam");        
+        info.UserName = "WebTest";
+        info.TelePhone = "18005128888";
+        var TendingKey = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"; //维护密钥
+        PublishOperator.WriteUserCardInfo(info, TendingKey);
+    }
+    
+    function CardMoney()
+    {
+    	var Pin = "999999";
+    	var balance = PublishOperator.ReadCardBalance(Pin);
+    	alert("余额:"+ balance);
+    	var statusCard = new ActiveXObject("PublishCardX.GrayStatus");
+    	PublishOperator.ReadCardGrayStatus(Pin,statusCard);
+    	if(statusCard.bCardGray)
+    		alert("灰卡终端机编号：" + statusCard.strTerminalId);
+    }
+    
+    function LoadMoney()
+    {
+    	var Pin = "999999";
+    	var LoadKey = "66666666666666666666666666666666"; //圈存密钥
+    	PublishOperator.CardLoadMoney(Pin,"201506020004",1000.0,LoadKey);
+    }
+    
+</script>
+    <object id="PublishOperator" classid="clsid:8FA99275-798D-454b-AC7E-DEC997B99042" codebase="PublishCardX.cab#version=1,0,0,1"></object>
+    <input id="Read" type="button" value="读取卡信息" onclick="ReadCard()"/>
+    <input id="Write" type="button" value="修改卡信息" onclick="WriteCard()"/>
+    <input id="GetMoney" type="button" value="读取余额和灰卡" onclick="CardMoney()"/>
+    <input id="LoadMoney" type="button" value="圈存1000元" onclick="LoadMoney()"/>
+</body>
+</html>
