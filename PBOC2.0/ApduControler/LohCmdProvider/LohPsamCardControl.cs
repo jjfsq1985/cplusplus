@@ -11,6 +11,7 @@ using ApduCtrl;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Xml;
+using CardControl;
 
 namespace LohApduCtrl
 {
@@ -223,7 +224,7 @@ namespace LohApduCtrl
                 }
                 else if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                 {
-                    string strErr = GetErrString(RecvData[nRecvLen - 2], RecvData[nRecvLen - 1], strData);
+                    string strErr = GlobalControl.GetErrString(RecvData[nRecvLen - 2], RecvData[nRecvLen - 1], strData);
                     OnTextOutput(new MsgOutEvent(0, " 外部认证错误：" + strErr));
                     return false;
                 }
@@ -853,38 +854,18 @@ namespace LohApduCtrl
                 ObjSql = null;
                 return false;
             }
+            ObjSql.CloseConnection();
+            ObjSql = null;
 
-            byte[] ConsumerKey = GetDbUserConsumerKey(ObjSql, 1);
+            byte[] ConsumerKey = GlobalControl.GetDbConsumerKey(m_DBInfo, "PROC_GetCpuKey", "AppConsumerKey", 1);
             if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
             {
                 OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
                 MessageBox.Show("加气消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
-            ObjSql.CloseConnection();
-            ObjSql = null;
+
             return true;
-        }
-
-        private byte[] GetDbUserConsumerKey(SqlHelper sqlHelp, int AppIndex)
-        {
-            SqlDataReader dataReader = null;
-            SqlParameter[] sqlparam = new SqlParameter[1];
-            sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, AppIndex);
-            sqlHelp.ExecuteProc("PROC_GetCpuKey", sqlparam, out dataReader);
-            if (dataReader == null)
-                return null;
-            if (!dataReader.HasRows || !dataReader.Read())
-            {
-                dataReader.Close();
-                return null;
-            }
-
-            byte[] ConsumerKey = new byte[16];
-            string strKey = (string)dataReader["ConsumerMasterKey"];
-            StrKeyToByte(strKey, ConsumerKey);
-            dataReader.Close();
-            return ConsumerKey;
         }
 
         public int ReadKeyValueFromSource()
@@ -906,43 +887,16 @@ namespace LohApduCtrl
         //还用不上的密钥没有读出
         private bool GetDbPsamKeyValue(SqlHelper sqlHelp)
         {
-            SqlDataReader dataReader = null;
-            sqlHelp.ExecuteProc("PROC_GetPsamKey", out dataReader);
-            if (dataReader != null)
-            {
-                if (!dataReader.HasRows)
-                {
-                    dataReader.Close();
-                    return false;
-                }
-                else
-                {
-                    byte[] byteKey = null;
-                    string strKey = "";
-                    if (dataReader.Read())
-                    {
-                        strKey = (string)dataReader["MasterKey"];
-                        byteKey = PublicFunc.StringToBCD(strKey);
-                        SetMainKeyValue(byteKey, CardCategory.PsamCard);  //卡片主控密钥  
-
-                        strKey = (string)dataReader["MasterTendingKey"];
-                        byteKey = PublicFunc.StringToBCD(strKey);
-                        SetMaintainKeyValue(byteKey, CardCategory.PsamCard);  //卡片维护密钥
-
-                        strKey = (string)dataReader["ApplicatonMasterKey"];
-                        StrKeyToByte(strKey, m_MAMK);//psam卡应用主控密钥
-                        strKey = (string)dataReader["ApplicationTendingKey"];
-                        StrKeyToByte(strKey, m_MAMTK);
-                        strKey = (string)dataReader["ConsumerMasterKey"];
-                        StrKeyToByte(strKey, m_MPK);
-                        strKey = (string)dataReader["MacEncryptKey"];
-                        StrKeyToByte(strKey, m_MADK);
-                    }
-                    dataReader.Close();
-                    return true;
-                }
-            }
-            return false;
+            PsamKeyData KeyVal = new PsamKeyData();
+            if (!GlobalControl.GetDbPsamKeyVal(sqlHelp, KeyVal))
+                return false;
+            SetMainKeyValue(KeyVal.MasterKeyVal, CardCategory.PsamCard);  //卡片主控密钥  
+            SetMaintainKeyValue(KeyVal.MasterTendingKeyVal, CardCategory.PsamCard);  //卡片维护密钥
+            Buffer.BlockCopy(KeyVal.ApplicationMasterKey, 0, m_MAMK, 0, 16);//未用,psam卡无应用主控密钥安装
+            Buffer.BlockCopy(KeyVal.ApplicationTendingKey, 0, m_MAMTK, 0, 16);
+            Buffer.BlockCopy(KeyVal.ConsumerMasterKey, 0, m_MPK, 0, 16);            
+            Buffer.BlockCopy(KeyVal.MacEncryptKey, 0, m_MADK, 0, 16);
+            return true;
         }
 
 
@@ -1207,7 +1161,7 @@ namespace LohApduCtrl
 
                 GetXmlPsamKeyValue(root, EncryptKey);
 
-                byte[] ConsumerKey = GetXmlUserConsumerKey(root, EncryptKey, 1);
+                byte[] ConsumerKey = GlobalControl.GetPrivateKeyFromXml(strXmlPath, "UserKeyValue_App1", "AppConsumerKey");
                 if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
                 {
                     OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
@@ -1237,7 +1191,7 @@ namespace LohApduCtrl
             byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
             SetMaintainKeyValue(byteKey, CardCategory.PsamCard);  //卡片维护密钥
 
-            node = PsamKeyNode.SelectSingleNode("ApplicatonMasterKey");
+            node = PsamKeyNode.SelectSingleNode("ApplicationMasterKey");
             byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
             Buffer.BlockCopy(byteKey, 0, m_MAMK, 0, 16);//未用,psam卡无应用主控密钥安装
 
@@ -1254,15 +1208,6 @@ namespace LohApduCtrl
             Buffer.BlockCopy(byteKey, 0, m_MADK, 0, 16);
 
             return true;
-        }
-
-        private byte[] GetXmlUserConsumerKey(XmlNode ParentNode, byte[] EncryptKey, int nAppIndex)
-        {
-            string strName = string.Format("UserKeyValue_App{0}", nAppIndex);
-            XmlNode UserKeyNode = ParentNode.SelectSingleNode(strName);
-            XmlNode node = UserKeyNode.SelectSingleNode("ConsumerMasterKey");
-            byte[] byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            return byteKey;
         }
 
     }

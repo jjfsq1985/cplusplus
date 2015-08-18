@@ -94,7 +94,7 @@ namespace PublishCardOperator
                 byte[] ConsumerKey = new byte[16];
                 if (dataReader.Read())
                 {
-                    string strKey = (string)dataReader["ConsumerMasterKey"];
+                    string strKey = (string)dataReader["AppConsumerKey"];
                     byte[] BcdKey = PublicFunc.StringToBCD(strKey);
                     Trace.Assert(BcdKey.Length == 16);
                     Buffer.BlockCopy(BcdKey, 0, ConsumerKey, 0, 16);                    

@@ -48,10 +48,12 @@ CREATE PROCEDURE PROC_RewriteCpuCard(
 	@FactoryNum char(7), --钢瓶生产厂家编号
 	@CylinderVolume int, --钢瓶容积
 	@BusDistance varchar(10) --公交路数
+	@RelatedMotherCard char(16) --子卡关联的母卡卡号
 	) With Encryption
  AS    	
     declare @curTime datetime --时间
     declare @SrcClientId   int
+    declare @SrcRelatedMotherCard char(16)
     declare @SrcPersonalId  varchar(32)
     declare @SrcDriverName nvarchar(50)
     declare @SrcDriverTel varchar(32)
@@ -69,10 +71,10 @@ CREATE PROCEDURE PROC_RewriteCpuCard(
 	if not exists(select * from Base_Card where CardNum=@CardId)
 		return 3
 begin
-		select @SrcClientId=ClientId,@SrcPersonalId=PersonalId,@SrcDriverName=DriverName,@SrcDriverTel=DriverTel,@SrcSteelCylinderId= SteelCylinderId,@SrcFactoryNum=FactoryNum from Base_Card where CardNum=@CardId;
+		select @SrcClientId=ClientId,@SrcRelatedMotherCard = RelatedMotherCard,@SrcPersonalId=PersonalId,@SrcDriverName=DriverName,@SrcDriverTel=DriverTel,@SrcSteelCylinderId= SteelCylinderId,@SrcFactoryNum=FactoryNum from Base_Card where CardNum=@CardId;
 		--开始事务
 		begin tran maintran
-		update  Base_Card set ClientId = @ClientId,UseValidateDate = @UseValidateDate, UseInvalidateDate = @UseInvalidateDate,
+		update  Base_Card set ClientId = @ClientId,RelatedMotherCard=@RelatedMotherCard,UseValidateDate = @UseValidateDate, UseInvalidateDate = @UseInvalidateDate,
 							Plate = @Plate,SelfId = @SelfId,PersonalId=@PersonalId,DriverName=@DriverName,DriverTel=@DriverTel,
 							VechileCategory=@VechileCategory,SteelCylinderId=@SteelCylinderId,CylinderTestDate=@CylinderTestDate,Remark=@Remark,
 							R_OilTimesADay=@R_OilTimesADay,R_OilVolATime=@R_OilVolATime,R_OilVolTotal=@R_OilVolTotal,R_OilEndDate=@R_OilEndDate,
@@ -85,6 +87,7 @@ begin
 		    end		
 		--插入修改卡信息的记录
 		set @LogContent = '修改卡信息：' + '所属单位' + convert(varchar(10),@SrcClientId) + '->' + convert(varchar(10),@ClientId) + ';';
+		set @LogContent	= 	@LogContent + '关联母卡' + @SrcRelatedMotherCard + '->' + @RelatedMotherCard + ';';
 		set @LogContent	= 	@LogContent + '证件号' + @SrcPersonalId + '->' + @PersonalId + ';';
 		set @LogContent	= 	@LogContent + '持卡人姓名' + @SrcDriverName + '->' + @DriverName + ';';
 		set @LogContent	= 	@LogContent + '持卡人电话' + @SrcDriverTel + '->' + @DriverTel + ';';

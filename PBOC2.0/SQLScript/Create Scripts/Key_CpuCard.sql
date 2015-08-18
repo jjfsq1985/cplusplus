@@ -30,17 +30,18 @@ CREATE TABLE [dbo].[Key_CARD_ADF](
 	[ADFKeyId] [int] IDENTITY(1,1) NOT NULL,
 	[RelatedKeyId] [int] NOT NULL,    --关联在Key_CpuCard表中的KeyId
 	[ApplicationIndex] [int] NOT NULL,   --应用号，1-加气应用；2-积分应用；3-监管应用；...
-	[ApplicatonMasterKey] [char](32) NOT NULL,
-	[ApplicationTendingKey] [char](32) NOT NULL,
+	[AppMasterKey] [char](32) NOT NULL,
+	[AppTendingKey] [char](32) NOT NULL,
 	[AppInternalAuthKey] [char](32) NOT NULL,
-	[PINResetKey] [char](32) NULL,
-	[PINUnlockKey] [char](32) NULL,
-	[ConsumerMasterKey] [char](32) NULL,
-	[LoadKey] [char](32) NULL,
-	[TacMasterKey] [char](32) NULL,
-	[UnGrayKey] [char](32) NULL,
-	[UnLoadKey] [char](32) NULL,
-	[OverdraftKey] [char](32) NULL,
+	[AppPinResetKey] [char](32) NULL,
+	[AppPinUnlockKey] [char](32) NULL,
+	[AppConsumerKey] [char](32) NULL,
+	[AppLoadKey] [char](32) NULL,
+	[AppTacKey] [char](32) NULL,
+	[AppUnGrayKey] [char](32) NULL,
+	[AppUnLoadKey] [char](32) NULL,
+	[AppOverdraftKey] [char](32) NULL,
+
  CONSTRAINT [PK_Key_CARD_ADF] PRIMARY KEY CLUSTERED 
 (
 	[ADFKeyId] ASC
@@ -78,37 +79,37 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'ApplicationIndex'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用主控密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'ApplicatonMasterKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用主控密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppMasterKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用维护密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'ApplicationTendingKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用维护密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppTendingKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用内部认证密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppInternalAuthKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用内部认证密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppAuthKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PIN重装密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'PINResetKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PIN重装密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppPinResetKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PIN解锁密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'PINUnlockKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PIN解锁密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppPinUnlockKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'消费主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'ConsumerMasterKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'消费主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppConsumerKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'圈存主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'LoadKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'圈存主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppLoadKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'TAC主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'TacMasterKey'
-GO
-	
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'联机解扣主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'UnGrayKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'TAC主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppTacKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'圈提主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'UnLoadKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'联机解扣主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppUnGrayKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'修改透支限额主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'OverdraftKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'圈提主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppUnLoadKey'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'修改透支限额主密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppOverdraftKey'
 GO
 
 insert into Key_CpuCard values('F21B1234043830D448293E6636883378',

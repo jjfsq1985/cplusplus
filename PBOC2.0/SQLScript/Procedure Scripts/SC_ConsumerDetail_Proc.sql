@@ -85,8 +85,8 @@ BEGIN
 			  @FGUID,@FGunNo,@FSerialNo,@RawData
 		  )  */
        IF Exists( select 1 from SC_ConsumerDetail where FSerialNo < @FSerialNo)
-         Update Base_Card set CardBalance = @FResidualAmount where CardNum = @FUserCardNo 
-       delete SC_OmissiveData where FGunNo = @FGunNo and FSerialNo = @FSerialNo
+         Update Base_Card set CardBalance = @FResidualAmount where CardNum = @FUserCardNo;
+       delete SC_OmissiveData where FGunNo = @FGunNo and FSerialNo = @FSerialNo;
        set @ReValue=1  
       commit tran      
   end try  

@@ -200,7 +200,7 @@ namespace PublishCardOperator
                         PsamKeyView.Rows[index].Cells[2].Value = strKey;
                         strKey = FillKeyValue(dataReader, keyval.MasterTendingKey, "MasterTendingKey");
                         PsamKeyView.Rows[index].Cells[3].Value = strKey;
-                        strKey = FillKeyValue(dataReader, keyval.AppMasterKey, "ApplicatonMasterKey");
+                        strKey = FillKeyValue(dataReader, keyval.AppMasterKey, "ApplicationMasterKey");
                         PsamKeyView.Rows[index].Cells[4].Value = strKey;
                         strKey = FillKeyValue(dataReader, keyval.AppTendingKey, "ApplicationTendingKey");
                         PsamKeyView.Rows[index].Cells[5].Value = strKey;

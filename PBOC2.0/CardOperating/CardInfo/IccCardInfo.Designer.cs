@@ -68,9 +68,9 @@
             this.groupIccCardInfo.Controls.Add(this.textPSAMNo);
             this.groupIccCardInfo.Controls.Add(this.IccCardNo);
             this.groupIccCardInfo.Controls.Add(this.SaveClose);
-            this.groupIccCardInfo.Location = new System.Drawing.Point(2, -1);
+            this.groupIccCardInfo.Location = new System.Drawing.Point(10, -1);
             this.groupIccCardInfo.Name = "groupIccCardInfo";
-            this.groupIccCardInfo.Size = new System.Drawing.Size(438, 604);
+            this.groupIccCardInfo.Size = new System.Drawing.Size(505, 604);
             this.groupIccCardInfo.TabIndex = 0;
             this.groupIccCardInfo.TabStop = false;
             this.groupIccCardInfo.Text = "接触式卡信息";
@@ -230,7 +230,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(440, 606);
+            this.ClientSize = new System.Drawing.Size(530, 606);
             this.Controls.Add(this.groupIccCardInfo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;

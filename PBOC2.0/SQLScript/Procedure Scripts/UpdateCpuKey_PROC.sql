@@ -191,17 +191,17 @@ CREATE PROCEDURE PROC_UpdateCpuAppKey(
 		select @AppCount=COUNT(ADFKeyId) from Key_CARD_ADF where RelatedKeyId = @RelatedKeyId and ApplicationIndex = @AppIndex;
 		if(@AppCount <> 1)
 			return 3;
-		update Key_CARD_ADF set ApplicatonMasterKey = @AppMasterKey,
-								ApplicationTendingKey=@AppTendingKey,
+		update Key_CARD_ADF set AppMasterKey = @AppMasterKey,
+								AppTendingKey=@AppTendingKey,
 								AppInternalAuthKey = @AppInternalAuthKey,
-								PINResetKey = @PinResetKey,
-								PINUnlockKey=@PinUnlockKey,
-								ConsumerMasterKey=@ConsumerMasterKey,
-								LoadKey=@LoadKey,
-								TacMasterKey=@TacMasterKey,
-								UnGrayKey=@UnGrayKey,
-								UnLoadKey=@UnLoadKey,
-								OverdraftKey=@OvertraftKey where RelatedKeyId = @RelatedKeyId and ApplicationIndex = @AppIndex;
+								AppPinResetKey = @PinResetKey,
+								AppPinUnlockKey=@PinUnlockKey,
+								AppConsumerKey=@ConsumerMasterKey,
+								AppLoadKey=@LoadKey,
+								AppTacKey=@TacMasterKey,
+								AppUnGrayKey=@UnGrayKey,
+								AppUnLoadKey=@UnLoadKey,
+								AppOverdraftKey=@OvertraftKey where RelatedKeyId = @RelatedKeyId and ApplicationIndex = @AppIndex;
 		if(@@ERROR <> 0)
 			begin
 		    rollback tran maintran

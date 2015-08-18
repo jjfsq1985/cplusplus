@@ -36,6 +36,7 @@ namespace CardOperating
         public UserCardInfo()
         {
             InitializeComponent();
+
         }
 
 
@@ -135,6 +136,8 @@ namespace CardOperating
             textBoalFactoryNo.Text = m_CardInfoPar.BoalFactoryID;
             textBusDistance.Text = m_CardInfoPar.BusDistance;
             textRemark.Text = m_CardInfoPar.Remark;
+
+            SetControlState(m_CardInfoPar.UserCardType);
 
             this.textCompanyId.Validated += new System.EventHandler(this.textCompanyId_Validated);
             this.CustomPassword.CheckedChanged += new System.EventHandler(this.CustomPassword_CheckedChanged);
@@ -304,27 +307,27 @@ namespace CardOperating
             return nSel;
         }
 
-        private int GetCardTypeIndex(UserCardInfoParam.CardType eCardType)
+        private int GetCardTypeIndex(CardType eCardType)
         {
             int nSel = 0;
             switch (eCardType)
             {
-                case UserCardInfoParam.CardType.PersonalCard:
+                case CardType.PersonalCard:
                     nSel = 0;
                     break;
-                case UserCardInfoParam.CardType.ManagerCard:
+                case CardType.ManagerCard:
                     nSel = 1;
                     break;
-                case UserCardInfoParam.CardType.EmployeeCard:
+                case CardType.EmployeeCard:
                     nSel = 2;
                     break;
-                case UserCardInfoParam.CardType.ServiceCard:
+                case CardType.ServiceCard:
                     nSel = 3;
                     break;
-                case UserCardInfoParam.CardType.CompanySubCard:
+                case CardType.CompanySubCard:
                     nSel = 4;
                     break;
-                case UserCardInfoParam.CardType.CompanyMotherCard:
+                case CardType.CompanyMotherCard:
                     nSel = 5;
                     break;
             }
@@ -385,6 +388,13 @@ namespace CardOperating
             if (cmbClientName.SelectedIndex >= 0 && cmbClientName.SelectedIndex < m_ListClientInfo.Count)
                 m_CardInfoPar.ClientID = m_ListClientInfo[cmbClientName.SelectedIndex].ClientId;
             m_CardInfoPar.SetCardId(textCompanyId.Text);
+
+            if (m_CardInfoPar.UserCardType == CardType.CompanySubCard && m_CardInfoPar.GetRelatedMotherCardID() == null)
+            {
+                MessageBox.Show("请选择单位子卡关联的母卡卡号。\n如果关联母卡列表为空，请先制单位母卡。", "单位子卡", MessageBoxButtons.OK);
+                return;
+            }
+
             if (DateFrom.Value < DateTo.Value)
             {
                 m_CardInfoPar.ValidCardBegin = DateFrom.Value;
@@ -478,29 +488,29 @@ namespace CardOperating
             return byteAreaLimit;
         }
 
-        private UserCardInfoParam.CardType GetCardType(int nSelectIndex)
+        private CardType GetCardType(int nSelectIndex)
         {
-            UserCardInfoParam.CardType eType = UserCardInfoParam.CardType.PersonalCard;
+            CardType eType = CardType.PersonalCard;
 
             switch (nSelectIndex)
             {
                 case 0:
-                    eType = UserCardInfoParam.CardType.PersonalCard;
+                    eType = CardType.PersonalCard;
                     break;
                 case 1:
-                    eType = UserCardInfoParam.CardType.ManagerCard;
+                    eType = CardType.ManagerCard;
                     break;
                 case 2:
-                    eType = UserCardInfoParam.CardType.EmployeeCard;
+                    eType = CardType.EmployeeCard;
                     break;
                 case 3:
-                    eType = UserCardInfoParam.CardType.ServiceCard;
+                    eType = CardType.ServiceCard;
                     break;
                 case 4:
-                    eType = UserCardInfoParam.CardType.CompanySubCard;
+                    eType = CardType.CompanySubCard;
                     break;
                 case 5:
-                    eType = UserCardInfoParam.CardType.CompanyMotherCard;
+                    eType = CardType.CompanyMotherCard;
                     break;
             }
             return eType;
@@ -598,29 +608,6 @@ namespace CardOperating
             FillListAreaCode(byteLimit);
         }
 
-        private void cmbUserCardType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            m_CardInfoPar.UserCardType = GetCardType(cmbUserCardType.SelectedIndex);
-            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
-            if (m_CardInfoPar.UserCardType != UserCardInfoParam.CardType.PersonalCard && m_CardInfoPar.UserCardType != UserCardInfoParam.CardType.CompanySubCard)
-            {
-                LimitCarNo.Checked = false;
-                LimitCarNo.Enabled = false;
-                textCarNo.Text = "";
-                textCarNo.Enabled = false;
-                textSelfId.Text = "";
-                textSelfId.Enabled = false;
-            }
-            else
-            {
-                LimitCarNo.Enabled = true;
-                textCarNo.Enabled = true;
-                textSelfId.Enabled = true;
-            }
-            byte nCardType = (byte)m_CardInfoPar.UserCardType;
-            textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
-        }
-
         private void LimitCarNo_CheckedChanged(object sender, EventArgs e)
         {
             if (LimitCarNo.Checked && string.IsNullOrEmpty(textCarNo.Text))
@@ -641,7 +628,7 @@ namespace CardOperating
             }
 
             string CardNoMin = companyId + "020100000000";//按公司代码计算卡流水号
-            string CardNoMax = companyId + "020900999999"; //最大卡号
+            string CardNoMax = companyId + "022900999999"; //最大卡号
             SqlParameter[] sqlparams = new SqlParameter[2];
             sqlparams[0] = ObjSql.MakeParam("CardNoMin", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMin);
             sqlparams[1] = ObjSql.MakeParam("CardNoMax", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMax);
@@ -667,6 +654,9 @@ namespace CardOperating
             byte nCardType = (byte)m_CardInfoPar.UserCardType;
             m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
             textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
+
+            //从数据库读出母卡列表
+            ReadMotherCardList(m_CardInfoPar.CompanyID,m_CardInfoPar.UserCardType);
         }
 
         private void FillListAreaCode(byte byteLimitArea)
@@ -892,6 +882,114 @@ namespace CardOperating
             m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
             byte nCardType = (byte)m_CardInfoPar.UserCardType;
             textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
+        }
+
+        private void cmbUserCardType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            m_CardInfoPar.UserCardType = GetCardType(cmbUserCardType.SelectedIndex);
+            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
+
+            SetControlState(m_CardInfoPar.UserCardType);
+
+            byte nCardType = (byte)m_CardInfoPar.UserCardType;
+            textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
+
+            //从数据库读出母卡列表
+            ReadMotherCardList(m_CardInfoPar.CompanyID, m_CardInfoPar.UserCardType);
+        }
+
+        private void SetControlState(CardType eType)
+        {
+            if (eType == CardType.PersonalCard)
+            {
+                LimitCarNo.Enabled = true;
+                cmbCarCategory.Enabled = true;
+                textCarNo.Enabled = true;
+                textSelfId.Enabled = true;
+                textSelfId.Visible = true;
+                textCarNo.Enabled = true;
+                textPriceLevel.Enabled = true;
+                textDiscountRate.Enabled = true;
+                DiscountRateExprieValid.Enabled = true;
+                LabelMotherCard.Visible = false;
+                cmbMotherCard.Visible = false;
+            }
+            else if(eType == CardType.CompanySubCard)
+            {
+                LimitCarNo.Enabled = true;
+                cmbCarCategory.Enabled = true;
+                textCarNo.Enabled = true;
+                textSelfId.Enabled = true;
+                textSelfId.Visible = true;
+                textCarNo.Enabled = true;
+                textPriceLevel.Enabled = true;
+                textDiscountRate.Enabled = true;
+                DiscountRateExprieValid.Enabled = true;
+                LabelMotherCard.Visible = true;
+                cmbMotherCard.Visible = true;
+            }
+            else
+            {
+                LimitCarNo.Checked = false;
+                LimitCarNo.Enabled = false;
+                cmbCarCategory.Enabled = false;
+                textCarNo.Text = "";
+                textCarNo.Enabled = false;
+                textPriceLevel.Enabled = false;                
+                textDiscountRate.Enabled = false;
+                DiscountRateExprieValid.Enabled = false;
+                textSelfId.Text = "";
+                textSelfId.Enabled = false;
+                textSelfId.Visible = false;
+                LabelMotherCard.Visible = false;
+                cmbMotherCard.Visible = false;
+            }
+        }
+
+        private void ReadMotherCardList(string companyId , CardType eType)
+        {
+            if (eType != CardType.CompanySubCard)
+            {                
+                return;
+            }
+            cmbMotherCard.Items.Clear();
+
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;                
+            }
+
+            string CardNoMin = companyId + "022100000000";//按公司代码获取单位母卡卡号
+            string CardNoMax = companyId + "022100999999"; //最大单位母卡卡号
+            SqlParameter[] sqlparams = new SqlParameter[3];
+            sqlparams[0] = ObjSql.MakeParam("CardNoMin", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMin);
+            sqlparams[1] = ObjSql.MakeParam("CardNoMax", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMax);
+
+            SqlDataReader dataReader = null;
+            ObjSql.ExecuteCommand("select CardNum from Base_Card where CardNum > @CardNoMin and CardNum < @CardNoMax", sqlparams, out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows)
+                {
+                    while(dataReader.Read())
+                    {
+                        cmbMotherCard.Items.Add((string)dataReader["CardNum"]);
+                    }
+                }
+                dataReader.Close();
+            }
+            ObjSql.CloseConnection();
+            ObjSql = null;
+        }
+
+        private void cmbMotherCard_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbMotherCard.SelectedIndex >= 0)
+            {                
+                m_CardInfoPar.SetMotherCard(cmbMotherCard.SelectedText);
+            }
         }
 
     }

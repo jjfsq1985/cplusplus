@@ -15,6 +15,16 @@ namespace ApduParam
         public string BusinessTime;   //交易时间
     }
 
+    public enum CardType
+    {
+        PersonalCard = 0x01, //个人卡
+        ManagerCard = 0x02,   //管理卡
+        EmployeeCard = 0x04,  //员工卡
+        ServiceCard = 0x06,  //维修卡
+        CompanySubCard = 0x11,  //单位子卡
+        CompanyMotherCard = 0x21 //单位母卡
+    }
+
     //用户卡数据结构
     public class UserCardInfoParam
     {
@@ -27,15 +37,7 @@ namespace ApduParam
             set { m_nClientId = value; }
         }
 
-        public enum CardType
-        {
-            PersonalCard = 0x01, //个人卡
-            ManagerCard = 0x02,   //管理卡
-            EmployeeCard = 0x04,  //员工卡
-            ServiceCard = 0x06,  //维修卡
-            CompanySubCard = 0x11,  //单位子卡
-            CompanyMotherCard = 0x21 //单位母卡
-        }
+
 
         //证件类型
         public enum IdentityType
@@ -47,6 +49,8 @@ namespace ApduParam
         }
 
         private string m_strCardId;
+
+        private string m_strMotherCardId;  //子卡关联的母卡卡号
 
         private string m_strCompanyId;  //发卡网点公司ID
         public string CompanyID
@@ -286,6 +290,7 @@ namespace ApduParam
         {
             m_nClientId = 0;
             m_strCardId = "";
+            m_strMotherCardId = "";
             m_strCompanyId = "0001";
             m_eCardType = CardType.PersonalCard;
             m_strCardIndex = "000001";
@@ -330,6 +335,13 @@ namespace ApduParam
             m_UserAccount = m_strCardId;//客户账号，与序列号相同
         }
 
+        public void SetMotherCard(string strMotherCardId)
+        {
+            if(m_eCardType != CardType.CompanySubCard)
+                return;
+            m_strMotherCardId = strMotherCardId;
+        }
+
         public void setLimitArea(byte LimitArea, string strLimitAreaCode )
         {
             if (LimitArea > 0 && LimitArea < 5 && strLimitAreaCode.Length %2 == 0)
@@ -364,6 +376,21 @@ namespace ApduParam
             for (int i = 0; i < nByteSize; i++)
             {
                 byteCardId[i] = Convert.ToByte(m_strCardId.Substring(i * 2, 2), 16);
+            }
+            return byteCardId;
+        }
+
+        public byte[] GetRelatedMotherCardID()
+        {
+            int nLen = m_strMotherCardId.Length;
+            if (nLen != 16)
+                return null;
+            int nByteSize = nLen / 2;
+            byte[] byteCardId = new byte[nByteSize];
+
+            for (int i = 0; i < nByteSize; i++)
+            {
+                byteCardId[i] = Convert.ToByte(m_strMotherCardId.Substring(i * 2, 2), 16);
             }
             return byteCardId;
         }

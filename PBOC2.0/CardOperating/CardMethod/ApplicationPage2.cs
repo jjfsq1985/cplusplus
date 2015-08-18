@@ -40,14 +40,14 @@ namespace CardOperating
                 m_bLyGray = false;
                 //未灰锁时终端机编号输出为0
                 int nCardStatus = 0;
-                if (m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId))
+                if (m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId, m_GTAC))
                 {
                     if (nCardStatus == 2)
                     {
                         //当前TAC未读，需要清空后重读
                         m_UserCardCtrl.ClearTACUF();
                         nCardStatus = 0;
-                        m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId);
+                        m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId, m_GTAC);
                         m_bLyGray = nCardStatus == 1 ? true : false;
                     }
                     else

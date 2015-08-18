@@ -94,10 +94,10 @@
             // 
             this.tabApp.Controls.Add(this.tabPageApp1);
             this.tabApp.Controls.Add(this.tabPageApp2);
-            this.tabApp.Location = new System.Drawing.Point(1, 55);
+            this.tabApp.Location = new System.Drawing.Point(2, 55);
             this.tabApp.Name = "tabApp";
             this.tabApp.SelectedIndex = 0;
-            this.tabApp.Size = new System.Drawing.Size(440, 530);
+            this.tabApp.Size = new System.Drawing.Size(528, 530);
             this.tabApp.TabIndex = 0;
             this.tabApp.SelectedIndexChanged += new System.EventHandler(this.tabApp_SelectedIndexChanged);
             // 
@@ -122,7 +122,7 @@
             this.tabPageApp1.Location = new System.Drawing.Point(4, 22);
             this.tabPageApp1.Name = "tabPageApp1";
             this.tabPageApp1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageApp1.Size = new System.Drawing.Size(432, 504);
+            this.tabPageApp1.Size = new System.Drawing.Size(520, 504);
             this.tabPageApp1.TabIndex = 0;
             this.tabPageApp1.Text = "加气应用";
             this.tabPageApp1.UseVisualStyleBackColor = true;
@@ -158,7 +158,7 @@
             this.RecordInCard.FullRowSelect = true;
             this.RecordInCard.GridLines = true;
             this.RecordInCard.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.RecordInCard.Location = new System.Drawing.Point(1, 314);
+            this.RecordInCard.Location = new System.Drawing.Point(28, 314);
             this.RecordInCard.MultiSelect = false;
             this.RecordInCard.Name = "RecordInCard";
             this.RecordInCard.Size = new System.Drawing.Size(431, 184);
@@ -393,7 +393,7 @@
             this.tabPageApp2.Location = new System.Drawing.Point(4, 22);
             this.tabPageApp2.Name = "tabPageApp2";
             this.tabPageApp2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageApp2.Size = new System.Drawing.Size(432, 504);
+            this.tabPageApp2.Size = new System.Drawing.Size(520, 504);
             this.tabPageApp2.TabIndex = 1;
             this.tabPageApp2.Text = "积分应用";
             this.tabPageApp2.UseVisualStyleBackColor = true;
@@ -419,7 +419,7 @@
             this.LyRecordInCard.FullRowSelect = true;
             this.LyRecordInCard.GridLines = true;
             this.LyRecordInCard.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.LyRecordInCard.Location = new System.Drawing.Point(10, 309);
+            this.LyRecordInCard.Location = new System.Drawing.Point(26, 309);
             this.LyRecordInCard.MultiSelect = false;
             this.LyRecordInCard.Name = "LyRecordInCard";
             this.LyRecordInCard.Size = new System.Drawing.Size(411, 184);
@@ -635,7 +635,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(440, 606);
+            this.ClientSize = new System.Drawing.Size(530, 606);
             this.Controls.Add(this.tabApp);
             this.Controls.Add(this.ContactCard);
             this.Controls.Add(this.Infomation);

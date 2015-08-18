@@ -11,7 +11,7 @@ using ApduInterface;
 
 namespace DaHuaApduCtrl
 {
-    public class DaHuaCardCtrlBase : ICardCtrlBase
+    public class DaHuaCardCtrlBase
     {
         //卡片中初始密钥
         protected static byte[] m_KeyOrg = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
@@ -39,25 +39,7 @@ namespace DaHuaApduCtrl
 
         }
 
-        protected string GetErrString(byte SW1, byte SW2, string strErrCode)
-        {
-            if (SW1 == 0x63 && (byte)(SW2 & 0xF0) == 0xC0)
-            {
-                int nRetry = (int)(SW2&0x0F);
-                return string.Format("认证失败，剩余{0}次机会",nRetry);
-            }
-            else if (SW1 == 0x69 && SW2 == 0x83)
-            {
-                return "认证方法已锁";
-            }
-            else if (SW1 == 0x93 && SW2 == 0x03)
-            {
-                return "应用永久锁定";
-            }
-            return "其他错误：" + strErrCode;
-        }
-
-        protected void SetOrgKeyValue(byte[] byteKey, CardCategory eCategory)
+        public void SetOrgKeyValue(byte[] byteKey, CardCategory eCategory)
         {
             if (byteKey.Length != 16)
                 return;
@@ -129,34 +111,5 @@ namespace DaHuaApduCtrl
             return key;
         }
 
-        //计算过程密钥
-        protected byte[] GetProcessKey(byte[] ASN, byte[] MasterKey, byte[] RandVal, byte[] byteSn)
-        {
-            if (ASN.Length != 8)
-                return null;
-            //过程密钥
-            byte[] SubKey = new byte[16];
-            byte[] encryptAsn = DesCryptography.TripleEncryptData(ASN, MasterKey);
-            byte[] XorASN = new byte[8];
-            for (int i = 0; i < 8; i++)
-                XorASN[i] = (byte)(ASN[i] ^ 0xFF);
-            byte[] encryptXorAsn = DesCryptography.TripleEncryptData(XorASN, MasterKey);
-            Buffer.BlockCopy(encryptAsn, 0, SubKey, 0, 8);
-            Buffer.BlockCopy(encryptXorAsn, 0, SubKey, 8, 8);
-            byte[] byteData = new byte[8];
-            Buffer.BlockCopy(RandVal, 0, byteData, 0, 4);
-            Buffer.BlockCopy(byteSn, 0, byteData, 4, 2);
-            byteData[6] = 0x80;
-            byteData[7] = 0x00;
-            byte[] byteRetKey = DesCryptography.TripleEncryptData(byteData, SubKey);
-            return byteRetKey;
-        }
-
-        protected void StrKeyToByte(string strKey, byte[] byteKey)
-        {
-            byte[] BcdKey = PublicFunc.StringToBCD(strKey);
-            if (BcdKey.Length == 16)
-                Buffer.BlockCopy(BcdKey, 0, byteKey, 0, 16);
-        }
     }
 }

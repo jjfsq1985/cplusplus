@@ -9,11 +9,16 @@ using IFuncPlugin;
 using System.Xml;
 using ApduParam;
 using System.Diagnostics;
+using System.Data.SqlClient;
+using SqlServerHelper;
+using CardControl;
 
 namespace PublishCardOperator
 {
     public partial class ImportKey : Form, IPlugin
     {
+        private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
+
         private int m_nImportAuthority = 0;
 
         public ImportKey()
@@ -43,23 +48,24 @@ namespace PublishCardOperator
         }
 
         public void ShowPluginForm(Panel parent, SqlConnectInfo DbInfo)
-        {            
+        {
+            m_DBInfo = DbInfo;
             //必须，否则不能作为子窗口显示
             this.TopLevel = false;
             this.Parent = parent;
             this.Show();
             this.BringToFront();
-            if (m_nImportAuthority != GrobalVariable.CardPublish_Authority)
+            if ((m_nImportAuthority & GrobalVariable.CardPublish_Authority) != GrobalVariable.CardPublish_Authority)
             {
                 btnXmlPath.Enabled = false;
                 ReadXml.Enabled = false;
-                BtnSave.Enabled = false;                
+                BtnSave.Enabled = false;
             }
         }
 
         public void SetAuthority(int nLoginUserId, int nAuthority)
         {
-            m_nImportAuthority = nAuthority;            
+            m_nImportAuthority = nAuthority;
         }
 
         private void ImportKey_Load(object sender, EventArgs e)
@@ -128,6 +134,199 @@ namespace PublishCardOperator
             Root.AppendChild(node);
 
             xml.Save(strXmlPath);
+
+            if (ReadXml.Checked)
+                MessageBox.Show("配置成功，以后制卡从XML文件读取密钥。");
+            else
+                MessageBox.Show("配置成功，以后制卡从数据库读取密钥。");
+
+            SaveKeyToDB(strXmlPath);
+        }
+
+        //xml配置写入DB数据库
+        private void SaveKeyToDB(string strXmlPath)
+        {
+            //有密钥管理权限则将xml的密钥写入数据库
+            if ((m_nImportAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
+                return;
+            try
+            {
+                CpuKeyData XmlCpuKey = new CpuKeyData();
+                XmlCpuKey.nAppIndex = 1;
+                PsamKeyData XmlPsamKey = new PsamKeyData();
+                if (!GlobalControl.GetXmlCpuKeyVal(strXmlPath, XmlCpuKey) || !GlobalControl.GetXmlPsamKeyVal(strXmlPath, XmlPsamKey))
+                    return;
+                UpdateDbOrgKey(XmlCpuKey.OrgKeyVal, XmlPsamKey.OrgKeyVal, "从XML导入");
+                UpdateDbCpuKey(XmlCpuKey);                
+                UpdateDbPsamKey(XmlPsamKey);
+
+            }
+            catch
+            {
+                MessageBox.Show("XML中的密钥保存至数据库失败。");
+            }
+        }
+
+        private void UpdateDbOrgKey(byte[] UserOrgKey, byte[] PsamOrgKey, string strDescirbe)
+        {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
+            bool bEqual = PublicFunc.ByteDataEquals(UserOrgKey, PsamOrgKey);
+
+            string strBcd = "";
+            SqlParameter[] sqlparams = new SqlParameter[7];
+            sqlparams[0] = ObjSql.MakeParam("KeyId", SqlDbType.Int, 4, ParameterDirection.Input, 0);
+            strBcd = BitConverter.ToString(UserOrgKey).Replace("-", "");
+            sqlparams[1] = ObjSql.MakeParam("OrgKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+            if (!bEqual)
+                sqlparams[2] = ObjSql.MakeParam("KeyType", SqlDbType.Int, 4, ParameterDirection.Input, 0);
+            else
+                sqlparams[2] = ObjSql.MakeParam("KeyType", SqlDbType.Int, 4, ParameterDirection.Input, 2);
+
+            sqlparams[3] = ObjSql.MakeParam("KeyDetail", SqlDbType.NVarChar, 50, ParameterDirection.Input, strDescirbe);
+            sqlparams[4] = ObjSql.MakeParam("KeyState", SqlDbType.Bit, 1, ParameterDirection.Input, true);
+            sqlparams[5] = ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, DbStateFlag.eDbAdd);
+            sqlparams[6] = ObjSql.MakeParam("AddKeyId", SqlDbType.Int, 4, ParameterDirection.Output, null);
+            ObjSql.ExecuteProc("PROC_UpdateOrgKeyRoot", sqlparams);
+
+            if (!bEqual)
+            {
+                strBcd = BitConverter.ToString(PsamOrgKey).Replace("-", "");
+                sqlparams[1] = ObjSql.MakeParam("OrgKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+                sqlparams[2] = ObjSql.MakeParam("KeyType", SqlDbType.Int, 4, ParameterDirection.Input, 1);
+                ObjSql.ExecuteProc("PROC_UpdateOrgKeyRoot", sqlparams);
+            }
+            ObjSql.CloseConnection();
+            ObjSql = null;
+        }
+
+        private void UpdateDbPsamKey(PsamKeyData XmlPsamKey)
+        {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
+            string strBcd = "";
+
+            SqlParameter[] sqlparams = new SqlParameter[12];
+            sqlparams[0] = ObjSql.MakeParam("KeyId", SqlDbType.Int, 4, ParameterDirection.Input, 0);
+
+            strBcd = BitConverter.ToString(XmlPsamKey.MasterKeyVal).Replace("-", "");
+            sqlparams[1] = ObjSql.MakeParam("MasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlPsamKey.MasterTendingKeyVal).Replace("-", "");
+            sqlparams[2] = ObjSql.MakeParam("MasterTendingKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlPsamKey.ApplicationMasterKey).Replace("-", "");
+            sqlparams[3] = ObjSql.MakeParam("AppMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlPsamKey.ApplicationTendingKey).Replace("-", "");
+            sqlparams[4] = ObjSql.MakeParam("AppTendingKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlPsamKey.ConsumerMasterKey).Replace("-", "");
+            sqlparams[5] = ObjSql.MakeParam("ConsumerMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlPsamKey.GrayCardKey).Replace("-", "");
+            sqlparams[6] = ObjSql.MakeParam("GrayCardKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlPsamKey.MacEncryptKey).Replace("-", "");
+            sqlparams[7] = ObjSql.MakeParam("MacEncryptKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            sqlparams[8] = ObjSql.MakeParam("KeyDetail", SqlDbType.NVarChar, 50, ParameterDirection.Input, XmlPsamKey.strDescribe);
+            sqlparams[9] = ObjSql.MakeParam("KeyState", SqlDbType.Bit, 1, ParameterDirection.Input, true);
+            sqlparams[10] = ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, DbStateFlag.eDbAdd);
+            sqlparams[11] = ObjSql.MakeParam("AddKeyId", SqlDbType.Int, 4, ParameterDirection.Output, null);
+            ObjSql.ExecuteProc("PROC_UpdatePsamKey", sqlparams);
+
+            ObjSql.CloseConnection();
+            ObjSql = null;
+        }
+
+        private void UpdateDbCpuKey(CpuKeyData XmlCpuKey)
+        {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
+            string strBcd = "";
+
+            SqlParameter[] sqlparams = new SqlParameter[8];
+            sqlparams[0] = ObjSql.MakeParam("KeyId", SqlDbType.Int, 4, ParameterDirection.Input, 0);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.MasterKeyVal).Replace("-", "");
+            sqlparams[1] = ObjSql.MakeParam("MasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.MasterTendingKeyVal).Replace("-", "");
+            sqlparams[2] = ObjSql.MakeParam("MasterTendingKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            //没有卡片内部认证密钥导入，用全0保存
+            strBcd = "00000000000000000000000000000000";
+            sqlparams[3] = ObjSql.MakeParam("InternalAuthKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+            
+            sqlparams[4] = ObjSql.MakeParam("KeyDetail", SqlDbType.NVarChar, 50, ParameterDirection.Input, XmlCpuKey.strDescribe);
+            sqlparams[5] = ObjSql.MakeParam("KeyState", SqlDbType.Bit, 1, ParameterDirection.Input, true);
+            sqlparams[6] = ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, DbStateFlag.eDbAdd);
+            sqlparams[7] = ObjSql.MakeParam("AddKeyId", SqlDbType.Int, 4, ParameterDirection.Output, null);
+            if (ObjSql.ExecuteProc("PROC_UpdateCpuKey", sqlparams) == 0)
+            {
+                UpdateDbCpuAppKeyValue(ObjSql, XmlCpuKey, (int)sqlparams[7].Value);
+            }
+
+            ObjSql.CloseConnection();
+            ObjSql = null;
+        }
+
+        private void UpdateDbCpuAppKeyValue(SqlHelper ObjSql, CpuKeyData XmlCpuKey, int nRelatedKeyId)
+        {
+            string strBcd = "";
+            SqlParameter[] sqlparams = new SqlParameter[14];
+            sqlparams[0] = ObjSql.MakeParam("RelatedKeyId", SqlDbType.Int, 4, ParameterDirection.Input, nRelatedKeyId);
+            sqlparams[1] = ObjSql.MakeParam("AppIndex", SqlDbType.Int, 4, ParameterDirection.Input, XmlCpuKey.nAppIndex);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppMasterKey).Replace("-", "");
+            sqlparams[2] = ObjSql.MakeParam("AppMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppTendingKey).Replace("-", "");
+            sqlparams[3] = ObjSql.MakeParam("AppTendingKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppInternalAuthKey).Replace("-", "");
+            sqlparams[4] = ObjSql.MakeParam("AppAuthKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppPinResetKey).Replace("-", "");
+            sqlparams[5] = ObjSql.MakeParam("PinResetKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppPinUnlockKey).Replace("-", "");
+            sqlparams[6] = ObjSql.MakeParam("PinUnlockKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppConsumerKey).Replace("-", "");
+            sqlparams[7] = ObjSql.MakeParam("ConsumerMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppLoadKey).Replace("-", "");
+            sqlparams[8] = ObjSql.MakeParam("LoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppTacKey).Replace("-", "");
+            sqlparams[9] = ObjSql.MakeParam("TacMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppUnGrayKey).Replace("-", "");
+            sqlparams[10] = ObjSql.MakeParam("UnGrayKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppUnLoadKey).Replace("-", "");
+            sqlparams[11] = ObjSql.MakeParam("UnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            strBcd = BitConverter.ToString(XmlCpuKey.AppOverdraftKey).Replace("-", "");
+            sqlparams[12] = ObjSql.MakeParam("OvertraftKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            sqlparams[13] = ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, DbStateFlag.eDbAdd);
+
+            ObjSql.ExecuteProc("PROC_UpdateCpuAppKey", sqlparams);
         }
 
     }

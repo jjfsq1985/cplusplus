@@ -5,7 +5,7 @@ using ApduParam;
 
 namespace ApduInterface
 {
-    public interface IUserCardControl : ICardCtrlBase
+    public interface IUserCardControl
     {
         event MessageOutput TextOutput;
 
@@ -32,24 +32,24 @@ namespace ApduInterface
         int VerifyUserPin(string strPIN);        
         
         //金额圈存
-        bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKeyFromDb);  
+        bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKey);  
       
         //积分圈存
-        bool LoyaltyLoad(byte[] ASN, byte[] TermId, int nLoyaltyValue, bool bReadKeyFromDb);
+        bool LoyaltyLoad(byte[] ASN, byte[] TermId, int nLoyaltyValue, bool bReadKey);
 
-        bool UserCardUnLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKeyFromDb);
+        bool UserCardUnLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKey);
 
         bool UserCardBalance(ref double dbBalance);        
 
-        bool UserCardGray(ref int nStatus, byte[] TerminalId);
+        bool UserCardGray(ref int nStatus, byte[] PSAM_TID,byte[] GTAC);
 
         bool InitForGray(byte[] TermialID, byte[] outData);        
                 
         bool GrayLock(byte[] Data, byte[] outGTAC, byte[] outMAC2);        
                 
-        bool InitForUnlockGreyCard(byte[] TermialID, byte[] outData);        
-                
-        bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney, bool bReadKeyFromDb);
+        bool InitForUnlockGreyCard(byte[] TermialID, byte[] outData);
+
+        bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney, bool bReadKey);
         
         bool DebitForUnlock(byte[] byteData);        
 
@@ -57,7 +57,7 @@ namespace ApduInterface
 
         int ReadKeyValueFromSource();        
 
-        bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar);
+        bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar);        
 
         bool UpdateCardInfoToDb(UserCardInfoParam UserCardInfoPar);        
 

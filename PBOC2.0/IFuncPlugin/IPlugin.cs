@@ -53,6 +53,34 @@ namespace IFuncPlugin
                 return null;
             }
         }
+
+        public static string GetCardTypeString(byte CardType)
+        {
+            string strCardType = "";
+            switch (CardType)
+            {
+                case 0x01:
+                    strCardType = "个人卡";
+                    break;
+                case 0x02:
+                    strCardType = "管理卡";
+                    break;
+                case 0x04:
+                    strCardType = "员工卡";
+                    break;
+                case 0x06:
+                    strCardType = "维修卡";
+                    break;
+                case 0x11:
+                    strCardType = "单位子卡";
+                    break;
+                case 0x21:
+                    strCardType = "单位母卡";
+                    break;
+            }
+            return strCardType;
+        }
+
     }
 
     public class GrobalVariable

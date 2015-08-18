@@ -72,7 +72,7 @@ CREATE PROCEDURE PROC_UpdatePsamKey(
 		begin tran maintran
 		update Key_PsamCard set MasterKey = @MasterKey,
 							MasterTendingKey=@MasterTendingKey,
-							ApplicatonMasterKey = @AppMasterKey,
+							ApplicationMasterKey = @AppMasterKey,
 							ApplicationTendingKey = @AppTendingKey,
 							ConsumerMasterKey = @ConsumerMasterKey,
 							GrayCardKey = @GrayCardKey,

@@ -60,7 +60,7 @@ namespace PublishCardOperator
             Trace.Assert(nAuthority == GrobalVariable.CardOp_KeyManage_Authority); //必然有密钥管理权限           
         }
 
-        private void ReadOrgKey(XmlDocument xml, XmlElement rootNode, SqlHelper ObjSql, string strName, int nType, byte[] encryptkey)
+        private void OrgKeyToXml(XmlDocument xml, XmlElement rootNode, SqlHelper ObjSql, string strName, int nType, byte[] encryptkey)
         {
             SqlDataReader dataReader = null;
             SqlParameter[] KeyType = new SqlParameter[1];
@@ -116,8 +116,8 @@ namespace PublishCardOperator
             Buffer.BlockCopy(Left, 0, EncryptKey, 0, 8);
             Buffer.BlockCopy(Right, 0, EncryptKey, 8, 8);
 
-            ReadOrgKey(xml, Root, m_ObjSql, "UserOrgKey", 0, EncryptKey);
-            ReadOrgKey(xml, Root, m_ObjSql, "PsamOrgKey", 1, EncryptKey);
+            OrgKeyToXml(xml, Root, m_ObjSql, "UserOrgKey", 0, EncryptKey);
+            OrgKeyToXml(xml, Root, m_ObjSql, "PsamOrgKey", 1, EncryptKey);
 
             SqlDataReader dataReader = null;
 
@@ -144,17 +144,17 @@ namespace PublishCardOperator
 
                     KeyToXmlNode(dataReader,xml, CpuKeyRoot, "MasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "MasterTendingKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "ApplicatonMasterKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "ApplicationTendingKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppInternalAuthKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "PINResetKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "PINUnlockKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "ConsumerMasterKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "LoadKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "TacMasterKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "UnGrayKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "UnLoadKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "OverdraftKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppMasterKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppTendingKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppAuthKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppPinResetKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppPinUnlockKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppConsumerKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppLoadKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppTacKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppUnGrayKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppUnLoadKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppOverdraftKey", EncryptKey);
 
                     Root.AppendChild(CpuKeyRoot);
                 }
@@ -177,7 +177,7 @@ namespace PublishCardOperator
 
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "MasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "MasterTendingKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, PsamKeyRoot, "ApplicatonMasterKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, PsamKeyRoot, "ApplicationMasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "ApplicationTendingKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "ConsumerMasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "GrayCardKey", EncryptKey);

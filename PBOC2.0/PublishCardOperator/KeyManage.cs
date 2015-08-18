@@ -101,7 +101,7 @@ namespace PublishCardOperator
             AppKeyGridView.Columns.Add("AppIndex", "应用号");
             AppKeyGridView.Columns.Add("AppMasterKey", "应用主控密钥");
             AppKeyGridView.Columns.Add("AppTendingKey", "应用维护密钥");
-            AppKeyGridView.Columns.Add("AppInternalAuthKey", "应用内部认证\n密钥");
+            AppKeyGridView.Columns.Add("AppAuthKey", "应用内部认证\n密钥");
             AppKeyGridView.Columns.Add("AppPinResetKey", "PIN密码重装\n密钥");
             AppKeyGridView.Columns.Add("AppPinUnlockKey", "PIN解锁密钥");
             AppKeyGridView.Columns.Add("ConsumerMasterKey", "消费主密钥");
@@ -260,17 +260,17 @@ namespace PublishCardOperator
                         AppKeyValueGroup keyval = new AppKeyValueGroup();
                         keyval.eDbFlag = DbStateFlag.eDbOK;
                         keyval.AppIndex = (int)dataReader["ApplicationIndex"];
-                        FillKeyValue(dataReader, keyval.AppMasterKey, "ApplicatonMasterKey");
-                        FillKeyValue(dataReader, keyval.AppTendingKey, "ApplicationTendingKey");
-                        FillKeyValue(dataReader, keyval.AppInternalAuthKey, "AppInternalAuthKey");
-                        FillKeyValue(dataReader, keyval.PINResetKey, "PINResetKey");
-                        FillKeyValue(dataReader, keyval.PINUnlockKey, "PINUnlockKey");
-                        FillKeyValue(dataReader, keyval.ConsumerMasterKey, "ConsumerMasterKey");
-                        FillKeyValue(dataReader, keyval.LoadKey, "LoadKey");
-                        FillKeyValue(dataReader, keyval.TacMasterKey, "TacMasterKey");
-                        FillKeyValue(dataReader, keyval.UnGrayKey, "UnGrayKey");
-                        FillKeyValue(dataReader, keyval.UnLoadKey, "UnLoadKey");
-                        FillKeyValue(dataReader, keyval.OverdraftKey, "OverdraftKey");
+                        FillKeyValue(dataReader, keyval.AppMasterKey, "AppMasterKey");
+                        FillKeyValue(dataReader, keyval.AppTendingKey, "AppTendingKey");
+                        FillKeyValue(dataReader, keyval.AppInternalAuthKey, "AppAuthKey");
+                        FillKeyValue(dataReader, keyval.PINResetKey, "AppPinResetKey");
+                        FillKeyValue(dataReader, keyval.PINUnlockKey, "AppPinUnlockKey");
+                        FillKeyValue(dataReader, keyval.ConsumerMasterKey, "AppConsumerKey");
+                        FillKeyValue(dataReader, keyval.LoadKey, "AppLoadKey");
+                        FillKeyValue(dataReader, keyval.TacMasterKey, "AppTacKey");
+                        FillKeyValue(dataReader, keyval.UnGrayKey, "AppUnGrayKey");
+                        FillKeyValue(dataReader, keyval.UnLoadKey, "AppUnLoadKey");
+                        FillKeyValue(dataReader, keyval.OverdraftKey, "AppOverdraftKey");
                         lstAppKey.Add(keyval);
                     }
                 }
@@ -936,7 +936,7 @@ namespace PublishCardOperator
                         sqlparams[3] = m_ObjSql.MakeParam("AppTendingKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
                         strBcd = BitConverter.ToString(AppKey.AppInternalAuthKey).Replace("-", "");
-                        sqlparams[4] = m_ObjSql.MakeParam("AppInternalAuthKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+                        sqlparams[4] = m_ObjSql.MakeParam("AppAuthKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
                         strBcd = BitConverter.ToString(AppKey.PINResetKey).Replace("-", "");
                         sqlparams[5] = m_ObjSql.MakeParam("PinResetKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);

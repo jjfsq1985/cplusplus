@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IApduBase.cs" />
-    <Compile Include="ICardCtrlBase.cs" />
     <Compile Include="ISamCardControl.cs" />
     <Compile Include="IUserCardControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

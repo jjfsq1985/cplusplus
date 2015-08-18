@@ -16,6 +16,7 @@ CREATE TABLE [dbo].[Base_Card](
 	[CardType] [varchar](2) NOT NULL,
 	[ClientId] int NOT NULL,
 	[CardState] [int] NOT NULL,
+	[RelatedMotherCard] [char](16) NULL,
 	[UseValidateDate] [datetime] NULL,
 	[UseInvalidateDate] [datetime] NULL,
 	[Plate] [nvarchar](16) NULL,
@@ -62,6 +63,7 @@ CREATE TABLE [dbo].[Base_Card_Key](
 	[MasterKey] [char](32) NOT NULL,
 	[ApplicationIndex] [int] NOT NULL,
 	[AppTendingKey] [char](32) NULL,
+	[AppConsumerKey] [char](32) NULL,
 	[AppLoadKey] [char] (32) NULL,
 	[AppUnLoadKey] [char] (32) NULL,	
 	[AppUnGrayKey] [char](32) NULL,
@@ -84,6 +86,9 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'所属单位' , @l
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'卡状态（0-正常，1-挂失，2-已办理补卡，3-已退卡）' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card', @level2type=N'COLUMN',@level2name=N'CardState'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'子卡关联的母卡卡号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card', @level2type=N'COLUMN',@level2name=N'RelatedMotherCard'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'卡生效日期' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card', @level2type=N'COLUMN',@level2name=N'UseValidateDate'
@@ -197,6 +202,9 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用号' , @lev
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用维护密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card_Key', @level2type=N'COLUMN',@level2name=N'AppTendingKey'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用消费密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card_Key', @level2type=N'COLUMN',@level2name=N'AppConsumerKey'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用圈存密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card_Key', @level2type=N'COLUMN',@level2name=N'AppLoadKey'

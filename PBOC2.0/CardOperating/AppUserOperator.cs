@@ -26,9 +26,11 @@ namespace CardOperating
 
         private UserCardInfoParam m_CardInfoPar = new UserCardInfoParam();
         private IUserCardControl m_UserCardCtrl = null;
-        private readonly byte[] m_FixedTermialId = new byte[] { 0x20, 0x15, 0x01, 0x01, 0x00, 0x01 };  //固定的终端机设备编号
+        private readonly byte[] m_FixedTermialId = new byte[] { 0x14, 0x32, 0x00, 0x00, 0x00, 0x01 };  //固定的终端机设备编号
 
         private static byte[] m_TermialId = new byte[6];            //终端机设备编号
+        private static byte[] m_GTAC = new byte[4];    //灰锁时的GTAC
+
         private static byte[] m_ASN = new byte[8];//用户卡卡号
         private static string m_strPIN = "999999";//由用户输入
 
@@ -483,6 +485,7 @@ namespace CardOperating
                 ObjSql = null;
                 return;
             }
+            bool bHaveRecordInDb = false;
             SqlParameter[] sqlparams = new SqlParameter[1];
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
 
@@ -492,6 +495,7 @@ namespace CardOperating
             {
                 if (dataReader.HasRows && dataReader.Read())
                 {
+                    bHaveRecordInDb = true;
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("ClientId")))
                         CardInfo.ClientID = (int)dataReader["ClientId"];
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("DriverTel")))
@@ -499,13 +503,19 @@ namespace CardOperating
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("SelfId")))
                         CardInfo.SelfId = (string)dataReader["SelfId"];
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("Remark")))
-                        CardInfo.Remark = (string)dataReader["Remark"];                    
-
+                        CardInfo.Remark = (string)dataReader["Remark"];
                 }
                 dataReader.Close();
             }
             ObjSql.CloseConnection();
             ObjSql = null;
+            if (!bHaveRecordInDb)
+            {
+                if (MessageBox.Show("无此卡号的发卡记录，是否增加？", "发卡", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    m_UserCardCtrl.SaveCpuCardInfoToDb(CardInfo);
+                }
+            }
         }
 
         private int GetLimitGasTypeIndex(ushort LimitGasType)
@@ -864,23 +874,44 @@ namespace CardOperating
                 return;
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
+            decimal MoneyLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
+            double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
             byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
             if (ASN == null)
             {
                 MessageBox.Show("未读到卡号");
                 return;
             }
+            else if (ASN[3] == 0x02)
+            {
+                MessageBox.Show("管理卡不能圈存", "卡充值",MessageBoxButtons.OK);
+                return;
+            }
+            else if (ASN[3] == 0x06)
+            {
+                MessageBox.Show("维修卡不能圈存", "卡充值", MessageBoxButtons.OK);
+                return;
+            }
+            else
+            {
+                string strCardType = PublicFunc.GetCardTypeString(ASN[3]);
+                string strTemp = "圈存";
+                if (ASN[3] == 0x21)
+                    strTemp = "充值";
+
+                string strMsg = "确实要对" + strCardType + BitConverter.ToString(ASN).Replace("-", "") + strTemp + dbMoneyLoad.ToString("F2") + "元吗？";
+                if (MessageBox.Show(strMsg, "卡充值", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    return;
+                }
+            }
             Buffer.BlockCopy(ASN, 0, m_ASN, 0, 8);
-            decimal MoneyLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
-            double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
             int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
             if (nRet == 1)
             {
                 byte[] TerminalId = new byte[6];
-                if (PublicFunc.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
-                    Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
-                else
-                    Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
+                //使用固定终端机编号圈存
+                Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
 
                 double dbBalance = 0.0;
                 if (m_UserCardCtrl.UserCardBalance(ref dbBalance))//圈存前读余额
@@ -889,7 +920,7 @@ namespace CardOperating
                     {
                         //写圈存数据库记录
                         SaveLoadRecord(dbMoneyLoad, dbBalance);
-                        string strInfo = string.Format("成功对卡号{0}圈存{1}元.", BitConverter.ToString(m_ASN), dbMoneyLoad.ToString("F2"));
+                        string strInfo = string.Format("成功对卡号{0}圈存{1}元.", BitConverter.ToString(m_ASN).Replace("-",""), dbMoneyLoad.ToString("F2"));
                         MessageBox.Show(strInfo);
                     }
                     else
@@ -937,14 +968,14 @@ namespace CardOperating
                 m_bGray = false;
                 //未灰锁时终端机编号输出为0
                 int nCardStatus = 0;
-                if (m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId))
+                if (m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId, m_GTAC))
                 {
                     if (nCardStatus == 2)
                     {
                         //当前TAC未读，需要清空后重读
                         m_UserCardCtrl.ClearTACUF();
                         nCardStatus = 0;
-                        m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId);
+                        m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId, m_GTAC);
                         m_bGray = nCardStatus == 1 ? true : false;
                     }
                     else
@@ -996,17 +1027,23 @@ namespace CardOperating
                 return;
             }
             Buffer.BlockCopy(ASN, 0, m_ASN, 0, 8);
+
+            //获取数据库灰卡记录和终端机编号
+            GrayCardInfo GrayInfo = new GrayCardInfo();
+            if (!GetCardGrayRecord(m_ASN, m_TermialId, m_GTAC, GrayInfo))
+            {
+                MessageBox.Show("没有此卡的灰卡记录。");
+                return;
+            }
+
             int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
             if (nRet == 1)
             {
-                byte[] TerminalId = new byte[6];
-                if (PublicFunc.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
-                    Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
-                else
-                    Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
-                const double BusinessMoney = 0.0;//强制联机解灰 0 扣款
-                if(m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0),true))
+                if (m_UserCardCtrl.UnLockGrayCard(m_ASN, m_TermialId, (int)(GrayInfo.Money * 100.0), true))
+                {
                     m_bGray = false;
+                    SaveUnGrayRecord(GrayInfo);
+                }
             }
             else if (nRet == 2)
             {
@@ -1315,6 +1352,83 @@ namespace CardOperating
         private void AppUserOperator_FormClosing(object sender, FormClosingEventArgs e)
         {
             CloseDevice();
+        }
+
+        private void SaveUnGrayRecord(GrayCardInfo GrayInfo)
+        {
+            string strCardId = BitConverter.ToString(GrayInfo.ASN).Replace("-", "");
+            string strStationNo = BitConverter.ToString(GrayInfo.StationNo).Replace("-", "");            
+
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
+            SqlParameter[] sqlparams = new SqlParameter[10];
+            sqlparams[0] = ObjSql.MakeParam("StationNo", SqlDbType.Char, 8, ParameterDirection.Input, strStationNo);
+            sqlparams[1] = ObjSql.MakeParam("GunNo", SqlDbType.Int, 4, ParameterDirection.Input, GrayInfo.GunNo);
+            sqlparams[0] = ObjSql.MakeParam("CardNo", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
+            sqlparams[1] = ObjSql.MakeParam("TradeDateTime", SqlDbType.DateTime, 8, ParameterDirection.Input, GrayInfo.ConsumerTime);
+            sqlparams[2] = ObjSql.MakeParam("GrayPrice", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(GrayInfo.Price));
+            sqlparams[2] = ObjSql.MakeParam("GrayGas", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(GrayInfo.Gas));
+            sqlparams[3] = ObjSql.MakeParam("GrayMoney", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(GrayInfo.Money));
+            sqlparams[3] = ObjSql.MakeParam("ResidualAmount", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(GrayInfo.ResidualAmount));
+            sqlparams[5] = ObjSql.MakeParam("Operator", SqlDbType.Int, 4, ParameterDirection.Input, m_nLoginUserId);
+            sqlparams[6] = ObjSql.MakeParam("OperateTime", SqlDbType.DateTime, 8, ParameterDirection.Input, DateTime.Now);
+
+
+            ObjSql.ExecuteCommand("insert into Data_GreyCardRecord values(@StationNo,@GunNo,@CardNo,@TradeDateTime,@GrayPrice,@GrayGas,@GrayMoney,@ResidualAmount,@Operator,@OperateTime)", sqlparams);
+
+            ObjSql.CloseConnection();
+            ObjSql = null;
+        }
+
+        private bool GetCardGrayRecord(byte[] ASN, byte[] PSAM_TID, byte[] GTAC, GrayCardInfo GrayCardInfoInDb)
+        {
+            string strCardId = BitConverter.ToString(ASN).Replace("-", "");
+            string strTerminalId = BitConverter.ToString(PSAM_TID).Replace("-", "");
+            string strGTAC = BitConverter.ToString(GTAC).Replace("-", "");
+
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return false;
+            }
+
+            SqlParameter[] sqlparams = new SqlParameter[10];
+            sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
+            sqlparams[1] = ObjSql.MakeParam("PSAM_TID", SqlDbType.Char, 12, ParameterDirection.Input, strTerminalId);
+            sqlparams[2] = ObjSql.MakeParam("GTAC", SqlDbType.Char, 8, ParameterDirection.Input, strGTAC);
+
+            sqlparams[3] = ObjSql.MakeParam("StationNo", SqlDbType.Char, 8, ParameterDirection.Output, null);
+            sqlparams[4] = ObjSql.MakeParam("GunNo", SqlDbType.Int, 4, ParameterDirection.Output, null);
+            sqlparams[5] = ObjSql.MakeParam("ConsumerTime", SqlDbType.DateTime, 8, ParameterDirection.Output, null);
+            sqlparams[6] = ObjSql.MakeParam("Price", SqlDbType.Decimal, 16, ParameterDirection.Output, null);
+            sqlparams[7] = ObjSql.MakeParam("Gas", SqlDbType.Decimal, 16, ParameterDirection.Output, null);
+            sqlparams[8] = ObjSql.MakeParam("Money", SqlDbType.Decimal, 16, ParameterDirection.Output, null);
+            sqlparams[9] = ObjSql.MakeParam("ResidualAmount", SqlDbType.Decimal, 16, ParameterDirection.Output, null);
+
+            if (ObjSql.ExecuteProc("PROC_GetGrayRecord", sqlparams) != 0)
+            {
+                ObjSql.CloseConnection();
+                ObjSql = null;
+                return false;
+            }            
+            byte[] data = null;
+            Buffer.BlockCopy(ASN, 0, GrayCardInfoInDb.ASN, 0, 8);
+            data = PublicFunc.StringToBCD((string)sqlparams[3].Value);
+            Buffer.BlockCopy(data, 0, GrayCardInfoInDb.StationNo, 0, 4);
+            GrayCardInfoInDb.GunNo = (int)sqlparams[4].Value;
+            GrayCardInfoInDb.ConsumerTime = (DateTime)sqlparams[5].Value;
+            GrayCardInfoInDb.Price = decimal.ToDouble((decimal)sqlparams[6].Value);
+            GrayCardInfoInDb.Gas = decimal.ToDouble((decimal)sqlparams[7].Value);
+            GrayCardInfoInDb.Money = decimal.ToDouble((decimal)sqlparams[8].Value);
+            GrayCardInfoInDb.ResidualAmount = decimal.ToDouble((decimal)sqlparams[9].Value);
+            ObjSql.CloseConnection();
+            ObjSql = null;
+            return true;
         }
     }
 }

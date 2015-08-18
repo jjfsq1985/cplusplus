@@ -39,12 +39,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardControl.cs" />
     <Compile Include="CardInfoParam.cs" />
     <Compile Include="DesCryptography.cs" />
+    <Compile Include="GrayCardInfo.cs" />
     <Compile Include="IccCardInfoParam.cs" />
     <Compile Include="MsgOutEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageKeyParam.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IFuncPlugin\IFuncPlugin.csproj">
+      <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
+      <Name>IFuncPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlServerHelper\SqlServerHelper.csproj">
+      <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
+      <Name>SqlServerHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

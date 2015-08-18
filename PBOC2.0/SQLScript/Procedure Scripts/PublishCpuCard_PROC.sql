@@ -47,20 +47,15 @@ CREATE PROCEDURE PROC_PublishCpuCard(
 	@CylinderNum int, --钢瓶数量
 	@FactoryNum char(7), --钢瓶生产厂家编号
 	@CylinderVolume int, --钢瓶容积
-	@BusDistance varchar(10) --公交路数
+	@BusDistance varchar(10), --公交路数
+	@UserKeyGuid uniqueidentifier,   --密钥信息的GUID
+	@RelatedMotherCard char(16) --子卡关联的母卡卡号
 	) With Encryption
  AS    
-	declare @CpuKeyId int  --cpu卡密钥编号
-	declare @OrgKeyId int
-	declare @OrgKey char(32)
-	declare @MasterKey char(32)
-	
 	declare @SrcKeyGuid  uniqueidentifier
 	
     declare @curTime datetime --时间
     set @curTime = GETDATE()
-    declare @KeyGuid uniqueidentifier
-	set @KeyGuid=newid()
 	--如果外部存在事务则不执行存储过程
 	if (@@trancount<>0)
 		return 1
@@ -77,23 +72,17 @@ CREATE PROCEDURE PROC_PublishCpuCard(
 begin
 		--开始事务
 		begin tran maintran
-		insert into Base_Card values(@CardId,@CardType,@ClientId,0,@UseValidateDate,@UseInvalidateDate,
+		insert into Base_Card values(@CardId,@CardType,@ClientId,0,@RelatedMotherCard,@UseValidateDate,@UseInvalidateDate,
 									@Plate,@SelfId,@CertificatesType,@PersonalId,@DriverName,@DriverTel,
 									@VechileCategory,@SteelCylinderId,@CylinderTestDate,@Remark,
 									0,0,0,0,0,@R_OilTimesADay,@R_OilVolATime,@R_OilVolTotal,@R_OilEndDate,
-									@R_Plate,@R_Oil,@R_RFID,@CylinderNum,@FactoryNum,@CylinderVolume,@BusDistance,'0',@curTime,@KeyGuid,0);
+									@R_Plate,@R_Oil,@R_RFID,@CylinderNum,@FactoryNum,@CylinderVolume,@BusDistance,'0',@curTime,@UserKeyGuid,0);		
 		if(@@ERROR <> 0)
 			begin
 		    rollback tran maintran
 		    return 3
 		    end	
-		select @OrgKeyId = OrgKeyId,@CpuKeyId = UseKeyID from Config_SysParams; --从配置中获取当前有效的密钥号
-		select @OrgKey = OrgKey from Key_OrgRoot where KeyId = @OrgKeyId and KeyType <> 1;
-		select @MasterKey = MasterKey from Key_CpuCard where KeyId = @CpuKeyId;
-		insert into Base_Card_Key select @KeyGuid,@OrgKey,@MasterKey,
-					ApplicationIndex,ApplicationTendingKey,LoadKey,UnLoadKey,
-					UnGrayKey,PINUnlockKey,PINResetKey from Key_CARD_ADF where RelatedKeyId = @CpuKeyId;
-	commit tran miantran
+		commit tran miantran
 end
 	return 0
 GO

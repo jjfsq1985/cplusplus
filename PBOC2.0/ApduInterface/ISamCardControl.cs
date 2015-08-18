@@ -5,7 +5,7 @@ using ApduParam;
 
 namespace ApduInterface
 {
-    public interface ISamCardControl : ICardCtrlBase
+    public interface ISamCardControl
     {
         event MessageOutput TextOutput;
 

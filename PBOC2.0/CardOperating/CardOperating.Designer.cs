@@ -308,7 +308,7 @@
             // 
             this.CardInfoPanel.Location = new System.Drawing.Point(518, 10);
             this.CardInfoPanel.Name = "CardInfoPanel";
-            this.CardInfoPanel.Size = new System.Drawing.Size(442, 610);
+            this.CardInfoPanel.Size = new System.Drawing.Size(560, 610);
             this.CardInfoPanel.TabIndex = 9;
             this.CardInfoPanel.Visible = false;
             // 
@@ -338,7 +338,7 @@
             // CardOperating
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(517, 621);
+            this.ClientSize = new System.Drawing.Size(518, 632);
             this.Controls.Add(this.cmbDevType);
             this.Controls.Add(this.btnMethod);
             this.Controls.Add(this.CardInfoPanel);

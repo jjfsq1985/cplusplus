@@ -4,6 +4,13 @@ using System.Text;
 
 namespace ApduInterface
 {
+    //卡片种类
+    public enum CardCategory
+    {
+        CpuCard = 0,  //CPU卡
+        PsamCard  //PSAM卡
+    }
+
     public interface IApduBase
     {
         byte[] GetOutputCmd();

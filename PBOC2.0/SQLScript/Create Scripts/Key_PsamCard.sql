@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[Key_PsamCard](
 	[KeyId] [int] IDENTITY(1,1) NOT NULL,
 	[MasterKey] [char](32) NOT NULL,
 	[MasterTendingKey] [char](32) NOT NULL,
-	[ApplicatonMasterKey] [char](32) NOT NULL,
+	[ApplicationMasterKey] [char](32) NOT NULL,
 	[ApplicationTendingKey] [char](32) NOT NULL,
 	[ConsumerMasterKey] [char](32) NOT NULL,
 	[GrayCardKey] [char](32) NOT NULL,
@@ -41,7 +41,7 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'卡片维护密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_PsamCard', @level2type=N'COLUMN',@level2name=N'MasterTendingKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用主控密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_PsamCard', @level2type=N'COLUMN',@level2name=N'ApplicatonMasterKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用主控密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_PsamCard', @level2type=N'COLUMN',@level2name=N'ApplicationMasterKey'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用维护密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_PsamCard', @level2type=N'COLUMN',@level2name=N'ApplicationTendingKey'

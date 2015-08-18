@@ -415,7 +415,7 @@ namespace FNTMain
             Type t = KeyImportObj.GetType();
             MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
             MethodInfo SetAuthority = t.GetMethod("SetAuthority");
-            SetAuthority.Invoke(KeyImportObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardPublish_Authority) });
+            SetAuthority.Invoke(KeyImportObj, new object[] { m_nLoginID, m_nLoginAuthority });
             ShowPluginForm.Invoke(KeyImportObj, new object[] { MainPanel, m_dbConnectInfo });
         }
 
@@ -741,33 +741,6 @@ namespace FNTMain
             }
         }
 
-        private string GetCardTypeString(byte CardType)
-        {
-            string strCardType = "";
-            switch (CardType)
-            {
-                case 0x01:
-                    strCardType = "个人卡";
-                    break;
-                case 0x02:
-                    strCardType = "管理卡";
-                    break;
-                case 0x04:
-                    strCardType = "员工卡";
-                    break;
-                case 0x06:
-                    strCardType = "维修卡";                    
-                    break;
-                case 0x11:
-                    strCardType = "单位子卡";
-                    break;
-                case 0x21:
-                    strCardType = "单位母卡";
-                    break;
-            }
-            return strCardType;
-        }
-
         private string GetClientName(int nClientID)
         {
             string strRet = "";
@@ -854,7 +827,7 @@ namespace FNTMain
                     while (dataReader.Read())
                     {
                         ListViewItem ItemCard = new ListViewItem();
-                        string strCardType = GetCardTypeString(Convert.ToByte((string)dataReader["CardType"], 16));
+                        string strCardType = PublicFunc.GetCardTypeString(Convert.ToByte((string)dataReader["CardType"], 16));
                         ItemCard.SubItems.Add(strCardType);
                         string strClientName = GetClientName((int)dataReader["ClientId"]);
                         ItemCard.SubItems.Add(strClientName);
@@ -961,7 +934,7 @@ namespace FNTMain
                     while (dataReader.Read())
                     {
                         ListViewItem ItemCard = new ListViewItem();
-                        string strCardType = GetCardTypeString(Convert.ToByte((string)dataReader["CardType"], 16));
+                        string strCardType = PublicFunc.GetCardTypeString(Convert.ToByte((string)dataReader["CardType"], 16));
                         ItemCard.SubItems.Add(strCardType);
                         ItemCard.SubItems.Add(strClientName);//ID相同的名称一致
                         DateTime DateStart = (DateTime)dataReader["UseValidateDate"];

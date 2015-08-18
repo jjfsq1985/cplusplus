@@ -11,6 +11,7 @@ using ApduInterface;
 using ApduCtrl;
 using System.Windows.Forms;
 using System.Xml;
+using CardControl;
 
 namespace DaHuaApduCtrl
 {
@@ -154,7 +155,7 @@ namespace DaHuaApduCtrl
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                 {
-                    string strErr = GetErrString(RecvData[nRecvLen - 2], RecvData[nRecvLen - 1], strData);
+                    string strErr = GlobalControl.GetErrString(RecvData[nRecvLen - 2], RecvData[nRecvLen - 1], strData);
                     OnTextOutput(new MsgOutEvent(0, " 外部认证错误：" + strErr));
                     return false;
                 }
@@ -265,9 +266,9 @@ namespace DaHuaApduCtrl
                 if (SelectFile(m_strPSE, null))
                 {
                     if (!ExternalAuthentication(bMainKey))
-                        return 2;
+                        return 4;
                     if (!DeleteMF(bMainKey))
-                        return 3;
+                        return 5;
                 }
             }
             return 0;
@@ -712,44 +713,50 @@ namespace DaHuaApduCtrl
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
-            //TAC主密钥MTK
-            KeyInfo = new StorageKeyParam("安装TAC主密钥", 0x05, 0x42, 0x01, 0xFF, 0x00);
-            KeyInfo.SetParam(byteASN, m_MTK, m_KeyOrg);
-            KeyInfo.SetDiversify(keyDiversify);
-            if (!storageUserKey(KeyInfo))
-                return false;
-            //圈提主密钥MULK
-            KeyInfo = new StorageKeyParam("安装圈提主密钥", 0x06, 0x46, 0x01, 0xFF, 0x00);
+            //圈提密钥MULK
+            KeyInfo = new StorageKeyParam("安装圈提密钥", 0x04, 0x46, 0x01, 0xFF, 0x00);
             KeyInfo.SetParam(byteASN, m_MULK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
+            //TAC主密钥MTK
+            KeyInfo = new StorageKeyParam("安装TAC密钥", 0x05, 0x42, 0x01, 0xFF, 0x00);
+            KeyInfo.SetParam(byteASN, m_MTK, m_KeyOrg);
+            KeyInfo.SetDiversify(keyDiversify);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //解扣主密钥MUGK
+            KeyInfo = new StorageKeyParam("安装联机解扣密钥", 0x06, 0x46, 0x01, 0xFF, 0x00);
+            KeyInfo.SetParam(byteASN, m_MUGK, m_KeyOrg);
+            KeyInfo.SetDiversify(keyDiversify);
+            if (!storageUserKey(KeyInfo))
+                return false;
             //透支限额主密钥MUK
-            KeyInfo = new StorageKeyParam("安装透支限额主密钥", 0x07, 0x47, 0x01, 0xFF, 0x00);
+            KeyInfo = new StorageKeyParam("安装透支限额密钥", 0x07, 0x47, 0x01, 0xFF, 0x00);
             KeyInfo.SetParam(byteASN, m_MUK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //PIN解锁主密钥MPUK
-            KeyInfo = new StorageKeyParam("安装PIN解锁主密钥", 0x08, 0x43, 0x01, 0xFF, 0x00);
+            KeyInfo = new StorageKeyParam("安装PIN解锁密钥", 0x08, 0x43, 0x01, 0xFF, 0x00);
             KeyInfo.SetParam(byteASN, m_MPUK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //PIN重装主密钥MRPK
-            KeyInfo = new StorageKeyParam("安装PIN重装主密钥", 0x09, 0x44, 0x01, 0xFF, 0x00);
+            KeyInfo = new StorageKeyParam("安装PIN重装密钥", 0x09, 0x44, 0x01, 0xFF, 0x00);
             KeyInfo.SetParam(byteASN, m_MRPK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //应用维护主密钥MAMK
-            KeyInfo = new StorageKeyParam("安装应用维护主密钥", 0x0A, 0x45, 0x01, 0xFF, 0x00);
+            KeyInfo = new StorageKeyParam("安装应用维护密钥", 0x0A, 0x45, 0x01, 0xFF, 0x00);
             KeyInfo.SetParam(byteASN, m_MAMTK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
                 return false;
             //内部认证主密钥MIAK
-            KeyInfo = new StorageKeyParam("安装内部认证主密钥", 0x0B, 0x48, 0x01, 0xFF, 0x00);
+            KeyInfo = new StorageKeyParam("安装内部认证密钥", 0x0B, 0x48, 0x01, 0xFF, 0x00);
             KeyInfo.SetParam(byteASN, m_MIAK, m_KeyOrg);
             KeyInfo.SetDiversify(keyDiversify);
             if (!storageUserKey(KeyInfo))
@@ -1173,21 +1180,21 @@ namespace DaHuaApduCtrl
             return VerifyPIN(false, strPIN);
         }
 
-        public bool LoyaltyLoad(byte[] ASN, byte[] TermId, int nLoyaltyValue, bool bReadKeyFromDb)
+        public bool LoyaltyLoad(byte[] ASN, byte[] TermId, int nLoyaltyValue, bool bReadKey)
         {
             return false;
         }
 
         //圈存功能
-        public bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKeyFromDb)
+        public bool UserCardLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKey)
         {
             //获取已发卡的圈存密钥
-            if (bReadKeyFromDb)
+            if (bReadKey)
             {
                 byte[] keyLoad = GetApplicationKeyVal(ASN, "AppLoadKey", 1);
                 if (keyLoad == null)
                 {
-                    MessageBox.Show("无此卡的记录，不能圈存。");
+                    MessageBox.Show("无圈存密钥，不能圈存。");
                     return false;
                 }
                 Buffer.BlockCopy(keyLoad, 0, m_MLK, 0, 16);
@@ -1208,7 +1215,7 @@ namespace DaHuaApduCtrl
             byte[] MAC1 = new byte[4];
             Buffer.BlockCopy(outData, 12, MAC1, 0, 4);
             //判断MAC1是否正确
-            byte[] seslk = GetProcessKey(ASN, m_MLK, rand, OnlineSn);//m_MLK1圈存主密钥1（DLK）
+            byte[] seslk = GlobalControl.GetProcessKey(ASN, m_MLK, rand, OnlineSn);//m_MLK1圈存主密钥1（DLK）
             if (seslk == null)
                 return false;
             byte[] srcData = new byte[15];//用于计算MAC1的原始数据
@@ -1233,14 +1240,14 @@ namespace DaHuaApduCtrl
         }
 
         //圈提
-        public bool UserCardUnLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKeyFromDb)
+        public bool UserCardUnLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKey)
         {
-            if (bReadKeyFromDb)
+            if (bReadKey)
             {
                 byte[] keyUnLoad = GetApplicationKeyVal(ASN, "AppUnLoadKey", 1);//圈提密钥
                 if (keyUnLoad == null)
                 {
-                    MessageBox.Show("无此卡的记录，不能圈提。");
+                    MessageBox.Show("无圈提密钥，不能圈提。");
                     return false;
                 }
                 Buffer.BlockCopy(keyUnLoad, 0, m_MULK, 0, 16);
@@ -1261,7 +1268,7 @@ namespace DaHuaApduCtrl
             byte[] MAC1 = new byte[4];
             Buffer.BlockCopy(outData, 12, MAC1, 0, 4);
             //判断MAC1是否正确
-            byte[] sesulk = GetProcessKey(ASN, m_MULK, rand, OnlineSn);//m_MULK 圈提密钥主密钥
+            byte[] sesulk = GlobalControl.GetProcessKey(ASN, m_MULK, rand, OnlineSn);//m_MULK 圈提密钥主密钥
             if (sesulk == null)
                 return false;
             byte[] srcData = new byte[15];//用于计算MAC1的原始数据
@@ -1315,7 +1322,7 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        public bool UserCardGray(ref int nStatus, byte[] TerminalId)
+        public bool UserCardGray(ref int nStatus, byte[] PSAM_TID,byte[] GTAC)
         {
             m_CmdProvider.createrCardGrayCmd(false);
             byte[] data = m_CmdProvider.GetOutputCmd();
@@ -1339,9 +1346,11 @@ namespace DaHuaApduCtrl
                 else if (RecvData[0] == 0x01)
                     nStatus = 1;
                 else
-                    nStatus = 0;                
-                //未灰锁时终端机编号为0
-                Buffer.BlockCopy(RecvData, 9, TerminalId, 0, 6);
+                    nStatus = 0;
+                //未灰锁时终端机编号、GTAC都为0
+                Buffer.BlockCopy(RecvData, 9, PSAM_TID, 0, 6);
+                //GTAC
+                Buffer.BlockCopy(RecvData, 26, GTAC, 0, 4);
             }
             return true;
         }
@@ -1424,18 +1433,18 @@ namespace DaHuaApduCtrl
         }
 
         //联机解扣
-        public bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney, bool bReadKeyFromDb)
+        public bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney, bool bReadKey)
         {
             //获取已发卡的圈存密钥,测试时用数据库存储的默认密钥
-            if (bReadKeyFromDb)
+            if (bReadKey)
             {
                 byte[] keyUnlockGray = GetApplicationKeyVal(ASN, "AppUnGrayKey", 1);
                 if (keyUnlockGray == null)
                 {
-                    MessageBox.Show("无此卡的记录，不能解灰。");
+                    MessageBox.Show("无解灰密钥，不能解灰。");
                     return false;
                 }
-                Buffer.BlockCopy(keyUnlockGray, 0, m_MULK, 0, 16);
+                Buffer.BlockCopy(keyUnlockGray, 0, m_MUGK, 0, 16);
             }
             const byte BusinessType = 0x95; //交易类型标识：联机解0扣
             byte[] outData = new byte[18];
@@ -1455,7 +1464,7 @@ namespace DaHuaApduCtrl
             byte[] MAC1 = new byte[4];
             Buffer.BlockCopy(outData, 14, MAC1, 0, 4);
             //判断MAC1是否正确
-            byte[] sesukk = GetProcessKey(ASN, m_MULK, rand, OnlineSn);//联机解扣密钥
+            byte[] sesukk = GlobalControl.GetProcessKey(ASN, m_MUGK, rand, OnlineSn);//联机解扣密钥
             if (sesukk == null)
                 return false;
             byte[] srcData = new byte[13];//用于计算MAC1的原始数据
@@ -1555,13 +1564,6 @@ namespace DaHuaApduCtrl
                 return false;
             }
 
-            if (!GetDbOrgKeyValue(ObjSql))
-            {
-                ObjSql.CloseConnection();
-                ObjSql = null;
-                return false;
-            }
-
             if (!GetDbUserKeyValue(ObjSql, 1))
             {
                 ObjSql.CloseConnection();
@@ -1569,7 +1571,7 @@ namespace DaHuaApduCtrl
                 return false;
             }
 
-            byte[] ConsumerKey = GetDbPsamConsumerKey(ObjSql);
+            byte[] ConsumerKey = GlobalControl.GetDbConsumerKey(m_DBInfo, "PROC_GetPsamKey", "ConsumerMasterKey", 0);
             if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
             {
                 OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
@@ -1598,117 +1600,32 @@ namespace DaHuaApduCtrl
         }
 
         //还用不上的密钥没有读出
-        private bool GetDbUserKeyValue(SqlHelper sqlHelp, int AppIndex)
+        private bool GetDbUserKeyValue(SqlHelper sqlHelp, int nAppIndex)
         {
-            //读卡密钥和加气应用密钥
-            SqlDataReader dataReader = null;
-            SqlParameter[] sqlparam = new SqlParameter[1];
-            sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, AppIndex);                           
-            sqlHelp.ExecuteProc("PROC_GetCpuKey",sqlparam, out dataReader);
-            if (dataReader == null)
+            CpuKeyData KeyVal = new CpuKeyData();
+            KeyVal.nAppIndex = nAppIndex;
+            if (!GlobalControl.GetDbCpuKeyVal(sqlHelp, KeyVal))
                 return false;
-
-            if (!dataReader.HasRows)
-            {
-                dataReader.Close();
-                return false;
-            }
-            byte[] byteKey = null;
-            string strKey = "";
-            if (dataReader.Read())
-            {
-                strKey = (string)dataReader["MasterKey"];
-                byteKey = PublicFunc.StringToBCD(strKey);
-                SetMainKeyValue(byteKey, CardCategory.CpuCard);//卡片主控密钥
-
-                strKey = (string)dataReader["MasterTendingKey"];
-                byteKey = PublicFunc.StringToBCD(strKey);
-                SetMaintainKeyValue(byteKey, CardCategory.CpuCard);  //卡片维护密钥
-
-                strKey = (string)dataReader["ApplicatonMasterKey"];
-                StrKeyToByte(strKey, m_MAMK);
-                strKey = (string)dataReader["ApplicationTendingKey"];
-                StrKeyToByte(strKey, m_MAMTK);
-                strKey = (string)dataReader["AppInternalAuthKey"];
-                StrKeyToByte(strKey, m_MIAK);
-                strKey = (string)dataReader["PINResetKey"];
-                StrKeyToByte(strKey, m_MRPK);
-                strKey = (string)dataReader["PINUnlockKey"];
-                StrKeyToByte(strKey, m_MPUK);
-                strKey = (string)dataReader["ConsumerMasterKey"];
-                StrKeyToByte(strKey, m_MPK);
-                strKey = (string)dataReader["LoadKey"];
-                StrKeyToByte(strKey, m_MLK);
-                strKey = (string)dataReader["TacMasterKey"];
-                StrKeyToByte(strKey, m_MTK);
-                strKey = (string)dataReader["UnGrayKey"];
-                StrKeyToByte(strKey, m_MUGK);
-                strKey = (string)dataReader["UnLoadKey"];
-                StrKeyToByte(strKey, m_MULK);
-                strKey = (string)dataReader["OverdraftKey"];
-                StrKeyToByte(strKey, m_MUK);                
-            }
-            dataReader.Close();
-            dataReader = null;
+            SetOrgKeyValue(KeyVal.OrgKeyVal, CardCategory.CpuCard);
+            SetMainKeyValue(KeyVal.MasterKeyVal, CardCategory.CpuCard);//卡片主控密钥
+            SetMaintainKeyValue(KeyVal.MasterTendingKeyVal, CardCategory.CpuCard);  //卡片维护密钥   
+            Buffer.BlockCopy(KeyVal.AppMasterKey,0,m_MAMK,0,16);
+            Buffer.BlockCopy(KeyVal.AppTendingKey, 0, m_MAMTK, 0, 16);
+            Buffer.BlockCopy(KeyVal.AppInternalAuthKey, 0, m_MIAK, 0, 16);
+            Buffer.BlockCopy(KeyVal.AppPinResetKey, 0, m_MRPK, 0, 16);
+            Buffer.BlockCopy(KeyVal.AppPinUnlockKey, 0, m_MPUK, 0, 16);
+            Buffer.BlockCopy(KeyVal.AppConsumerKey, 0, m_MPK, 0, 16);
+            Buffer.BlockCopy(KeyVal.AppLoadKey, 0, m_MLK, 0, 16);
+            Buffer.BlockCopy(KeyVal.AppTacKey, 0, m_MTK, 0, 16);
+            Buffer.BlockCopy(KeyVal.AppUnGrayKey, 0, m_MUGK, 0, 16);
+            Buffer.BlockCopy(KeyVal.AppUnLoadKey, 0, m_MULK, 0, 16);
+            Buffer.BlockCopy(KeyVal.AppOverdraftKey, 0, m_MUK, 0, 16);
             return true;
-        }
+        }        
 
-        private byte[] GetDbPsamConsumerKey(SqlHelper sqlHelp)
+        private void GetSqlParam(SqlHelper ObjSql, SqlParameter[] sqlparams, UserCardInfoParam UserCardInfoPar)
         {
-            SqlDataReader dataReader = null;
-            sqlHelp.ExecuteProc("PROC_GetPsamKey", out dataReader);
-            if (dataReader == null)
-                return null;
-            if (!dataReader.HasRows || !dataReader.Read())
-            {
-                dataReader.Close();
-                return null;
-            }
-            byte[] ConsumerKey = new byte[16];
-            string strKey = (string)dataReader["ConsumerMasterKey"];
-            StrKeyToByte(strKey, ConsumerKey);
-
-            dataReader.Close();
-            return ConsumerKey;
-        }
-
-        private bool GetDbOrgKeyValue(SqlHelper sqlHelp)
-        {
-            SqlDataReader dataReader = null;
-            //OrgKeyType 0-CPU卡，1-PSAM卡
-            SqlParameter[] sqlparams = new SqlParameter[1];
-            sqlparams[0] = sqlHelp.MakeParam("OrgKeyType", SqlDbType.Int, 4, ParameterDirection.Input, 0);            
-            sqlHelp.ExecuteProc("PROC_GetOrgKey",sqlparams, out dataReader);
-            if (dataReader != null)
-            {
-                if (!dataReader.HasRows)
-                {
-                    dataReader.Close();
-                    return false;
-                }
-                else
-                {
-                    if (dataReader.Read())
-                    {
-                        string strKey = (string)dataReader["OrgKey"];
-                        byte[] byteKey = PublicFunc.StringToBCD(strKey);
-                        SetOrgKeyValue(byteKey, CardCategory.CpuCard);
-                    }
-                    dataReader.Close();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private bool GetSqlParam(SqlHelper ObjSql, SqlParameter[] sqlparams, UserCardInfoParam UserCardInfoPar)
-        {
-            string strDbVal = null;
-            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
-            {
-                ObjSql = null;
-                return false;
-            }            
+            string strDbVal = null;            
 
             strDbVal = BitConverter.ToString(UserCardInfoPar.GetUserCardID()).Replace("-", "");
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strDbVal);
@@ -1750,18 +1667,33 @@ namespace DaHuaApduCtrl
             sqlparams[23] = ObjSql.MakeParam("FactoryNum", SqlDbType.Char, 7, ParameterDirection.Input, UserCardInfoPar.BoalFactoryID);//
             sqlparams[24] = ObjSql.MakeParam("CylinderVolume", SqlDbType.Int, 4, ParameterDirection.Input, UserCardInfoPar.CylinderVolume);//
             sqlparams[25] = ObjSql.MakeParam("BusDistance", SqlDbType.VarChar, 10, ParameterDirection.Input, UserCardInfoPar.BusDistance);//
-            return true;
         }
 
         public bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar)
         {
             bool bSuccess = false;
             SqlHelper ObjSql = new SqlHelper();
-            SqlParameter[] sqlparams = new SqlParameter[26];
-            if (!GetSqlParam(ObjSql, sqlparams,UserCardInfoPar))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
                 return false;
+            }
+            SqlParameter[] sqlparams = new SqlParameter[28];
+            GetSqlParam(ObjSql, sqlparams, UserCardInfoPar);
+                
+            Guid CardGuid = Guid.NewGuid();
+            sqlparams[26] = ObjSql.MakeParam("UserKeyGuid", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, CardGuid);//
+            byte[] MotherCard = UserCardInfoPar.GetRelatedMotherCardID();
+            if (UserCardInfoPar.UserCardType == CardType.CompanySubCard && MotherCard != null)
+            {
+                string strVal = BitConverter.ToString(MotherCard).Replace("-", "");
+                sqlparams[27] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
+            }
             if (ObjSql.ExecuteProc("PROC_PublishCpuCard", sqlparams) == 0)
+            {
+                SaveCpuCardKey(ObjSql, CardGuid, UserCardInfoPar.GetUserCardID());
                 bSuccess = true;
+            }
             ObjSql.CloseConnection();
             ObjSql = null;
             return bSuccess;
@@ -1771,9 +1703,20 @@ namespace DaHuaApduCtrl
         {
             bool bSuccess = false;
             SqlHelper ObjSql = new SqlHelper();
-            SqlParameter[] sqlparams = new SqlParameter[26];
-            if (!GetSqlParam(ObjSql, sqlparams, UserCardInfoPar))
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
                 return false;
+            }
+            SqlParameter[] sqlparams = new SqlParameter[27];
+            GetSqlParam(ObjSql, sqlparams, UserCardInfoPar);
+
+            byte[] MotherCard = UserCardInfoPar.GetRelatedMotherCardID();
+            if (UserCardInfoPar.UserCardType == CardType.CompanySubCard && MotherCard != null)
+            {
+                string strVal = BitConverter.ToString(MotherCard).Replace("-", "");
+                sqlparams[26] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
+            }
             if (ObjSql.ExecuteProc("PROC_RewriteCpuCard", sqlparams) == 0)
                 bSuccess = true;
             ObjSql.CloseConnection();
@@ -1789,7 +1732,7 @@ namespace DaHuaApduCtrl
             if (byteAsn != null)
             {                
                 CardInfo.CardOrderNo = BitConverter.ToString(byteAsn, 5, 3).Replace("-", "");
-                CardInfo.UserCardType = (UserCardInfoParam.CardType)byteAsn[3];
+                CardInfo.UserCardType = (CardType)byteAsn[3];
                 Trace.Assert(byteAsn[2] == 0x02);
                 CardInfo.SetCardId(BitConverter.ToString(byteAsn, 0, 2).Replace("-", ""));
                 CardInfo.ValidCardBegin = cardStart;
@@ -1859,7 +1802,7 @@ namespace DaHuaApduCtrl
                 return;
             try
             {
-                Trace.Assert(CardInfo.UserCardType == (UserCardInfoParam.CardType)RecvData[0]);
+                Trace.Assert(CardInfo.UserCardType == (CardType)RecvData[0]);
                 int nCount = 0;
                 for (int i = 0; i < 20; i++)
                 {
@@ -2130,7 +2073,7 @@ namespace DaHuaApduCtrl
             byte[] AppTendingKey = GetApplicationKeyVal(CardInfo.GetUserCardID(),"AppTendingKey",1);
             if (AppTendingKey == null)
             {
-                MessageBox.Show("无此卡的记录，不能修改卡信息。");
+                MessageBox.Show("无维护密钥，不能修改卡信息。");
                 return false;
             }
             return UpdateApplicationFile(CardInfo, AppTendingKey);
@@ -2138,40 +2081,15 @@ namespace DaHuaApduCtrl
 
         private byte[] GetApplicationKeyVal(byte[] CardId,string strKeyName, int nAppIndex)
         {
-            SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
             {
-                ObjSql = null;
-                return null;
+                string strName = string.Format("UserKeyValue_App{0}", nAppIndex);
+                return GlobalControl.GetPrivateKeyFromXml(m_ctrlApdu.m_strCardKeyPath, strName, strKeyName);
             }
-            string strDbAsn = BitConverter.ToString(CardId).Replace("-", "");
-
-            SqlDataReader dataReader = null;
-            SqlParameter[] sqlparam = new SqlParameter[2];
-            sqlparam[0] = ObjSql.MakeParam("CardNum", SqlDbType.Char, 16, ParameterDirection.Input, strDbAsn);
-            sqlparam[1] = ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, nAppIndex);
-            ObjSql.ExecuteProc("PROC_GetPublishedCard", sqlparam, out dataReader);
-            string strKeyUsed = "";
-            byte[] KeyValue = null;
-            if (dataReader != null)
+            else
             {
-                if (!dataReader.HasRows)
-                    dataReader.Close();
-                else
-                {
-                    if (dataReader.Read())
-                    {                        
-                        strKeyUsed = (string)dataReader[strKeyName];
-                        byte[] byteKey = PublicFunc.StringToBCD(strKeyUsed);
-                        KeyValue = new byte[16];
-                        Buffer.BlockCopy(byteKey, 0, KeyValue, 0, 16);                        
-                    }
-                    dataReader.Close();
-                }
+                return GlobalControl.GetPublishedCardKeyFormDb(m_DBInfo,CardId, strKeyName, nAppIndex);
             }
-            ObjSql.CloseConnection();
-            ObjSql = null;
-            return KeyValue;
         }
 
         public bool ChangePIN(string strOldPin, string strNewPin)
@@ -2230,7 +2148,7 @@ namespace DaHuaApduCtrl
             byte[] keyReset = GetApplicationKeyVal(ASN, "AppPinResetKey", 1);
             if (keyReset == null)
             {
-                MessageBox.Show("无此卡的记录，不能重装PIN。");
+                MessageBox.Show("无PIN重装密钥，不能重装PIN。");
                 return false;
             }
             Buffer.BlockCopy(keyReset, 0, m_MRPK, 0, 16);           
@@ -2283,7 +2201,7 @@ namespace DaHuaApduCtrl
             byte[] keyUnlock = GetApplicationKeyVal(ASN, "AppPinUnlockKey", 1);
             if (keyUnlock == null)
             {
-                MessageBox.Show("无此卡的记录，不能解锁PIN。");
+                MessageBox.Show("无PIN解锁密钥，不能解锁PIN。");
                 return false;
             }
             Buffer.BlockCopy(keyUnlock, 0, m_MPUK, 0, 16);
@@ -2431,55 +2349,36 @@ namespace DaHuaApduCtrl
 
         private bool ReadKeyFromXml()
         {
-            string strXmlPath = m_ctrlApdu.m_strCardKeyPath;
-            try
-            {
-                XmlNode node = null;
-                XmlDocument xml = new XmlDocument();
-                xml.Load(strXmlPath);//按路径读xml文件
-                XmlNode root = xml.DocumentElement;//指向根节点
-                node = root.SelectSingleNode("Seed");
-                byte[] InitData = PublicFunc.StringToBCD(node.InnerText);
-                node = root.SelectSingleNode("InitKey");
-                byte[] InitKey = PublicFunc.StringToBCD(node.InnerText);
-
-                byte[] Left = DesCryptography.TripleEncryptData(InitData, InitKey);
-                byte[] Right = DesCryptography.TripleDecryptData(InitData, InitKey);
-                byte[] EncryptKey = new byte[16];
-                Buffer.BlockCopy(Left, 0, EncryptKey, 0, 8);
-                Buffer.BlockCopy(Right, 0, EncryptKey, 8, 8);
-
-                node = root.SelectSingleNode("UserOrgKey");
-                byte[] UserOrgKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-                SetOrgKeyValue(UserOrgKey, CardCategory.CpuCard);
-
-                GetXmlUserKeyValue(root, EncryptKey, 1);
-
-                byte[] ConsumerKey = GetXmlPsamConsumerKey(root, EncryptKey);
-                if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
-                {
-                    OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
-                    MessageBox.Show("加气或积分消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-
-            }
-            catch
-            {
+            CpuKeyData CpuKey = new CpuKeyData();
+            CpuKey.nAppIndex = 1;
+            if (!GlobalControl.GetXmlCpuKeyVal(m_ctrlApdu.m_strCardKeyPath, CpuKey))
                 return false;
+            SetOrgKeyValue(CpuKey.OrgKeyVal, CardCategory.CpuCard);
+            SetMainKeyValue(CpuKey.MasterKeyVal, CardCategory.CpuCard);//卡片主控密钥
+            SetMaintainKeyValue(CpuKey.MasterTendingKeyVal, CardCategory.CpuCard);  //卡片维护密钥   
+            Buffer.BlockCopy(CpuKey.AppMasterKey, 0, m_MAMK, 0, 16);
+            Buffer.BlockCopy(CpuKey.AppTendingKey, 0, m_MAMTK, 0, 16);
+            Buffer.BlockCopy(CpuKey.AppInternalAuthKey, 0, m_MIAK, 0, 16);
+            Buffer.BlockCopy(CpuKey.AppPinResetKey, 0, m_MRPK, 0, 16);
+            Buffer.BlockCopy(CpuKey.AppPinUnlockKey, 0, m_MPUK, 0, 16);
+            Buffer.BlockCopy(CpuKey.AppConsumerKey, 0, m_MPK, 0, 16);
+            Buffer.BlockCopy(CpuKey.AppLoadKey, 0, m_MLK, 0, 16);
+            Buffer.BlockCopy(CpuKey.AppTacKey, 0, m_MTK, 0, 16);
+            Buffer.BlockCopy(CpuKey.AppUnGrayKey, 0, m_MUGK, 0, 16);
+            Buffer.BlockCopy(CpuKey.AppUnLoadKey, 0, m_MULK, 0, 16);
+            Buffer.BlockCopy(CpuKey.AppOverdraftKey, 0, m_MUK, 0, 16);
+
+            byte[] ConsumerKey = GlobalControl.GetPrivateKeyFromXml(m_ctrlApdu.m_strCardKeyPath, "PsamKeyValue", "ConsumerMasterKey");
+            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
+            {
+                OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
+                MessageBox.Show("加气或积分消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             return true;
         }
 
-        private byte[] GetXmlPsamConsumerKey(XmlNode ParentNode, byte[] EncryptKey)
-        {            
-            XmlNode PsamKeyNode = ParentNode.SelectSingleNode("PsamKeyValue");
-            XmlNode node = PsamKeyNode.SelectSingleNode("ConsumerMasterKey");
-            byte[] byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            return byteKey;
-        }
-
-        private bool GetXmlUserKeyValue(XmlNode ParentNode, byte[] EncryptKey, int nAppIndex)
+        private bool GetXmlCpuKeyValue(XmlNode ParentNode, byte[] EncryptKey, int nAppIndex)
         {
             XmlNode node = null;
             byte[] byteKey = null;
@@ -2488,57 +2387,19 @@ namespace DaHuaApduCtrl
 
             node = UserKeyNode.SelectSingleNode("MasterKey");
             byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            SetMainKeyValue(byteKey, CardCategory.CpuCard);  //卡片主控密钥   
-
-            node = UserKeyNode.SelectSingleNode("MasterTendingKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            SetMaintainKeyValue(byteKey, CardCategory.CpuCard);  //卡片维护密钥
-
-            node = UserKeyNode.SelectSingleNode("ApplicatonMasterKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MAMK, 0, 16);
-
-            node = UserKeyNode.SelectSingleNode("ApplicationTendingKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MAMTK, 0, 16);
-
-            node = UserKeyNode.SelectSingleNode("AppInternalAuthKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MIAK, 0, 16);
-
-            node = UserKeyNode.SelectSingleNode("PINResetKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MRPK, 0, 16);
-
-            node = UserKeyNode.SelectSingleNode("PINUnlockKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MPUK, 0, 16);
-
-            node = UserKeyNode.SelectSingleNode("ConsumerMasterKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MPK, 0, 16);
-
-            node = UserKeyNode.SelectSingleNode("LoadKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MLK, 0, 16);
-
-            node = UserKeyNode.SelectSingleNode("TacMasterKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MTK, 0, 16);
-
-            node = UserKeyNode.SelectSingleNode("UnGrayKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MUGK, 0, 16);
-
-            node = UserKeyNode.SelectSingleNode("UnLoadKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MULK, 0, 16);
-
-            node = UserKeyNode.SelectSingleNode("OverdraftKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_MUK, 0, 16);
+  
 
             return true;
+        }
+
+        private void SaveCpuCardKey(SqlHelper ObjSql, Guid keyGuid, byte[] ASN)
+        {
+            //将密钥存储到Base_Card_Key表
+            if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
+                GlobalControl.InsertCardKeyFromXml(ObjSql, keyGuid, ASN,m_ctrlApdu.m_strCardKeyPath);
+            else
+                GlobalControl.InsertCardKeyFromDb(ObjSql, keyGuid, ASN);
+
         }
 
     }

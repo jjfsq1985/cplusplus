@@ -10,6 +10,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountManage", "AccountManage\AccountManage.csproj", "{F02A0239-D905-4EE1-ACF0-4EE5FBB91AC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNTMain", "FNTMain\FNTMain.csproj", "{151459CE-73F2-42CA-9E85-EA6D850A186F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{99F44602-F33D-438A-AEAB-DAD1D5887C3C} = {99F44602-F33D-438A-AEAB-DAD1D5887C3C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFuncPlugin", "IFuncPlugin\IFuncPlugin.csproj", "{4EE6DABB-484E-4984-8CC4-B84CEC45A161}"
 EndProject

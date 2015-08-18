@@ -156,7 +156,7 @@ namespace CardOperating
             int nMode = 0;
             if (!m_DevControl.IsDevicePcscMode(ref nMode))
             {
-                DialogResult Result = MessageBox.Show("读卡器没有插入或者不是PC/SC模式，是否切换到PC/SC模式？", "错误", MessageBoxButtons.YesNo);
+                DialogResult Result = MessageBox.Show("读卡器没有插入或者不是PC/SC模式，是否切换到PC/SC模式？", "连接读卡器", MessageBoxButtons.YesNo);
                 if (Result == DialogResult.Yes)
                 {
                     m_DevControl.ChangeDevice(3);//open Contactless、Contact and sam Reader
@@ -167,7 +167,7 @@ namespace CardOperating
             {
                 if (nMode == 1)
                 {
-                    DialogResult Result = MessageBox.Show("接触式读卡器不能使用，是否打开？", "提示", MessageBoxButtons.YesNo);
+                    DialogResult Result = MessageBox.Show("接触式读卡器未启用，是否启用以使用接触式卡片？", "提示", MessageBoxButtons.YesNo);
                     if (Result == DialogResult.Yes)
                     {
                         m_DevControl.ChangeDevice(3);//open Contactless、Contact and sam Reader
@@ -254,8 +254,20 @@ namespace CardOperating
             if (!m_DevControl.IsDeviceOpen() || m_UserCardCtrl == null)
                 return;
             //动作
-            if (m_UserCardCtrl.InitCard(false) != 0)
-                MessageBox.Show("当前卡片内主控密钥不匹配，初始化失败。\r\n请确认卡商然后重置。", "警告", MessageBoxButtons.OK);
+            int nResult = m_UserCardCtrl.InitCard(false);
+            if (nResult != 0)
+            {
+                if (nResult == 1)
+                    MessageBox.Show("已存在卡号初始化失败，请确认卡商。", "警告", MessageBoxButtons.OK);
+                else if(nResult == 2)
+                    MessageBox.Show("已存在卡号外部认证失败，请确认当前卡片的初始密钥。", "警告", MessageBoxButtons.OK);
+                else if (nResult == 3)
+                    MessageBox.Show("已存在卡号初始化失败，请确认当前卡片的初始密钥。", "警告", MessageBoxButtons.OK);
+                else if(nResult == 4)
+                    MessageBox.Show("外部认证失败，请确认制卡使用的初始密钥。", "警告", MessageBoxButtons.OK);
+                else if (nResult == 5)
+                    MessageBox.Show("初始化失败，请确认制卡使用的初始密钥。", "警告", MessageBoxButtons.OK);     
+            }
         }
 
         private void btnUserCardReset_Click(object sender, EventArgs e)
@@ -263,8 +275,20 @@ namespace CardOperating
             if (!m_DevControl.IsDeviceOpen() || m_UserCardCtrl == null)
                 return;
             //动作
-            if (m_UserCardCtrl.InitCard(true) != 0)
-                MessageBox.Show("当前卡片内主控密钥不匹配，重置失败。\r\n请确认卡商然后初始化。", "警告", MessageBoxButtons.OK);
+            int nResult = m_UserCardCtrl.InitCard(true);
+            if (nResult != 0)
+            {
+                if (nResult == 1)
+                    MessageBox.Show("已存在卡号重置失败，请确认卡商。", "警告", MessageBoxButtons.OK);
+                else if (nResult == 2)
+                    MessageBox.Show("已存在卡号外部认证失败，请确认当前卡片的主控密钥。", "警告", MessageBoxButtons.OK);
+                else if (nResult == 3)
+                    MessageBox.Show("已存在卡号初始化失败，请确认当前卡片的主控密钥。", "警告", MessageBoxButtons.OK);
+                else if (nResult == 4)
+                    MessageBox.Show("外部认证失败，请确认制卡使用的主控密钥。", "警告", MessageBoxButtons.OK);
+                else if (nResult == 5)
+                    MessageBox.Show("初始化失败，请确认制卡使用的主控密钥。", "警告", MessageBoxButtons.OK);  
+            }
         }
 
         //卡信息设置
@@ -567,9 +591,9 @@ namespace CardOperating
             if (!m_DevControl.IsDeviceOpen() || m_UserCardCtrl == null)
                 return;
             UserCardInfoParam cardInfo = m_CardUser.GetUserCardParam();
-            if (cardInfo.UserCardType != UserCardInfoParam.CardType.PersonalCard
-                && cardInfo.UserCardType != UserCardInfoParam.CardType.CompanySubCard
-                && cardInfo.UserCardType != UserCardInfoParam.CardType.CompanyMotherCard)
+            if (cardInfo.UserCardType != CardType.PersonalCard
+                && cardInfo.UserCardType != CardType.CompanySubCard
+                && cardInfo.UserCardType != CardType.CompanyMotherCard)
             {
                 WriteMsg(0, "只有加气卡才有积分应用。");
                 return;
