@@ -146,7 +146,7 @@ namespace PublishCardOperator
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "MasterTendingKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppMasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppTendingKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppAuthKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppInternalAuthKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppPinResetKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppPinUnlockKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppConsumerKey", EncryptKey);

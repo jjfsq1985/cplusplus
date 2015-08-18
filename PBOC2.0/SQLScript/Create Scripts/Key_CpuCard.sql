@@ -85,7 +85,7 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用维护密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppTendingKey'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用内部认证密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppAuthKey'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用内部认证密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppInternalAuthKey'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PIN重装密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_CARD_ADF', @level2type=N'COLUMN',@level2name=N'AppPinResetKey'

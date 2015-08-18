@@ -298,7 +298,7 @@ namespace PublishCardOperator
             sqlparams[3] = ObjSql.MakeParam("AppTendingKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
             strBcd = BitConverter.ToString(XmlCpuKey.AppInternalAuthKey).Replace("-", "");
-            sqlparams[4] = ObjSql.MakeParam("AppAuthKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+            sqlparams[4] = ObjSql.MakeParam("AppInternalAuthKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
             strBcd = BitConverter.ToString(XmlCpuKey.AppPinResetKey).Replace("-", "");
             sqlparams[5] = ObjSql.MakeParam("PinResetKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);

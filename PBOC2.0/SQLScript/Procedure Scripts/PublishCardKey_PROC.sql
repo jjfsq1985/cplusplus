@@ -31,9 +31,9 @@ CREATE PROCEDURE PROC_PublishCardKey(
 	@AppConsumerKey char(32), --消费密钥
 	@AppLoadKey char(32),	--圈存密钥
 	@AppUnLoadKey char(32),--圈提密钥
-	@AppUnGrayKeychar(32), --解灰密钥	
+	@AppUnGrayKey char(32), --解灰密钥	
 	@AppPinUnlockKey char(32), --PIN解锁密钥
-	@AppPinResetKey char(32), --PIN重装密钥
+	@AppPinResetKey char(32) --PIN重装密钥
 	) With Encryption
  AS    
 	--如果外部存在事务则不执行存储过程

@@ -318,7 +318,7 @@ namespace CardControl
                 GlobalControl.StrKeyToByte(strKey, CpuKey.AppMasterKey);
                 strKey = (string)dataReader["AppTendingKey"];
                 GlobalControl.StrKeyToByte(strKey, CpuKey.AppTendingKey);
-                strKey = (string)dataReader["AppAuthKey"];
+                strKey = (string)dataReader["AppInternalAuthKey"];
                 GlobalControl.StrKeyToByte(strKey, CpuKey.AppInternalAuthKey);
                 strKey = (string)dataReader["AppPinResetKey"];
                 GlobalControl.StrKeyToByte(strKey, CpuKey.AppPinResetKey);
@@ -389,7 +389,7 @@ namespace CardControl
                 byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
                 Buffer.BlockCopy(byteKey, 0, KeyVal.AppTendingKey, 0, 16);
 
-                node = CpuKeyNode.SelectSingleNode("AppAuthKey");
+                node = CpuKeyNode.SelectSingleNode("AppInternalAuthKey");
                 byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
                 Buffer.BlockCopy(byteKey, 0, KeyVal.AppInternalAuthKey, 0, 16);
 

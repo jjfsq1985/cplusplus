@@ -47,7 +47,7 @@ CREATE PROCEDURE PROC_RewriteCpuCard(
 	@CylinderNum int, --钢瓶数量
 	@FactoryNum char(7), --钢瓶生产厂家编号
 	@CylinderVolume int, --钢瓶容积
-	@BusDistance varchar(10) --公交路数
+	@BusDistance varchar(10), --公交路数
 	@RelatedMotherCard char(16) --子卡关联的母卡卡号
 	) With Encryption
  AS    	
