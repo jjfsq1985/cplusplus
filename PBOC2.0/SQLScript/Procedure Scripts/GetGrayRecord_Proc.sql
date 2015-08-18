@@ -1,4 +1,4 @@
-ï»¿ USE [FunnettStation]
+USE [FunnettStation]
 GO
 
 if exists (select * from sysobjects where id = object_id(N'PROC_GetGrayRecord') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
@@ -14,31 +14,31 @@ GO
 
 /*       Object:  Stored Procedure dbo.PROC_GetGrayRecord    */
 
-/*       åˆ›å»ºæ—¶é—´ 2015-08-13                              */
+/*       ´´½¨Ê±¼ä 2015-08-13                              */
 
-/*       è·å–ç°å¡çš„äº¤æ˜“è®°å½•  */
+/*       »ñÈ¡»Ò¿¨µÄ½»Ò×¼ÇÂ¼  */
                                                                                                                  
 /*************************************************************************************/
 
 CREATE PROCEDURE PROC_GetGrayRecord(
-	@CardId char(16),    --å¡å·
-	@PSAM_TID char(12),  --ç»ˆç«¯æœºç¼–å·
-	@GTAC    char(8),   --ç°é”çš„GTAC
-	@StationNo char(8) output, --ç«™ç‚¹ç¼–å·
-	@GunNo int output,      --æªå·
-	@ConsumerTime datetime output, --äº¤æ˜“æ—¶é—´
-	@Price  decimal(18,2) output, --å•ä»·
-	@Gas    decimal(18,2) output, --æ°”é‡
-	@Money  decimal(18,2) output, --é‡‘é¢
-	@ResidualAmount decimal(18,2) output --å¡å†…ä½™é¢
+	@CardId char(16),    --¿¨ºÅ
+	@PSAM_TID char(12),  --ÖÕ¶Ë»ú±àºÅ
+	@GTAC    char(8),   --»ÒËøµÄGTAC
+	@StationNo char(8) output, --Õ¾µã±àºÅ
+	@GunNo int output,      --Ç¹ºÅ
+	@ConsumerTime datetime output, --½»Ò×Ê±¼ä
+	@Price  decimal(18,2) output, --µ¥¼Û
+	@Gas    decimal(18,2) output, --ÆøÁ¿
+	@Money  decimal(18,2) output, --½ğ¶î
+	@ResidualAmount decimal(18,2) output --¿¨ÄÚÓà¶î
 	) With Encryption
  AS 
 	declare @RecordCardId char(16)
-	--å¦‚æœå¤–éƒ¨å­˜åœ¨äº‹åŠ¡åˆ™ä¸æ‰§è¡Œå­˜å‚¨è¿‡ç¨‹
+	--Èç¹ûÍâ²¿´æÔÚÊÂÎñÔò²»Ö´ĞĞ´æ´¢¹ı³Ì
 	if(@@trancount<>0)
 		return 1
 	set xact_abort on 
-	--å¼€å§‹äº‹åŠ¡
+	--¿ªÊ¼ÊÂÎñ
 	begin tran maintran	
 	select @RecordCardId=FUserCardNo,@StationNo=FStationNO,@GunNo=FGunNo,@ConsumerTime=FTradeDateTime,
 			@Price=FPrice,@Gas=FGas,@Money=FMoney,@ResidualAmount=FResidualAmount from SC_ConsumerDetail where FUserCardNo = @CardId and FPSAM_TID = @PSAM_TID and FTAC=@GTAC and FRecordType = '1';

@@ -1,7 +1,7 @@
-ÔªøUSE [FunnettStation]
+USE [FunnettStation]
 GO
 
-/******Ëß£ÁÅ∞Âç°ËÆ∞ÂΩïË°®******/
+/******Ω‚ª“ø®º«¬º±Ì******/
 SET ANSI_NULLS ON
 GO
 
@@ -34,37 +34,37 @@ GO
 SET ANSI_PADDING OFF
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ÁÅ∞Âç°ËÆ∞ÂΩïID' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'RecordId'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ª“ø®º«¬ºID' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'RecordId'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Á´ôÁÇπÁºñÂè∑' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'StationNo'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'’æµ„±‡∫≈' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'StationNo'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Êû™Âè∑' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'GunNo'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'«π∫≈' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'GunNo'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Âç°Âè∑' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'CardNo'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ø®∫≈' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'CardNo'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'‰∫§ÊòìÊó∂Èó¥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'TradeDateTime'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Ωª“◊ ±º‰' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'TradeDateTime'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ÁÅ∞ËÆ∞ÂΩïÂçï‰ª∑' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'GrayPrice'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ª“º«¬ºµ•º€' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'GrayPrice'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Ê∞îÈáè' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'GrayGas'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'∆¯¡ø' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'GrayGas'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ÈáëÈ¢ù' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'GrayMoney'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Ω∂Ó' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'GrayMoney'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Âç°ÂÜÖ‰ΩôÈ¢ù' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'ResidualAmount'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ø®ƒ⁄”‡∂Ó' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'ResidualAmount'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Êìç‰ΩúÂëò' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'Operator'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'≤Ÿ◊˜‘±' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'Operator'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Ëß£ÁÅ∞Êó∂Èó¥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'OperateTime'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Ω‚ª“ ±º‰' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_GreyCardRecord', @level2type=N'COLUMN',@level2name=N'OperateTime'
 GO
 
 

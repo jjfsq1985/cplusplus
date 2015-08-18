@@ -1,10 +1,10 @@
-ï»¿USE [FunnettStation]
+USE [FunnettStation]
 GO
 
 if exists (select * from sysobjects where id = object_id(N'PROC_PublishCardKey') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
 drop procedure PROC_PublishCardKey
 
-/****** ç”¨æˆ·å¡åˆ¶å¡ï¼Œå‘å¡ ******/
+/****** ÓÃ»§¿¨ÖÆ¿¨£¬·¢¿¨ ******/
 SET ANSI_NULLS ON
 GO
 
@@ -16,37 +16,37 @@ GO
 
 /*       Object:  Stored Procedure dbo.PROC_PublishCardKey                      */
 
-/*       åˆ›å»ºæ—¶é—´ 2015-04-03                                                                   */
+/*       ´´½¨Ê±¼ä 2015-04-03                                                                   */
 
-/*       è®°å½•åˆ¶å¡ã€å‘å¡è¿‡ç¨‹                                                                            */                                                                                                                 
+/*       ¼ÇÂ¼ÖÆ¿¨¡¢·¢¿¨¹ı³Ì                                                                            */                                                                                                                 
 /*************************************************************************************/
 
 CREATE PROCEDURE PROC_PublishCardKey(
-	@CardId char(16),--å¡å·
-	@UserKeyGuid uniqueidentifier,   --å¯†é’¥ä¿¡æ¯çš„GUID
-	@OrgKey char(32),		--åˆå§‹å¯†é’¥
-	@MasterKey char(32),	--ä¸»æ§å¯†é’¥
-	@ApplicationIndex int,	--åº”ç”¨å·
-	@AppTendingKey char(32),--åº”ç”¨ç»´æŠ¤å¯†é’¥
-	@AppConsumerKey char(32), --æ¶ˆè´¹å¯†é’¥
-	@AppLoadKey char(32),	--åœˆå­˜å¯†é’¥
-	@AppUnLoadKey char(32),--åœˆæå¯†é’¥
-	@AppUnGrayKeychar(32), --è§£ç°å¯†é’¥	
-	@AppPinUnlockKey char(32), --PINè§£é”å¯†é’¥
-	@AppPinResetKey char(32), --PINé‡è£…å¯†é’¥
+	@CardId char(16),--¿¨ºÅ
+	@UserKeyGuid uniqueidentifier,   --ÃÜÔ¿ĞÅÏ¢µÄGUID
+	@OrgKey char(32),		--³õÊ¼ÃÜÔ¿
+	@MasterKey char(32),	--Ö÷¿ØÃÜÔ¿
+	@ApplicationIndex int,	--Ó¦ÓÃºÅ
+	@AppTendingKey char(32),--Ó¦ÓÃÎ¬»¤ÃÜÔ¿
+	@AppConsumerKey char(32), --Ïû·ÑÃÜÔ¿
+	@AppLoadKey char(32),	--È¦´æÃÜÔ¿
+	@AppUnLoadKey char(32),--È¦ÌáÃÜÔ¿
+	@AppUnGrayKeychar(32), --½â»ÒÃÜÔ¿	
+	@AppPinUnlockKey char(32), --PIN½âËøÃÜÔ¿
+	@AppPinResetKey char(32), --PINÖØ×°ÃÜÔ¿
 	) With Encryption
  AS    
-	--å¦‚æœå¤–éƒ¨å­˜åœ¨äº‹åŠ¡åˆ™ä¸æ‰§è¡Œå­˜å‚¨è¿‡ç¨‹
+	--Èç¹ûÍâ²¿´æÔÚÊÂÎñÔò²»Ö´ĞĞ´æ´¢¹ı³Ì
 	if (@@trancount<>0)
 		return 1
 	set xact_abort on 
 	if(len(@CardId)<>16)
 		return 2                                        
-	--åˆ¤æ–­å¡å·åœ¨å—
+	--ÅĞ¶Ï¿¨ºÅÔÚÂğ
 	if not exists(select * from Base_Card where CardNum=@CardId)
 		return 3;
 begin
-		--å¼€å§‹äº‹åŠ¡
+		--¿ªÊ¼ÊÂÎñ
 		begin tran maintran
 				insert into Base_Card_Key values(@UserKeyGuid,@OrgKey,@MasterKey,
 					@ApplicationIndex,@AppTendingKey,@AppConsumerKey,@AppLoadKey,@AppUnLoadKey,
