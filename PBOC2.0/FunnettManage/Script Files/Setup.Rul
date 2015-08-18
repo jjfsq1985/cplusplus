@@ -1,0 +1,557 @@
+//===========================================================================
+//
+//  File Name:    Setup.rul
+//
+//  Description:  Blank setup main script file
+//
+//  Comments:     Blank setup is an empty setup project. If you want to
+//				  create a new project via. step-by step instructions use the
+//				  Project Assistant.
+//
+//===========================================================================
+
+// Included header files ----------------------------------------------------
+#include "ifx.h"
+
+// Note: In order to have your InstallScript function executed as a custom
+// action by the Windows Installer, it must be prototyped as an 
+// entry-point function.
+
+// The keyword export identifies MyFunction() as an entry-point function.
+// The argument it accepts must be a handle to the Installer database.
+    
+/* export prototype MyFunction(HWND); */
+prototype IsExistDB(STRING, STRING, STRING, BOOL);
+
+function OnBegin() 
+STRING sKey,sValue,sData;
+NUMBER nType, nSize,nResult;
+STRING szMsg,szFrmMsg,szWaitText; 
+begin
+	LoadStringFromStringTable("IDS_STRING_CHECK",szWaitText);
+	LoadStringFromStringTable("IDS_STRING_FRAMEWORKMSG",szFrmMsg);	
+	LoadStringFromStringTable("IDS_STRING_DBMSG",szMsg);
+	if !MAINTENANCE then   
+	SdShowMsg(szWaitText,TRUE); 
+	Delay(2); 
+	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+	sKey = "Software\\Microsoft\\NET Framework Setup\\NDP\\v3.5";
+	nResult = RegDBGetKeyValueEx(sKey,"Version",nType,sData,nSize);
+		if(nResult <0) then
+		SdShowMsg(szWaitText,FALSE); 
+		SdShowMsg(szFrmMsg,TRUE);
+		abort; 
+		endif; 
+	nType = 0;      
+	sData = "";
+	nSize = 0;
+	sKey = "Software\\Microsoft\\Microsoft SQL Server\\Services\\SQL Server";
+	nResult = RegDBGetKeyValueEx(sKey,"Name",nType,sData,nSize);
+		if(nResult <0) then  
+		SdShowMsg(szWaitText,FALSE);
+		SdShowMsg(szMsg,TRUE);
+		abort; 
+		endif;
+	SdShowMsg(szWaitText,FALSE);
+	endif;	
+end;
+//---------------------------------------------------------------------------
+// OnSQLLogin
+//---------------------------------------------------------------------------
+function number OnSQLLogin( nBtn )
+string sMessage;
+string szConnection, szServer, szUser, szPassword, szDB, sTemp[MAX_PATH];
+number nResult, nSize, nCount;
+BOOL   bWinLogin, bNext;
+LIST   listConnections;
+begin
+
+    //First initialize SQL Server runtime
+    SQLRTInitialize2();
+
+   // Suppress ISSQLSRV.DLL to show a connection error message.
+	MsiSetProperty( ISMSI_HANDLE, "IS_SQLSERVER_CA_SILENT", "1" );
+
+    //Get the names of all the necessary connections
+    listConnections = SQLRTGetConnections();
+    ListGetFirstString (listConnections, szConnection);
+
+    nCount = 0;
+
+    //determine if NEXT or BACK will be returned 
+    //if there are no connections to make
+    if( nBtn != BACK ) then
+        bNext = TRUE;
+    else
+        bNext = FALSE;
+		//start at end if going BACK
+		while (ISERR_SUCCESS = ListGetNextString( listConnections, szConnection ) );
+			nCount++;
+		endwhile;
+    endif;
+
+    
+    // Login for each connection
+    while (nResult = ISERR_SUCCESS)
+
+        //Get Default values for connection
+        SQLRTGetConnectionInfo( szConnection, szServer, szDB, szUser, szPassword );
+
+        bWinLogin = SQLRTGetConnectionAuthentication( szConnection );
+
+        // Display login dialog (without connection name)
+        // COMMENT OUT TO SWAP DIALOGS
+        nResult = SQLServerSelectLogin2( szConnection, szServer, szUser, szPassword, bWinLogin, szDB, FALSE, FALSE );
+
+        // Display login dialog (with connection name)
+        // UNCOMMENT TO SWAP DIALOGS
+        // nResult = SQLServerSelectLogin2( szConnection, szServer, szUser, szPassword, bWinLogin, szDB, TRUE, TRUE );
+
+        if( nResult = NEXT ) then
+
+            //store data in case we need it again
+            SQLRTPutConnectionInfo2( szConnection, szServer, szDB, szUser, szPassword );
+
+	        SQLRTPutConnectionAuthentication( szConnection, bWinLogin );
+
+            //test connection
+			nResult = SQLRTTestConnection2( szConnection, szServer, szDB, szUser, szPassword, bWinLogin );
+
+            nSize = MAX_PATH;
+            MsiGetProperty( ISMSI_HANDLE, "IS_SQLSERVER_STATUS", sTemp, nSize );
+
+           if( sTemp != "0" ) then
+
+				nSize = _MAX_PATH;
+				MsiGetProperty( ISMSI_HANDLE, "IS_SQLSERVER_STATUS_ERROR", sMessage, nSize );
+                    
+				if( nSize = 0 ) then
+			        Sprintf(sMessage, SdLoadString( IDS_IFX_SQL_ERROR_LOGIN_FAILED ), szConnection, SdLoadString( ISCRIPT_E_UNKNOWN_ERROR_DESC ));
+				endif;
+				
+				MessageBox( sMessage, MB_OK );
+
+                //Show same login dialog again
+                nResult = ListCurrentString(listConnections, szConnection);
+
+            else //SUCCESS
+                
+                //Move on to next connection
+                nCount++;
+                bNext = TRUE;
+                nResult = ListGetNextString(listConnections, szConnection);
+
+            endif;
+
+        else
+
+            //BACK
+            nCount--;
+            bNext = FALSE;
+            nResult = ListSetIndex( listConnections, nCount );
+            ListCurrentString( listConnections, szConnection );
+
+        endif;
+
+    endwhile;
+ 
+    if( bNext ) then    	
+        return NEXT;
+    else
+        return BACK;
+    endif;
+
+end;
+//---------------------------------------------------------------------------
+// OnFilterComponents
+//
+// The OnFilterComponents event is called by the framework to filter out
+// components in each feature by language and platform, override this
+// event to perform custom filtering.
+//
+// Note: This event will not be called automatically in a
+// program...endprogram style setup.
+//---------------------------------------------------------------------------
+function OnFilterComponents()
+begin
+    // Filter file groups by current platform.
+    FeatureFilterOS(MEDIA, 0, ISOSL_ALL, TRUE);
+    FeatureFilterOS(MEDIA, 0, SYSINFO.nISOSL, FALSE);
+ 
+    // Filter file groups by current language.
+    FeatureFilterLanguage(MEDIA, ISLANG_ALL, TRUE);
+    FeatureFilterLanguage(MEDIA, STANDARD_SELECTED_LANGUAGE, FALSE);
+end;
+//---------------------------------------------------------------------------
+// OnFirstUIBefore
+//
+// The OnFirstUIBefore event is called by the framework when the setup is
+// running in first install mode. By default this event displays UI allowing
+// the end user to specify installation parameters.
+//---------------------------------------------------------------------------
+function OnFirstUIBefore()
+    NUMBER nResult, nSetupType, nvSize, nUser;
+    STRING szTitle, szMsg, szQuestion, svName, svCompany, szFile;
+    STRING szLicenseFile, szOpt1,szOpt2;
+	BOOL bCustom, bIgnore1, bIgnore2;     
+	BOOL bLicenseAccepted,bRtf;	
+	string szServer, szUser, szPassword, szDB;
+	BOOL   bWinLogin, bDbExist;	
+begin	
+    // TO DO: if you want to enable background, window title, and caption bar title                                                                   
+    // SetTitle( @PRODUCT_NAME, 24, WHITE );                                        
+    // SetTitle( @PRODUCT_NAME, 0, BACKGROUNDCAPTION ); 	                  
+    // Enable( FULLWINDOWMODE );						   
+    // Enable( BACKGROUND );							  
+    // SetColor(BACKGROUND,RGB (0, 128, 128));					   
+
+    // Added in InstallShield 15 - Show an appropriate error message if
+    // -removeonly is specified and the product is not installed.
+    if( REMOVEONLY ) then
+        Disable( DIALOGCACHE );
+		szMsg = SdLoadString( IDS_IFX_ERROR_PRODUCT_NOT_INSTALLED_UNINST );
+   		SdSubstituteProductInfo( szMsg );
+		MessageBox( szMsg, SEVERE );
+		abort;
+    endif;
+    
+	nSetupType = TYPICAL;	
+
+Dlg_SdWelcome:
+    szTitle = "智能IC卡管理系统";
+    szMsg   = "";
+    nResult = SdWelcome(szTitle, szMsg);
+    if (nResult = BACK) goto Dlg_SdWelcome;
+	
+	szTitle   = "";
+	svName    = "";
+    svCompany = "";
+     
+Dlg_SdLicense2Ex: 
+	szTitle = ""; 
+	szOpt1 = ""; 
+	szOpt2 = "";  
+	szLicenseFile =  SUPPORTDIR^"license.txt";
+	bLicenseAccepted = FALSE;    
+	bRtf = FALSE;
+	nResult = SdLicense2Ex(szTitle,szOpt1, szOpt2,szLicenseFile,bLicenseAccepted, bRtf);
+	if(nResult = BACK) goto Dlg_SdWelcome; 
+	
+Dlg_SdAskDestPath:    	
+    nResult = SdAskDestPath(szTitle, szMsg, INSTALLDIR, 0);
+    if (nResult = BACK) goto Dlg_SdLicense2Ex; 
+    nvSize = 0;
+	FeatureCompareSizeRequired(MEDIA, INSTALLDIR, nvSize);
+	if (nvSize != 0) then      
+      	MessageBox(szSdStr_NotEnoughSpace, WARNING);
+	    goto Dlg_SdAskDestPath;
+    endif;
+
+Dlg_SQL:
+    nResult = OnSQLLogin( nResult );
+    if( nResult = BACK ) goto Dlg_SdAskDestPath; 
+    
+Dlg_DbExist:	
+    SQLRTGetConnectionInfo( "FunnettStation", szServer, szDB, szUser, szPassword );//szDB为""，内部固定FunnettStation
+    bWinLogin = SQLRTGetConnectionAuthentication( "FunnettStation" );
+	bDbExist = IsExistDB(szServer,szUser,szPassword,bWinLogin);
+	if(bDbExist) then
+	    if(AskYesNo( "数据库已存在，安装程序将备份数据到安装目录，并清空数据库。\n如有需要，请在安装完成后还原数据。\n是否继续安装？", NO ) == NO) then
+	     abort;
+		endif;
+	endif;
+		
+Dlg_SdStartCopy:
+    szTitle = "";
+    szMsg   = "";    
+    nResult = SdStartCopy2( szTitle, szMsg );			
+	
+    if (nResult = BACK) then
+       goto Dlg_SQL;;
+    endif;
+
+    // Added in IS 2009 - Set appropriate StatusEx static text.
+    SetStatusExStaticText( SdLoadString( IDS_IFX_STATUSEX_STATICTEXT_FIRSTUI ) );
+
+    // setup default status
+    Enable(STATUSEX);
+ 
+    return 0;
+end;   
+
+function IsExistDB(szServer, szLogin, szPwd, bWinLogin)
+BOOL bExist;
+NUMBER i;
+STRING szTemp;
+VARIANT objSQL;
+begin  
+	bExist = FALSE;
+	objSQL = CoCreateObject("SQLDMO.SQLServer");
+	if ( !IsObject( objSQL ) ) then
+	    return bExist;
+    endif;
+	if(bWinLogin) then		
+		objSQL.LoginSecure = TRUE;
+	  	objSQL.Connect(szServer);
+	else
+		objSQL.LoginSecure = FALSE;
+	  	objSQL.Connect(szServer,szLogin,szPwd);
+	endif;
+      for i = 1 to objSQL.Databases.Count
+      	szTemp = objSQL.Databases.Item(i).Name;
+        if (szTemp == "FunnettStation") then
+        	objSQL.DisConnect();
+        	bExist = TRUE;
+        	return bExist;
+        endif;
+      endfor; 
+  objSQL.DisConnect();
+  return bExist;
+end;
+
+
+//---------------------------------------------------------------------------
+// OnMaintUIBefore
+//
+// The OnMaintUIBefore event is called by the framework when the setup is
+// running in maintenance mode. By default this event displays UI that
+// allows the end user to add or remove features, repair currently
+// installed features or uninstall the application.
+//---------------------------------------------------------------------------
+function OnMaintUIBefore()
+	NUMBER nResult, nType;
+	STRING szTitle, szMsg, svDir, svResult, szCaption;
+begin
+	// TO DO: if you want to enable background, window title, and caption bar title   								
+	// SetTitle( @PRODUCT_NAME, 24, WHITE );					
+	// SetTitle( @PRODUCT_NAME, 0, BACKGROUNDCAPTION );  			
+	// SetColor(BACKGROUND,RGB (0, 128, 128));					
+	// Enable( FULLWINDOWMODE );						
+	// Enable( BACKGROUND );							
+	
+Dlg_Start:
+
+    // Added in Version 9.5 - Support for REMOVEONLY option.
+    if( !REMOVEONLY ) then
+		// In standard mode show maintenance dialog
+		Disable(BACKBUTTON);
+		nType = SdWelcomeMaint(szTitle, szMsg, MODIFY);
+		Enable(BACKBUTTON);
+	else
+        // Hide the initial progress dialog as otherwise the user can
+        // click on it, and hide the MessageBox.
+        Disable( DIALOGCACHE );
+
+        // In RemoveOnly mode, set to remove.
+        nType = REMOVEALL;
+    endif;
+	
+	// Show Uninstall Confirmation Dialog
+    if ( nType = REMOVEALL ) then
+		nResult = MessageBox( SdLoadString( IFX_MAINTUI_MSG ), MB_YESNO );
+		if (nResult != IDYES ) then
+            
+            if( REMOVEONLY ) then
+                // In REMOVEONLY mode, abort the setup.
+                abort;
+            else
+                // In non-REMOVEONLY mode, redisplay the previous dialog.
+			    goto Dlg_Start;
+            endif;
+
+		endif;
+	endif;
+
+	nResult = NEXT;
+
+Dlg_SdFeatureTree:
+	if (nType = MODIFY) then
+		szTitle = "";
+		szMsg = "";
+		nResult = SdFeatureTree(szTitle, szMsg, INSTALLDIR, "", 2);
+		if (nResult = BACK) goto Dlg_Start;
+	endif;
+
+	switch(nType)
+        case REMOVEALL: 
+        
+            ComponentRemoveAll();
+
+            // Added in IS 2009 - Set appropriate StatusEx static text.
+            SetStatusExStaticText( SdLoadString( IDS_IFX_STATUSEX_STATICTEXT_MAINTUI_REMOVEALL ) );
+
+        case REPAIR:
+        
+            ComponentReinstall();
+
+            // Added in IS 2009 - Set appropriate StatusEx static text.
+            SetStatusExStaticText( SdLoadString( IDS_IFX_STATUSEX_STATICTEXT_MAINTUI_REPAIR ) );
+
+
+        case MODIFY:
+
+            // Added in IS 2009 - Set appropriate StatusEx static text.
+            SetStatusExStaticText( SdLoadString( IDS_IFX_STATUSEX_STATICTEXT_MAINTUI_MODIFY ) );
+
+    endswitch;
+    
+	Enable(STATUSEX);
+
+end;
+//---------------------------------------------------------------------------
+// OnUninstall
+//
+// The OnUninstall event is called when the setup is run with the -uninst
+// switch, in this case this is the only event that will be called.
+//---------------------------------------------------------------------------
+function OnUninstall()
+	BOOL   bOpt1, bOpt2;
+	int    nReturn;
+	string szTitle, szMsg1, szMsg2, szOpt1, szOpt2, svResult, szCaption;
+begin
+	
+    // Added in InstallShield 15 - Show an appropriate error message if
+    // -uninst is specified and the product is not installed.
+    if( !MAINTENANCE ) then
+		szMsg1 = SdLoadString( IDS_IFX_ERROR_PRODUCT_NOT_INSTALLED_UNINST );
+   		SdSubstituteProductInfo( szMsg1 );
+		MessageBox( szMsg1, SEVERE );
+		abort;
+    endif;
+
+    svResult = SdLoadString(ISWI_IS5_UNINST_MSG);
+	szCaption = SdLoadString(IFX_ONMAINTUI_CAPTION);
+	Sprintf (svResult, svResult, @PRODUCT_NAME);
+	if (IDCANCEL = SprintfBox(MB_OKCANCEL, szCaption, svResult)) then
+		abort; 
+	endif;
+
+	// Added in IS 2009 - Set appropriate StatusEx static text.
+    SetStatusExStaticText( SdLoadString( IDS_IFX_STATUSEX_STATICTEXT_MAINTUI_REMOVEALL ) );
+
+    // Uninstall the application
+	Enable(STATUSEX);
+    ComponentRemoveAll();
+    ComponentTransferData(MEDIA);
+	Disable(STATUSEX);
+
+	bOpt1 = FALSE;
+	bOpt2 = FALSE;
+
+    // Show final dialog.
+    if ( BATCH_INSTALL ) then
+        SdFinishReboot( SdLoadString(IFX_SDFINISH_REMOVE_TITLE), SdLoadString(IFX_SDFINISH_REMOVE_MSG2), SYS_BOOTMACHINE, "", 0 );
+    else    
+        SdFinish( SdLoadString(IFX_SDFINISH_REMOVE_TITLE), SdLoadString(IFX_SDFINISH_REMOVE_MSG1), "", "" , "", bOpt1 , bOpt2 );
+    endif;
+end;
+// SdOptionsButtons ---------------------------------------------------------
+function  SdOptionsButtons( szTitle, szMsg, listButton, listDescrip )
+    string  szDlg, szTemp;
+    string  svItem[ MAX_STRING ];
+    HWND    hwndDlg;
+    number  nId, nTemp, nSdDialog, nReturn, nMessage;
+    BOOL    bDone, bChange;
+begin
+
+    if((!listButton) || (listButton = LIST_NULL) || 
+        (!listDescrip) || (listDescrip = LIST_NULL)) then
+        return -1;
+    endif;
+
+    if ((ListGetType(listButton) != STRINGLIST) || 
+        (ListGetType(listDescrip) != STRINGLIST)) then
+        return -1;
+    endif;
+
+    szDlg     = SD_DLG_OPTIONSBUTTONS;
+    nSdDialog = SD_NDLG_OPTIONSBUTTONS;
+
+    // Record data produced by this dialog
+    if (MODE=SILENTMODE) then
+        SdMakeName( szAppKey, szDlg, szTitle, nSdOptionsButtons );
+        SilentReadData( szAppKey, "Result", DATA_NUMBER, szTemp, nId );
+        return nId;
+    endif;
+
+    // ensure general initialization is complete
+    if (!bSdInit) then
+        SdInit();
+    endif;
+
+    if (EzDefineDialog( szDlg, "", "", SD_NDLG_OPTIONSBUTTONS ) = DLG_ERR) then
+        return -1;
+    endif;
+
+    // Loop in dialog until the user selects a standard button
+    bDone = FALSE;
+
+    while (!bDone)
+
+        nId = WaitOnDialog( szDlg );
+
+        switch (nId)
+
+        case DLG_INIT:
+
+            if( szMsg != "" ) then
+                SdSetStatic( szDlg, SD_COMPONENT_MSG, szMsg );
+            endif;
+
+            Delay(1);
+            hwndDlg = CmdGetHwndDlg( szDlg );
+            SdGeneralInit( szDlg, hwndDlg, STYLE_NORMAL, szSdProduct );
+            SdSetDlgTitle(szDlg, hwndDlg, szTitle);
+
+            // initialize the buttons and static fields
+            SdOptionsButtonsInit( szDlg, hwndDlg, listButton, listDescrip );
+
+        case SD_PBUT_OK:
+
+            nId   = OK;
+            bDone = TRUE;
+
+        case SD_PBUT_BACK:
+
+            nId    = BACK;
+            bDone  = TRUE;
+
+        case DLG_ERR:
+
+            SdError( -1, "SdOptionsButtons" );
+            nId   = -1;
+            bDone = TRUE;
+
+        case DLG_CLOSE:
+
+            SdCloseDlg( hwndDlg, nId, bDone );
+
+        default:
+
+            // check standard handling
+            if (SdIsStdButton( nId ) && SdDoStdButton( nId )) then
+                bDone = TRUE;
+            else
+                if ((nId >= 100) && (nId < 200)) then
+                    bDone = TRUE; // user button
+                endif;
+            endif;
+      
+        endswitch;
+
+    endwhile;
+
+    EndDialog( szDlg );
+    ReleaseDialog( szDlg );
+
+    SdUnInit();
+
+    // record data produced by this dialog
+    if (MODE=RECORDMODE) then
+        SdMakeName( szAppKey, szDlg, szTitle, nSdOptionsButtons );
+        SilentWriteData( szAppKey, "Result", DATA_NUMBER, "", nId );
+    endif;
+
+    return nId;
+
+end;
