@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcscLH", "PcscLH\PcscLH.csproj", "{B16A1FDB-0033-4EB5-8ED0-0F357A848186}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLhPcsc", "TestLhPcsc\TestLhPcsc.csproj", "{2DFECD3D-35F3-4675-97BE-1B302685DFF6}"
