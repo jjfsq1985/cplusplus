@@ -42,7 +42,7 @@
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(75, 23);
             this.btnOpen.TabIndex = 0;
-            this.btnOpen.Text = "Open";
+            this.btnOpen.Text = "打开卡片";
             this.btnOpen.UseVisualStyleBackColor = true;
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
@@ -52,7 +52,7 @@
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
-            this.btnClose.Text = "Close";
+            this.btnClose.Text = "关闭卡片";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
@@ -87,7 +87,7 @@
             // 
             // textAtr
             // 
-            this.textAtr.Location = new System.Drawing.Point(83, 106);
+            this.textAtr.Location = new System.Drawing.Point(74, 150);
             this.textAtr.Name = "textAtr";
             this.textAtr.Size = new System.Drawing.Size(319, 21);
             this.textAtr.TabIndex = 5;

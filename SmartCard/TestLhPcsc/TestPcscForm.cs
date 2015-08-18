@@ -11,7 +11,7 @@ namespace TestLhPcsc
 {
     public partial class TestPcscForm : Form
     {
-        PcscSmardCard Longhuan = new PcscSmardCard();
+        PcscSmardCard SmartCard = new PcscSmardCard();
         public TestPcscForm()
         {
             InitializeComponent();
@@ -24,7 +24,7 @@ namespace TestLhPcsc
             int nIndex = cmbReaderName.SelectedIndex;
             string strReaderName = (string)cmbReaderName.Items[nIndex];
             byte[] CardAtr = null;
-            Longhuan.LH_ConnectReader(strReaderName, out CardAtr);
+            SmartCard.LH_ConnectReader(strReaderName, out CardAtr);
             if (CardAtr != null)
                 textAtr.Text = BitConverter.ToString(CardAtr).Replace("-", "");
             else
@@ -33,13 +33,13 @@ namespace TestLhPcsc
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            Longhuan.LH_DisconnectReader();
+            SmartCard.LH_DisconnectReader();
         }
 
         private void btnEstablish_Click(object sender, EventArgs e)
         {
             List<string> Readers = new List<string>();
-            Longhuan.LH_Open(ref Readers);
+            SmartCard.LH_Open(ref Readers);
             cmbReaderName.Items.Clear();
             foreach (string strReaderName in Readers)
             {
@@ -51,7 +51,7 @@ namespace TestLhPcsc
 
         private void btnRelease_Click(object sender, EventArgs e)
         {
-            Longhuan.LH_Close();
+            SmartCard.LH_Close();
         }
     }
 }
