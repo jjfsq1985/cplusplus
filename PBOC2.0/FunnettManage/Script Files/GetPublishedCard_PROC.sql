@@ -32,8 +32,8 @@ CREATE PROCEDURE PROC_GetPublishedCard(
 	set xact_abort on 
 	--开始事务
 	begin tran maintran
-	select @KeyGuid = KeyGuid from Base_Card where CardNum = @CardNum;
-	select * from Base_Card_Key where KeyGuid = @KeyGuid and ApplicationIndex = @ApplicationIndex;
+	select @KeyGuid = KeyGuid from Base_Card where CardNum = @CardNum;	
+	select * from Base_Card inner join Base_Card_Key on Base_Card.KeyGuid = Base_Card_Key.KeyGuid where Base_Card.KeyGuid = @KeyGuid and Base_Card_Key.ApplicationIndex = @ApplicationIndex;
 	if(@@ERROR <> 0)
 		begin
 		rollback tran maintran
