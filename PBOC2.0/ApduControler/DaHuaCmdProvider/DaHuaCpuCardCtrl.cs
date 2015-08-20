@@ -2088,7 +2088,8 @@ namespace DaHuaApduCtrl
             }
             else
             {
-                return GlobalControl.GetPublishedCardKeyFormDb(m_DBInfo,CardId, strKeyName, nAppIndex);
+                string strKeyVal = GlobalControl.GetPublishedCardInfoFormDb(m_DBInfo, CardId, strKeyName, nAppIndex);
+                return PublicFunc.StringToBCD(strKeyVal);
             }
         }
 

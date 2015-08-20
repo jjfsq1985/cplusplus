@@ -862,8 +862,16 @@ namespace FNTMain
                         {
                             ItemCard.SubItems.Add("");
                         }
-                        decimal balance = (decimal)dataReader["CardBalance"];
-                        ItemCard.SubItems.Add(balance.ToString());
+                        if (strCardType == "µ¥Î»Ä¸¿¨")
+                        {
+                            decimal balance = (decimal)dataReader["AccountBalance"];
+                            ItemCard.SubItems.Add(balance.ToString());
+                        }
+                        else
+                        {
+                            decimal balance = (decimal)dataReader["CardBalance"];
+                            ItemCard.SubItems.Add(balance.ToString());
+                        }
 
                         string strCardId = (string)dataReader["CardNum"];
                         ItemCard.Text = strCardId;

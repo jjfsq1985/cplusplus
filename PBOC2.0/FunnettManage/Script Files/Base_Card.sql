@@ -136,7 +136,7 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'¿¨Óà¶î' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card', @level2type=N'COLUMN',@level2name=N'CardBalance'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ÕË»§Óà¶î£¨Î´È¦´æµÄ×Ó¿¨Óà¶î£©' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card', @level2type=N'COLUMN',@level2name=N'AccountBalance'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ÕË»§Óà¶î£¨µ¥Î»Ä¸¿¨Óà¶î£©' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card', @level2type=N'COLUMN',@level2name=N'AccountBalance'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'»ý·Ö×Ü¶î' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Base_Card', @level2type=N'COLUMN',@level2name=N'CreditsTotal'

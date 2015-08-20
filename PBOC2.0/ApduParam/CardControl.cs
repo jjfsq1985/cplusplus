@@ -159,7 +159,7 @@ namespace CardControl
             dataReader = null;
         }
 
-        public static byte[] GetPublishedCardKeyFormDb(SqlConnectInfo dbInfo,byte[] CardId, string strKeyName, int nAppIndex)
+        public static string GetPublishedCardInfoFormDb(SqlConnectInfo dbInfo, byte[] CardId, string strInfoName, int nAppIndex)
         {
             if (CardId == null)
                 return null;
@@ -176,8 +176,7 @@ namespace CardControl
             sqlparam[0] = ObjSql.MakeParam("CardNum", SqlDbType.Char, 16, ParameterDirection.Input, strDbAsn);
             sqlparam[1] = ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, nAppIndex);
             ObjSql.ExecuteProc("PROC_GetPublishedCard", sqlparam, out dataReader);
-            string strKeyUsed = "";
-            byte[] KeyValue = null;
+            string strData = "";
             if (dataReader != null)
             {
                 if (!dataReader.HasRows)
@@ -186,17 +185,17 @@ namespace CardControl
                 {
                     if (dataReader.Read())
                     {
-                        strKeyUsed = (string)dataReader[strKeyName];
-                        byte[] byteKey = PublicFunc.StringToBCD(strKeyUsed);
-                        KeyValue = new byte[16];
-                        Buffer.BlockCopy(byteKey, 0, KeyValue, 0, 16);
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal(strInfoName)))
+                        {
+                            strData = (string)dataReader[strInfoName];
+                        }
                     }
                     dataReader.Close();
                 }
             }
             ObjSql.CloseConnection();
             ObjSql = null;
-            return KeyValue;
+            return strData;
         }
 
         /// <summary>
