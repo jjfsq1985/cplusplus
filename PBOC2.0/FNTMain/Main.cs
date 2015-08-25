@@ -622,6 +622,21 @@ namespace FNTMain
                         }                        
                     }
                     break;
+                case 4:
+                case 5:
+                    {
+                        Regex reg = new Regex(@"^[0-9]+$");
+                        if (!reg.Match(strText).Success)
+                        {
+                            MessageBox.Show("卡号格式不正确,只能是数字");
+                        }
+                        else
+                        {
+                            bool bNewCardId = nSel == 5 ? true:false;
+                            SearchInvalidCardByCardNum(strText, bNewCardId);
+                        }
+                    }
+                    break;
             }
         }
 
@@ -635,6 +650,8 @@ namespace FNTMain
             cmbCondition.Items.Add("卡所有者");
             cmbCondition.Items.Add("身份证号码");
             cmbCondition.Items.Add("所属单位");
+            cmbCondition.Items.Add("失效卡号");
+            cmbCondition.Items.Add("补卡卡号");            
             cmbCondition.SelectedIndex = 0;
 
             listSearchResult.Items.Clear();
@@ -647,6 +664,7 @@ namespace FNTMain
             listSearchResult.Columns.Add("用户姓名", 100);
             listSearchResult.Columns.Add("联系电话", 100);
             listSearchResult.Columns.Add("卡余额", 60);
+            listSearchResult.Columns.Add("卡状态", 60);
 
             //搜索所有插件并显示菜单
             LoadPlugin();
@@ -685,6 +703,7 @@ namespace FNTMain
                         listSearchResult.Columns.Add("用户姓名", 100);
                         listSearchResult.Columns.Add("联系电话", 100);
                         listSearchResult.Columns.Add("卡余额", 60);
+                        listSearchResult.Columns.Add("卡状态", 60);
                     }
                     break;
                 case 1: 
@@ -699,6 +718,7 @@ namespace FNTMain
                     listSearchResult.Columns.Add("用户姓名", 100);
                     listSearchResult.Columns.Add("联系电话", 100);
                     listSearchResult.Columns.Add("卡余额", 60);
+                    listSearchResult.Columns.Add("卡状态", 60);
                     break;
                 case 2:
                     textSearchContent.MaxLength = 18;
@@ -712,6 +732,7 @@ namespace FNTMain
                     listSearchResult.Columns.Add("用户姓名", 100);
                     listSearchResult.Columns.Add("联系电话", 100);
                     listSearchResult.Columns.Add("卡余额", 60);
+                    listSearchResult.Columns.Add("卡状态", 60);
                     break;
                 case 3:
                     textSearchContent.MaxLength = 50;
@@ -736,7 +757,42 @@ namespace FNTMain
                         listSearchResult.Columns.Add("用户姓名", 100);
                         listSearchResult.Columns.Add("联系电话", 100);
                         listSearchResult.Columns.Add("卡余额", 60);
+                        listSearchResult.Columns.Add("卡状态", 60);
                     }
+                    break;
+                case 4:
+                    textSearchContent.MaxLength = 16;
+                    ChkSearchPsam.Visible = false;
+                    ChkSearchPsam.Enabled = false;
+                    listSearchResult.Columns.Add("失效卡号", 120);
+                    listSearchResult.Columns.Add("卡类型", 60);
+                    listSearchResult.Columns.Add("所属单位", 150);
+                    listSearchResult.Columns.Add("有效期", 150);
+                    listSearchResult.Columns.Add("身份证号", 120);
+                    listSearchResult.Columns.Add("用户姓名", 100);
+                    listSearchResult.Columns.Add("联系电话", 100);
+                    listSearchResult.Columns.Add("卡余额", 60);
+                    listSearchResult.Columns.Add("操作", 60);
+                    listSearchResult.Columns.Add("客户姓名", 100);
+                    listSearchResult.Columns.Add("客户身份证号", 120);
+                    listSearchResult.Columns.Add("客户电话", 100);
+                    break;
+                case 5:
+                    textSearchContent.MaxLength = 16;
+                    ChkSearchPsam.Visible = false;
+                    ChkSearchPsam.Enabled = false;
+                    listSearchResult.Columns.Add("失效卡号", 120);
+                    listSearchResult.Columns.Add("卡类型", 60);
+                    listSearchResult.Columns.Add("所属单位", 150);
+                    listSearchResult.Columns.Add("有效期", 150);
+                    listSearchResult.Columns.Add("身份证号", 120);
+                    listSearchResult.Columns.Add("用户姓名", 100);
+                    listSearchResult.Columns.Add("联系电话", 100);
+                    listSearchResult.Columns.Add("卡余额", 60);
+                    listSearchResult.Columns.Add("补卡卡号", 120);
+                    listSearchResult.Columns.Add("补卡人", 100);
+                    listSearchResult.Columns.Add("补卡人身份证号", 120);
+                    listSearchResult.Columns.Add("补卡人电话", 100);
                     break;
             }
         }
@@ -862,6 +918,7 @@ namespace FNTMain
                         {
                             ItemCard.SubItems.Add("");
                         }
+
                         if (strCardType == "单位母卡")
                         {
                             decimal balance = (decimal)dataReader["AccountBalance"];
@@ -873,6 +930,9 @@ namespace FNTMain
                             ItemCard.SubItems.Add(balance.ToString());
                         }
 
+                        string strCardState = GetCardState((int)dataReader["CardState"]);
+                        ItemCard.SubItems.Add(strCardState);
+
                         string strCardId = (string)dataReader["CardNum"];
                         ItemCard.Text = strCardId;
                         listSearchResult.Items.Add(ItemCard);
@@ -882,6 +942,28 @@ namespace FNTMain
             }
             ObjSql.CloseConnection();
             ObjSql = null;
+        }
+
+        private string GetCardState(int nCardState)
+        {
+            string strState = "";
+            //0-正常，1-挂失，2-已补卡，3-已退卡
+            switch (nCardState)
+            {
+                case 0:
+                    strState = "正常";
+                    break;
+                case 1:
+                    strState = "已挂失";
+                    break;
+                case 2:
+                    strState = "已补卡";
+                    break;
+                case 3:
+                    strState = "已退卡";
+                    break;
+            }
+            return strState;
         }
 
         private void SearchPsamInfoByClient(int nClientID, string strClientName)
@@ -976,8 +1058,20 @@ namespace FNTMain
                         {
                             ItemCard.SubItems.Add("");
                         }
-                        decimal balance = (decimal)dataReader["CardBalance"];
-                        ItemCard.SubItems.Add(balance.ToString());
+
+                        if (strCardType == "单位母卡")
+                        {
+                            decimal balance = (decimal)dataReader["AccountBalance"];
+                            ItemCard.SubItems.Add(balance.ToString());
+                        }
+                        else
+                        {
+                            decimal balance = (decimal)dataReader["CardBalance"];
+                            ItemCard.SubItems.Add(balance.ToString());
+                        }
+
+                        string strCardState = GetCardState((int)dataReader["CardState"]);
+                        ItemCard.SubItems.Add(strCardState);
 
                         string strCardId = (string)dataReader["CardNum"];
                         ItemCard.Text = strCardId;
@@ -1049,12 +1143,13 @@ namespace FNTMain
                 SearchPsam("PsamId", strCardId);
             else
                 SearchCommon("CardNum", strCardId);
-        }
+        }   
 
         private void ChkSearchPsam_CheckedChanged(object sender, EventArgs e)
         {
             listSearchResult.Items.Clear();
             listSearchResult.Columns.Clear();
+            cmbCondition.SelectedIndex = 0;
             if (ChkSearchPsam.Checked)
             {
                 listSearchResult.Columns.Add("卡号", 120);
@@ -1074,7 +1169,210 @@ namespace FNTMain
                 listSearchResult.Columns.Add("用户姓名", 100);
                 listSearchResult.Columns.Add("联系电话", 100);
                 listSearchResult.Columns.Add("卡余额", 60);
+                listSearchResult.Columns.Add("卡状态", 60);
             }
+        }
+
+        private void SearchInvalidCardByCardNum(string strSearchParam, bool bNewCardId)
+        {
+            //bNewCardId 为 true 则查补卡卡号，false 查 补卡记录中的失效卡号
+            listSearchResult.Items.Clear();
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_dbConnectInfo.strServerName, m_dbConnectInfo.strDbName, m_dbConnectInfo.strUser, m_dbConnectInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
+
+            string strParamName = bNewCardId ? "RePublishCardId" : "InvalidCardId";
+
+            SqlParameter[] sqlparams = new SqlParameter[1];
+            sqlparams[0] = ObjSql.MakeParam("Search", SqlDbType.VarChar, 32, ParameterDirection.Input, "%" + strSearchParam + "%");
+            SqlDataReader dataReader = null;
+            ObjSql.ExecuteCommand("select * from OperateCard_Record where " + strParamName + " like @Search", sqlparams, out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        ListViewItem ItemCard = new ListViewItem();
+                        string strCardType = PublicFunc.GetCardTypeString(Convert.ToByte((string)dataReader["CardType"], 16));
+                        ItemCard.SubItems.Add(strCardType);
+                        string strClientName = GetClientName((int)dataReader["ClientId"]);
+                        ItemCard.SubItems.Add(strClientName);
+                        DateTime DateStart = (DateTime)dataReader["UseValidateDate"];
+                        DateTime DateEnd = (DateTime)dataReader["UseInvalidateDate"];
+                        ItemCard.SubItems.Add(DateStart.ToString("yyyyMMdd") + "-" + DateEnd.ToString("yyyyMMdd"));
+
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("PersonalId")))
+                        {
+                            string strPersionId = (string)dataReader["PersonalId"];
+                            ItemCard.SubItems.Add(strPersionId);
+                        }
+                        else
+                        {
+                            ItemCard.SubItems.Add("");
+                        }
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("DriverName")))
+                        {
+                            string strDriverName = (string)dataReader["DriverName"];
+                            ItemCard.SubItems.Add(strDriverName);
+                        }
+                        else
+                        {
+                            ItemCard.SubItems.Add("");
+                        }
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("DriverTel")))
+                        {
+                            string strDriverTel = (string)dataReader["DriverTel"];
+                            ItemCard.SubItems.Add(strDriverTel);
+                        }
+                        else
+                        {
+                            ItemCard.SubItems.Add("");
+                        }
+                        if (strCardType == "单位母卡")
+                        {
+                            decimal balance = (decimal)dataReader["AccountBalance"];
+                            ItemCard.SubItems.Add(balance.ToString());
+                        }
+                        else
+                        {
+                            decimal balance = (decimal)dataReader["CardBalance"];
+                            ItemCard.SubItems.Add(balance.ToString());
+                        }
+
+                        if (bNewCardId)
+                        {
+                            string strNewCardId = (string)dataReader["RePublishCardId"];
+                            ItemCard.SubItems.Add(strNewCardId);
+                        }
+                        else
+                        {
+                            string strOperate = (string)dataReader["OperateName"];
+                            ItemCard.SubItems.Add(strOperate);
+                        }
+
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("RelatedName")))
+                        {
+                            string strDriverName = (string)dataReader["RelatedName"];
+                            ItemCard.SubItems.Add(strDriverName);
+                        }
+                        else
+                        {
+                            ItemCard.SubItems.Add("");
+                        }
+
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("RelatedPersonalId")))
+                        {
+                            string strPersionId = (string)dataReader["RelatedPersonalId"];
+                            ItemCard.SubItems.Add(strPersionId);
+                        }
+                        else
+                        {
+                            ItemCard.SubItems.Add("");
+                        }
+
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("RelatedTel")))
+                        {
+                            string strDriverTel = (string)dataReader["RelatedTel"];
+                            ItemCard.SubItems.Add(strDriverTel);
+                        }
+                        else
+                        {
+                            ItemCard.SubItems.Add("");
+                        }
+
+                        string strOldCardId = (string)dataReader["InvalidCardId"];
+                        ItemCard.Text = strOldCardId;
+                        listSearchResult.Items.Add(ItemCard);
+                    }
+                }
+                dataReader.Close();
+            }
+            ObjSql.CloseConnection();
+            ObjSql = null;
+        }
+
+        private void listSearchResult_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right || cmbCondition.SelectedIndex == 4 || cmbCondition.SelectedIndex == 5)
+                return;
+            //右键菜单
+            if (listSearchResult.SelectedItems.Count == 0)
+                return;
+            listSearchResult.ContextMenuStrip = ListCtrlMenu;
+        }
+
+        private void ListCtrlMenu_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            listSearchResult.ContextMenuStrip = null;
+        }
+
+        //解挂，设置卡状态，并取消黑名单
+        private void RefindMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listSearchResult.SelectedItems.Count != 1)
+                return;
+            ListViewItem selectCard = listSearchResult.SelectedItems[0];
+            if(selectCard.SubItems[7].Text != "已挂失")
+                return;
+            string strCardId = selectCard.Text;
+            ToBlackCard CardSetting = new ToBlackCard();
+            CardSetting.SetFormParam(0, strCardId, m_dbConnectInfo);
+            if (CardSetting.ShowDialog(this) != DialogResult.OK)
+                return;
+            listSearchResult.Items[strCardId].SubItems[7].Text = "正常";
+        }
+
+        //挂失，设置卡状态，并加黑名单
+        private void LostCardMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listSearchResult.SelectedItems.Count != 1)
+                return;
+            ListViewItem selectCard = listSearchResult.SelectedItems[0];
+            if (selectCard.SubItems[7].Text != "正常")
+                return;
+            string strCardId = selectCard.Text;
+            ToBlackCard CardSetting = new ToBlackCard();
+            CardSetting.SetFormParam(1, strCardId, m_dbConnectInfo);
+            if (CardSetting.ShowDialog(this) != DialogResult.OK)
+                return;
+            listSearchResult.Items[strCardId].SubItems[7].Text = "已挂失";
+        }
+
+
+        //补卡，加补卡记录表并删除Base_Card的挂失记录，补的卡需要是已经制过的卡片
+        private void RePublishMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listSearchResult.SelectedItems.Count != 1)
+                return;
+            ListViewItem selectCard = listSearchResult.SelectedItems[0];
+            if (selectCard.SubItems[7].Text != "已挂失")
+                return;
+            string strCardId = selectCard.Text;
+            ToBlackCard CardSetting = new ToBlackCard();
+            CardSetting.SetFormParam(2, strCardId, m_dbConnectInfo);
+            if (CardSetting.ShowDialog(this) != DialogResult.OK)
+                return;
+            listSearchResult.Items[strCardId].SubItems[7].Text = "已补卡";
+        }
+
+        //退卡，设置卡无效，并加黑名单
+        private void SignOffMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listSearchResult.SelectedItems.Count != 1)
+                return;
+            ListViewItem selectCard = listSearchResult.SelectedItems[0];
+            if (selectCard.SubItems[7].Text != "正常" && selectCard.SubItems[7].Text != "已挂失")
+                return;
+            string strCardId = selectCard.Text;
+            ToBlackCard CardSetting = new ToBlackCard();
+            CardSetting.SetFormParam(3, strCardId, m_dbConnectInfo);
+            if (CardSetting.ShowDialog(this) != DialogResult.OK)
+                return;
+            listSearchResult.Items[strCardId].SubItems[7].Text = "已退卡";
         }
 
     }

@@ -364,6 +364,8 @@
 		<row><td>key_psamcard.sql_SQLComponent</td><td>{B42C5DCE-681A-4127-8D4F-44EE9CC23AE0}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>log_publishcard.sql_SQLComponent</td><td>{68EEAC36-CA39-4AC3-8203-E2177E8AAAF3}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>mt_32.dll</td><td>{F36759B2-E455-4ACB-AF96-3A96A6CCC853}</td><td>PLUGINS</td><td>8</td><td/><td>mt_32.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>operatecard_proc.sql_SQLComponent</td><td>{5149C524-5EA9-43C4-A5E8-8E2D6CA0F019}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>operatecard_record.sql_SQLComponent</td><td>{AC9E0237-E773-4C44-BE0F-BA9416625EC7}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>psam_card.sql_SQLComponent</td><td>{9A4D8483-6A73-45E1-A362-EED38FD03160}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>publishcardkey_proc.sql_SQLComponent</td><td>{E5AF7BF5-A143-4D81-9877-2B3A5DB46F0F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>publishcpucard_proc.sql_SQLComponent</td><td>{5205E31F-6A5F-4E51-8E3F-FB55586AB60F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -395,6 +397,7 @@
 		<row><td>sqlscript.sql_SQLComponent</td><td>{BB0BB281-4524-430D-8F72-AEE431395DD0}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>update_config_proc.sql_SQLComponent</td><td>{72E7EB93-710D-4013-A4F9-B02D41FA4216}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>updateaccount_proc.sql_SQLComponent</td><td>{20AFE57A-91A7-4599-95B8-4C54637C6F0B}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>updatecardstate_proc.sql_SQLComponent</td><td>{67DF8BDB-B4F9-4A11-B443-D88DC7A6FFA1}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>updateclientinfo_proc.sql_SQLComponent</td><td>{D694CD42-7AFD-4A8F-9CF5-F1A164E8521F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>updatecpukey_proc.sql_SQLComponent</td><td>{F70B0BE9-CB3E-46A6-9CCE-A98677DFD132}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>updateorgkeyroot_proc.sql_SQLComponent</td><td>{149FF4BA-01BD-4348-BE44-290DB115AE1E}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -471,6 +474,8 @@
 		<row><td>INSTALLDIR</td><td>key_orgroot.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>key_psamcard.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>log_publishcard.sql_SQLComponent</td></row>
+		<row><td>INSTALLDIR</td><td>operatecard_proc.sql_SQLComponent</td></row>
+		<row><td>INSTALLDIR</td><td>operatecard_record.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>psam_card.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>publishcardkey_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>publishcpucard_proc.sql_SQLComponent</td></row>
@@ -502,6 +507,7 @@
 		<row><td>INSTALLDIR</td><td>sqlscript.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>update_config_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>updateaccount_proc.sql_SQLComponent</td></row>
+		<row><td>INSTALLDIR</td><td>updatecardstate_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>updateclientinfo_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>updatecpukey_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>updateorgkeyroot_proc.sql_SQLComponent</td></row>
@@ -1326,6 +1332,8 @@
 		<row><td>ICFeatures</td><td>key_psamcard.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>log_publishcard.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>mt_32.dll</td></row>
+		<row><td>ICFeatures</td><td>operatecard_proc.sql_SQLComponent</td></row>
+		<row><td>ICFeatures</td><td>operatecard_record.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>psam_card.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>publishcardkey_proc.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>publishcpucard_proc.sql_SQLComponent</td></row>
@@ -1357,6 +1365,7 @@
 		<row><td>ICFeatures</td><td>sqlscript.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>update_config_proc.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>updateaccount_proc.sql_SQLComponent</td></row>
+		<row><td>ICFeatures</td><td>updatecardstate_proc.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>updateclientinfo_proc.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>updatecpukey_proc.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>updateorgkeyroot_proc.sql_SQLComponent</td></row>
@@ -1705,6 +1714,8 @@
 		<row><td>key_psamcard.sql_SQLComponent</td><td/><td/><td>_A0FAC809_B6EB_4527_9552_4503DEC5998A_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>log_publishcard.sql_SQLComponent</td><td/><td/><td>_0BEE7C61_D472_4470_8E62_0EB73C607D42_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>mt_32.dll</td><td/><td/><td>_82709AC9_3E91_44FA_AE8D_26F593061BDE_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>operatecard_proc.sql_SQLComponent</td><td/><td/><td>_5B852597_B192_4D6D_980D_C43A69378B73_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>operatecard_record.sql_SQLComponent</td><td/><td/><td>_F3293401_5D7E_4A56_A3B1_AD8311B8A48B_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>psam_card.sql_SQLComponent</td><td/><td/><td>_76BC144B_96C2_4E42_823A_BC4350EAEA2C_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>publishcardkey_proc.sql_SQLComponent</td><td/><td/><td>_6845BE3B_5084_4F9E_B818_19829714CB9C_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>publishcpucard_proc.sql_SQLComponent</td><td/><td/><td>_EFFCE3AA_3A1D_416F_8F27_455FDC94E176_FILTER</td><td/><td/><td/><td/></row>
@@ -1736,6 +1747,7 @@
 		<row><td>sqlscript.sql_SQLComponent</td><td/><td/><td>_530ACF5A_6E6A_4A68_934C_E8F20838B033_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>update_config_proc.sql_SQLComponent</td><td/><td/><td>_B04D44D0_D4BC_4E2D_B2C5_2E86DA24E27C_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>updateaccount_proc.sql_SQLComponent</td><td/><td/><td>_8F41C8EE_1291_49E3_9F85_3B879834CE99_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>updatecardstate_proc.sql_SQLComponent</td><td/><td/><td>_64B2B972_0609_491E_A862_57E01B24ACCE_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>updateclientinfo_proc.sql_SQLComponent</td><td/><td/><td>_6AAC297E_DC35_430A_8815_9020BC21DC5A_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>updatecpukey_proc.sql_SQLComponent</td><td/><td/><td>_1CD5C449_C2DA_4471_BED9_7CB7CBD2AB9F_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>updateorgkeyroot_proc.sql_SQLComponent</td><td/><td/><td>_E4BA1562_ADA4_4853_9225_F310C2BE7ACD_FILTER</td><td/><td/><td/><td/></row>
@@ -2201,36 +2213,38 @@
 		<row><td>FunnettStation</td><td>base_card.sql</td><td>10</td></row>
 		<row><td>FunnettStation</td><td>base_client.sql</td><td>12</td></row>
 		<row><td>FunnettStation</td><td>base_station.sql</td><td>13</td></row>
-		<row><td>FunnettStation</td><td>checkdata_proc.sql</td><td>38</td></row>
+		<row><td>FunnettStation</td><td>checkdata_proc.sql</td><td>39</td></row>
 		<row><td>FunnettStation</td><td>config_sysparams.sql</td><td>6</td></row>
 		<row><td>FunnettStation</td><td>cs_setgun.sql</td><td>24</td></row>
-		<row><td>FunnettStation</td><td>customreport_proc.sql</td><td>56</td></row>
+		<row><td>FunnettStation</td><td>customreport_proc.sql</td><td>58</td></row>
 		<row><td>FunnettStation</td><td>data_city.sql</td><td>14</td></row>
 		<row><td>FunnettStation</td><td>data_greycardrecord.sql</td><td>17</td></row>
 		<row><td>FunnettStation</td><td>data_province.sql</td><td>15</td></row>
 		<row><td>FunnettStation</td><td>data_superior.sql</td><td>16</td></row>
-		<row><td>FunnettStation</td><td>getcpukey_proc.sql</td><td>39</td></row>
-		<row><td>FunnettStation</td><td>getgrayrecord_proc.sql</td><td>40</td></row>
-		<row><td>FunnettStation</td><td>getorgkey_proc.sql</td><td>41</td></row>
-		<row><td>FunnettStation</td><td>getpsamkey_proc.sql</td><td>42</td></row>
-		<row><td>FunnettStation</td><td>getpublishedcard_proc.sql</td><td>43</td></row>
+		<row><td>FunnettStation</td><td>getcpukey_proc.sql</td><td>40</td></row>
+		<row><td>FunnettStation</td><td>getgrayrecord_proc.sql</td><td>41</td></row>
+		<row><td>FunnettStation</td><td>getorgkey_proc.sql</td><td>42</td></row>
+		<row><td>FunnettStation</td><td>getpsamkey_proc.sql</td><td>43</td></row>
+		<row><td>FunnettStation</td><td>getpublishedcard_proc.sql</td><td>44</td></row>
 		<row><td>FunnettStation</td><td>key_cpucard.sql</td><td>8</td></row>
 		<row><td>FunnettStation</td><td>key_orgroot.sql</td><td>7</td></row>
 		<row><td>FunnettStation</td><td>key_psamcard.sql</td><td>9</td></row>
 		<row><td>FunnettStation</td><td>log_publishcard.sql</td><td>32</td></row>
+		<row><td>FunnettStation</td><td>operatecard_proc.sql</td><td>59</td></row>
+		<row><td>FunnettStation</td><td>operatecard_record.sql</td><td>38</td></row>
 		<row><td>FunnettStation</td><td>psam_card.sql</td><td>11</td></row>
-		<row><td>FunnettStation</td><td>publishcardkey_proc.sql</td><td>44</td></row>
-		<row><td>FunnettStation</td><td>publishcpucard_proc.sql</td><td>45</td></row>
-		<row><td>FunnettStation</td><td>publishpsamcard_proc.sql</td><td>46</td></row>
+		<row><td>FunnettStation</td><td>publishcardkey_proc.sql</td><td>45</td></row>
+		<row><td>FunnettStation</td><td>publishcpucard_proc.sql</td><td>46</td></row>
+		<row><td>FunnettStation</td><td>publishpsamcard_proc.sql</td><td>47</td></row>
 		<row><td>FunnettStation</td><td>rechargecardrecord.sql</td><td>18</td></row>
-		<row><td>FunnettStation</td><td>rewritecpucard_proc.sql</td><td>47</td></row>
+		<row><td>FunnettStation</td><td>rewritecpucard_proc.sql</td><td>48</td></row>
 		<row><td>FunnettStation</td><td>sc_blackaddcard.sql</td><td>20</td></row>
 		<row><td>FunnettStation</td><td>sc_blackcard.sql</td><td>19</td></row>
 		<row><td>FunnettStation</td><td>sc_blackdelcard.sql</td><td>21</td></row>
 		<row><td>FunnettStation</td><td>sc_config.sql</td><td>4</td></row>
 		<row><td>FunnettStation</td><td>sc_config_data.sql</td><td>5</td></row>
 		<row><td>FunnettStation</td><td>sc_consumerdetail.sql</td><td>25</td></row>
-		<row><td>FunnettStation</td><td>sc_consumerdetail_proc.sql</td><td>48</td></row>
+		<row><td>FunnettStation</td><td>sc_consumerdetail_proc.sql</td><td>49</td></row>
 		<row><td>FunnettStation</td><td>sc_consumerdetailhistroy.sql</td><td>26</td></row>
 		<row><td>FunnettStation</td><td>sc_customreportinfo.sql</td><td>34</td></row>
 		<row><td>FunnettStation</td><td>sc_customreportinfo_data.sql</td><td>35</td></row>
@@ -2243,15 +2257,16 @@
 		<row><td>FunnettStation</td><td>sc_secrettb.sql</td><td>31</td></row>
 		<row><td>FunnettStation</td><td>sc_senddetail.sql</td><td>33</td></row>
 		<row><td>FunnettStation</td><td>sc_shift.sql</td><td>30</td></row>
-		<row><td>FunnettStation</td><td>sc_shift_proc.sql</td><td>49</td></row>
+		<row><td>FunnettStation</td><td>sc_shift_proc.sql</td><td>50</td></row>
 		<row><td>FunnettStation</td><td>sc_stationinfo.sql</td><td>23</td></row>
 		<row><td>FunnettStation</td><td>sc_whitecard.sql</td><td>22</td></row>
-		<row><td>FunnettStation</td><td>update_config_proc.sql</td><td>50</td></row>
-		<row><td>FunnettStation</td><td>updateaccount_proc.sql</td><td>51</td></row>
-		<row><td>FunnettStation</td><td>updateclientinfo_proc.sql</td><td>52</td></row>
-		<row><td>FunnettStation</td><td>updatecpukey_proc.sql</td><td>53</td></row>
-		<row><td>FunnettStation</td><td>updateorgkeyroot_proc.sql</td><td>54</td></row>
-		<row><td>FunnettStation</td><td>updatepsamkey_proc.sql</td><td>55</td></row>
+		<row><td>FunnettStation</td><td>update_config_proc.sql</td><td>51</td></row>
+		<row><td>FunnettStation</td><td>updateaccount_proc.sql</td><td>52</td></row>
+		<row><td>FunnettStation</td><td>updatecardstate_proc.sql</td><td>57</td></row>
+		<row><td>FunnettStation</td><td>updateclientinfo_proc.sql</td><td>53</td></row>
+		<row><td>FunnettStation</td><td>updatecpukey_proc.sql</td><td>54</td></row>
+		<row><td>FunnettStation</td><td>updateorgkeyroot_proc.sql</td><td>55</td></row>
+		<row><td>FunnettStation</td><td>updatepsamkey_proc.sql</td><td>56</td></row>
 		<row><td>FunnettStation</td><td>userdb.sql</td><td>2</td></row>
 	</table>
 
@@ -2341,6 +2356,8 @@
 		<row><td>key_orgroot.sql</td><td>key_orgroot.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\key_orgroot.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>key_psamcard.sql</td><td>key_psamcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\key_psamcard.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>log_publishcard.sql</td><td>log_publishcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\log_publishcard.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
+		<row><td>operatecard_proc.sql</td><td>operatecard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\operatecard_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
+		<row><td>operatecard_record.sql</td><td>operatecard_record.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\operatecard_record.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>psam_card.sql</td><td>psam_card.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\psam_card.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>publishcardkey_proc.sql</td><td>publishcardkey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\publishcardkey_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>publishcpucard_proc.sql</td><td>publishcpucard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\publishcpucard_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
@@ -2371,6 +2388,7 @@
 		<row><td>sc_whitecard.sql</td><td>sc_whitecard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_whitecard.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>update_config_proc.sql</td><td>update_config_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\update_config_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>updateaccount_proc.sql</td><td>updateaccount_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\updateaccount_proc .sql</td><td/><td>2</td><td>0</td><td/><td/></row>
+		<row><td>updatecardstate_proc.sql</td><td>updatecardstate_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updatecardstate_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>updateclientinfo_proc.sql</td><td>updateclientinfo_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\updateclientinfo_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>updatecpukey_proc.sql</td><td>updatecpukey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\updatecpukey_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>updateorgkeyroot_proc.sql</td><td>updateorgkeyroot_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\updateorgkeyroot_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
@@ -2409,6 +2427,8 @@
 		<row><td>key_orgroot.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>key_psamcard.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>log_publishcard.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
+		<row><td>operatecard_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
+		<row><td>operatecard_record.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>psam_card.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>publishcardkey_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>publishcpucard_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
@@ -2439,6 +2459,7 @@
 		<row><td>sc_whitecard.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>update_config_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>updateaccount_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
+		<row><td>updatecardstate_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>updateclientinfo_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>updatecpukey_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>updateorgkeyroot_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>

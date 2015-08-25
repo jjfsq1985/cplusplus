@@ -907,23 +907,29 @@ namespace CardOperating
                     return;
                 }
             }
-           
-            int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
-            if (nRet == 1)
+
+
+            if ((ASN[3] == 0x11) || (ASN[3] == 0x21))
             {
-                if ((ASN[3] == 0x11) || (ASN[3] == 0x21))
-                    RechargeCompanyCard(m_FixedTermialId, ASN, dbMoneyLoad);
-                else
-                    LoadUserCard(m_FixedTermialId, ASN, dbMoneyLoad);
-            }
-            else if (nRet == 2)
-            {
-                MessageBox.Show("PIN码已锁!");
+                RechargeCompanyCard(m_FixedTermialId, ASN, dbMoneyLoad);
             }
             else
             {
-                MessageBox.Show("PIN码验证失败!");
+                int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
+                if (nRet == 1)
+                {
+                    LoadUserCard(m_FixedTermialId, ASN, dbMoneyLoad);
+                }
+                else if (nRet == 2)
+                {
+                    MessageBox.Show("PIN码已锁!");
+                }
+                else
+                {
+                    MessageBox.Show("PIN码验证失败!");
+                }
             }
+            
 
             CloseUserCard();            
         }
@@ -1193,7 +1199,7 @@ namespace CardOperating
             //更新Base_Card充值总额和当前卡余额
             double dbRechargeTotal = GetBaseCardMoneyValue(ObjSql, strCardId, "RechargeTotal") + dbLoadMoney;
             UpdateBaseCardMoneyValue(ObjSql, strCardId, "RechargeTotal", dbRechargeTotal);
-            UpdateBaseCardMoneyValue(ObjSql, strCardId, "CardBalance", dblTotal);
+            UpdateBaseCardMoneyValue(ObjSql, strCardId, strUpdateField, dblTotal);
 
             ObjSql.CloseConnection();
             ObjSql = null;

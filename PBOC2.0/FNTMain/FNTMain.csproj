@@ -60,8 +60,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ToBlackCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ToBlackCard.Designer.cs">
+      <DependentUpon>ToBlackCard.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CardOperating\CardOperating.csproj">
+      <Project>{867C4012-8C2A-44E7-BB89-BB21716884DA}</Project>
+      <Name>CardOperating</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IFuncPlugin\IFuncPlugin.csproj">
       <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
       <Name>IFuncPlugin</Name>
@@ -85,6 +95,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToBlackCard.resx">
+      <DependentUpon>ToBlackCard.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

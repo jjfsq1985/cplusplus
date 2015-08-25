@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.MainMenu = new System.Windows.Forms.MenuStrip();
             this.SystemMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,10 +52,16 @@
             this.LabelText = new System.Windows.Forms.Label();
             this.cmbCondition = new System.Windows.Forms.ComboBox();
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.ListCtrlMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.LostCardMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RefindMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RePublishMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SignOffMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.SystemStatus.SuspendLayout();
             this.FuzzySearch.SuspendLayout();
             this.MainPanel.SuspendLayout();
+            this.ListCtrlMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainMenu
@@ -182,12 +189,17 @@
             // 
             // listSearchResult
             // 
+            this.listSearchResult.FullRowSelect = true;
+            this.listSearchResult.GridLines = true;
+            this.listSearchResult.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listSearchResult.Location = new System.Drawing.Point(20, 99);
+            this.listSearchResult.MultiSelect = false;
             this.listSearchResult.Name = "listSearchResult";
             this.listSearchResult.Size = new System.Drawing.Size(1041, 546);
             this.listSearchResult.TabIndex = 5;
             this.listSearchResult.UseCompatibleStateImageBehavior = false;
             this.listSearchResult.View = System.Windows.Forms.View.Details;
+            this.listSearchResult.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listSearchResult_MouseClick);
             // 
             // btnSearch
             // 
@@ -243,6 +255,45 @@
             this.MainPanel.Size = new System.Drawing.Size(1072, 656);
             this.MainPanel.TabIndex = 3;
             // 
+            // ListCtrlMenu
+            // 
+            this.ListCtrlMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.LostCardMenuItem,
+            this.RefindMenuItem,
+            this.RePublishMenuItem,
+            this.SignOffMenuItem});
+            this.ListCtrlMenu.Name = "ListCtrlMenu";
+            this.ListCtrlMenu.Size = new System.Drawing.Size(101, 92);
+            this.ListCtrlMenu.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.ListCtrlMenu_Closed);
+            // 
+            // LostCardMenuItem
+            // 
+            this.LostCardMenuItem.Name = "LostCardMenuItem";
+            this.LostCardMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.LostCardMenuItem.Text = "挂失";
+            this.LostCardMenuItem.Click += new System.EventHandler(this.LostCardMenuItem_Click);
+            // 
+            // RefindMenuItem
+            // 
+            this.RefindMenuItem.Name = "RefindMenuItem";
+            this.RefindMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.RefindMenuItem.Text = "解挂";
+            this.RefindMenuItem.Click += new System.EventHandler(this.RefindMenuItem_Click);
+            // 
+            // RePublishMenuItem
+            // 
+            this.RePublishMenuItem.Name = "RePublishMenuItem";
+            this.RePublishMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.RePublishMenuItem.Text = "补卡";
+            this.RePublishMenuItem.Click += new System.EventHandler(this.RePublishMenuItem_Click);
+            // 
+            // SignOffMenuItem
+            // 
+            this.SignOffMenuItem.Name = "SignOffMenuItem";
+            this.SignOffMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.SignOffMenuItem.Text = "销卡";
+            this.SignOffMenuItem.Click += new System.EventHandler(this.SignOffMenuItem_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -264,6 +315,7 @@
             this.FuzzySearch.ResumeLayout(false);
             this.FuzzySearch.PerformLayout();
             this.MainPanel.ResumeLayout(false);
+            this.ListCtrlMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -293,6 +345,11 @@
         private System.Windows.Forms.GroupBox FuzzySearch;
         private System.Windows.Forms.CheckBox ChkSearchPsam;
         private System.Windows.Forms.Panel MainPanel;
+        private System.Windows.Forms.ContextMenuStrip ListCtrlMenu;
+        private System.Windows.Forms.ToolStripMenuItem LostCardMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem RefindMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem RePublishMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SignOffMenuItem;
     }
 }
 
