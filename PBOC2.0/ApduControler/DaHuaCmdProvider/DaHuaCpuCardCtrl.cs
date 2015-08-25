@@ -1689,6 +1689,10 @@ namespace DaHuaApduCtrl
                 string strVal = BitConverter.ToString(MotherCard).Replace("-", "");
                 sqlparams[27] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
             }
+            else
+            {
+                sqlparams[27] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, "");//
+            }
             if (ObjSql.ExecuteProc("PROC_PublishCpuCard", sqlparams) == 0)
             {
                 SaveCpuCardKey(ObjSql, CardGuid, UserCardInfoPar.GetUserCardID());
@@ -1716,6 +1720,10 @@ namespace DaHuaApduCtrl
             {
                 string strVal = BitConverter.ToString(MotherCard).Replace("-", "");
                 sqlparams[26] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
+            }
+            else
+            {
+                sqlparams[26] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, "");//
             }
             if (ObjSql.ExecuteProc("PROC_RewriteCpuCard", sqlparams) == 0)
                 bSuccess = true;

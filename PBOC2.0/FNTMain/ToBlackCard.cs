@@ -214,7 +214,8 @@ namespace FNTMain
             sqlparams[1] = ObjSql.MakeParam("OperateName", SqlDbType.NVarChar, 16, ParameterDirection.Input, strOpName);
             sqlparams[2] = ObjSql.MakeParam("RelatedName", SqlDbType.NVarChar, 50, ParameterDirection.Input, m_SettingName);
             sqlparams[3] = ObjSql.MakeParam("RelatedPersonalId", SqlDbType.VarChar, 32, ParameterDirection.Input, m_SettingPersonalID);
-            sqlparams[4] = ObjSql.MakeParam("RelatedTel", SqlDbType.VarChar, 32, ParameterDirection.Input, m_SettingTel);            
+            sqlparams[4] = ObjSql.MakeParam("RelatedTel", SqlDbType.VarChar, 32, ParameterDirection.Input, m_SettingTel);
+            sqlparams[5] = ObjSql.MakeParam("RePublishCardId", SqlDbType.Char, 16, ParameterDirection.Input, "");
             ObjSql.ExecuteProc("PROC_OperateCard", sqlparams);        
         }
     }
