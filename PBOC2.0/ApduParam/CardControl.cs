@@ -520,7 +520,7 @@ namespace CardControl
                 sqlparams[5] = ObjSql.MakeParam("AppTendingKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppTendingKey);
 
                 string strAppConsumerKey = BitConverter.ToString(KeyData.AppConsumerKey).Replace("-", "");
-                sqlparams[6] = ObjSql.MakeParam("AppTendingKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppConsumerKey);
+                sqlparams[6] = ObjSql.MakeParam("AppConsumerKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppConsumerKey);
 
                 string strAppLoadKey = BitConverter.ToString(KeyData.AppLoadKey).Replace("-", "");
                 sqlparams[7] = ObjSql.MakeParam("AppLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppLoadKey);
@@ -570,7 +570,7 @@ namespace CardControl
                 sqlparams[5] = ObjSql.MakeParam("AppTendingKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppTendingKey);
 
                 string strAppConsumerKey = BitConverter.ToString(KeyData.AppConsumerKey).Replace("-", "");
-                sqlparams[6] = ObjSql.MakeParam("AppTendingKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppConsumerKey);
+                sqlparams[6] = ObjSql.MakeParam("AppConsumerKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppConsumerKey);
 
                 string strAppLoadKey = BitConverter.ToString(KeyData.AppLoadKey).Replace("-", "");
                 sqlparams[7] = ObjSql.MakeParam("AppLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppLoadKey);

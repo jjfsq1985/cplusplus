@@ -2082,12 +2082,12 @@
 		<col key="yes" def="s72">Property</col>
 		<col def="L255">Value</col>
 		<row><td>Product Configuration</td><td>IncludeActionHelp</td><td>1</td></row>
-		<row><td>Product Configuration</td><td>PackageCode</td><td>{A3B1D581-EA89-4DCA-B03C-0CAD28CA470A}</td></row>
-		<row><td>Product Configuration</td><td>ProductCode</td><td>{41BE81EA-87A3-4BB5-92F9-AF95FC97E841}</td></row>
+		<row><td>Product Configuration</td><td>PackageCode</td><td>{1A1F43DF-4823-46D2-9BD3-A92D680F382A}</td></row>
+		<row><td>Product Configuration</td><td>ProductCode</td><td>{2BA9BAA0-06A0-4544-9E55-008969D3916F}</td></row>
 		<row><td>Product Configuration</td><td>ProductName</td><td>富耐特管理系统</td></row>
-		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.05.0818</td></row>
+		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.06.0826</td></row>
 		<row><td>Product Configuration</td><td>SetupFileName</td><td>加气站管理系统</td></row>
-		<row><td>Product Configuration</td><td>UpgradeCode</td><td>{E9EDBB30-CB07-4BCA-AED1-9489841E3E09}</td></row>
+		<row><td>Product Configuration</td><td>UpgradeCode</td><td>{386FC082-B9CB-4C41-8B38-0FDA56F1E3BF}</td></row>
 	</table>
 
 	<table name="ISRelease">
@@ -4254,13 +4254,13 @@ UgBlAGwAZQBhAHMAZQABAFAAcgBvAGQAdQBjAHQAIABDAG8AbgBmAGkAZwB1AHIAYQB0AGkAbwBuAA==
 		<row><td>PROGMSG_IIS_ROLLBACKAPPPOOLS</td><td>##IDS_PROGMSG_IIS_ROLLBACKAPPPOOLS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKVROOTS</td><td>##IDS_PROGMSG_IIS_ROLLBACKVROOTS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
-		<row><td>ProductCode</td><td>{305C9CC8-72DD-4E29-8789-8C8ACF6133DC}</td><td/></row>
+		<row><td>ProductCode</td><td>{372328D7-4C8E-4625-9ACB-6F1A9808E2F9}</td><td/></row>
 		<row><td>ProductName</td><td>FunnettManage</td><td/></row>
-		<row><td>ProductVersion</td><td>1.05.0818</td><td/></row>
+		<row><td>ProductVersion</td><td>1.06.0826</td><td/></row>
 		<row><td>REBOOT</td><td>Suppress</td><td/></row>
 		<row><td>STANDARD_USE_SETUPEXE</td><td>##IDS_STANDARD_USE_SETUPEXE##</td><td/></row>
 		<row><td>SecureCustomProperties</td><td>ISALWAYSINSTALLELEVATED;ISSETUPDRIVEN;ARPSYSTEMCOMPONENT;ARPNOMODIFY;ARPNOREMOVE;INSTALLDIR;ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;IS_SQLSERVER_LIST;IS_SQLSERVER_DATABASE;IS_SQLSERVER_AUTHENTICATION;IS_SQLSERVER_USERNAME;IS_SQLSERVER_SERVER;IS_SQLSERVER_PASSWORD;IS_NET_API_LOGON_USERNAME;IS_NET_API_LOGON_PASSWORD;IS_NEW_USER_CONFIRM_TEXT;IS_NEW_USER_SERVER_TEXT;IS_NEW_USER_GROUP_TEXT;IS_NEW_USER_NAME_TEXT;IS_NET_API_NEW_USER_PASSWORD;IS_NET_API_NEW_USER_NAME;IS_NET_API_NEW_USER_CONFIRM;IS_NEW_USER_PASSWORD_TEXT;IS_NET_API_NEW_USER_SERVER;IS_NET_API_NEW_USER_GROUP;IS_NET_API_GROUP_LIST;IS_NET_API_SERVER_LIST;IS_NET_API_SERVER_NEW_USER_LIST;IS_NET_API_USER_LIST;IS_NET_API_LOGON_DOMAIN_TOKEN;IS_NET_API_LOGON_USERNAME_TOKEN;SUPPORTDIR</td><td/></row>
-		<row><td>UpgradeCode</td><td>{9F63A7FE-7852-4176-9A10-D2D504F52A56}</td><td/></row>
+		<row><td>UpgradeCode</td><td>{74D84B00-5661-48DB-A1B4-CE2B7EED716D}</td><td/></row>
 	</table>
 
 	<table name="PublishComponent">
