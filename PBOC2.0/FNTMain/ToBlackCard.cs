@@ -120,6 +120,8 @@ namespace FNTMain
 
             ObjSql.CloseConnection();
             ObjSql = null;
+
+            DialogResult = DialogResult.OK;
         }
 
         private void SettingDataBase(SqlHelper ObjSql, CardStateSetting eSettingState)

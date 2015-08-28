@@ -2473,6 +2473,7 @@
 		<col def="S0">Search</col>
 		<col def="S0">Replace</col>
 		<col def="i4">Attributes</col>
+		<row><td>Replacement1</td><td>DbInit.sql</td><td>C:/</td><td>[INSTALLDIR]</td><td>2</td></row>
 	</table>
 
 	<table name="ISScriptFile">

@@ -1325,7 +1325,7 @@ namespace FNTMain
             CardSetting.SetFormParam(ToBlackCard.CardStateSetting.CardToNormal, strCardId, m_dbConnectInfo);
             if (CardSetting.ShowDialog(this) != DialogResult.OK)
                 return;
-            listSearchResult.Items[strCardId].SubItems[CardState_Item_Index].Text = "正常";
+            selectCard.SubItems[CardState_Item_Index].Text = "正常";
         }
 
         //挂失，设置卡状态，并加黑名单
@@ -1341,7 +1341,7 @@ namespace FNTMain
             CardSetting.SetFormParam(ToBlackCard.CardStateSetting.CardToLost, strCardId, m_dbConnectInfo);
             if (CardSetting.ShowDialog(this) != DialogResult.OK)
                 return;
-            listSearchResult.Items[strCardId].SubItems[CardState_Item_Index].Text = "已挂失";
+            selectCard.SubItems[CardState_Item_Index].Text = "已挂失";
         }
 
 
@@ -1358,7 +1358,7 @@ namespace FNTMain
             CardSetting.SetFormParam(ToBlackCard.CardStateSetting.CardToRePublish, strCardId, m_dbConnectInfo);
             if (CardSetting.ShowDialog(this) != DialogResult.OK)
                 return;
-            listSearchResult.Items[strCardId].SubItems[CardState_Item_Index].Text = "已补卡";
+            selectCard.SubItems[CardState_Item_Index].Text = "已补卡";
         }
 
         //退卡，设置卡无效，并加黑名单
@@ -1374,7 +1374,7 @@ namespace FNTMain
             CardSetting.SetFormParam(ToBlackCard.CardStateSetting.CardToClose, strCardId, m_dbConnectInfo);
             if (CardSetting.ShowDialog(this) != DialogResult.OK)
                 return;
-            listSearchResult.Items[strCardId].SubItems[CardState_Item_Index].Text = "已退卡";
+            selectCard.SubItems[CardState_Item_Index].Text = "已退卡";
         }
 
     }
