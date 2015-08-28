@@ -14,12 +14,21 @@ namespace FNTMain
 {
     public partial class ToBlackCard : Form
     {
+        public enum CardStateSetting
+        {
+            Unknown = -1,
+            CardToNormal = 0, //卡片正常
+            CardToLost = 1, //卡片挂失
+            CardToRePublish = 2,  //补卡
+            CardToClose = 3    //退卡
+        }
+
         private RePublishController m_CardControl = null;
 
         private const Char Backspace = (Char)8;
         private const Char Key_X = (Char)88;
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
-        private int m_SettingState = -1;
+        private CardStateSetting m_SettingState = CardStateSetting.Unknown;
         private string m_CardId;
 
         public string m_SettingName;
@@ -31,33 +40,33 @@ namespace FNTMain
             InitializeComponent();
         }
 
-        public void SetFormParam(int nState, string strCardId, SqlConnectInfo dbinfo)
+        public void SetFormParam(CardStateSetting eState, string strCardId, SqlConnectInfo dbinfo)
         {
             LabelCardType.Visible = false;
             cmbDevType.Visible = false;
             ContactCard.Visible = false;
             btnSetting.Text = "确定";
 
-            m_SettingState = nState;
+            m_SettingState = eState;
             m_CardId = strCardId;
             m_DBInfo = dbinfo;
-            switch(nState)
+            switch (eState)
             {
-                case 0://解0挂
+                case CardStateSetting.CardToNormal://解挂
                     LabelCardID.Text = "解挂卡号";
                     textCardID.Text = m_CardId;
                     LabelName.Text = "解挂人姓名";
                     LabelPersonalID.Text = "解挂人证件号";
                     LabelName.Text = "解挂人联系电话";
                     break;
-                case 1: //挂失
+                case CardStateSetting.CardToLost: //挂失
                     LabelCardID.Text = "挂失卡号";
                     textCardID.Text = m_CardId;
-                    LabelName.Text = "挂失人姓名";
+                    LabelName.Text  = "挂失人姓名";
                     LabelPersonalID.Text = "挂失人证件号";
                     LabelName.Text = "挂失人联系电话";
                     break;
-                case 2: //补卡
+                case CardStateSetting.CardToRePublish: //补卡
                     LabelCardID.Text = "失效卡号";
                     textCardID.Text = m_CardId;
                     LabelName.Text = "补卡人姓名";
@@ -69,7 +78,7 @@ namespace FNTMain
                     cmbDevType.SelectedIndex = 0;
                     btnSetting.Text = "补卡";
                     break;
-                case 3: //退卡
+                case CardStateSetting.CardToClose: //退卡
                     LabelCardID.Text = "退卡卡号";
                     textCardID.Text  = m_CardId;
                     LabelName.Text   = "退卡人姓名";
@@ -113,18 +122,18 @@ namespace FNTMain
             ObjSql = null;
         }
 
-        private void SettingDataBase(SqlHelper ObjSql,int nSettingState)
+        private void SettingDataBase(SqlHelper ObjSql, CardStateSetting eSettingState)
         {
             bool bBlackCard = true; //挂失、补卡、退卡都为true
-            if (nSettingState == 0)//解0挂为false
+            if (eSettingState == CardStateSetting.CardToNormal)//解挂为false
                 bBlackCard = false;
             SqlParameter[] sqlparams = new SqlParameter[3];
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, m_CardId);
-            sqlparams[1] = ObjSql.MakeParam("CardState", SqlDbType.Int, 4, ParameterDirection.Input, nSettingState);
+            sqlparams[1] = ObjSql.MakeParam("CardState", SqlDbType.Int, 4, ParameterDirection.Input, (int)eSettingState);
             sqlparams[2] = ObjSql.MakeParam("BlackCard", SqlDbType.Bit, 1, ParameterDirection.Input, bBlackCard);
             ObjSql.ExecuteProc("PROC_UpdateCardState", sqlparams);
 
-            if (m_SettingState == 2)
+            if (eSettingState == CardStateSetting.CardToRePublish)
             {
                 //补卡,返回新卡的卡号
                 string strRePublishId = m_CardControl.RePublishCard(m_CardId);
@@ -140,7 +149,7 @@ namespace FNTMain
 
         private void ToBlackCard_Load(object sender, EventArgs e)
         {
-            if (m_SettingState == 2)
+            if (m_SettingState == CardStateSetting.CardToRePublish)
             {
                 ContactCard.Checked = false;
                 ContactCard.Enabled = false;
@@ -183,21 +192,21 @@ namespace FNTMain
             ObjSql.ExecuteProc("PROC_OperateCard", sqlparams);            
         }
 
-        private string GetOperatorName(int nState)
+        private string GetOperatorName(CardStateSetting eState)
         {
             string strName = "";
-            switch (nState)
+            switch (eState)
             {
-                case 0:
+                case CardStateSetting.CardToNormal:
                     strName = "解挂";
                     break;
-                case 1:
+                case CardStateSetting.CardToLost:
                     strName = "挂失";
                     break;
-                case 2:
+                case CardStateSetting.CardToRePublish:
                     strName = "补卡";
                     break;
-                case 3:
+                case CardStateSetting.CardToClose:
                     strName = "退卡";
                     break;
             }

@@ -39,6 +39,8 @@ namespace FNTMain
 
         private ToolStripMenuItem KeyManageMenuItem = new ToolStripMenuItem(); //动态添加密钥管理菜单
 
+        private const int CardState_Item_Index = 8;   //查询结果卡状态栏索引
+
         public Main(int nLoginId,SqlConnectInfo DbInfo)
         {
             m_nLoginID = nLoginId;
@@ -1316,14 +1318,14 @@ namespace FNTMain
             if (listSearchResult.SelectedItems.Count != 1)
                 return;
             ListViewItem selectCard = listSearchResult.SelectedItems[0];
-            if(selectCard.SubItems[7].Text != "已挂失")
+            if (selectCard.SubItems[CardState_Item_Index].Text != "已挂失")
                 return;
             string strCardId = selectCard.Text;
             ToBlackCard CardSetting = new ToBlackCard();
-            CardSetting.SetFormParam(0, strCardId, m_dbConnectInfo);
+            CardSetting.SetFormParam(ToBlackCard.CardStateSetting.CardToNormal, strCardId, m_dbConnectInfo);
             if (CardSetting.ShowDialog(this) != DialogResult.OK)
                 return;
-            listSearchResult.Items[strCardId].SubItems[7].Text = "正常";
+            listSearchResult.Items[strCardId].SubItems[CardState_Item_Index].Text = "正常";
         }
 
         //挂失，设置卡状态，并加黑名单
@@ -1332,14 +1334,14 @@ namespace FNTMain
             if (listSearchResult.SelectedItems.Count != 1)
                 return;
             ListViewItem selectCard = listSearchResult.SelectedItems[0];
-            if (selectCard.SubItems[7].Text != "正常")
+            if (selectCard.SubItems[CardState_Item_Index].Text != "正常")
                 return;
             string strCardId = selectCard.Text;
             ToBlackCard CardSetting = new ToBlackCard();
-            CardSetting.SetFormParam(1, strCardId, m_dbConnectInfo);
+            CardSetting.SetFormParam(ToBlackCard.CardStateSetting.CardToLost, strCardId, m_dbConnectInfo);
             if (CardSetting.ShowDialog(this) != DialogResult.OK)
                 return;
-            listSearchResult.Items[strCardId].SubItems[7].Text = "已挂失";
+            listSearchResult.Items[strCardId].SubItems[CardState_Item_Index].Text = "已挂失";
         }
 
 
@@ -1349,14 +1351,14 @@ namespace FNTMain
             if (listSearchResult.SelectedItems.Count != 1)
                 return;
             ListViewItem selectCard = listSearchResult.SelectedItems[0];
-            if (selectCard.SubItems[7].Text != "已挂失")
+            if (selectCard.SubItems[CardState_Item_Index].Text != "已挂失")
                 return;
             string strCardId = selectCard.Text;
             ToBlackCard CardSetting = new ToBlackCard();
-            CardSetting.SetFormParam(2, strCardId, m_dbConnectInfo);
+            CardSetting.SetFormParam(ToBlackCard.CardStateSetting.CardToRePublish, strCardId, m_dbConnectInfo);
             if (CardSetting.ShowDialog(this) != DialogResult.OK)
                 return;
-            listSearchResult.Items[strCardId].SubItems[7].Text = "已补卡";
+            listSearchResult.Items[strCardId].SubItems[CardState_Item_Index].Text = "已补卡";
         }
 
         //退卡，设置卡无效，并加黑名单
@@ -1365,14 +1367,14 @@ namespace FNTMain
             if (listSearchResult.SelectedItems.Count != 1)
                 return;
             ListViewItem selectCard = listSearchResult.SelectedItems[0];
-            if (selectCard.SubItems[7].Text != "正常" && selectCard.SubItems[7].Text != "已挂失")
+            if (selectCard.SubItems[CardState_Item_Index].Text != "正常" && selectCard.SubItems[CardState_Item_Index].Text != "已挂失")
                 return;
             string strCardId = selectCard.Text;
             ToBlackCard CardSetting = new ToBlackCard();
-            CardSetting.SetFormParam(3, strCardId, m_dbConnectInfo);
+            CardSetting.SetFormParam(ToBlackCard.CardStateSetting.CardToClose, strCardId, m_dbConnectInfo);
             if (CardSetting.ShowDialog(this) != DialogResult.OK)
                 return;
-            listSearchResult.Items[strCardId].SubItems[7].Text = "已退卡";
+            listSearchResult.Items[strCardId].SubItems[CardState_Item_Index].Text = "已退卡";
         }
 
     }
