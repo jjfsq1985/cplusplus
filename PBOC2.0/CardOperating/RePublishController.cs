@@ -123,7 +123,7 @@ namespace CardOperating
             }
             else
             {
-                m_UserCardCtrl.UpdateCardInfoToDb(m_CardInfoPar);
+                m_UserCardCtrl.SaveCpuCardInfoToDb(m_CardInfoPar,true);
                 //圈存
                 if (CpuCardType != CardType.ManagerCard && CpuCardType != CardType.ServiceCard && CardBalance > 0)
                 {

@@ -236,25 +236,10 @@ namespace LohApduCtrl
             return true;
         }
 
-        private bool DeleteMF(bool bMainKey)
+        private bool DeleteMF()
         {
-            byte[] randByte = GetRandomValue(8);
-            if (randByte == null || randByte.Length != 8)
-                return false;
-
-            byte[] KeyVal = GetKeyVal(bMainKey, CardCategory.PsamCard);
-
-            return ClearMF(randByte, KeyVal);
-        }
-
-        private bool DeleteMFWithKey(byte[] KeyVal)
-        {
-            byte[] randByte = GetRandomValue(8);
-            if (randByte == null || randByte.Length != 8)
-                return false;
-
-            return ClearMF(randByte, KeyVal);
-        }        
+            return ClearMF(null, null);
+        }    
 
         private bool ClearMF(byte[] randByte, byte[] KeyVal)
         {
@@ -293,25 +278,8 @@ namespace LohApduCtrl
 
         public int InitIccCard(bool bMainKey)
         {
-            byte[] KeyInit = new byte[16];
-            bool bPublished = CheckPublishedCard(bMainKey, KeyInit);
-            if (bPublished)
-            {
-                if (SelectFile(m_PSE, null))
-                {
-                    if (!DeleteMFWithKey(KeyInit))
-                        return 1;
-                }
-            }
-            else
-            {
-                //新建立MF不需要外部认证
-                if (SelectFile(m_PSE, null))
-                {
-                    if (!DeleteMF(bMainKey))
-                        return 1;
-                }
-            }
+            if (!DeleteMF())
+                return 1;
             InitWhiteCard();
             return 0;
         }
@@ -938,7 +906,7 @@ namespace LohApduCtrl
             return bSuccess;
         }
 
-        //检查数据库中是否有该卡的发卡记录
+        //检查数据库中是否有该卡的发卡记录,龙寰卡不用
         public bool CheckPublishedCard(bool bMainKey, byte[] KeyInit)
         {
             //PSAM卡获取卡号不用进业务应用
@@ -965,9 +933,6 @@ namespace LohApduCtrl
                 {
                     if (dataReader.Read())
                     {
-                        string strMasterKey = (string)dataReader["PsamMasterKey"];
-                        byte[] byteKey = PublicFunc.StringToBCD(strMasterKey);
-                        Buffer.BlockCopy(byteKey, 0, KeyInit, 0, 16);
                         bRet = true;
                     }
                     dataReader.Close();

@@ -57,9 +57,7 @@ namespace ApduInterface
 
         int ReadKeyValueFromSource();        
 
-        bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar);        
-
-        bool UpdateCardInfoToDb(UserCardInfoParam UserCardInfoPar);        
+        bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar, bool bUpdate);               
 
         void GetUserCardInfo(UserCardInfoParam CardInfo);        
 

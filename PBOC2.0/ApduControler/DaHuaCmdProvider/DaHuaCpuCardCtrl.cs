@@ -1669,7 +1669,7 @@ namespace DaHuaApduCtrl
             sqlparams[25] = ObjSql.MakeParam("BusDistance", SqlDbType.VarChar, 10, ParameterDirection.Input, UserCardInfoPar.BusDistance);//
         }
 
-        public bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar)
+        public bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar, bool bUpdate)
         {
             bool bSuccess = false;
             SqlHelper ObjSql = new SqlHelper();
@@ -1678,55 +1678,59 @@ namespace DaHuaApduCtrl
                 ObjSql = null;
                 return false;
             }
-            SqlParameter[] sqlparams = new SqlParameter[28];
-            GetSqlParam(ObjSql, sqlparams, UserCardInfoPar);
-                
+            int nParamCount = 0;
+            if (!bUpdate)
+                nParamCount = 28;
+            else
+                nParamCount = 27;
+
             Guid CardGuid = Guid.NewGuid();
-            sqlparams[26] = ObjSql.MakeParam("UserKeyGuid", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, CardGuid);//
-            byte[] MotherCard = UserCardInfoPar.GetRelatedMotherCardID();
-            if (UserCardInfoPar.UserCardType == CardType.CompanySubCard && MotherCard != null)
-            {
-                string strVal = BitConverter.ToString(MotherCard).Replace("-", "");
-                sqlparams[27] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
-            }
-            else
-            {
-                sqlparams[27] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, "");//
-            }
-            if (ObjSql.ExecuteProc("PROC_PublishCpuCard", sqlparams) == 0)
-            {
-                SaveCpuCardKey(ObjSql, CardGuid, UserCardInfoPar.GetUserCardID());
-                bSuccess = true;
-            }
-            ObjSql.CloseConnection();
-            ObjSql = null;
-            return bSuccess;
-        }
 
-        public bool UpdateCardInfoToDb(UserCardInfoParam UserCardInfoPar)
-        {
-            bool bSuccess = false;
-            SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
-            {
-                ObjSql = null;
-                return false;
-            }
-            SqlParameter[] sqlparams = new SqlParameter[27];
+            SqlParameter[] sqlparams = new SqlParameter[nParamCount];
             GetSqlParam(ObjSql, sqlparams, UserCardInfoPar);
-
-            byte[] MotherCard = UserCardInfoPar.GetRelatedMotherCardID();
-            if (UserCardInfoPar.UserCardType == CardType.CompanySubCard && MotherCard != null)
+            if (!bUpdate)
             {
-                string strVal = BitConverter.ToString(MotherCard).Replace("-", "");
-                sqlparams[26] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
+                sqlparams[26] = ObjSql.MakeParam("UserKeyGuid", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, CardGuid);//
+                byte[] MotherCard = UserCardInfoPar.GetRelatedMotherCardID();
+                if (UserCardInfoPar.UserCardType == CardType.CompanySubCard && MotherCard != null)
+                {
+                    string strVal = BitConverter.ToString(MotherCard).Replace("-", "");
+                    sqlparams[27] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
+                }
+                else
+                {
+                    sqlparams[27] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, "");//
+                }
             }
             else
             {
-                sqlparams[26] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, "");//
+                byte[] MotherCard = UserCardInfoPar.GetRelatedMotherCardID();
+                if (UserCardInfoPar.UserCardType == CardType.CompanySubCard && MotherCard != null)
+                {
+                    string strVal = BitConverter.ToString(MotherCard).Replace("-", "");
+                    sqlparams[26] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
+                }
+                else
+                {
+                    sqlparams[26] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, "");//
+                }
             }
-            if (ObjSql.ExecuteProc("PROC_RewriteCpuCard", sqlparams) == 0)
-                bSuccess = true;
+                
+
+
+            if (!bUpdate)
+            {
+                if (ObjSql.ExecuteProc("PROC_PublishCpuCard", sqlparams) == 0)
+                {
+                    SaveCpuCardKey(ObjSql, CardGuid, UserCardInfoPar.GetUserCardID());
+                    bSuccess = true;
+                }
+            }
+            else
+            {
+                if (ObjSql.ExecuteProc("PROC_RewriteCpuCard", sqlparams) == 0)
+                    bSuccess = true;
+            }
             ObjSql.CloseConnection();
             ObjSql = null;
             return bSuccess;
@@ -1737,15 +1741,16 @@ namespace DaHuaApduCtrl
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
             byte[] byteAsn = GetUserCardASN(false, ref cardStart, ref cardEnd);
-            if (byteAsn != null)
-            {                
-                CardInfo.CardOrderNo = BitConverter.ToString(byteAsn, 5, 3).Replace("-", "");
-                CardInfo.UserCardType = (CardType)byteAsn[3];
-                Trace.Assert(byteAsn[2] == 0x02);
-                CardInfo.SetCardId(BitConverter.ToString(byteAsn, 0, 2).Replace("-", ""));
-                CardInfo.ValidCardBegin = cardStart;
-                CardInfo.ValidCardEnd = cardEnd;
-            }
+            if (byteAsn == null)
+                return;
+
+            CardInfo.CardOrderNo = BitConverter.ToString(byteAsn, 5, 3).Replace("-", "");
+            CardInfo.UserCardType = (CardType)byteAsn[3];
+            Trace.Assert(byteAsn[2] == 0x02);
+            CardInfo.SetCardId(BitConverter.ToString(byteAsn, 0, 2).Replace("-", ""));
+            CardInfo.ValidCardBegin = cardStart;
+            CardInfo.ValidCardEnd = cardEnd;
+
             GetBaseInfo(CardInfo);
             GetLimitInfo(CardInfo);
             GetCylinderInfo(CardInfo);

@@ -219,18 +219,7 @@ namespace LohApduCtrl
             return true;
         }
 
-        private bool DeleteMFWithKey(bool bContact,byte[] KeyVal)
-        {
-            if (!bContact)
-            {
-                //非接触式卡，锁PIN后重新制卡仍然锁PIN，需清理卡片其他区域
-                ClearCardFile(0x01);
-                ClearCardFile(0x02);
-            }
-            return ClearMF(null, null);
-        }
-
-        private bool DeleteMF(bool bContact, bool bMainKey)
+        private bool DeleteMF(bool bContact)
         {
             if (!bContact)
             {
@@ -277,26 +266,8 @@ namespace LohApduCtrl
 
         public int InitCard(bool bMainKey)
         {
-            byte[] KeyInit = new byte[16];
-            bool bPublished = CheckPublishedCard(bMainKey, KeyInit); 
-            if (bPublished)
-            {
-                //在应用内获取卡号后回到MF下   
-                if (SelectFile(m_PSE, null))
-                {
-                    if (!DeleteMFWithKey(m_bContactCard,KeyInit))
-                        return 1;
-                }
-            }
-            else
-            {
-                //新建立MF不需要外部认证
-                if (SelectFile(m_PSE, null))
-                {
-                    if (!DeleteMF(m_bContactCard,bMainKey))                        
-                        return 1;
-                }
-            }
+            if (!DeleteMF(m_bContactCard))
+                return 1;
             InitWhiteCard();
             return 0;
         }
@@ -810,21 +781,29 @@ namespace LohApduCtrl
             byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
             if (!SelectFile(m_ADF01, prefix))
                 return false;
-            byte[] byteCardId = UserCardInfoPar.GetUserCardID();            
+            byte[] byteCardId = UserCardInfoPar.GetUserCardID();
+            byte[] keyUpdate = null;
+            if (AppTendingKey != null)
+            {
+                //维护密钥需进行一次分散
+                keyUpdate = StorageKeyParam.GetUpdateEFKey(AppTendingKey, byteCardId);
+                if (keyUpdate == null)
+                    return false;
+            }
             //更新公共应用基本数据文件EF15
-            if (!UpdateEF15File(AppTendingKey, byteCardId, UserCardInfoPar.ValidCardBegin, UserCardInfoPar.ValidCardEnd))
+            if (!UpdateEF15File(keyUpdate, byteCardId, UserCardInfoPar.ValidCardBegin, UserCardInfoPar.ValidCardEnd))
                 return false;
             //更新持卡人基本数据文件EF16
-            if (!UpdateEF16File(AppTendingKey, UserCardInfoPar))
+            if (!UpdateEF16File(keyUpdate, UserCardInfoPar))
                 return false;
             //更新普通信息数据文件EF0B
             if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag))
                 return false;
-            //敏感信息文件
-            if (!UpdateEF1CFile(AppTendingKey, UserCardInfoPar))
+            //敏感信息文件EF1C
+            if (!UpdateEF1CFile(keyUpdate, UserCardInfoPar))
                 return false;
-            //气票专用文件
-            if (!UpdateEF0DFile(AppTendingKey, UserCardInfoPar))
+            //气票专用文件EF0D
+            if (!UpdateEF0DFile(keyUpdate, UserCardInfoPar))
                 return false;
             return true;
         }
@@ -1450,7 +1429,7 @@ namespace LohApduCtrl
             sqlparams[25] = ObjSql.MakeParam("BusDistance", SqlDbType.VarChar, 10, ParameterDirection.Input, UserCardInfoPar.BusDistance);//
         }
 
-        public bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar)
+        public bool SaveCpuCardInfoToDb(UserCardInfoParam UserCardInfoPar, bool bUpdate)
         {
             bool bSuccess = false;
             SqlHelper ObjSql = new SqlHelper();
@@ -1520,9 +1499,6 @@ namespace LohApduCtrl
             byte[] byteAsn = GetUserCardASN(false,ref cardStart, ref cardEnd);
             if (byteAsn == null)
                 return;
-            byte[] ExternalAuthKey = GetApplicationKeyVal(byteAsn, "MasterKey", 1);
-            if (ExternalAuthKey == null)
-                return;
             CardInfo.CardOrderNo = BitConverter.ToString(byteAsn, 5, 3).Replace("-", "");
             CardInfo.UserCardType = (CardType)byteAsn[3];
             Trace.Assert(byteAsn[2] == 0x02);
@@ -1530,17 +1506,10 @@ namespace LohApduCtrl
             CardInfo.ValidCardBegin = cardStart;
             CardInfo.ValidCardEnd = cardEnd;
 
-            if (!SelectFile(m_PSE, null))
-                return;
-            //外部认证             
-            if (!ExternalAuthWithKey(ExternalAuthKey))
-                return;
-            if (SelectCardApp(1))
-            {
-                GetBaseInfo(CardInfo);
-                GetLimitInfo(CardInfo);
-                GetCylinderInfo(CardInfo);
-            }
+            GetBaseInfo(CardInfo);
+            GetLimitInfo(CardInfo);
+            GetCylinderInfo(CardInfo);
+            
         }
 
         /// <summary>
@@ -1814,7 +1783,7 @@ namespace LohApduCtrl
 
         }
 
-        //检查数据库中是否有该卡的发卡记录,用于卡片重发
+        //检查数据库中是否有该卡的发卡记录,龙寰卡不用
         public bool CheckPublishedCard(bool bMainKey, byte[] KeyInit)
         {
             if (!SelectCardApp(1))//用户卡需要进应用后才能获取卡号
@@ -1846,10 +1815,6 @@ namespace LohApduCtrl
                 {
                     if (dataReader.Read())
                     {
-                        string strKeyUsed = "";
-                        strKeyUsed = (string)dataReader["MasterKey"];
-                        byte[] byteKey = PublicFunc.StringToBCD(strKeyUsed);
-                        Buffer.BlockCopy(byteKey, 0, KeyInit, 0, 16);
                         bRet = true;
                     }
                     dataReader.Close();
@@ -2134,7 +2099,7 @@ namespace LohApduCtrl
         private void InitWhiteCard()
         {
             CreateMF();
-            //ClearDF();            
+            //ClearDF(); //MF已清空，不需要再擦除DF下文件           
         }
 
         public bool CreateLoyaltyApp(byte[] byteASN, bool bDefaultPwd, string strCustomPwd)

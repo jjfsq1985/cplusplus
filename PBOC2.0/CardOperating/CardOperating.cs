@@ -258,7 +258,7 @@ namespace CardOperating
             if (nResult != 0)
             {
                 if (nResult == 1)
-                    MessageBox.Show("已存在卡号初始化失败，请确认卡商。", "警告", MessageBoxButtons.OK);
+                    MessageBox.Show("初始化失败，请确认卡商。", "警告", MessageBoxButtons.OK);
                 else if(nResult == 2)
                     MessageBox.Show("已存在卡号外部认证失败，请确认当前卡片的初始密钥。", "警告", MessageBoxButtons.OK);
                 else if (nResult == 3)
@@ -279,7 +279,7 @@ namespace CardOperating
             if (nResult != 0)
             {
                 if (nResult == 1)
-                    MessageBox.Show("已存在卡号重置失败，请确认卡商。", "警告", MessageBoxButtons.OK);
+                    MessageBox.Show("重置失败，请确认卡商。", "警告", MessageBoxButtons.OK);
                 else if (nResult == 2)
                     MessageBox.Show("已存在卡号外部认证失败，请确认当前卡片的主控密钥。", "警告", MessageBoxButtons.OK);
                 else if (nResult == 3)
@@ -353,7 +353,7 @@ namespace CardOperating
                 return;
 
             //保存至数据库            
-            string strSuccess = m_UserCardCtrl.SaveCpuCardInfoToDb(cardInfo) ? "成功" : "失败";
+            string strSuccess = m_UserCardCtrl.SaveCpuCardInfoToDb(cardInfo,false) ? "成功" : "失败";
             WriteMsg(0, "卡信息写入数据库，结果：" + strSuccess);
         }
 

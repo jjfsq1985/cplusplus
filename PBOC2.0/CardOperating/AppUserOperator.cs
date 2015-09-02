@@ -513,7 +513,7 @@ namespace CardOperating
             {
                 if (MessageBox.Show("无此卡号的发卡记录，是否增加？", "发卡", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    m_UserCardCtrl.SaveCpuCardInfoToDb(CardInfo);
+                    m_UserCardCtrl.SaveCpuCardInfoToDb(CardInfo, false);
                 }
             }
         }
@@ -848,7 +848,7 @@ namespace CardOperating
             }
             else
             {
-                m_UserCardCtrl.UpdateCardInfoToDb(m_CardInfoPar);
+                m_UserCardCtrl.SaveCpuCardInfoToDb(m_CardInfoPar,true);
             }
             CloseUserCard();            
         }
