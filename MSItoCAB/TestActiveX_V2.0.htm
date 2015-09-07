@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<head>
+    <title>C# ActiveX测试页</title>
+    <script type="text/javascript" src="md5.js"></script>
+    <script language="javascript">
+    	
+    function fclose()
+		{
+			PublishOperator.ReleaseCardCtrl();
+		}
+	
+		function fload()
+		{
+			var DaHuaAtMt = 0;
+			PublishOperator.InitCardControl(DaHuaAtMt);	
+		}
+		
+	  var CardId = "";	
+		
+    function ReadCard() 
+    {
+        var info = new ActiveXObject("PublishCardX.UserCardInfoParam");
+        PublishOperator.ReadUserCardInfo(false,info);
+
+        CardId = info.GetStringUserCardID();
+        var CardName = info.UserName;
+        alert("卡号:" + CardId + "持卡人:" + CardName);
+    }
+
+    function WriteCard() 
+    {
+        var info = new ActiveXObject("PublishCardX.UserCardInfoParam"); 
+        info.UserName = "WebTest";
+        info.TelePhone = "18005128888";
+        //维护密钥
+        var encryptInfo = new ActiveXObject("PublishCardX.EncryptKeyParam");
+        encryptInfo.strEncryptSeed = "EC8F98A27B149809";
+        encryptInfo.strInitKey = "271913149B654846B8B59F17B38D629B";
+        encryptInfo.strSrcKey = "670CE38BE9F9C1FE670CE38BE9F9C1FE";
+        
+        var VerifyInfo = new ActiveXObject("PublishCardX.VerifyParam");
+        VerifyInfo.strVerifyTime = "20150902163030";
+        VerifyInfo.strPrivateCode = hex_md5("20150902" + CardId + "163030"); 
+               
+        PublishOperator.WriteUserCardInfo(false,info,encryptInfo,null,VerifyInfo);
+    }
+    
+    function CardMoney()
+    {
+    	var Pin = "999999";
+    	var balance = PublishOperator.ReadCardBalance(false,Pin);
+    	alert("余额:"+ balance);
+    	var statusCard = new ActiveXObject("PublishCardX.GrayStatus");
+    	PublishOperator.ReadCardGrayStatus(false,Pin,statusCard);
+    	if(statusCard.bCardGray)
+    		alert("灰卡终端机编号：" + statusCard.strTerminalId);
+    }
+    
+    function LoadMoney()
+    {
+    	var Pin = "999999";
+    	//圈存密钥
+    	var encryptInfo = new ActiveXObject("PublishCardX.EncryptKeyParam");
+      encryptInfo.strEncryptSeed = "EC8F98A27B149809";
+      encryptInfo.strInitKey = "271913149B654846B8B59F17B38D629B";
+      encryptInfo.strSrcKey = "4F4DF028A66E95364F4DF028A66E9536";
+      
+      var VerifyInfo = new ActiveXObject("PublishCardX.VerifyParam");
+      VerifyInfo.strVerifyTime = "20150902164030";
+      VerifyInfo.strPrivateCode = hex_md5("20150902" + CardId + "164030");        
+
+    	PublishOperator.CardLoadMoney(false,Pin,"201509020001",1000.0,encryptInfo,VerifyInfo);
+    }
+	
+    	</script>
+    
+</head>
+<body onunload="fclose()" onload="fload()">
+    <object id="PublishOperator" classid="clsid:8FA99275-798D-454b-AC7E-DEC997B99042" codebase="PublishCardX.cab#version=1,2,0,2"></object>    
+    <input id="Read" type="button" value="读取卡信息" onclick="ReadCard()"/>
+    <input id="Write" type="button" value="修改卡信息" onclick="WriteCard()"/>
+    <input id="GetMoney" type="button" value="读取余额和灰卡" onclick="CardMoney()"/>
+    <input id="LoadMoney" type="button" value="圈存1000元" onclick="LoadMoney()"/>
+</body>
+</html>

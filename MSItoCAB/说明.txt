@@ -2,7 +2,7 @@
 生成的证书安装到受信任的根证书颁发机构
 生成证书时使用的密码： jjf2014
 发布者密码：jjf2014
-PublishCardX.msi中包含PublishCardX.dll 和依赖文件mt_32.dll
+PublishCardX.msi中包含PublishCardX.dll 和依赖文件mt_32.dll,DualCardDll.dll WinSCard.dll
 
 
 //cab包步骤
