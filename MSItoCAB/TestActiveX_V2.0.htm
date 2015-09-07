@@ -29,7 +29,8 @@
 
     function WriteCard() 
     {
-        var info = new ActiveXObject("PublishCardX.UserCardInfoParam"); 
+        var info = new ActiveXObject("PublishCardX.UserCardInfoParam");
+        PublishOperator.ReadUserCardInfo(false, info); 
         info.UserName = "WebTest";
         info.TelePhone = "18005128888";
         //维护密钥
@@ -40,9 +41,11 @@
         
         var VerifyInfo = new ActiveXObject("PublishCardX.VerifyParam");
         VerifyInfo.strVerifyTime = "20150902163030";
-        VerifyInfo.strPrivateCode = hex_md5("20150902" + CardId + "163030"); 
-               
-        PublishOperator.WriteUserCardInfo(false,info,encryptInfo,null,VerifyInfo);
+        VerifyInfo.strPrivateCode = hex_md5("20150902" + CardId + "163030");
+
+        var ret = PublishOperator.WriteUserCardInfo(false, info, encryptInfo, new ActiveXObject("PublishCardX.EncryptKeyParam"), VerifyInfo);
+        if (ret == 0)
+            alert("写卡成功");
     }
     
     function CardMoney()
