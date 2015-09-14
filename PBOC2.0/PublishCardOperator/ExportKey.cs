@@ -119,10 +119,10 @@ namespace PublishCardOperator
             OrgKeyToXml(xml, Root, m_ObjSql, "UserOrgKey", 0, EncryptKey);
             OrgKeyToXml(xml, Root, m_ObjSql, "PsamOrgKey", 1, EncryptKey);
 
+            SqlParameter[] sqlparam = new SqlParameter[1];
             SqlDataReader dataReader = null;
 
             //用户卡密钥
-            SqlParameter[] sqlparam = new SqlParameter[1];
             sqlparam[0] = m_ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, 1);
             m_ObjSql.ExecuteProc("PROC_GetCpuKey", sqlparam, out dataReader);
             if (dataReader != null)
@@ -131,7 +131,7 @@ namespace PublishCardOperator
                 {
                     //卡应用1
                     XmlNode CpuKeyRoot = xml.CreateNode(XmlNodeType.Element, "UserKeyValue_App1", "");
-                                        
+
                     XmlNode DescribeNode = xml.CreateNode(XmlNodeType.Element, "Describe", "");
                     string strData = DateTime.Now.ToString("F") + (string)dataReader["InfoRemark"];
                     DescribeNode.InnerText = strData;
@@ -142,7 +142,7 @@ namespace PublishCardOperator
                     node.InnerText = BitConverter.ToString(InitKey).Replace("-", "");
                     Root.AppendChild(node);
 
-                    KeyToXmlNode(dataReader,xml, CpuKeyRoot, "MasterKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "MasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "MasterTendingKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppMasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppTendingKey", EncryptKey);
@@ -155,6 +155,30 @@ namespace PublishCardOperator
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppUnGrayKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppUnLoadKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppOverdraftKey", EncryptKey);
+
+                    Root.AppendChild(CpuKeyRoot);
+                }
+                dataReader.Close();
+                dataReader = null;
+            }           
+            sqlparam[0] = m_ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, 2);
+            m_ObjSql.ExecuteProc("PROC_GetCpuKey", sqlparam, out dataReader);
+            if (dataReader != null)
+            {
+                if (dataReader.HasRows && dataReader.Read())
+                {
+                    //卡应用2
+                    XmlNode CpuKeyRoot = xml.CreateNode(XmlNodeType.Element, "UserKeyValue_App2", "");
+
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppMasterKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppTendingKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppInternalAuthKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppPinResetKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppPinUnlockKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppConsumerKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppLoadKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppTacKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppUnGrayKey", EncryptKey);
 
                     Root.AppendChild(CpuKeyRoot);
                 }

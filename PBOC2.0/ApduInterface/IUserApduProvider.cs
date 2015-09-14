@@ -45,27 +45,27 @@ namespace ApduInterface
         
         bool createUpdateEF10FileCmd(byte[] key, byte[] RandomVal);
 
-        bool createInitializeLoadCmd(int nMoney, byte[] TermialID);        
+        bool createInitializeLoadCmd(int nMoney, byte[] TermialID, BalanceType eType);        
 
         bool createInitializeUnLoadCmd(int nMoney, byte[] TermialID);        
 
         bool createCreditLoadCmd(byte[] byteMAC2, byte[] TimeBcd);
 
-        bool createDebitUnLoadCmd(byte[] byteMAC2, byte[] TimeBcd);        
+        bool createDebitUnLoadCmd(byte[] byteMAC2, byte[] TimeBcd);
 
-        bool createCardBalanceCmd();        
+        bool createCardBalanceCmd(BalanceType eType);        
 
-        bool createrCardGrayCmd(bool bClearTAC);        
+        bool createrCardGrayCmd(bool bClearTAC);
 
-        bool createrInitForGrayCmd(byte[] TermialID);        
+        bool createrInitForGrayCmd(byte[] TermialID, BalanceType eType);        
 
         bool createrGrayLockCmd(byte[] DataVal);        
 
         bool createrInitForUnlockCardCmd(byte[] TermialID);
 
         bool createGreyCardUnLockCmd(int nMoney, byte[] byteMAC2, byte[] TimeBcd);
-        
-        bool createDebitForUnlockCmd(byte[] DebitData);
+
+        bool createDebitForUnlockCmd(byte[] DebitData, BalanceType eType);
 
         bool createReadRecordCmd(byte ResponseLen, int nRecordId);
 

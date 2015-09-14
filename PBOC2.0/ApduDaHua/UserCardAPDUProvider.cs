@@ -806,14 +806,14 @@ namespace ApduDaHua
             return true;
         }        
 
-        public bool createInitializeLoadCmd(int nMoney, byte[] TermialID)
+        public bool createInitializeLoadCmd(int nMoney, byte[] TermialID, BalanceType eType)
         {
             if (TermialID.Length != 6)
                 return false;
             m_CLA = 0x80;
             m_INS = 0x50;
             m_P1 = 0x00;
-            m_P2 = 0x01; //ED电子存折0x01; EP电子钱包0x02
+            m_P2 = (byte)eType; //ED电子存折0x01; EP电子钱包0x02
             int nLen = 11;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
@@ -836,7 +836,7 @@ namespace ApduDaHua
             m_CLA = 0x80;
             m_INS = 0x50;
             m_P1 = 0x05;
-            m_P2 = 0x01; //圈提
+            m_P2 = 0x01; //电子存折ED圈提，EP不能圈提
             int nLen = 11;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
@@ -884,12 +884,12 @@ namespace ApduDaHua
             return true;
         }
 
-        public bool createCardBalanceCmd()
+        public bool createCardBalanceCmd(BalanceType eType)
         {
             m_CLA = 0x80;
             m_INS = 0x5C;
             m_P1 = 0x00;
-            m_P2 = 0x01; //ED电子存折0x01; EP电子钱包0x02
+            m_P2 = (byte)eType; //ED电子存折0x01; EP电子钱包0x02
             m_Lc = 0;
             m_Data = null;
             m_le = 4;
@@ -911,14 +911,14 @@ namespace ApduDaHua
         }
 
         //灰锁初始化
-        public bool createrInitForGrayCmd(byte[] TermialID)
+        public bool createrInitForGrayCmd(byte[] TermialID, BalanceType eType)
         {
             if (TermialID.Length != 6)
                 return false;
             m_CLA = 0xE0;
             m_INS = 0x7A;
             m_P1 = 0x08;
-            m_P2 = 0x01;//ED电子存折0x01; EP电子钱包0x02
+            m_P2 = (byte)eType;//ED电子存折0x01; EP电子钱包0x02
             int nLen = 7;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
@@ -987,7 +987,7 @@ namespace ApduDaHua
             return true;
         }
 
-        public bool createDebitForUnlockCmd(byte[] DebitData)
+        public bool createDebitForUnlockCmd(byte[] DebitData, BalanceType eType)
         {
             int nLen = DebitData.Length;
             if (nLen != 27)
@@ -995,7 +995,7 @@ namespace ApduDaHua
             m_CLA = 0xE0;
             m_INS = 0x7E;
             m_P1 = 0x08;
-            m_P2 = 0x01;//ED电子存折0x01; EP电子钱包0x02
+            m_P2 = (byte)eType;//ED电子存折0x01; EP电子钱包0x02
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
             Buffer.BlockCopy(DebitData, 0, m_Data, 0, 27);            

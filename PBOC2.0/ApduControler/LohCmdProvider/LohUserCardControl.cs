@@ -45,10 +45,31 @@ namespace LohApduCtrl
         private static byte[] m_MUK = new byte[] { 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99 };
         //联机解扣密钥
         private static byte[] m_MUGK = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
-        //应用维护密钥MAMK
+        //应用维护密钥MAMTK
         private static byte[] m_MAMTK = new byte[] { 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33 };
         //内部认证密钥MIAK
         private static byte[] m_MIAK = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //积分应用主控密钥MAMK
+        private static byte[] m_MAMK_Ly = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
+        //积分消费密钥MPK
+        private static byte[] m_MPK_Ly = new byte[] { 0xDA, 0xC2, 0x71, 0x5F, 0x15, 0xC1, 0x40, 0x6D, 0xF3, 0x2E, 0xE6, 0x9E, 0xD4, 0xF8, 0x46, 0x2E };
+        //积分圈存密钥MLK
+        private static byte[] m_MLK_Ly = new byte[] { 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44 };
+        //TAC主密钥MTK
+        private static byte[] m_MTK_Ly = new byte[] { 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66 };
+        //PIN解锁主密钥MPUK
+        private static byte[] m_MPUK_Ly = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
+        //密码重装主密钥MRPK
+        private static byte[] m_MRPK_Ly = new byte[] { 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88 };
+        //联机解扣密钥
+        private static byte[] m_MUGK_Ly = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
+        //积分维护主密钥MAMTK
+        private static byte[] m_MAMTK_Ly = new byte[] { 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33 };
+        //内部认证密钥MIAK
+        private static byte[] m_MIAK_Ly = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
 
         public LohUserCardControl(ApduController ApduCtrlObj, bool bContactCard, SqlConnectInfo DbInfo)
         {
@@ -808,9 +829,9 @@ namespace LohApduCtrl
             return true;
         }
 
-        private bool InitializeForLoad(int nMoney, byte[] TermId, byte[] outData)
+        private bool InitializeForLoad(int nMoney, byte[] TermId, byte[] outData, BalanceType eType)
         {
-            m_CmdProvider.createInitializeLoadCmd(nMoney,TermId);
+            m_CmdProvider.createInitializeLoadCmd(nMoney, TermId, eType);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -943,7 +964,55 @@ namespace LohApduCtrl
 
         public bool LoyaltyLoad(byte[] ASN, byte[] TermId, int nLoyaltyValue, bool bReadKey)
         {
-            return false;
+            //获取已发卡的圈存密钥
+            if (bReadKey)
+            {
+                byte[] keyLoad = GetApplicationKeyVal(ASN, "AppLoadKey", 2);
+                if (keyLoad == null)
+                {
+                    MessageBox.Show("无积分圈存密钥，不能圈存积分。");
+                    return false;
+                }
+                Buffer.BlockCopy(keyLoad, 0, m_MLK_Ly, 0, 16);
+            }
+            const byte BusinessType = 0x02; //交易类型标识：圈存存折0x01 圈存钱包0x02
+            byte[] outData = new byte[16];
+            byte[] SysTime = PublicFunc.GetBCDTime();
+            if (!InitializeForLoad(nLoyaltyValue, TermId, outData, BalanceType.Balance_EP))
+                return false;
+            byte[] byteBalance = new byte[4];
+            Buffer.BlockCopy(outData, 0, byteBalance, 0, 4);
+            byte[] OnlineSn = new byte[2];//交易序号
+            Buffer.BlockCopy(outData, 4, OnlineSn, 0, 2);
+            byte keyVer = (byte)outData[6];
+            byte keyFlag = (byte)outData[7];
+            byte[] rand = new byte[4];
+            Buffer.BlockCopy(outData, 8, rand, 0, 4);
+            byte[] MAC1 = new byte[4];
+            Buffer.BlockCopy(outData, 12, MAC1, 0, 4);
+            //判断MAC1是否正确
+            byte[] seslk = GlobalControl.GetProcessKey(ASN, m_MLK_Ly, rand, OnlineSn);//m_MLK_Ly圈存主密钥1（DLK）
+            if (seslk == null)
+                return false;
+            byte[] srcData = new byte[15];//用于计算MAC1的原始数据
+            Buffer.BlockCopy(byteBalance, 0, srcData, 0, 4);
+            byte[] byteMoney = BitConverter.GetBytes(nLoyaltyValue);
+            srcData[4] = byteMoney[3];
+            srcData[5] = byteMoney[2];
+            srcData[6] = byteMoney[1];
+            srcData[7] = byteMoney[0];
+            srcData[8] = BusinessType;
+            Buffer.BlockCopy(TermId, 0, srcData, 9, 6);
+            byte[] MAC1Compare = m_CmdProvider.CalcMacVal_DES(srcData, seslk);
+            if (!PublicFunc.ByteDataEquals(MAC1, MAC1Compare))//MAC1检查
+            {
+                string strInfo = string.Format("圈存积分 Output MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(MAC1), BitConverter.ToString(MAC1Compare));
+                System.Diagnostics.Trace.WriteLine(strInfo);
+                return false;
+            }
+            byte[] MAC2 = CalcMAC2(BusinessType, nLoyaltyValue, TermId, SysTime, seslk);
+            CreditForLoad(MAC2, SysTime);
+            return true;
         }
 
         //圈存功能
@@ -963,7 +1032,7 @@ namespace LohApduCtrl
             const byte BusinessType = 0x01; //交易类型标识：圈存存折0x01 圈存钱包0x02
             byte[] outData = new byte[16];
             byte[] SysTime = PublicFunc.GetBCDTime();
-            if (!InitializeForLoad(nMoneyValue, TermId, outData))
+            if (!InitializeForLoad(nMoneyValue, TermId, outData, BalanceType.Balance_ED))
                 return false;
             byte[] byteBalance = new byte[4];
             Buffer.BlockCopy(outData, 0, byteBalance, 0, 4);            
@@ -1054,9 +1123,9 @@ namespace LohApduCtrl
         }
 
 
-        public bool UserCardBalance(ref double dbBalance)
+        public bool UserCardBalance(ref double dbBalance, BalanceType eType)
         {
-            m_CmdProvider.createCardBalanceCmd();
+            m_CmdProvider.createCardBalanceCmd(eType);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -1118,9 +1187,9 @@ namespace LohApduCtrl
 
 
 
-        public bool InitForGray(byte[] TermialID, byte[] outData)
+        public bool InitForGray(byte[] TermialID, byte[] outData, BalanceType eType)
         {
-            m_CmdProvider.createrInitForGrayCmd(TermialID);
+            m_CmdProvider.createrInitForGrayCmd(TermialID, eType);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -1269,9 +1338,9 @@ namespace LohApduCtrl
             return true;
         }
 
-        public bool DebitForUnlock(byte[] byteData)
+        public bool DebitForUnlock(byte[] byteData, BalanceType eType)
         {
-            m_CmdProvider.createDebitForUnlockCmd(byteData);
+            m_CmdProvider.createDebitForUnlockCmd(byteData, eType);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -1331,16 +1400,19 @@ namespace LohApduCtrl
                 ObjSql = null;
                 return false;
             }
-            ObjSql.CloseConnection();
-            ObjSql = null;
+            bool bCompare = false;
+            if (GetDbUserKeyValue(ObjSql, 2))
+                bCompare = true;
 
-            byte[] ConsumerKey = GlobalControl.GetDbConsumerKey(m_DBInfo, "PROC_GetPsamKey", "ConsumerMasterKey", 0);
-            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
+            byte[] ConsumerKey = GlobalControl.GetDbConsumerKey(ObjSql, "PROC_GetPsamKey", "ConsumerMasterKey", 0);
+            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK) || (bCompare && !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK_Ly)) )
             {
                 OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
-                MessageBox.Show("加气消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("加气或积分消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
+            ObjSql.CloseConnection();
+            ObjSql = null;
             return true;
         }
 
@@ -2104,17 +2176,114 @@ namespace LohApduCtrl
 
         public bool CreateLoyaltyApp(byte[] byteASN, bool bDefaultPwd, string strCustomPwd)
         {
-            return false;
+            byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
+            if (!SelectFile(m_ADF02, prefix))
+                return false;
+            //气票交易密钥
+            if (!CreateEFKeyFile())
+                return false;
+
+            StorageLoyaltyKey(byteASN);
+            StoragePINFile(bDefaultPwd, strCustomPwd);//PIN安装
+
+            //公共应用基本数据文件
+            if (!CreateEFFile(0x0015, 0xA8, 0x001E, 0, 0xF0F0, 0xFFFF))
+                return false;
+            //持卡人基本数据文件
+            if (!CreateEFFile(0x0016, 0xA8, 0x0029, 0, 0xF0F0, 0xFFFF))
+                return false;
+            //气票应用普通信息数据文件
+            if (!CreateEFFile(0x001B, 0x28, 0x0027, 0, 0xF0F0, 0xFFFF))
+                return false;
+            //交易明细文件EF18 循环记录文件
+            if (!CreateRecordFile(0x0018, 0x2E, 0x0B, 0x17, 0xF1EF, 0xFFFF))
+                return false;
+            return true;       
         }
 
         public bool UpdateLoyaltyApp(UserCardInfoParam UserCardInfoPar, byte[] AppTendingKey)
         {
-            return false;
+            //选择ADF01
+            byte[] prefix = new byte[] { 0xA0, 0x00, 0x00, 0x00, 0x03 };
+            if (!SelectFile(m_ADF02, prefix))
+                return false;
+            byte[] byteCardId = UserCardInfoPar.GetUserCardID();
+            byte[] keyUpdate = null;
+            if (AppTendingKey != null)
+            {
+                //维护密钥需进行一次分散
+                keyUpdate = StorageKeyParam.GetUpdateEFKey(AppTendingKey, byteCardId);
+                if (keyUpdate == null)
+                    return false;
+            }
+            //更新公共应用基本数据文件EF15
+            if (!UpdateEF15File(keyUpdate, byteCardId, UserCardInfoPar.ValidCardBegin, UserCardInfoPar.ValidCardEnd))
+                return false;
+            //更新持卡人基本数据文件EF16
+            if (!UpdateEF16File(keyUpdate, UserCardInfoPar))
+                return false;
+            //更新普通信息数据文件EF0B
+            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag))
+                return false;
+            return true;
         }
 
+        //安装积分应用密钥
         private bool StorageLoyaltyKey(byte[] byteASN)
         {
-            return false;
+            StorageKeyParam KeyInfo = null;
+            //加气应用主控密钥MCMK
+            KeyInfo = new StorageKeyParam("安装积分主控密钥", 0x00, 0xF9, 0xAA, 0x0A, 0x33);
+            KeyInfo.SetParam(byteASN, m_MAMK_Ly, m_KeyMain);
+            if (!storageUserKey(KeyInfo))
+                return false;
+
+            //加气消费密钥MPK
+            byte[] LeftDiversify = DesCryptography.TripleEncryptData(KeyInfo.ASN, m_MPK_Ly);
+            byte[] RightDiversify = DesCryptography.TripleEncryptData(KeyInfo.XorASN, m_MPK_Ly);
+            byte[] TempMPK_Ly = new byte[16];           //加气消费密钥分散
+            Buffer.BlockCopy(LeftDiversify, 0, TempMPK_Ly, 0, 8);
+            Buffer.BlockCopy(RightDiversify, 0, TempMPK_Ly, 8, 8);
+            KeyInfo = new StorageKeyParam("安装积分消费密钥", 0x01, 0xFE, 0xAA, 0x01, 0x00);
+            KeyInfo.SetParam(byteASN, TempMPK_Ly, m_KeyMain);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //应用维护密钥MAMK
+            KeyInfo = new StorageKeyParam("安装积分应用维护密钥", 0x00, 0xF6, 0xAA, 0xFF, 0x33);
+            KeyInfo.SetParam(byteASN, m_MAMTK_Ly, m_KeyMain);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //圈存密钥MLK
+            KeyInfo = new StorageKeyParam("安装积分圈存密钥", 0x01, 0xFF, 0xAA, 0x01, 0x00);
+            KeyInfo.SetParam(byteASN, m_MLK_Ly, m_KeyMain);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //TAC密钥MTK
+            KeyInfo = new StorageKeyParam("安装积分TAC密钥", 0x00, 0xF4, 0xAA, 0x01, 0x00);
+            KeyInfo.SetParam(byteASN, m_MTK_Ly, m_KeyMain);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //PIN解锁密钥MPUK
+            KeyInfo = new StorageKeyParam("安装积分PIN解锁密钥", 0x00, 0xF7, 0xAA, 0xFF, 0x33);
+            KeyInfo.SetParam(byteASN, m_MPUK_Ly, m_KeyMain);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //密码重装密钥MRPK
+            KeyInfo = new StorageKeyParam("安装积分PIN重装密钥", 0x00, 0xF8, 0xAA, 0xFF, 0x33);
+            KeyInfo.SetParam(byteASN, m_MRPK_Ly, m_KeyMain);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //联机解扣密钥MUGK
+            KeyInfo = new StorageKeyParam("安装积分联机解扣密钥", 0x01, 0xD9, 0xAA, 0x01, 0x00);
+            KeyInfo.SetParam(byteASN, m_MUGK_Ly, m_KeyMain);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            //内部认证密钥MIAK
+            KeyInfo = new StorageKeyParam("安装积分内部认证密钥", 0x01, 0xF9, 0xAA, 0x0A, 0x33);//同主控密钥
+            KeyInfo.SetParam(byteASN, m_MIAK_Ly, m_KeyMain);
+            if (!storageUserKey(KeyInfo))
+                return false;
+            return true;
         }
 
         private bool ReadKeyFromXml()
@@ -2122,7 +2291,12 @@ namespace LohApduCtrl
             CpuKeyData CpuKey = new CpuKeyData();
             CpuKey.nAppIndex = 1;
             if (!GlobalControl.GetXmlCpuKeyVal(m_ctrlApdu.m_strCardKeyPath, CpuKey))
-                return false;            
+                return false;
+            CpuKeyData CpuKey_Ly = new CpuKeyData();
+            CpuKey_Ly.nAppIndex = 2;
+            if (!GlobalControl.GetXmlCpuKeyVal(m_ctrlApdu.m_strCardKeyPath, CpuKey))
+                CpuKey_Ly = null;
+
             SetMainKeyValue(CpuKey.MasterKeyVal, CardCategory.CpuCard);//卡片主控密钥
             SetMaintainKeyValue(CpuKey.MasterTendingKeyVal, CardCategory.CpuCard);  //卡片维护密钥   
             Buffer.BlockCopy(CpuKey.AppMasterKey, 0, m_MAMK, 0, 16);
@@ -2137,11 +2311,24 @@ namespace LohApduCtrl
             Buffer.BlockCopy(CpuKey.AppUnLoadKey, 0, m_MULK, 0, 16);
             Buffer.BlockCopy(CpuKey.AppOverdraftKey, 0, m_MUK, 0, 16);
 
+            if (CpuKey_Ly != null)
+            {
+                Buffer.BlockCopy(CpuKey.AppMasterKey, 0, m_MAMK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey.AppTendingKey, 0, m_MAMTK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey.AppInternalAuthKey, 0, m_MIAK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey.AppPinResetKey, 0, m_MRPK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey.AppPinUnlockKey, 0, m_MPUK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey.AppConsumerKey, 0, m_MPK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey.AppLoadKey, 0, m_MLK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey.AppTacKey, 0, m_MTK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey.AppUnGrayKey, 0, m_MUGK_Ly, 0, 16);
+            }
+
             byte[] ConsumerKey = GlobalControl.GetPrivateKeyFromXml(m_ctrlApdu.m_strCardKeyPath, "PsamKeyValue", "ConsumerMasterKey");
-            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK))
+            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK) || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK_Ly))
             {
                 OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
-                MessageBox.Show("加气消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("加气或积分消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             return true;
@@ -2151,9 +2338,15 @@ namespace LohApduCtrl
         {
             //将密钥存储到Base_Card_Key表
             if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
-                GlobalControl.InsertCardKeyFromXml(ObjSql, keyGuid, ASN, m_ctrlApdu.m_strCardKeyPath);
+            {
+                GlobalControl.InsertCardKeyFromXml(ObjSql, keyGuid, ASN, m_ctrlApdu.m_strCardKeyPath, 1);
+                GlobalControl.InsertCardKeyFromXml(ObjSql, keyGuid, ASN, m_ctrlApdu.m_strCardKeyPath, 2);
+            }
             else
-                GlobalControl.InsertCardKeyFromDb(ObjSql, keyGuid, ASN);
+            {
+                GlobalControl.InsertCardKeyFromDb(ObjSql, keyGuid, ASN, 1);
+                GlobalControl.InsertCardKeyFromDb(ObjSql, keyGuid, ASN, 2);
+            }
         }
 
     }

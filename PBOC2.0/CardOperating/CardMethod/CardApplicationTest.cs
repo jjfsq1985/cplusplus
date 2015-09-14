@@ -210,7 +210,7 @@ namespace CardOperating
                     strT = "圈存钱包";
                     break;
                 case 0x03:
-                    strT = "圈提存折";
+                    strT = "存折圈提";
                     break;
                 case 0x93:
                     strT = "加气交易";

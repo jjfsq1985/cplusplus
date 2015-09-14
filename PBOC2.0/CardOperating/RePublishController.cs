@@ -157,7 +157,7 @@ namespace CardOperating
         private void LoadUserCard(byte[] TerminalId, byte[] ASN, double dbMoney)
         {
             double dbBalance = 0.0;
-            bool bRead = m_UserCardCtrl.UserCardBalance(ref dbBalance);//圈存前读余额
+            bool bRead = m_UserCardCtrl.UserCardBalance(ref dbBalance, BalanceType.Balance_ED);//圈存前读余额
             int nCardStatus = 0;
             byte[] TermialId = new byte[6];
             byte[] GTAC = new byte[4];

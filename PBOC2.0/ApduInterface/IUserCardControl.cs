@@ -39,19 +39,19 @@ namespace ApduInterface
 
         bool UserCardUnLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKey);
 
-        bool UserCardBalance(ref double dbBalance);        
+        bool UserCardBalance(ref double dbBalance, BalanceType eType);        
 
         bool UserCardGray(ref int nStatus, byte[] PSAM_TID,byte[] GTAC);
 
-        bool InitForGray(byte[] TermialID, byte[] outData);        
+        bool InitForGray(byte[] TermialID, byte[] outData, BalanceType eType);        
                 
         bool GrayLock(byte[] Data, byte[] outGTAC, byte[] outMAC2);        
                 
         bool InitForUnlockGreyCard(byte[] TermialID, byte[] outData);
 
         bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney, bool bReadKey);
-        
-        bool DebitForUnlock(byte[] byteData);        
+
+        bool DebitForUnlock(byte[] byteData, BalanceType eType);        
 
         bool ClearTACUF();
 

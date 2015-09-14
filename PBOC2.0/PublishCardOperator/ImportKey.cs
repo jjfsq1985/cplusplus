@@ -157,9 +157,13 @@ namespace PublishCardOperator
                 if (!GlobalControl.GetXmlCpuKeyVal(strXmlPath, XmlCpuKey) || !GlobalControl.GetXmlPsamKeyVal(strXmlPath, XmlPsamKey))
                     return;
                 UpdateDbOrgKey(XmlCpuKey.OrgKeyVal, XmlPsamKey.OrgKeyVal, "从XML导入");
-                UpdateDbCpuKey(XmlCpuKey);                
                 UpdateDbPsamKey(XmlPsamKey);
 
+                CpuKeyData XmlCpuKey_Ly = new CpuKeyData();
+                XmlCpuKey_Ly.nAppIndex = 2;
+                if (!GlobalControl.GetXmlCpuKeyVal(strXmlPath, XmlCpuKey_Ly))
+                    XmlCpuKey_Ly = null;
+                UpdateDbCpuKey(XmlCpuKey,XmlCpuKey_Ly);
             }
             catch
             {
@@ -248,8 +252,8 @@ namespace PublishCardOperator
             ObjSql = null;
         }
 
-        private void UpdateDbCpuKey(CpuKeyData XmlCpuKey)
-        {
+        private void UpdateDbCpuKey(CpuKeyData XmlCpuKey, CpuKeyData XmlCpuKey_Ly)
+        {            
             SqlHelper ObjSql = new SqlHelper();
             if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
@@ -277,11 +281,14 @@ namespace PublishCardOperator
             sqlparams[7] = ObjSql.MakeParam("AddKeyId", SqlDbType.Int, 4, ParameterDirection.Output, null);
             if (ObjSql.ExecuteProc("PROC_UpdateCpuKey", sqlparams) == 0)
             {
-                UpdateDbCpuAppKeyValue(ObjSql, XmlCpuKey, (int)sqlparams[7].Value);
+                int nRelatedKeyId = (int)sqlparams[7].Value;
+                UpdateDbCpuAppKeyValue(ObjSql, XmlCpuKey, nRelatedKeyId);
+                if(XmlCpuKey_Ly != null)
+                    UpdateDbCpuAppKeyValue(ObjSql, XmlCpuKey_Ly, nRelatedKeyId);
             }
 
             ObjSql.CloseConnection();
-            ObjSql = null;
+            ObjSql = null;           
         }
 
         private void UpdateDbCpuAppKeyValue(SqlHelper ObjSql, CpuKeyData XmlCpuKey, int nRelatedKeyId)
@@ -318,11 +325,18 @@ namespace PublishCardOperator
             strBcd = BitConverter.ToString(XmlCpuKey.AppUnGrayKey).Replace("-", "");
             sqlparams[10] = ObjSql.MakeParam("UnGrayKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
-            strBcd = BitConverter.ToString(XmlCpuKey.AppUnLoadKey).Replace("-", "");
+            //不存在的密钥用0补满
+            if (XmlCpuKey.nAppIndex == 1)
+                strBcd = BitConverter.ToString(XmlCpuKey.AppUnLoadKey).Replace("-", "");
+            else
+                strBcd = "00000000000000000000000000000000";
             sqlparams[11] = ObjSql.MakeParam("UnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
-            strBcd = BitConverter.ToString(XmlCpuKey.AppOverdraftKey).Replace("-", "");
-            sqlparams[12] = ObjSql.MakeParam("OvertraftKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+            if (XmlCpuKey.nAppIndex == 1)
+                strBcd = BitConverter.ToString(XmlCpuKey.AppOverdraftKey).Replace("-", "");
+            else
+                strBcd = "00000000000000000000000000000000";
+            sqlparams[12] = ObjSql.MakeParam("OvertraftKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);            
 
             sqlparams[13] = ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, DbStateFlag.eDbAdd);
 

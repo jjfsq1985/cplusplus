@@ -99,7 +99,7 @@ namespace CardOperating
                 }
 
                 double dbBalance = 0.0f;
-                if (m_UserCardCtrl.UserCardBalance(ref dbBalance))
+                if (m_UserCardCtrl.UserCardBalance(ref dbBalance,BalanceType.Balance_ED))
                     textBalance.Text = dbBalance.ToString("F2");
                 else
                     textBalance.Text = "0.00";
@@ -143,7 +143,7 @@ namespace CardOperating
                 return;
             //灰锁初始化
             byte[] outData = new byte[15];
-            m_UserCardCtrl.InitForGray(m_TermialId, outData);
+            m_UserCardCtrl.InitForGray(m_TermialId, outData, BalanceType.Balance_ED);
             byte[] byteBalance = new byte[4];
             Buffer.BlockCopy(outData, 0, byteBalance, 0, 4);//ET余额
             byte[] OfflineSn = new byte[2];//ET脱机交易序号
@@ -220,7 +220,7 @@ namespace CardOperating
             if (UnlockData != null)
             {
                 //解扣debit for unlock
-                if (m_UserCardCtrl.DebitForUnlock(UnlockData))
+                if (m_UserCardCtrl.DebitForUnlock(UnlockData, BalanceType.Balance_ED))
                 {
                     //清TACUF （即 读灰锁状态，但其中P1 == 0x01）
                     m_UserCardCtrl.ClearTACUF();

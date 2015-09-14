@@ -943,7 +943,7 @@ namespace CardOperating
         private void LoadUserCard(byte[] TerminalId, byte[]  ASN, double dbMoneyLoad)
         {
             double dbBalance = 0.0;
-            if (m_UserCardCtrl.UserCardBalance(ref dbBalance))//圈存前读余额
+            if (m_UserCardCtrl.UserCardBalance(ref dbBalance, BalanceType.Balance_ED))//圈存前读余额
             {
                 if (m_UserCardCtrl.UserCardLoad(ASN, TerminalId, (int)(dbMoneyLoad * 100.0), true))
                 {
@@ -1008,7 +1008,7 @@ namespace CardOperating
                 }
 
                 double dbBalance = 0.0;
-                if (m_UserCardCtrl.UserCardBalance(ref dbBalance))
+                if (m_UserCardCtrl.UserCardBalance(ref dbBalance,BalanceType.Balance_ED))
                     textBalance.Text = dbBalance.ToString("F2");
                 else
                     textBalance.Text = "0.00";

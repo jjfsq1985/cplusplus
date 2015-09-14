@@ -9,6 +9,7 @@ namespace ApduDaHua
     public class ApduDaHuaBase : IApduBase
     {
         private static byte[] DEFAULT_MF_NAME = new byte[] { 0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31 };//"1PAY.SYS.DDF01"        
+
         public ApduDaHuaBase()
         {
 

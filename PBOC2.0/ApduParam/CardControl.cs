@@ -201,41 +201,29 @@ namespace CardControl
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="dbInfo">数据库参数</param>
+        /// <param name="sqlHelp">数据库连接</param>
         /// <param name="strProcName">存储过程名称</param>
         /// <param name="strKeyName">列名称</param>
         /// <param name="AppIndex">为0时读取PSAM卡消费密钥</param>
         /// <returns></returns>
-        public static byte[] GetDbConsumerKey(SqlConnectInfo dbInfo, string strProcName, string strKeyName, int AppIndex)
+        public static byte[] GetDbConsumerKey(SqlHelper sqlHelp, string strProcName, string strKeyName, int AppIndex)
         {
-            SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection(dbInfo.strServerName, dbInfo.strDbName, dbInfo.strUser, dbInfo.strUserPwd))
-            {
-                ObjSql = null;
-                return null;
-            }
             SqlDataReader dataReader = null;
             if (AppIndex == 0)
             {
-                ObjSql.ExecuteProc(strProcName, out dataReader);
+                sqlHelp.ExecuteProc(strProcName, out dataReader);
             }
             else
             {
                 SqlParameter[] sqlparam = new SqlParameter[1];
-                sqlparam[0] = ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, AppIndex);
-                ObjSql.ExecuteProc(strProcName, sqlparam, out dataReader);
+                sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, AppIndex);
+                sqlHelp.ExecuteProc(strProcName, sqlparam, out dataReader);
             }
             if (dataReader == null)
-            {
-                ObjSql.CloseConnection();
-                ObjSql = null;
                 return null;
-            }
             if (!dataReader.HasRows || !dataReader.Read())
             {
                 dataReader.Close();
-                ObjSql.CloseConnection();
-                ObjSql = null;
                 return null;
             }
 
@@ -245,8 +233,6 @@ namespace CardControl
             Buffer.BlockCopy(BcdKey, 0, ConsumerKey, 0, 16);
             dataReader.Close();
             dataReader = null;
-            ObjSql.CloseConnection();
-            ObjSql = null;
             return ConsumerKey;
         }        
 
@@ -368,17 +354,26 @@ namespace CardControl
 
                 string strName = string.Format("UserKeyValue_App{0}", KeyVal.nAppIndex);
                 XmlNode CpuKeyNode = root.SelectSingleNode(strName);
+                if (CpuKeyNode == null)
+                    return false;
 
                 node = CpuKeyNode.SelectSingleNode("Describe");
-                KeyVal.strDescribe = node.InnerText;
+                if(node != null)
+                    KeyVal.strDescribe = node.InnerText;
 
                 node = CpuKeyNode.SelectSingleNode("MasterKey");
-                byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-                Buffer.BlockCopy(byteKey, 0, KeyVal.MasterKeyVal, 0, 16);
+                if (node != null)
+                {
+                    byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+                    Buffer.BlockCopy(byteKey, 0, KeyVal.MasterKeyVal, 0, 16);
+                }
 
                 node = CpuKeyNode.SelectSingleNode("MasterTendingKey");
-                byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-                Buffer.BlockCopy(byteKey, 0, KeyVal.MasterTendingKeyVal, 0, 16);
+                if (node != null)
+                {
+                    byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+                    Buffer.BlockCopy(byteKey, 0, KeyVal.MasterTendingKeyVal, 0, 16);
+                }
 
                 node = CpuKeyNode.SelectSingleNode("AppMasterKey");
                 byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
@@ -417,12 +412,18 @@ namespace CardControl
                 Buffer.BlockCopy(byteKey, 0, KeyVal.AppUnGrayKey, 0, 16);
 
                 node = CpuKeyNode.SelectSingleNode("AppUnLoadKey");
-                byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-                Buffer.BlockCopy(byteKey, 0, KeyVal.AppUnLoadKey, 0, 16);
+                if (node != null)
+                {
+                    byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+                    Buffer.BlockCopy(byteKey, 0, KeyVal.AppUnLoadKey, 0, 16);
+                }
 
                 node = CpuKeyNode.SelectSingleNode("AppOverdraftKey");
-                byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-                Buffer.BlockCopy(byteKey, 0, KeyVal.AppOverdraftKey, 0, 16);
+                if (node != null)
+                {
+                    byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+                    Buffer.BlockCopy(byteKey, 0, KeyVal.AppOverdraftKey, 0, 16);
+                }
             }
             catch
             {
@@ -496,12 +497,12 @@ namespace CardControl
         }
 
         //从XML获取密钥写入数据库Base_Card_Key表
-        public static void InsertCardKeyFromXml(SqlHelper ObjSql, Guid KeyGuid, byte[] ASN, string strXmlFile)
+        public static void InsertCardKeyFromXml(SqlHelper ObjSql, Guid KeyGuid, byte[] ASN, string strXmlFile, int nAppIndex)
         {
             try
             {
                 CpuKeyData KeyData = new CpuKeyData();
-                KeyData.nAppIndex = 1;
+                KeyData.nAppIndex = nAppIndex;
                 if (!GetXmlCpuKeyVal(strXmlFile, KeyData))
                     return;
                 string strCardId = BitConverter.ToString(ASN).Replace("-", "");
@@ -525,8 +526,16 @@ namespace CardControl
                 string strAppLoadKey = BitConverter.ToString(KeyData.AppLoadKey).Replace("-", "");
                 sqlparams[7] = ObjSql.MakeParam("AppLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppLoadKey);
 
-                string strAppUnloadKey = BitConverter.ToString(KeyData.AppUnLoadKey).Replace("-", "");
-                sqlparams[8] = ObjSql.MakeParam("AppUnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppUnloadKey);
+                if (nAppIndex == 1)
+                {
+                    string strAppUnloadKey = BitConverter.ToString(KeyData.AppUnLoadKey).Replace("-", "");
+                    sqlparams[8] = ObjSql.MakeParam("AppUnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppUnloadKey);
+                }
+                else
+                {
+                    string strAppUnloadKey = "00000000000000000000000000000000";
+                    sqlparams[8] = ObjSql.MakeParam("AppUnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppUnloadKey);
+                }
 
                 string strAppUnGrayKey = BitConverter.ToString(KeyData.AppUnGrayKey).Replace("-", "");
                 sqlparams[9] = ObjSql.MakeParam("AppUnGrayKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppUnGrayKey);
@@ -546,12 +555,12 @@ namespace CardControl
         }
 
         //从Key_CARD_ADF表获取密钥写入数据库Base_Card_Key表
-        public static void InsertCardKeyFromDb(SqlHelper ObjSql, Guid KeyGuid, byte[] ASN)
+        public static void InsertCardKeyFromDb(SqlHelper ObjSql, Guid KeyGuid, byte[] ASN, int nAppIndex)
         {
             try
             {
                 CpuKeyData KeyData = new CpuKeyData();
-                KeyData.nAppIndex = 1;
+                KeyData.nAppIndex = nAppIndex;
                 if (!GetDbCpuKeyVal(ObjSql, KeyData))
                     return;
                 string strCardId = BitConverter.ToString(ASN).Replace("-", "");
@@ -575,8 +584,16 @@ namespace CardControl
                 string strAppLoadKey = BitConverter.ToString(KeyData.AppLoadKey).Replace("-", "");
                 sqlparams[7] = ObjSql.MakeParam("AppLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppLoadKey);
 
-                string strAppUnloadKey = BitConverter.ToString(KeyData.AppUnLoadKey).Replace("-", "");
-                sqlparams[8] = ObjSql.MakeParam("AppUnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppUnloadKey);
+                if (nAppIndex == 1)
+                {
+                    string strAppUnloadKey = BitConverter.ToString(KeyData.AppUnLoadKey).Replace("-", "");
+                    sqlparams[8] = ObjSql.MakeParam("AppUnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppUnloadKey);
+                }
+                else
+                {
+                    string strAppUnloadKey = "00000000000000000000000000000000";
+                    sqlparams[8] = ObjSql.MakeParam("AppUnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppUnloadKey);
+                }
 
                 string strAppUnGrayKey = BitConverter.ToString(KeyData.AppUnGrayKey).Replace("-", "");
                 sqlparams[9] = ObjSql.MakeParam("AppUnGrayKey", SqlDbType.Char, 32, ParameterDirection.Input, strAppUnGrayKey);

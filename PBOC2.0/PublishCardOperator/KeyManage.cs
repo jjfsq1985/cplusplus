@@ -956,10 +956,16 @@ namespace PublishCardOperator
                         strBcd = BitConverter.ToString(AppKey.UnGrayKey).Replace("-", "");
                         sqlparams[10] = m_ObjSql.MakeParam("UnGrayKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
-                        strBcd = BitConverter.ToString(AppKey.UnLoadKey).Replace("-", "");
+                        if (AppKey.AppIndex == 1)
+                            strBcd = BitConverter.ToString(AppKey.UnLoadKey).Replace("-", "");
+                        else
+                            strBcd = "00000000000000000000000000000000";
                         sqlparams[11] = m_ObjSql.MakeParam("UnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
-
-                        strBcd = BitConverter.ToString(AppKey.OverdraftKey).Replace("-", "");
+                        
+                        if (AppKey.AppIndex == 1)
+                            strBcd = BitConverter.ToString(AppKey.OverdraftKey).Replace("-", "");
+                        else
+                            strBcd = "00000000000000000000000000000000";
                         sqlparams[12] = m_ObjSql.MakeParam("OvertraftKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
                         sqlparams[13] = m_ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, AppKey.eDbFlag);

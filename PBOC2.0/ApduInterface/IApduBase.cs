@@ -4,6 +4,12 @@ using System.Text;
 
 namespace ApduInterface
 {
+    public enum BalanceType
+    {
+        Balance_ED = 1, //电子存折，加气应用
+        Balance_EP = 2 //电子钱包，积分应用
+    }
+
     //卡片种类
     public enum CardCategory
     {
