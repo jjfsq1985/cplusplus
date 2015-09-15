@@ -39,7 +39,7 @@ namespace ApduInterface
 
         bool UserCardUnLoad(byte[] ASN, byte[] TermId, int nMoneyValue, bool bReadKey);
 
-        bool UserCardBalance(ref double dbBalance, BalanceType eType);        
+        bool UserCardBalance(ref int nBalance, BalanceType eType);        
 
         bool UserCardGray(ref int nStatus, byte[] PSAM_TID,byte[] GTAC);
 
@@ -69,11 +69,11 @@ namespace ApduInterface
 
         bool UpdateCardInfo(UserCardInfoParam CardInfo);
         
-        bool ChangePIN(string strOldPin, string strNewPin);        
+        bool ChangePIN(string strOldPin, string strNewPin);
 
-        bool PINReset(byte[] ASN, string strPin);
+        bool PINReset(byte[] ASN, string strPin, int nAppIndex);
 
-        bool PINUnLock(byte[] ASN, string strPIN);
+        bool PINUnLock(byte[] ASN, string strPIN, int nAppIndex);
 
     }
 }

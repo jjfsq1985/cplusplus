@@ -121,6 +121,8 @@ namespace CardControl
                 Buffer.BlockCopy(Right, 0, EncryptKey, 8, 8);
 
                 XmlNode UserKeyNode = root.SelectSingleNode(strSectionName);
+                if (UserKeyNode == null)
+                    return null;
 
                 node = UserKeyNode.SelectSingleNode(strKeyName);
                 byte[] byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);

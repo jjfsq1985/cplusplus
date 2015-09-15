@@ -95,9 +95,9 @@ namespace CardOperating
                     LyGrayFlag.Checked = false;
                 }
 
-                double dbBalance = 0.0f;
-                if (m_UserCardCtrl.UserCardBalance(ref dbBalance, BalanceType.Balance_EP))
-                    textLoyalty.Text = dbBalance.ToString("F2");
+                int nBalance = 0;
+                if (m_UserCardCtrl.UserCardBalance(ref nBalance, BalanceType.Balance_EP))
+                    textLoyalty.Text = nBalance.ToString();
                 else
                     textLoyalty.Text = "0.00";
             }

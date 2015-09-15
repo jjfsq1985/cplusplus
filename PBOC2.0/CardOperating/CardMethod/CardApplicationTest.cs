@@ -38,9 +38,7 @@ namespace CardOperating
             InitializeComponent();
 
             Page1Init();
-            Page2Init();
-
-            tabApp.TabPages.Remove(tabPageApp2);
+            Page2Init();            
         }
 
         public void SetDbInfo(SqlConnectInfo DbInfo)

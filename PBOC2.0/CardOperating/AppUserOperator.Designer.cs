@@ -88,6 +88,9 @@
             this.cmbIdType = new System.Windows.Forms.ComboBox();
             this.IdTypeLabel = new System.Windows.Forms.Label();
             this.CardApp = new System.Windows.Forms.GroupBox();
+            this.tabApp = new System.Windows.Forms.TabControl();
+            this.tabSINOPEC = new System.Windows.Forms.TabPage();
+            this.textPIN = new System.Windows.Forms.TextBox();
             this.PINOperate = new System.Windows.Forms.GroupBox();
             this.btnPinChange = new System.Windows.Forms.Button();
             this.btnPinReset = new System.Windows.Forms.Button();
@@ -96,28 +99,59 @@
             this.OldPIN = new System.Windows.Forms.Label();
             this.NewPIN = new System.Windows.Forms.Label();
             this.btnPinUnlock = new System.Windows.Forms.Button();
-            this.textPIN = new System.Windows.Forms.TextBox();
-            this.LabelPIN = new System.Windows.Forms.Label();
-            this.Balance = new System.Windows.Forms.Label();
-            this.btnUnlockGrayCard = new System.Windows.Forms.Button();
-            this.GrayFlag = new System.Windows.Forms.CheckBox();
-            this.Unit1 = new System.Windows.Forms.Label();
-            this.textBalance = new System.Windows.Forms.TextBox();
-            this.btnBalance = new System.Windows.Forms.Button();
-            this.Unit2 = new System.Windows.Forms.Label();
-            this.Money = new System.Windows.Forms.Label();
-            this.textMoney = new System.Windows.Forms.TextBox();
             this.btnCardLoad = new System.Windows.Forms.Button();
+            this.textMoney = new System.Windows.Forms.TextBox();
+            this.LabelPIN = new System.Windows.Forms.Label();
+            this.Money = new System.Windows.Forms.Label();
+            this.Balance = new System.Windows.Forms.Label();
+            this.Unit2 = new System.Windows.Forms.Label();
+            this.btnUnlockGrayCard = new System.Windows.Forms.Button();
+            this.btnBalance = new System.Windows.Forms.Button();
+            this.GrayFlag = new System.Windows.Forms.CheckBox();
+            this.textBalance = new System.Windows.Forms.TextBox();
+            this.Unit1 = new System.Windows.Forms.Label();
+            this.tabLOYALTY = new System.Windows.Forms.TabPage();
+            this.textPIN_Ly = new System.Windows.Forms.TextBox();
+            this.textLyBalance = new System.Windows.Forms.TextBox();
+            this.PINOperate_Ly = new System.Windows.Forms.GroupBox();
+            this.ChangePin_Ly = new System.Windows.Forms.Button();
+            this.PinReset_Ly = new System.Windows.Forms.Button();
+            this.textNewPin_Ly = new System.Windows.Forms.TextBox();
+            this.textOldPin_Ly = new System.Windows.Forms.TextBox();
+            this.LyOldPin = new System.Windows.Forms.Label();
+            this.LyNewPin = new System.Windows.Forms.Label();
+            this.PinUnlock_Ly = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.LoadLoyalty = new System.Windows.Forms.Button();
+            this.ChkGrayLy = new System.Windows.Forms.CheckBox();
+            this.textLoadValue = new System.Windows.Forms.TextBox();
+            this.ReadLoyalty = new System.Windows.Forms.Button();
+            this.LabelPIN_Ly = new System.Windows.Forms.Label();
+            this.UnGrayLy = new System.Windows.Forms.Button();
+            this.LoadValue = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.LyBalance = new System.Windows.Forms.Label();
             this.cmbDevType = new System.Windows.Forms.ComboBox();
             this.CardReader = new System.Windows.Forms.Label();
             this.ContactCard = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.groupLimit.SuspendLayout();
             this.CardInfoPanel.Panel1.SuspendLayout();
             this.CardInfoPanel.Panel2.SuspendLayout();
             this.CardInfoPanel.SuspendLayout();
             this.CardInfo.SuspendLayout();
             this.CardApp.SuspendLayout();
+            this.tabApp.SuspendLayout();
+            this.tabSINOPEC.SuspendLayout();
             this.PINOperate.SuspendLayout();
+            this.tabLOYALTY.SuspendLayout();
+            this.PINOperate_Ly.SuspendLayout();
             this.SuspendLayout();
             // 
             // textRemark
@@ -631,7 +665,7 @@
             // 
             // CardInfoPanel
             // 
-            this.CardInfoPanel.Location = new System.Drawing.Point(7, 28);
+            this.CardInfoPanel.Location = new System.Drawing.Point(7, 31);
             this.CardInfoPanel.Name = "CardInfoPanel";
             // 
             // CardInfoPanel.Panel1
@@ -641,7 +675,7 @@
             // CardInfoPanel.Panel2
             // 
             this.CardInfoPanel.Panel2.Controls.Add(this.CardApp);
-            this.CardInfoPanel.Size = new System.Drawing.Size(978, 573);
+            this.CardInfoPanel.Size = new System.Drawing.Size(978, 570);
             this.CardInfoPanel.SplitterDistance = 590;
             this.CardInfoPanel.TabIndex = 103;
             // 
@@ -696,7 +730,7 @@
             this.CardInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CardInfo.Location = new System.Drawing.Point(0, 0);
             this.CardInfo.Name = "CardInfo";
-            this.CardInfo.Size = new System.Drawing.Size(590, 573);
+            this.CardInfo.Size = new System.Drawing.Size(590, 570);
             this.CardInfo.TabIndex = 103;
             this.CardInfo.TabStop = false;
             this.CardInfo.Text = "卡信息";
@@ -726,26 +760,57 @@
             // 
             // CardApp
             // 
-            this.CardApp.Controls.Add(this.PINOperate);
-            this.CardApp.Controls.Add(this.textPIN);
-            this.CardApp.Controls.Add(this.LabelPIN);
-            this.CardApp.Controls.Add(this.Balance);
-            this.CardApp.Controls.Add(this.btnUnlockGrayCard);
-            this.CardApp.Controls.Add(this.GrayFlag);
-            this.CardApp.Controls.Add(this.Unit1);
-            this.CardApp.Controls.Add(this.textBalance);
-            this.CardApp.Controls.Add(this.btnBalance);
-            this.CardApp.Controls.Add(this.Unit2);
-            this.CardApp.Controls.Add(this.Money);
-            this.CardApp.Controls.Add(this.textMoney);
-            this.CardApp.Controls.Add(this.btnCardLoad);
+            this.CardApp.Controls.Add(this.tabApp);
             this.CardApp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CardApp.Location = new System.Drawing.Point(0, 0);
             this.CardApp.Name = "CardApp";
-            this.CardApp.Size = new System.Drawing.Size(384, 573);
+            this.CardApp.Size = new System.Drawing.Size(384, 570);
             this.CardApp.TabIndex = 47;
             this.CardApp.TabStop = false;
             this.CardApp.Text = "卡应用";
+            // 
+            // tabApp
+            // 
+            this.tabApp.Controls.Add(this.tabSINOPEC);
+            this.tabApp.Controls.Add(this.tabLOYALTY);
+            this.tabApp.Location = new System.Drawing.Point(6, 20);
+            this.tabApp.Name = "tabApp";
+            this.tabApp.SelectedIndex = 0;
+            this.tabApp.Size = new System.Drawing.Size(363, 547);
+            this.tabApp.TabIndex = 106;
+            // 
+            // tabSINOPEC
+            // 
+            this.tabSINOPEC.BackColor = System.Drawing.SystemColors.Control;
+            this.tabSINOPEC.Controls.Add(this.textPIN);
+            this.tabSINOPEC.Controls.Add(this.PINOperate);
+            this.tabSINOPEC.Controls.Add(this.btnCardLoad);
+            this.tabSINOPEC.Controls.Add(this.textMoney);
+            this.tabSINOPEC.Controls.Add(this.LabelPIN);
+            this.tabSINOPEC.Controls.Add(this.Money);
+            this.tabSINOPEC.Controls.Add(this.Balance);
+            this.tabSINOPEC.Controls.Add(this.Unit2);
+            this.tabSINOPEC.Controls.Add(this.btnUnlockGrayCard);
+            this.tabSINOPEC.Controls.Add(this.btnBalance);
+            this.tabSINOPEC.Controls.Add(this.GrayFlag);
+            this.tabSINOPEC.Controls.Add(this.textBalance);
+            this.tabSINOPEC.Controls.Add(this.Unit1);
+            this.tabSINOPEC.Location = new System.Drawing.Point(4, 22);
+            this.tabSINOPEC.Name = "tabSINOPEC";
+            this.tabSINOPEC.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSINOPEC.Size = new System.Drawing.Size(355, 521);
+            this.tabSINOPEC.TabIndex = 0;
+            this.tabSINOPEC.Text = "加气应用";
+            // 
+            // textPIN
+            // 
+            this.textPIN.Location = new System.Drawing.Point(106, 14);
+            this.textPIN.MaxLength = 6;
+            this.textPIN.Name = "textPIN";
+            this.textPIN.Size = new System.Drawing.Size(96, 21);
+            this.textPIN.TabIndex = 46;
+            this.textPIN.Validated += new System.EventHandler(this.textPIN_Validated);
+            this.textPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPIN_KeyPress);
             // 
             // PINOperate
             // 
@@ -756,18 +821,18 @@
             this.PINOperate.Controls.Add(this.OldPIN);
             this.PINOperate.Controls.Add(this.NewPIN);
             this.PINOperate.Controls.Add(this.btnPinUnlock);
-            this.PINOperate.Location = new System.Drawing.Point(37, 210);
+            this.PINOperate.Location = new System.Drawing.Point(21, 144);
             this.PINOperate.Name = "PINOperate";
-            this.PINOperate.Size = new System.Drawing.Size(247, 150);
+            this.PINOperate.Size = new System.Drawing.Size(320, 131);
             this.PINOperate.TabIndex = 53;
             this.PINOperate.TabStop = false;
             this.PINOperate.Text = "PIN码";
             // 
             // btnPinChange
             // 
-            this.btnPinChange.Location = new System.Drawing.Point(62, 113);
+            this.btnPinChange.Location = new System.Drawing.Point(122, 98);
             this.btnPinChange.Name = "btnPinChange";
-            this.btnPinChange.Size = new System.Drawing.Size(75, 23);
+            this.btnPinChange.Size = new System.Drawing.Size(59, 23);
             this.btnPinChange.TabIndex = 53;
             this.btnPinChange.Text = "修改PIN";
             this.btnPinChange.UseVisualStyleBackColor = true;
@@ -775,7 +840,7 @@
             // 
             // btnPinReset
             // 
-            this.btnPinReset.Location = new System.Drawing.Point(172, 77);
+            this.btnPinReset.Location = new System.Drawing.Point(220, 65);
             this.btnPinReset.Name = "btnPinReset";
             this.btnPinReset.Size = new System.Drawing.Size(59, 23);
             this.btnPinReset.TabIndex = 52;
@@ -785,26 +850,26 @@
             // 
             // textNewPIN
             // 
-            this.textNewPIN.Location = new System.Drawing.Point(80, 79);
+            this.textNewPIN.Location = new System.Drawing.Point(86, 66);
             this.textNewPIN.MaxLength = 6;
             this.textNewPIN.Name = "textNewPIN";
-            this.textNewPIN.Size = new System.Drawing.Size(83, 21);
+            this.textNewPIN.Size = new System.Drawing.Size(95, 21);
             this.textNewPIN.TabIndex = 51;
             this.textNewPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNewPIN_KeyPress);
             // 
             // textOldPIN
             // 
-            this.textOldPIN.Location = new System.Drawing.Point(80, 27);
+            this.textOldPIN.Location = new System.Drawing.Point(86, 27);
             this.textOldPIN.MaxLength = 6;
             this.textOldPIN.Name = "textOldPIN";
-            this.textOldPIN.Size = new System.Drawing.Size(83, 21);
+            this.textOldPIN.Size = new System.Drawing.Size(95, 21);
             this.textOldPIN.TabIndex = 50;
             this.textOldPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textOldPIN_KeyPress);
             // 
             // OldPIN
             // 
             this.OldPIN.AutoSize = true;
-            this.OldPIN.Location = new System.Drawing.Point(25, 30);
+            this.OldPIN.Location = new System.Drawing.Point(28, 31);
             this.OldPIN.Name = "OldPIN";
             this.OldPIN.Size = new System.Drawing.Size(47, 12);
             this.OldPIN.TabIndex = 49;
@@ -813,7 +878,7 @@
             // NewPIN
             // 
             this.NewPIN.AutoSize = true;
-            this.NewPIN.Location = new System.Drawing.Point(25, 82);
+            this.NewPIN.Location = new System.Drawing.Point(28, 70);
             this.NewPIN.Name = "NewPIN";
             this.NewPIN.Size = new System.Drawing.Size(47, 12);
             this.NewPIN.TabIndex = 48;
@@ -821,7 +886,7 @@
             // 
             // btnPinUnlock
             // 
-            this.btnPinUnlock.Location = new System.Drawing.Point(172, 25);
+            this.btnPinUnlock.Location = new System.Drawing.Point(220, 26);
             this.btnPinUnlock.Name = "btnPinUnlock";
             this.btnPinUnlock.Size = new System.Drawing.Size(59, 23);
             this.btnPinUnlock.TabIndex = 47;
@@ -829,37 +894,63 @@
             this.btnPinUnlock.UseVisualStyleBackColor = true;
             this.btnPinUnlock.Click += new System.EventHandler(this.btnPinUnlock_Click);
             // 
-            // textPIN
+            // btnCardLoad
             // 
-            this.textPIN.Location = new System.Drawing.Point(116, 37);
-            this.textPIN.MaxLength = 6;
-            this.textPIN.Name = "textPIN";
-            this.textPIN.Size = new System.Drawing.Size(83, 21);
-            this.textPIN.TabIndex = 46;
-            this.textPIN.Validated += new System.EventHandler(this.textPIN_Validated);
-            this.textPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPIN_KeyPress);
+            this.btnCardLoad.Location = new System.Drawing.Point(241, 50);
+            this.btnCardLoad.Name = "btnCardLoad";
+            this.btnCardLoad.Size = new System.Drawing.Size(64, 23);
+            this.btnCardLoad.TabIndex = 35;
+            this.btnCardLoad.Text = "圈存";
+            this.btnCardLoad.UseVisualStyleBackColor = true;
+            this.btnCardLoad.Click += new System.EventHandler(this.btnCardLoad_Click);
+            // 
+            // textMoney
+            // 
+            this.textMoney.Location = new System.Drawing.Point(105, 48);
+            this.textMoney.Name = "textMoney";
+            this.textMoney.Size = new System.Drawing.Size(97, 21);
+            this.textMoney.TabIndex = 36;
+            this.textMoney.Text = "10,000.00";
             // 
             // LabelPIN
             // 
             this.LabelPIN.AutoSize = true;
-            this.LabelPIN.Location = new System.Drawing.Point(25, 40);
+            this.LabelPIN.Location = new System.Drawing.Point(10, 18);
             this.LabelPIN.Name = "LabelPIN";
             this.LabelPIN.Size = new System.Drawing.Size(83, 12);
             this.LabelPIN.TabIndex = 45;
             this.LabelPIN.Text = "请输入PIN码：";
             // 
+            // Money
+            // 
+            this.Money.AutoSize = true;
+            this.Money.Location = new System.Drawing.Point(46, 52);
+            this.Money.Name = "Money";
+            this.Money.Size = new System.Drawing.Size(41, 12);
+            this.Money.TabIndex = 37;
+            this.Money.Text = "金额：";
+            // 
             // Balance
             // 
             this.Balance.AutoSize = true;
-            this.Balance.Location = new System.Drawing.Point(25, 140);
+            this.Balance.Location = new System.Drawing.Point(46, 86);
             this.Balance.Name = "Balance";
             this.Balance.Size = new System.Drawing.Size(41, 12);
             this.Balance.TabIndex = 44;
             this.Balance.Text = "余额：";
             // 
+            // Unit2
+            // 
+            this.Unit2.AutoSize = true;
+            this.Unit2.Location = new System.Drawing.Point(210, 55);
+            this.Unit2.Name = "Unit2";
+            this.Unit2.Size = new System.Drawing.Size(17, 12);
+            this.Unit2.TabIndex = 38;
+            this.Unit2.Text = "元";
+            // 
             // btnUnlockGrayCard
             // 
-            this.btnUnlockGrayCard.Location = new System.Drawing.Point(261, 164);
+            this.btnUnlockGrayCard.Location = new System.Drawing.Point(241, 110);
             this.btnUnlockGrayCard.Name = "btnUnlockGrayCard";
             this.btnUnlockGrayCard.Size = new System.Drawing.Size(64, 23);
             this.btnUnlockGrayCard.TabIndex = 43;
@@ -867,39 +958,9 @@
             this.btnUnlockGrayCard.UseVisualStyleBackColor = true;
             this.btnUnlockGrayCard.Click += new System.EventHandler(this.btnUnlockGrayCard_Click);
             // 
-            // GrayFlag
-            // 
-            this.GrayFlag.AutoCheck = false;
-            this.GrayFlag.AutoSize = true;
-            this.GrayFlag.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GrayFlag.Location = new System.Drawing.Point(116, 167);
-            this.GrayFlag.Name = "GrayFlag";
-            this.GrayFlag.Size = new System.Drawing.Size(45, 16);
-            this.GrayFlag.TabIndex = 42;
-            this.GrayFlag.Text = "灰锁";
-            this.GrayFlag.UseVisualStyleBackColor = true;
-            // 
-            // Unit1
-            // 
-            this.Unit1.AutoSize = true;
-            this.Unit1.Location = new System.Drawing.Point(218, 138);
-            this.Unit1.Name = "Unit1";
-            this.Unit1.Size = new System.Drawing.Size(17, 12);
-            this.Unit1.TabIndex = 41;
-            this.Unit1.Text = "元";
-            // 
-            // textBalance
-            // 
-            this.textBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBalance.Location = new System.Drawing.Point(115, 134);
-            this.textBalance.Name = "textBalance";
-            this.textBalance.ReadOnly = true;
-            this.textBalance.Size = new System.Drawing.Size(97, 21);
-            this.textBalance.TabIndex = 40;
-            // 
             // btnBalance
             // 
-            this.btnBalance.Location = new System.Drawing.Point(261, 135);
+            this.btnBalance.Location = new System.Drawing.Point(241, 81);
             this.btnBalance.Name = "btnBalance";
             this.btnBalance.Size = new System.Drawing.Size(64, 23);
             this.btnBalance.TabIndex = 39;
@@ -907,41 +968,252 @@
             this.btnBalance.UseVisualStyleBackColor = true;
             this.btnBalance.Click += new System.EventHandler(this.btnBalance_Click);
             // 
-            // Unit2
+            // GrayFlag
             // 
-            this.Unit2.AutoSize = true;
-            this.Unit2.Location = new System.Drawing.Point(218, 90);
-            this.Unit2.Name = "Unit2";
-            this.Unit2.Size = new System.Drawing.Size(17, 12);
-            this.Unit2.TabIndex = 38;
-            this.Unit2.Text = "元";
+            this.GrayFlag.AutoCheck = false;
+            this.GrayFlag.AutoSize = true;
+            this.GrayFlag.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.GrayFlag.Location = new System.Drawing.Point(107, 116);
+            this.GrayFlag.Name = "GrayFlag";
+            this.GrayFlag.Size = new System.Drawing.Size(45, 16);
+            this.GrayFlag.TabIndex = 42;
+            this.GrayFlag.Text = "灰锁";
+            this.GrayFlag.UseVisualStyleBackColor = true;
             // 
-            // Money
+            // textBalance
             // 
-            this.Money.AutoSize = true;
-            this.Money.Location = new System.Drawing.Point(25, 90);
-            this.Money.Name = "Money";
-            this.Money.Size = new System.Drawing.Size(41, 12);
-            this.Money.TabIndex = 37;
-            this.Money.Text = "金额：";
+            this.textBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBalance.Location = new System.Drawing.Point(106, 82);
+            this.textBalance.Name = "textBalance";
+            this.textBalance.ReadOnly = true;
+            this.textBalance.Size = new System.Drawing.Size(96, 21);
+            this.textBalance.TabIndex = 40;
             // 
-            // textMoney
+            // Unit1
             // 
-            this.textMoney.Location = new System.Drawing.Point(115, 87);
-            this.textMoney.Name = "textMoney";
-            this.textMoney.Size = new System.Drawing.Size(97, 21);
-            this.textMoney.TabIndex = 36;
-            this.textMoney.Text = "10,000.00";
+            this.Unit1.AutoSize = true;
+            this.Unit1.Location = new System.Drawing.Point(211, 87);
+            this.Unit1.Name = "Unit1";
+            this.Unit1.Size = new System.Drawing.Size(17, 12);
+            this.Unit1.TabIndex = 41;
+            this.Unit1.Text = "元";
             // 
-            // btnCardLoad
+            // tabLOYALTY
             // 
-            this.btnCardLoad.Location = new System.Drawing.Point(272, 85);
-            this.btnCardLoad.Name = "btnCardLoad";
-            this.btnCardLoad.Size = new System.Drawing.Size(40, 23);
-            this.btnCardLoad.TabIndex = 35;
-            this.btnCardLoad.Text = "圈存";
-            this.btnCardLoad.UseVisualStyleBackColor = true;
-            this.btnCardLoad.Click += new System.EventHandler(this.btnCardLoad_Click);
+            this.tabLOYALTY.BackColor = System.Drawing.SystemColors.Control;
+            this.tabLOYALTY.Controls.Add(this.textPIN_Ly);
+            this.tabLOYALTY.Controls.Add(this.textLyBalance);
+            this.tabLOYALTY.Controls.Add(this.PINOperate_Ly);
+            this.tabLOYALTY.Controls.Add(this.label9);
+            this.tabLOYALTY.Controls.Add(this.LoadLoyalty);
+            this.tabLOYALTY.Controls.Add(this.ChkGrayLy);
+            this.tabLOYALTY.Controls.Add(this.textLoadValue);
+            this.tabLOYALTY.Controls.Add(this.ReadLoyalty);
+            this.tabLOYALTY.Controls.Add(this.LabelPIN_Ly);
+            this.tabLOYALTY.Controls.Add(this.UnGrayLy);
+            this.tabLOYALTY.Controls.Add(this.LoadValue);
+            this.tabLOYALTY.Controls.Add(this.label8);
+            this.tabLOYALTY.Controls.Add(this.LyBalance);
+            this.tabLOYALTY.Location = new System.Drawing.Point(4, 22);
+            this.tabLOYALTY.Name = "tabLOYALTY";
+            this.tabLOYALTY.Padding = new System.Windows.Forms.Padding(3);
+            this.tabLOYALTY.Size = new System.Drawing.Size(355, 521);
+            this.tabLOYALTY.TabIndex = 1;
+            this.tabLOYALTY.Text = "积分应用";
+            // 
+            // textPIN_Ly
+            // 
+            this.textPIN_Ly.Location = new System.Drawing.Point(114, 14);
+            this.textPIN_Ly.MaxLength = 6;
+            this.textPIN_Ly.Name = "textPIN_Ly";
+            this.textPIN_Ly.Size = new System.Drawing.Size(96, 21);
+            this.textPIN_Ly.TabIndex = 117;
+            this.textPIN_Ly.TextChanged += new System.EventHandler(this.textPIN_Ly_TextChanged);
+            this.textPIN_Ly.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPIN_Ly_KeyPress);
+            // 
+            // textLyBalance
+            // 
+            this.textLyBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textLyBalance.Location = new System.Drawing.Point(114, 82);
+            this.textLyBalance.Name = "textLyBalance";
+            this.textLyBalance.ReadOnly = true;
+            this.textLyBalance.Size = new System.Drawing.Size(96, 21);
+            this.textLyBalance.TabIndex = 111;
+            // 
+            // PINOperate_Ly
+            // 
+            this.PINOperate_Ly.Controls.Add(this.ChangePin_Ly);
+            this.PINOperate_Ly.Controls.Add(this.PinReset_Ly);
+            this.PINOperate_Ly.Controls.Add(this.textNewPin_Ly);
+            this.PINOperate_Ly.Controls.Add(this.textOldPin_Ly);
+            this.PINOperate_Ly.Controls.Add(this.LyOldPin);
+            this.PINOperate_Ly.Controls.Add(this.LyNewPin);
+            this.PINOperate_Ly.Controls.Add(this.PinUnlock_Ly);
+            this.PINOperate_Ly.Location = new System.Drawing.Point(21, 144);
+            this.PINOperate_Ly.Name = "PINOperate_Ly";
+            this.PINOperate_Ly.Size = new System.Drawing.Size(320, 131);
+            this.PINOperate_Ly.TabIndex = 118;
+            this.PINOperate_Ly.TabStop = false;
+            this.PINOperate_Ly.Text = "积分PIN码";
+            // 
+            // ChangePin_Ly
+            // 
+            this.ChangePin_Ly.Location = new System.Drawing.Point(130, 98);
+            this.ChangePin_Ly.Name = "ChangePin_Ly";
+            this.ChangePin_Ly.Size = new System.Drawing.Size(59, 23);
+            this.ChangePin_Ly.TabIndex = 53;
+            this.ChangePin_Ly.Text = "修改PIN";
+            this.ChangePin_Ly.UseVisualStyleBackColor = true;
+            this.ChangePin_Ly.Click += new System.EventHandler(this.ChangePin_Ly_Click);
+            // 
+            // PinReset_Ly
+            // 
+            this.PinReset_Ly.Location = new System.Drawing.Point(228, 65);
+            this.PinReset_Ly.Name = "PinReset_Ly";
+            this.PinReset_Ly.Size = new System.Drawing.Size(59, 23);
+            this.PinReset_Ly.TabIndex = 52;
+            this.PinReset_Ly.Text = "PIN重装";
+            this.PinReset_Ly.UseVisualStyleBackColor = true;
+            this.PinReset_Ly.Click += new System.EventHandler(this.PinReset_Ly_Click);
+            // 
+            // textNewPin_Ly
+            // 
+            this.textNewPin_Ly.Location = new System.Drawing.Point(94, 66);
+            this.textNewPin_Ly.MaxLength = 6;
+            this.textNewPin_Ly.Name = "textNewPin_Ly";
+            this.textNewPin_Ly.Size = new System.Drawing.Size(95, 21);
+            this.textNewPin_Ly.TabIndex = 51;
+            // 
+            // textOldPin_Ly
+            // 
+            this.textOldPin_Ly.Location = new System.Drawing.Point(94, 27);
+            this.textOldPin_Ly.MaxLength = 6;
+            this.textOldPin_Ly.Name = "textOldPin_Ly";
+            this.textOldPin_Ly.Size = new System.Drawing.Size(95, 21);
+            this.textOldPin_Ly.TabIndex = 50;
+            // 
+            // LyOldPin
+            // 
+            this.LyOldPin.AutoSize = true;
+            this.LyOldPin.Location = new System.Drawing.Point(28, 31);
+            this.LyOldPin.Name = "LyOldPin";
+            this.LyOldPin.Size = new System.Drawing.Size(47, 12);
+            this.LyOldPin.TabIndex = 49;
+            this.LyOldPin.Text = "原PIN码";
+            // 
+            // LyNewPin
+            // 
+            this.LyNewPin.AutoSize = true;
+            this.LyNewPin.Location = new System.Drawing.Point(28, 70);
+            this.LyNewPin.Name = "LyNewPin";
+            this.LyNewPin.Size = new System.Drawing.Size(47, 12);
+            this.LyNewPin.TabIndex = 48;
+            this.LyNewPin.Text = "新PIN码";
+            // 
+            // PinUnlock_Ly
+            // 
+            this.PinUnlock_Ly.Location = new System.Drawing.Point(228, 26);
+            this.PinUnlock_Ly.Name = "PinUnlock_Ly";
+            this.PinUnlock_Ly.Size = new System.Drawing.Size(59, 23);
+            this.PinUnlock_Ly.TabIndex = 47;
+            this.PinUnlock_Ly.Text = "PIN解锁";
+            this.PinUnlock_Ly.UseVisualStyleBackColor = true;
+            this.PinUnlock_Ly.Click += new System.EventHandler(this.PinUnlock_Ly_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(219, 87);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(17, 12);
+            this.label9.TabIndex = 112;
+            this.label9.Text = "元";
+            // 
+            // LoadLoyalty
+            // 
+            this.LoadLoyalty.Location = new System.Drawing.Point(249, 50);
+            this.LoadLoyalty.Name = "LoadLoyalty";
+            this.LoadLoyalty.Size = new System.Drawing.Size(64, 23);
+            this.LoadLoyalty.TabIndex = 106;
+            this.LoadLoyalty.Text = "圈存";
+            this.LoadLoyalty.UseVisualStyleBackColor = true;
+            this.LoadLoyalty.Click += new System.EventHandler(this.LoadLoyalty_Click);
+            // 
+            // ChkGrayLy
+            // 
+            this.ChkGrayLy.AutoCheck = false;
+            this.ChkGrayLy.AutoSize = true;
+            this.ChkGrayLy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ChkGrayLy.Location = new System.Drawing.Point(115, 116);
+            this.ChkGrayLy.Name = "ChkGrayLy";
+            this.ChkGrayLy.Size = new System.Drawing.Size(45, 16);
+            this.ChkGrayLy.TabIndex = 113;
+            this.ChkGrayLy.Text = "灰锁";
+            this.ChkGrayLy.UseVisualStyleBackColor = true;
+            // 
+            // textLoadValue
+            // 
+            this.textLoadValue.Location = new System.Drawing.Point(113, 48);
+            this.textLoadValue.Name = "textLoadValue";
+            this.textLoadValue.Size = new System.Drawing.Size(97, 21);
+            this.textLoadValue.TabIndex = 107;
+            this.textLoadValue.Text = "10,000";
+            // 
+            // ReadLoyalty
+            // 
+            this.ReadLoyalty.Location = new System.Drawing.Point(249, 81);
+            this.ReadLoyalty.Name = "ReadLoyalty";
+            this.ReadLoyalty.Size = new System.Drawing.Size(64, 23);
+            this.ReadLoyalty.TabIndex = 110;
+            this.ReadLoyalty.Text = "读取余额";
+            this.ReadLoyalty.UseVisualStyleBackColor = true;
+            this.ReadLoyalty.Click += new System.EventHandler(this.ReadLoyalty_Click);
+            // 
+            // LabelPIN_Ly
+            // 
+            this.LabelPIN_Ly.AutoSize = true;
+            this.LabelPIN_Ly.Location = new System.Drawing.Point(10, 18);
+            this.LabelPIN_Ly.Name = "LabelPIN_Ly";
+            this.LabelPIN_Ly.Size = new System.Drawing.Size(107, 12);
+            this.LabelPIN_Ly.TabIndex = 116;
+            this.LabelPIN_Ly.Text = "请输入积分PIN码：";
+            // 
+            // UnGrayLy
+            // 
+            this.UnGrayLy.Location = new System.Drawing.Point(249, 110);
+            this.UnGrayLy.Name = "UnGrayLy";
+            this.UnGrayLy.Size = new System.Drawing.Size(64, 23);
+            this.UnGrayLy.TabIndex = 114;
+            this.UnGrayLy.Text = "解灰";
+            this.UnGrayLy.UseVisualStyleBackColor = true;
+            this.UnGrayLy.Click += new System.EventHandler(this.UnGrayLy_Click);
+            // 
+            // LoadValue
+            // 
+            this.LoadValue.AutoSize = true;
+            this.LoadValue.Location = new System.Drawing.Point(46, 52);
+            this.LoadValue.Name = "LoadValue";
+            this.LoadValue.Size = new System.Drawing.Size(65, 12);
+            this.LoadValue.TabIndex = 108;
+            this.LoadValue.Text = "圈存积分：";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(218, 55);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(17, 12);
+            this.label8.TabIndex = 109;
+            this.label8.Text = "元";
+            // 
+            // LyBalance
+            // 
+            this.LyBalance.AutoSize = true;
+            this.LyBalance.Location = new System.Drawing.Point(46, 86);
+            this.LyBalance.Name = "LyBalance";
+            this.LyBalance.Size = new System.Drawing.Size(65, 12);
+            this.LyBalance.TabIndex = 115;
+            this.LyBalance.Text = "积分余额：";
             // 
             // cmbDevType
             // 
@@ -951,15 +1223,15 @@
             "达华-明泰 MT3",
             "龙寰-Duali DE-620",
             "龙寰-明泰 MT3"});
-            this.cmbDevType.Location = new System.Drawing.Point(101, 5);
+            this.cmbDevType.Location = new System.Drawing.Point(132, 10);
             this.cmbDevType.Name = "cmbDevType";
-            this.cmbDevType.Size = new System.Drawing.Size(136, 20);
+            this.cmbDevType.Size = new System.Drawing.Size(145, 20);
             this.cmbDevType.TabIndex = 104;
             // 
             // CardReader
             // 
             this.CardReader.AutoSize = true;
-            this.CardReader.Location = new System.Drawing.Point(39, 10);
+            this.CardReader.Location = new System.Drawing.Point(67, 13);
             this.CardReader.Name = "CardReader";
             this.CardReader.Size = new System.Drawing.Size(41, 12);
             this.CardReader.TabIndex = 105;
@@ -969,18 +1241,79 @@
             // 
             this.ContactCard.AutoSize = true;
             this.ContactCard.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ContactCard.Location = new System.Drawing.Point(290, 9);
+            this.ContactCard.Location = new System.Drawing.Point(317, 12);
             this.ContactCard.Name = "ContactCard";
             this.ContactCard.Size = new System.Drawing.Size(60, 16);
             this.ContactCard.TabIndex = 105;
             this.ContactCard.Text = "接触式";
             this.ContactCard.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(122, 98);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(59, 23);
+            this.button1.TabIndex = 53;
+            this.button1.Text = "修改PIN";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(220, 65);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(59, 23);
+            this.button2.TabIndex = 52;
+            this.button2.Text = "PIN重装";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(86, 66);
+            this.textBox2.MaxLength = 6;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(95, 21);
+            this.textBox2.TabIndex = 51;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(86, 27);
+            this.textBox3.MaxLength = 6;
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(95, 21);
+            this.textBox3.TabIndex = 50;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(28, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(47, 12);
+            this.label1.TabIndex = 49;
+            this.label1.Text = "原PIN码";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(28, 70);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(47, 12);
+            this.label2.TabIndex = 48;
+            this.label2.Text = "新PIN码";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(220, 26);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(59, 23);
+            this.button3.TabIndex = 47;
+            this.button3.Text = "PIN解锁";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
             // AppUserOperator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(997, 615);
+            this.ClientSize = new System.Drawing.Size(991, 615);
             this.Controls.Add(this.ContactCard);
             this.Controls.Add(this.CardReader);
             this.Controls.Add(this.cmbDevType);
@@ -1000,9 +1333,15 @@
             this.CardInfo.ResumeLayout(false);
             this.CardInfo.PerformLayout();
             this.CardApp.ResumeLayout(false);
-            this.CardApp.PerformLayout();
+            this.tabApp.ResumeLayout(false);
+            this.tabSINOPEC.ResumeLayout(false);
+            this.tabSINOPEC.PerformLayout();
             this.PINOperate.ResumeLayout(false);
             this.PINOperate.PerformLayout();
+            this.tabLOYALTY.ResumeLayout(false);
+            this.tabLOYALTY.PerformLayout();
+            this.PINOperate_Ly.ResumeLayout(false);
+            this.PINOperate_Ly.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1066,33 +1405,63 @@
         private System.Windows.Forms.Button btnModifyCard;
         private System.Windows.Forms.ComboBox cmbLimitGasType;
         private System.Windows.Forms.SplitContainer CardInfoPanel;
-        private System.Windows.Forms.TextBox textPIN;
-        private System.Windows.Forms.Label LabelPIN;
-        private System.Windows.Forms.Label Balance;
-        private System.Windows.Forms.Button btnUnlockGrayCard;
-        private System.Windows.Forms.CheckBox GrayFlag;
-        private System.Windows.Forms.Label Unit1;
-        private System.Windows.Forms.TextBox textBalance;
-        private System.Windows.Forms.Button btnBalance;
-        private System.Windows.Forms.Label Unit2;
-        private System.Windows.Forms.Label Money;
-        private System.Windows.Forms.TextBox textMoney;
-        private System.Windows.Forms.Button btnCardLoad;
         private System.Windows.Forms.GroupBox CardInfo;
-        private System.Windows.Forms.GroupBox CardApp;
-        private System.Windows.Forms.Button btnPinUnlock;
-        private System.Windows.Forms.TextBox textNewPIN;
-        private System.Windows.Forms.TextBox textOldPIN;
-        private System.Windows.Forms.Label OldPIN;
-        private System.Windows.Forms.Label NewPIN;
-        private System.Windows.Forms.GroupBox PINOperate;
-        private System.Windows.Forms.Button btnPinReset;
-        private System.Windows.Forms.Button btnPinChange;
         private System.Windows.Forms.ComboBox cmbIdType;
         private System.Windows.Forms.Label IdTypeLabel;
         private System.Windows.Forms.ComboBox cmbDevType;
         private System.Windows.Forms.Label CardReader;
         private System.Windows.Forms.CheckBox ContactCard;
+        private System.Windows.Forms.GroupBox CardApp;
+        private System.Windows.Forms.TabControl tabApp;
+        private System.Windows.Forms.TabPage tabSINOPEC;
+        private System.Windows.Forms.TextBox textPIN;
+        private System.Windows.Forms.GroupBox PINOperate;
+        private System.Windows.Forms.Button btnPinChange;
+        private System.Windows.Forms.Button btnPinReset;
+        private System.Windows.Forms.TextBox textNewPIN;
+        private System.Windows.Forms.TextBox textOldPIN;
+        private System.Windows.Forms.Label OldPIN;
+        private System.Windows.Forms.Label NewPIN;
+        private System.Windows.Forms.Button btnPinUnlock;
+        private System.Windows.Forms.Button btnCardLoad;
+        private System.Windows.Forms.TextBox textMoney;
+        private System.Windows.Forms.Label LabelPIN;
+        private System.Windows.Forms.Label Money;
+        private System.Windows.Forms.Label Balance;
+        private System.Windows.Forms.Label Unit2;
+        private System.Windows.Forms.Button btnUnlockGrayCard;
+        private System.Windows.Forms.Button btnBalance;
+        private System.Windows.Forms.CheckBox GrayFlag;
+        private System.Windows.Forms.TextBox textBalance;
+        private System.Windows.Forms.Label Unit1;
+        private System.Windows.Forms.TabPage tabLOYALTY;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox textPIN_Ly;
+        private System.Windows.Forms.TextBox textLyBalance;
+        private System.Windows.Forms.GroupBox PINOperate_Ly;
+        private System.Windows.Forms.Button ChangePin_Ly;
+        private System.Windows.Forms.Button PinReset_Ly;
+        private System.Windows.Forms.TextBox textNewPin_Ly;
+        private System.Windows.Forms.TextBox textOldPin_Ly;
+        private System.Windows.Forms.Label LyOldPin;
+        private System.Windows.Forms.Label LyNewPin;
+        private System.Windows.Forms.Button PinUnlock_Ly;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button LoadLoyalty;
+        private System.Windows.Forms.CheckBox ChkGrayLy;
+        private System.Windows.Forms.TextBox textLoadValue;
+        private System.Windows.Forms.Button ReadLoyalty;
+        private System.Windows.Forms.Label LabelPIN_Ly;
+        private System.Windows.Forms.Button UnGrayLy;
+        private System.Windows.Forms.Label LoadValue;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label LyBalance;
 
     }
 }

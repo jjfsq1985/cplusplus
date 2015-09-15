@@ -98,11 +98,16 @@ namespace CardOperating
                     GrayFlag.Checked = false;
                 }
 
-                double dbBalance = 0.0f;
-                if (m_UserCardCtrl.UserCardBalance(ref dbBalance,BalanceType.Balance_ED))
+                int nBalance = 0;
+                if (m_UserCardCtrl.UserCardBalance(ref nBalance, BalanceType.Balance_ED))
+                {
+                    double dbBalance = (double)(nBalance / 100.0);
                     textBalance.Text = dbBalance.ToString("F2");
+                }
                 else
+                {
                     textBalance.Text = "0.00";
+                }
             }
             CloseUserCard();
         }

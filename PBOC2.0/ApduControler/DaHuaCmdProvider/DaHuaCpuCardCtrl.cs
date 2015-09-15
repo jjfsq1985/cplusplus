@@ -1340,7 +1340,7 @@ namespace DaHuaApduCtrl
         }
 
 
-        public bool UserCardBalance(ref double dbBalance, BalanceType eType)
+        public bool UserCardBalance(ref int nBalance, BalanceType eType)
         {
             m_CmdProvider.createCardBalanceCmd(eType);
             byte[] data = m_CmdProvider.GetOutputCmd();
@@ -1364,7 +1364,7 @@ namespace DaHuaApduCtrl
                 byteBalance[1] = RecvData[2];
                 byteBalance[2] = RecvData[1];
                 byteBalance[3] = RecvData[0];
-                dbBalance = (double)(BitConverter.ToInt32(byteBalance, 0) / 100.0);                
+                nBalance = BitConverter.ToInt32(byteBalance, 0);                
             }
             return true;
         }
@@ -2215,7 +2215,7 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        public bool PINReset(byte[] ASN, string strPin)
+        public bool PINReset(byte[] ASN, string strPin, int nAppIndex)
         {
             if (ASN.Length != 8 || strPin.Length != 6)
                 return false;
@@ -2224,7 +2224,7 @@ namespace DaHuaApduCtrl
             for (int i = 0; i < 6; i++)
                 PwdData[i] = Convert.ToByte(strPin.Substring(i, 1), 10);
             //获取PIN重装密钥
-            byte[] keyReset = GetApplicationKeyVal(ASN, "AppPinResetKey", 1);
+            byte[] keyReset = GetApplicationKeyVal(ASN, "AppPinResetKey", nAppIndex);
             if (keyReset == null)
             {
                 MessageBox.Show("无PIN重装密钥，不能重装PIN。");
@@ -2262,7 +2262,7 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        public bool PINUnLock(byte[] ASN, string strPIN)
+        public bool PINUnLock(byte[] ASN, string strPIN, int nAppIndex)
         {
             if (ASN.Length != 8 || strPIN.Length != 6)
                 return false;
@@ -2277,7 +2277,7 @@ namespace DaHuaApduCtrl
             for (int i = 0; i < 6; i++)
                 PwdData[i] = Convert.ToByte(strPIN.Substring(i, 1), 10);
             //获取PIN解锁密钥
-            byte[] keyUnlock = GetApplicationKeyVal(ASN, "AppPinUnlockKey", 1);
+            byte[] keyUnlock = GetApplicationKeyVal(ASN, "AppPinUnlockKey", nAppIndex);
             if (keyUnlock == null)
             {
                 MessageBox.Show("无PIN解锁密钥，不能解锁PIN。");

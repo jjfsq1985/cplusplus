@@ -1233,9 +1233,17 @@ namespace DaHuaApduCtrl
                 byte[] ConsumerKey = GlobalControl.GetPrivateKeyFromXml(strXmlPath,"UserKeyValue_App1","AppConsumerKey");
                 if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK1))
                 {
-                    OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
-                    MessageBox.Show("加气或积分消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    OnTextOutput(new MsgOutEvent(0, "加气消费密钥不一致"));
+                    MessageBox.Show("加气消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+
+                byte[] ConsumerKey_Ly = GlobalControl.GetPrivateKeyFromXml(strXmlPath, "UserKeyValue_App2", "AppConsumerKey");
+                if (ConsumerKey_Ly != null && !PublicFunc.ByteDataEquals(ConsumerKey_Ly, m_MPK1))
+                {
+                    OnTextOutput(new MsgOutEvent(0, "积分消费密钥不一致"));
+                    MessageBox.Show("积分消费需要密钥一致，但当前使用的积分消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
 
             }
             catch

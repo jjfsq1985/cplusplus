@@ -30,11 +30,15 @@ namespace CardOperating
         private readonly byte[] m_FixedTermialId = new byte[] { 0x14, 0x32, 0x00, 0x00, 0x00, 0x01 };  //固定的终端机设备编号
 
         private static byte[] m_TermialId = new byte[6];            //终端机设备编号
+        private static byte[] m_TermialId_Ly = new byte[6];            //终端机设备编号
         private static byte[] m_GTAC = new byte[4];    //灰锁时的GTAC
+        private static byte[] m_GTAC_Ly = new byte[4];    //灰锁时的GTAC
 
         private static string m_strPIN = "999999";//由用户输入
+        private static string m_strPin_Ly = "999999";
 
         private bool m_bGray = false;   //卡已灰，不能扣款解锁
+        private bool m_bGray_Ly = false;  //积分应用灰锁
 
         //一个公司可以有多个单位（分公司），一个单位下可以有多个站点。
         private List<ClientInfo> m_ListClientInfo = new List<ClientInfo>();//单位信息
@@ -942,9 +946,10 @@ namespace CardOperating
         /// <param name="dbMoneyLoad">圈存金额 单位 元</param>
         private void LoadUserCard(byte[] TerminalId, byte[]  ASN, double dbMoneyLoad)
         {
-            double dbBalance = 0.0;
-            if (m_UserCardCtrl.UserCardBalance(ref dbBalance, BalanceType.Balance_ED))//圈存前读余额
+            int nBalance = 0;
+            if (m_UserCardCtrl.UserCardBalance(ref nBalance, BalanceType.Balance_ED))//圈存前读余额
             {
+                double dbBalance = (double)(nBalance / 100.0);
                 if (m_UserCardCtrl.UserCardLoad(ASN, TerminalId, (int)(dbMoneyLoad * 100.0), true))
                 {
                     //写圈存数据库记录
@@ -960,6 +965,35 @@ namespace CardOperating
             else
             {
                 MessageBox.Show("读取余额失败");
+            }
+        }
+
+        /// <summary>
+        /// 积分圈存
+        /// </summary>
+        /// <param name="TerminalId">固定终端机</param>
+        /// <param name="ASN">用户卡号</param>
+        /// <param name="Loyalty">积分额</param>
+        private void LoadUserCardLy(byte[] TerminalId, byte[] ASN, int Loyalty)
+        {
+            int nBalance = 0;
+            if (m_UserCardCtrl.UserCardBalance(ref nBalance, BalanceType.Balance_EP))//圈存前读积分余额
+            {
+                if (m_UserCardCtrl.UserCardLoad(ASN, TerminalId, nBalance, true))
+                {
+                    //写圈存数据库记录
+                    SaveLoadLoyaltyRecord(ASN, Loyalty, nBalance, "CreditsTotal");
+                    string strInfo = string.Format("成功对卡号{0}圈存{1}积分.", BitConverter.ToString(ASN).Replace("-", ""), Loyalty.ToString());
+                    MessageBox.Show(strInfo);
+                }
+                else
+                {
+                    MessageBox.Show("圈存积分失败");
+                }
+            }
+            else
+            {
+                MessageBox.Show("读取积分余额失败");
             }
         }
 
@@ -1007,13 +1041,18 @@ namespace CardOperating
                     GrayFlag.Checked = false;
                 }
 
-                double dbBalance = 0.0;
-                if (m_UserCardCtrl.UserCardBalance(ref dbBalance,BalanceType.Balance_ED))
+                int nBalance = 0;
+                if (m_UserCardCtrl.UserCardBalance(ref nBalance, BalanceType.Balance_ED))
+                {
+                    double dbBalance = (double)(nBalance / 100.0);
                     textBalance.Text = dbBalance.ToString("F2");
+                    SaveCardValueToDb(ASN, dbBalance, "CardBalance");
+                }
                 else
+                {
                     textBalance.Text = "0.00";
-
-                SaveCardMoneyToDb(ASN, dbBalance, "CardBalance");
+                }
+                
             }
             else if (nRet == 2)
             {
@@ -1029,7 +1068,7 @@ namespace CardOperating
         //解灰,未灰锁的卡读终端机编号为0，使用固定终端机编号
         private void btnUnlockGrayCard_Click(object sender, EventArgs e)
         {
-            //未灰状态不可强制解灰
+            //未灰状态不可解灰
             if (!m_bGray || !OpenUserCard())
                 return;
             if (!m_UserCardCtrl.SelectCardApp(1))
@@ -1090,7 +1129,7 @@ namespace CardOperating
                 MessageBox.Show("未读到卡号");
                 return;
             }
-            if (m_UserCardCtrl.PINUnLock(ASN, textOldPIN.Text))
+            if (m_UserCardCtrl.PINUnLock(ASN, textOldPIN.Text,1))
             {
                 MessageBox.Show("PIN码已解锁");
             }
@@ -1119,7 +1158,7 @@ namespace CardOperating
                 MessageBox.Show("未读到卡号");
                 return;
             }
-            if (m_UserCardCtrl.PINReset(ASN, textNewPIN.Text))
+            if (m_UserCardCtrl.PINReset(ASN, textNewPIN.Text,1))
             {
                 MessageBox.Show("新PIN码已装入");
             }
@@ -1164,6 +1203,27 @@ namespace CardOperating
                 e.Handled = true;//不接受非数字值
         }
 
+        private void SaveLoadLoyaltyRecord(byte[] ASN, int LoadLoyalty, int nBalance, string strUpdateField)
+        {
+            string strCardId = BitConverter.ToString(ASN).Replace("-", "");
+
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
+
+            int nTotal = nBalance + LoadLoyalty;
+            SqlParameter[] sqlparams = new SqlParameter[2];
+            sqlparams[0] = ObjSql.MakeParam(strUpdateField, SqlDbType.Int, 4, ParameterDirection.Input, nTotal);
+            sqlparams[1] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
+            ObjSql.ExecuteCommand("update Base_Card set " + strUpdateField + "=@" + strUpdateField + " where CardNum=@CardId", sqlparams);
+
+            ObjSql.CloseConnection();
+            ObjSql = null;
+        }
+
         /// <summary>
         /// 圈存记录
         /// </summary>
@@ -1198,14 +1258,14 @@ namespace CardOperating
 
             //更新Base_Card充值总额和当前卡余额
             double dbRechargeTotal = GetBaseCardMoneyValue(ObjSql, strCardId, "RechargeTotal") + dbLoadMoney;
-            UpdateBaseCardMoneyValue(ObjSql, strCardId, "RechargeTotal", dbRechargeTotal);
-            UpdateBaseCardMoneyValue(ObjSql, strCardId, strUpdateField, dblTotal);
+            UpdateBaseCardValue(ObjSql, strCardId, "RechargeTotal", dbRechargeTotal);
+            UpdateBaseCardValue(ObjSql, strCardId, strUpdateField, dblTotal);
 
             ObjSql.CloseConnection();
             ObjSql = null;
         }
 
-        private void UpdateBaseCardMoneyValue(SqlHelper ObjSql, string strCardId, string strFieldName, double dbValue)
+        private void UpdateBaseCardValue(SqlHelper ObjSql, string strCardId, string strFieldName, double dbValue)
         {
             SqlParameter[] sqlparams = new SqlParameter[2];
             sqlparams[0] = ObjSql.MakeParam(strFieldName, SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbValue));
@@ -1233,7 +1293,7 @@ namespace CardOperating
             return dbValue;
         }
 
-        private void SaveCardMoneyToDb(byte[] ASN, double dbBalance, string strFieldName)
+        private void SaveCardValueToDb(byte[] ASN, double dbBalance, string strFieldName)
         {
             string strCardId = BitConverter.ToString(ASN).Replace("-", "");
 
@@ -1243,7 +1303,7 @@ namespace CardOperating
                 ObjSql = null;
                 return;
             }
-            UpdateBaseCardMoneyValue(ObjSql, strCardId, strFieldName, dbBalance);
+            UpdateBaseCardValue(ObjSql, strCardId, strFieldName, dbBalance);
 
             ObjSql.CloseConnection();
             ObjSql = null;
@@ -1468,7 +1528,7 @@ namespace CardOperating
                 }
                 LoadUserCard(TerminalId, ASN, dbMoneyLoad);
                 //单位母卡金额减掉
-                SaveCardMoneyToDb(MotherAsn, dbBalance - dbMoneyLoad, "AccountBalance");
+                SaveCardValueToDb(MotherAsn, dbBalance - dbMoneyLoad, "AccountBalance");
             }
             else if(ASN[3] == 0x21)
             {
@@ -1481,5 +1541,245 @@ namespace CardOperating
                 MessageBox.Show(strInfo);                
             }
         }
+
+        private void LoadLoyalty_Click(object sender, EventArgs e)
+        {
+            if (!OpenUserCard())
+                return;
+            if (!m_UserCardCtrl.SelectCardApp(2))
+                return;
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            int LoadLoyalty = int.Parse(textLoadValue.Text, System.Globalization.NumberStyles.Number);            
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
+            if (ASN == null)
+            {
+                MessageBox.Show("未读到卡号");
+                return;
+            }
+            else if (ASN[3] != 0x01)
+            {
+                MessageBox.Show("只有用户卡可以积分", "圈存", MessageBoxButtons.OK);
+                return;
+            }
+            else
+            {
+                string strMsg = "确实要对用户卡" + BitConverter.ToString(ASN).Replace("-", "") + "充值" + LoadLoyalty.ToString() + "积分吗？";
+                if (MessageBox.Show(strMsg, "积分充值", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    return;
+                }
+
+            }
+
+            int nRet = m_UserCardCtrl.VerifyUserPin(m_strPin_Ly);
+            if (nRet == 1)
+            {
+                LoadUserCardLy(m_FixedTermialId, ASN, LoadLoyalty);
+            }
+            else if (nRet == 2)
+            {
+                MessageBox.Show("积分PIN码已锁!");
+            }
+            else
+            {
+                MessageBox.Show("积分PIN码验证失败!");
+            }
+
+            CloseUserCard();    
+        }
+
+        private void ReadLoyalty_Click(object sender, EventArgs e)
+        {
+            if (!OpenUserCard())
+                return;
+            if (!m_UserCardCtrl.SelectCardApp(2))
+                return;
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
+            if (ASN == null)
+            {
+                MessageBox.Show("未读到卡号");
+                return;
+            }
+            int nRet = m_UserCardCtrl.VerifyUserPin(m_strPin_Ly);
+            if (nRet == 1)
+            {
+                m_bGray = false;
+                //未灰锁时终端机编号输出为0
+                int nCardStatus = 0;
+                if (m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId_Ly, m_GTAC_Ly))
+                {
+                    if (nCardStatus == 2)
+                    {
+                        //当前TAC未读，需要清空后重读
+                        m_UserCardCtrl.ClearTACUF();
+                        nCardStatus = 0;
+                        m_UserCardCtrl.UserCardGray(ref nCardStatus, m_TermialId_Ly, m_GTAC_Ly);
+                        m_bGray_Ly = nCardStatus == 1 ? true : false;
+                    }
+                    else
+                    {
+                        m_bGray_Ly = nCardStatus == 1 ? true : false;
+                    }
+                    ChkGrayLy.CheckState = m_bGray_Ly ? CheckState.Checked : CheckState.Unchecked;
+                    ChkGrayLy.Checked = m_bGray_Ly;
+                }
+                else
+                {
+                    ChkGrayLy.CheckState = CheckState.Indeterminate;
+                    ChkGrayLy.Checked = false;
+                }
+
+                int nBalance = 0;
+                if (m_UserCardCtrl.UserCardBalance(ref nBalance, BalanceType.Balance_EP))
+                {                    
+                    textLyBalance.Text = nBalance.ToString();
+                    SaveCardValueToDb(ASN, nBalance, "CreditsTotal");
+                }
+                else
+                {
+                    textLyBalance.Text = "0.00";
+                }
+
+            }
+            else if (nRet == 2)
+            {
+                MessageBox.Show("积分PIN码已锁!");
+            }
+            else
+            {
+                MessageBox.Show("积分PIN码验证失败!");
+            }
+            CloseUserCard();
+        }
+
+        private void textPIN_Ly_TextChanged(object sender, EventArgs e)
+        {
+            m_strPin_Ly = textPIN_Ly.Text;
+        }
+
+        private void textPIN_Ly_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
+                e.Handled = true;//不接受非数字值
+        }
+
+        private void UnGrayLy_Click(object sender, EventArgs e)
+        {
+            //未灰状态不可强制解灰
+            if (!m_bGray_Ly || !OpenUserCard())
+                return;
+            if (!m_UserCardCtrl.SelectCardApp(2))
+                return;
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
+            if (ASN == null)
+            {
+                MessageBox.Show("未读到卡号");
+                return;
+            }
+
+            //积分灰锁强制解灰
+            int nUnGrayLoyalty = 0; 
+
+            int nRet = m_UserCardCtrl.VerifyUserPin(m_strPin_Ly);
+            if (nRet == 1)
+            {
+                if (m_UserCardCtrl.UnLockGrayCard(ASN, m_TermialId_Ly, nUnGrayLoyalty, true))
+                {
+                    m_bGray_Ly = false;                    
+                }
+            }
+            else if (nRet == 2)
+            {
+                MessageBox.Show("积分PIN码已锁!");
+            }
+            else
+            {
+                MessageBox.Show("积分PIN码验证失败!");
+            }
+            CloseUserCard();
+        }
+
+        private void PinUnlock_Ly_Click(object sender, EventArgs e)
+        {
+            if (textOldPin_Ly.Text.Length != 6)
+            {
+                MessageBox.Show("请输入原积分PIN码");
+                return;
+            }
+
+            if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp(2))
+                return;
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
+            if (ASN == null)
+            {
+                MessageBox.Show("未读到卡号");
+                return;
+            }
+            if (m_UserCardCtrl.PINUnLock(ASN, textOldPin_Ly.Text,2))
+            {
+                MessageBox.Show("积分PIN码已解锁");
+            }
+            else
+            {
+                MessageBox.Show("积分PIN码解锁失败");
+            }
+            CloseUserCard();
+        }
+
+        private void PinReset_Ly_Click(object sender, EventArgs e)
+        {
+            if (textNewPin_Ly.Text.Length != 6)
+            {
+                MessageBox.Show("请输入新的积分PIN码");
+                return;
+            }
+            if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp(2))
+                return;
+            DateTime cardStart = DateTime.MinValue;
+            DateTime cardEnd = DateTime.MinValue;
+            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
+            if (ASN == null)
+            {
+                MessageBox.Show("未读到卡号");
+                return;
+            }
+            if (m_UserCardCtrl.PINReset(ASN, textNewPIN.Text,2))
+            {
+                MessageBox.Show("新积分PIN码已装入");
+            }
+            else
+            {
+                MessageBox.Show("积分PIN码重装失败");
+            }
+            CloseUserCard();
+        }
+
+        private void ChangePin_Ly_Click(object sender, EventArgs e)
+        {
+            if (textOldPin_Ly.Text.Length != 6 || textNewPin_Ly.Text.Length != 6)
+                return;
+            if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp(2))
+                return;
+            if (m_UserCardCtrl.ChangePIN(textOldPin_Ly.Text, textNewPin_Ly.Text))
+            {
+                if (m_UserCardCtrl.VerifyUserPin(textNewPin_Ly.Text) == 1)
+                    MessageBox.Show("积分PIN码修改成功");
+                else
+                    MessageBox.Show("积分PIN码修改后验证失败，请重试");
+            }
+            else
+            {
+                MessageBox.Show("积分PIN码修改失败");
+            }
+            CloseUserCard();
+        }
+
     }
 }

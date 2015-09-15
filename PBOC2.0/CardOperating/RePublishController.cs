@@ -156,15 +156,15 @@ namespace CardOperating
 
         private void LoadUserCard(byte[] TerminalId, byte[] ASN, double dbMoney)
         {
-            double dbBalance = 0.0;
-            bool bRead = m_UserCardCtrl.UserCardBalance(ref dbBalance, BalanceType.Balance_ED);//圈存前读余额
+            int nBalance = 0;
+            bool bRead = m_UserCardCtrl.UserCardBalance(ref nBalance, BalanceType.Balance_ED);//圈存前读余额
             int nCardStatus = 0;
             byte[] TermialId = new byte[6];
             byte[] GTAC = new byte[4];
             bool bReadGray = m_UserCardCtrl.UserCardGray(ref nCardStatus, TermialId, GTAC);
             if(!bRead || !bReadGray)
                 return;
-            if(dbBalance != 0 || nCardStatus != 0)
+            if (nBalance != 0 || nCardStatus != 0)
                 return;
             if (m_UserCardCtrl.UserCardLoad(ASN, TerminalId, (int)(dbMoney * 100.0), true))
             {
