@@ -53,6 +53,7 @@ namespace CardOperating
         {
             InitializeComponent();
             textPIN.Text = m_strPIN;
+            textPIN_Ly.Text = m_strPin_Ly;
             cmbDevType.SelectedIndex = 0;
         }
 
@@ -979,7 +980,7 @@ namespace CardOperating
             int nBalance = 0;
             if (m_UserCardCtrl.UserCardBalance(ref nBalance, BalanceType.Balance_EP))//圈存前读积分余额
             {
-                if (m_UserCardCtrl.UserCardLoad(ASN, TerminalId, nBalance, true))
+                if (m_UserCardCtrl.LoyaltyLoad(ASN, TerminalId, Loyalty, true))
                 {
                     //写圈存数据库记录
                     SaveLoadLoyaltyRecord(ASN, Loyalty, nBalance, "CreditsTotal");
@@ -1750,7 +1751,7 @@ namespace CardOperating
                 MessageBox.Show("未读到卡号");
                 return;
             }
-            if (m_UserCardCtrl.PINReset(ASN, textNewPIN.Text,2))
+            if (m_UserCardCtrl.PINReset(ASN, textNewPin_Ly.Text, 2))
             {
                 MessageBox.Show("新积分PIN码已装入");
             }

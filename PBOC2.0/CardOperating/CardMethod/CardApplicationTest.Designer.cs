@@ -477,7 +477,7 @@
             this.textLyLoad.Name = "textLyLoad";
             this.textLyLoad.Size = new System.Drawing.Size(97, 21);
             this.textLyLoad.TabIndex = 27;
-            this.textLyLoad.Text = "10,000.00";
+            this.textLyLoad.Text = "10,000";
             // 
             // LoadLoyalty
             // 

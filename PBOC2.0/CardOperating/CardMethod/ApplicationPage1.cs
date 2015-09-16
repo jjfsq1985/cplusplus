@@ -45,7 +45,7 @@ namespace CardOperating
         //圈存
         private void btnCardLoad_Click(object sender, EventArgs e)
         {
-            if (m_nAppIndex != 1 || !OpenUserCard(1) || !ReadUserCardAsn(1))
+            if (m_nAppIndex != 1 || !OpenUserCard() || !ReadUserCardAsn(1))
                 return;
             decimal MoneyLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
             double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
@@ -66,7 +66,7 @@ namespace CardOperating
 
         private void btnBalance_Click(object sender, EventArgs e)
         {
-            if (m_nAppIndex != 1 || !OpenUserCard(1) || !ReadUserCardAsn(1))
+            if (m_nAppIndex != 1 || !OpenUserCard() || !ReadUserCardAsn(1))
                 return;
             string strInfo = string.Format("读取卡号{0}的余额，并检查是否灰锁。", BitConverter.ToString(m_ASN));
             OnMessageOutput(new MsgOutEvent(0, strInfo));
@@ -118,7 +118,7 @@ namespace CardOperating
             //未灰状态不可强制解灰
             if (m_nAppIndex != 1 || !m_bGray)
                 return;
-            if (!OpenUserCard(1) || !ReadUserCardAsn(1))
+            if (!OpenUserCard() || !ReadUserCardAsn(1))
                 return;
             if (m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
             {
@@ -138,7 +138,7 @@ namespace CardOperating
         {
             if (m_bGray || m_nAppIndex != 1)
                 return;
-            if (!OpenUserCard(1) || !ReadUserCardAsn(1))
+            if (!OpenUserCard() || !ReadUserCardAsn(1))
                 return;
             if (m_UserCardCtrl.VerifyUserPin(m_strPIN) != 1)
                 return;
@@ -236,7 +236,7 @@ namespace CardOperating
 
         private void btnReadRecord_Click(object sender, EventArgs e)
         {
-            if (m_nAppIndex != 1 || !OpenUserCard(1))
+            if (m_nAppIndex != 1 || !OpenUserCard())
                 return;
             if (!m_UserCardCtrl.SelectCardApp(1))
                 return;
@@ -271,7 +271,7 @@ namespace CardOperating
         {
             if (m_bGray || m_nAppIndex != 1)
                 return;
-            if (!OpenUserCard(1) || !ReadUserCardAsn(1))
+            if (!OpenUserCard() || !ReadUserCardAsn(1))
                 return;
             decimal MoneyUnLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
             double dbMoneyUnLoad = decimal.ToDouble(MoneyUnLoad);

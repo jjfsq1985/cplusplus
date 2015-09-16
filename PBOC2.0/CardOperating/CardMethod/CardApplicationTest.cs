@@ -121,7 +121,7 @@ namespace CardOperating
             return true;
         }
 
-        private bool OpenUserCard(int nAppIndex)
+        private bool OpenUserCard()
         {
             if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;

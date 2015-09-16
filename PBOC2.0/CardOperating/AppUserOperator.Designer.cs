@@ -121,7 +121,7 @@
             this.LyOldPin = new System.Windows.Forms.Label();
             this.LyNewPin = new System.Windows.Forms.Label();
             this.PinUnlock_Ly = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
+            this.UnitLy2 = new System.Windows.Forms.Label();
             this.LoadLoyalty = new System.Windows.Forms.Button();
             this.ChkGrayLy = new System.Windows.Forms.CheckBox();
             this.textLoadValue = new System.Windows.Forms.TextBox();
@@ -129,7 +129,7 @@
             this.LabelPIN_Ly = new System.Windows.Forms.Label();
             this.UnGrayLy = new System.Windows.Forms.Button();
             this.LoadValue = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.UnitLy1 = new System.Windows.Forms.Label();
             this.LyBalance = new System.Windows.Forms.Label();
             this.cmbDevType = new System.Windows.Forms.ComboBox();
             this.CardReader = new System.Windows.Forms.Label();
@@ -1004,7 +1004,7 @@
             this.tabLOYALTY.Controls.Add(this.textPIN_Ly);
             this.tabLOYALTY.Controls.Add(this.textLyBalance);
             this.tabLOYALTY.Controls.Add(this.PINOperate_Ly);
-            this.tabLOYALTY.Controls.Add(this.label9);
+            this.tabLOYALTY.Controls.Add(this.UnitLy2);
             this.tabLOYALTY.Controls.Add(this.LoadLoyalty);
             this.tabLOYALTY.Controls.Add(this.ChkGrayLy);
             this.tabLOYALTY.Controls.Add(this.textLoadValue);
@@ -1012,7 +1012,7 @@
             this.tabLOYALTY.Controls.Add(this.LabelPIN_Ly);
             this.tabLOYALTY.Controls.Add(this.UnGrayLy);
             this.tabLOYALTY.Controls.Add(this.LoadValue);
-            this.tabLOYALTY.Controls.Add(this.label8);
+            this.tabLOYALTY.Controls.Add(this.UnitLy1);
             this.tabLOYALTY.Controls.Add(this.LyBalance);
             this.tabLOYALTY.Location = new System.Drawing.Point(4, 22);
             this.tabLOYALTY.Name = "tabLOYALTY";
@@ -1120,14 +1120,14 @@
             this.PinUnlock_Ly.UseVisualStyleBackColor = true;
             this.PinUnlock_Ly.Click += new System.EventHandler(this.PinUnlock_Ly_Click);
             // 
-            // label9
+            // UnitLy2
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(219, 87);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(17, 12);
-            this.label9.TabIndex = 112;
-            this.label9.Text = "元";
+            this.UnitLy2.AutoSize = true;
+            this.UnitLy2.Location = new System.Drawing.Point(219, 87);
+            this.UnitLy2.Name = "UnitLy2";
+            this.UnitLy2.Size = new System.Drawing.Size(17, 12);
+            this.UnitLy2.TabIndex = 112;
+            this.UnitLy2.Text = "分";
             // 
             // LoadLoyalty
             // 
@@ -1197,14 +1197,14 @@
             this.LoadValue.TabIndex = 108;
             this.LoadValue.Text = "圈存积分：";
             // 
-            // label8
+            // UnitLy1
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(218, 55);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(17, 12);
-            this.label8.TabIndex = 109;
-            this.label8.Text = "元";
+            this.UnitLy1.AutoSize = true;
+            this.UnitLy1.Location = new System.Drawing.Point(218, 55);
+            this.UnitLy1.Name = "UnitLy1";
+            this.UnitLy1.Size = new System.Drawing.Size(17, 12);
+            this.UnitLy1.TabIndex = 109;
+            this.UnitLy1.Text = "分";
             // 
             // LyBalance
             // 
@@ -1452,7 +1452,7 @@
         private System.Windows.Forms.Label LyOldPin;
         private System.Windows.Forms.Label LyNewPin;
         private System.Windows.Forms.Button PinUnlock_Ly;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label UnitLy2;
         private System.Windows.Forms.Button LoadLoyalty;
         private System.Windows.Forms.CheckBox ChkGrayLy;
         private System.Windows.Forms.TextBox textLoadValue;
@@ -1460,7 +1460,7 @@
         private System.Windows.Forms.Label LabelPIN_Ly;
         private System.Windows.Forms.Button UnGrayLy;
         private System.Windows.Forms.Label LoadValue;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label UnitLy1;
         private System.Windows.Forms.Label LyBalance;
 
     }

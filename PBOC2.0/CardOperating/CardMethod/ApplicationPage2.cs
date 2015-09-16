@@ -42,12 +42,11 @@ namespace CardOperating
 
         private void btnLoadLy_Click(object sender, EventArgs e)
         {
-            if (m_nAppIndex != 2 || !OpenUserCard(2) || !ReadUserCardAsn(2))
+            if (m_nAppIndex != 2 || !OpenUserCard() || !ReadUserCardAsn(2))
                 return;
-            decimal LoyaltyLoad = decimal.Parse(textLyLoad.Text, System.Globalization.NumberStyles.Number);
-            double dbLyLoad = decimal.ToDouble(LoyaltyLoad);
+            int LoadLoyalty = int.Parse(textLyLoad.Text, System.Globalization.NumberStyles.Number); 
             //圈存
-            string strInfo = string.Format("对卡号{0}圈存{1}积分", BitConverter.ToString(m_ASN), dbLyLoad.ToString("F2"));
+            string strInfo = string.Format("对卡号{0}圈存{1}积分", BitConverter.ToString(m_ASN), LoadLoyalty.ToString());
             OnMessageOutput(new MsgOutEvent(0, strInfo));
             if (m_UserCardCtrl.VerifyUserPin(m_strLyPin) == 1)
             {
@@ -56,14 +55,14 @@ namespace CardOperating
                     Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
-                m_UserCardCtrl.LoyaltyLoad(m_ASN, TerminalId, (int)(dbLyLoad * 100.0), false);
+                m_UserCardCtrl.LoyaltyLoad(m_ASN, TerminalId, LoadLoyalty, false);
             }
             CloseUserCard();
         }
 
         private void btnReadLy_Click(object sender, EventArgs e)
         {
-            if (m_nAppIndex != 2 || !OpenUserCard(2) || !ReadUserCardAsn(2))
+            if (m_nAppIndex != 2 || !OpenUserCard() || !ReadUserCardAsn(2))
                 return;
             string strInfo = string.Format("读取卡号{0}的积分，并检查是否灰锁。", BitConverter.ToString(m_ASN));
             OnMessageOutput(new MsgOutEvent(0, strInfo));
@@ -109,7 +108,7 @@ namespace CardOperating
             //未灰状态不可强制解灰
             if (m_nAppIndex != 2 || !m_bLyGray)
                 return;
-            if (!OpenUserCard(2) || !ReadUserCardAsn(2))
+            if (!OpenUserCard() || !ReadUserCardAsn(2))
                 return;
             if (m_UserCardCtrl.VerifyUserPin(m_strLyPin) == 1)
             {
@@ -129,7 +128,7 @@ namespace CardOperating
         {
             if (m_bLyGray || m_nAppIndex != 2)
                 return;
-            if (!OpenUserCard(2) || !ReadUserCardAsn(2))
+            if (!OpenUserCard() || !ReadUserCardAsn(2))
                 return;
             if (m_UserCardCtrl.VerifyUserPin(m_strLyPin) != 1)
                 return;
@@ -227,7 +226,7 @@ namespace CardOperating
 
         private void btnReadLyRecord_Click(object sender, EventArgs e)
         {
-            if (m_nAppIndex != 2 || !OpenUserCard(2))
+            if (m_nAppIndex != 2 || !OpenUserCard())
                 return;
             if (!m_UserCardCtrl.SelectCardApp(2))
                 return;

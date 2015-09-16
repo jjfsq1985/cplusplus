@@ -2353,8 +2353,8 @@ namespace DaHuaApduCtrl
             byte[] byteCardId = UserCardInfoPar.GetUserCardID();
             //卡信息更新时使用外部提供的密钥
             if (AppTendingKey != null)
-                Buffer.BlockCopy(AppTendingKey, 0, m_MAMTK, 0, 16);
-            byte[] keyUpdate = StorageKeyParam.GetUpdateEFKey(m_MAMTK, byteCardId);
+                Buffer.BlockCopy(AppTendingKey, 0, m_MAMTK_Ly, 0, 16);
+            byte[] keyUpdate = StorageKeyParam.GetUpdateEFKey(m_MAMTK_Ly, byteCardId);
             if (keyUpdate == null)
                 return false;
             //更新公共应用基本数据文件EF15
