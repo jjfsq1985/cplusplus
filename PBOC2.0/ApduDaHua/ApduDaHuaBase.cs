@@ -114,18 +114,18 @@ namespace ApduDaHua
         }
 
         //COS版本
-        //private bool createCosVersionCmd()
-        //{
-        //    m_CLA = 0x00;
-        //    m_INS = 0xCA;
-        //    m_P1 = 0x9F;
-        //    m_P2 = 0x80;
-        //    m_Lc = 0x00;  //不存在
-        //    m_Data = null; //不存在
-        //    m_le = 3;
-        //    m_nTotalLen = 5;
-        //    return true;
-        //}
+        public bool createCosVersionCmd()
+        {
+            m_CLA = 0x00;
+            m_INS = 0xCA;
+            m_P1 = 0x9F;
+            m_P2 = 0x80;
+            m_Lc = 0x00;  //不存在
+            m_Data = null; //不存在
+            m_le = 3;
+            m_nTotalLen = 5;
+            return true;
+        }
 
         //外部认证
         /// <summary>

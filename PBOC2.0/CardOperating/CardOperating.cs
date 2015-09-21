@@ -232,6 +232,8 @@ namespace CardOperating
                 MessageBox.Show("从数据库读取用户卡密钥失败，请检查。");
             else if (nResult == 2)
                 MessageBox.Show("从XML文件读取用户卡密钥失败，请检查。");
+
+            m_UserCardCtrl.GetCosVer();
         }
 
         private void btnCloseCard_Click(object sender, EventArgs e)
@@ -386,6 +388,8 @@ namespace CardOperating
                 MessageBox.Show("从数据库读取PSAM卡密钥失败，请检查。");
             else if (nResult == 2)
                 MessageBox.Show("从XML文件读取PSAM卡密钥失败，请检查。");
+
+            m_IccCardCtrl.GetCosVer();
         }
 
         private void btnCloseIccCard_Click(object sender, EventArgs e)

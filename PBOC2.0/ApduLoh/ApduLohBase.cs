@@ -152,6 +152,11 @@ namespace ApduLoh
             return true;
         }
 
+        public bool createCosVersionCmd()
+        {
+            return false;
+        }
+
         //外部认证
         /// <summary>
         /// 

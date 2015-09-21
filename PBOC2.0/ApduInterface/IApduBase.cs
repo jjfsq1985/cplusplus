@@ -28,7 +28,9 @@ namespace ApduInterface
 
         bool createSelectCmd(byte[] byteName, byte[] prefixData);
 
-        bool createGetChallengeCmd(int nRandLen);        
+        bool createGetChallengeCmd(int nRandLen);
+
+        bool createCosVersionCmd();
 
         bool createExternalAuthenticationCmd(byte[] byteRandom, byte[] KeyValue);
 

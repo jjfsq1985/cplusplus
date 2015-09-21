@@ -293,6 +293,11 @@ namespace LohApduCtrl
             return 0;
         }
 
+        public void GetCosVer()
+        {
+
+        }
+
         private bool CreateFCI()
         {
             m_CmdProvider.createGenerateFCICmd();

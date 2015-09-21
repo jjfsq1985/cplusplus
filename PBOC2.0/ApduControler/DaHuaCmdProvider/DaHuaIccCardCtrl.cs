@@ -263,6 +263,27 @@ namespace DaHuaApduCtrl
             return 0;
         }
 
+        public void GetCosVer()
+        {
+            m_CmdProvider.createCosVersionCmd();
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {                
+                return;
+            }
+            else
+            {
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return;
+            }
+            string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+            OnTextOutput(new MsgOutEvent(0, "PSAM COS Version£º" + strData));
+        }
+
         public bool SelectPsamApp()
         {
             if (!SelectFile(m_PSE, null))

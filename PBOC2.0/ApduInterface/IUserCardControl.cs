@@ -11,6 +11,8 @@ namespace ApduInterface
 
         int InitCard(bool bMainKey);
 
+        void GetCosVer();
+
         bool CreateEFInMF();        
 
         void CreateKey();

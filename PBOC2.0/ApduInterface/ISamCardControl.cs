@@ -10,6 +10,8 @@ namespace ApduInterface
         event MessageOutput TextOutput;
 
         int InitIccCard(bool bMainKey);
+
+        void GetCosVer();
         
         bool SelectPsamApp();
 

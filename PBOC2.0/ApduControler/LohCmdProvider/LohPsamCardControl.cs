@@ -284,6 +284,11 @@ namespace LohApduCtrl
             return 0;
         }
 
+        public void GetCosVer()
+        {
+
+        }
+
         public bool SelectPsamApp()
         {
             if (!SelectFile(m_PSE, null))
