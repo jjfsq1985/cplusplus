@@ -19,6 +19,7 @@ namespace ClientManage
 
         private ClientInfo m_SelectedClient = null;
         private ContextMenuStrip m_treeMenu = new ContextMenuStrip();
+        private ContextMenuStrip m_treeChildMenu = new ContextMenuStrip();
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
         private int m_nClientInfoAuthority = 0;
 
@@ -28,6 +29,7 @@ namespace ClientManage
             InitializeComponent();
             m_treeMenu.Items.Add("增加节点", null, new EventHandler(AddClientNode));
             m_treeMenu.Items.Add("删除节点", null, new EventHandler(DelClientNode));
+            m_treeChildMenu.Items.Add("删除节点", null, new EventHandler(DelClientNode));
             
         }
 
@@ -204,10 +206,19 @@ namespace ClientManage
         {
             if (m_nClientInfoAuthority != GrobalVariable.ClientInfo_Authority || e.Button != MouseButtons.Right)
                 return;
-            if (e.Node.Parent == null || e.Node == null)
+            if (e.Node == null)
                 return;
-            treeClient.SelectedNode = e.Node;
-            m_treeMenu.Show(treeClient, e.X, e.Y);
+
+            if(e.Node.Parent != null)
+            {
+                treeClient.SelectedNode = e.Node;
+                m_treeChildMenu.Show(treeClient, e.X, e.Y);
+            }
+            else
+            {
+                treeClient.SelectedNode = e.Node;
+                m_treeMenu.Show(treeClient, e.X, e.Y);
+            }
         }
 
         private void treeClient_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)

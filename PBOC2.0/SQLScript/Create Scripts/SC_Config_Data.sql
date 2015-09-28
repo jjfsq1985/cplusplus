@@ -77,6 +77,9 @@ insert into SC_Config values('S001116103','S001116',N'新删黑名单版本号',N'',2,0.
 insert into SC_Config values('S001116104','S001116',N'新增黑名单版本号',N'',4,0.00,N'0','Y','I',2453);
 insert into SC_Config values('S001116105','S001116',N'气价版本号',N'',0,0.00,N'0','Y','I',9070);
 insert into SC_Config values('S001116106','S001116',N'通用信息版本号',N'',0,0.00,N'0','Y','I',9069);
+insert into SC_Config Values('S001116107','S001116',N'CNG气价版本号',N'0',0,0.00,N'0','Y','I',9071);
+insert into SC_Config Values('S001116108','S001116',N'LNG气价版本号',N'0',0,0.00,N'0','Y','I',9072);
+insert into SC_Config Values('S001116109','S001116',N'LPG气价版本号',N'0',0,0.00,N'0','Y','I',9073);
 GO
 
 insert into SC_Config values('S001117','S001',N'证件类型',N'',0,0.00,N'','Y','S',2036);

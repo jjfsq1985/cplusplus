@@ -39,15 +39,15 @@ namespace ApduLoh
             return false;
         }
 
-        //创建3F01文件(nFileIndex = 1, AidName = "86980701")
-        //创建3F02文件(nFileIndex = 2, AidName = "86980702")
+        //创建3F01文件(nFileIndex = 1, AidName = "SINOPEC")
+        //创建3F02文件(nFileIndex = 2, AidName = "LOYALTY")
         public bool createUpdateEF01Cmd(byte nFileIndex, byte[] AidName)
         {
             m_CLA = 0x80;
             m_INS = 0xE0;
             m_P1 = 0x3F;
             m_P2 = nFileIndex;
-            int nLen = 17;
+            int nLen = 13 + AidName.Length;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
             m_Data[0] = 0x38;

@@ -22,6 +22,7 @@ namespace AccountManage
 
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
         private int m_nAccountAuthority = 0;
+        private int m_nLoginUserId;
 
         public Account()
         {
@@ -67,6 +68,7 @@ namespace AccountManage
 
         public void SetAuthority(int nLoginUserId, int nAuthority)
         {
+            m_nLoginUserId = nLoginUserId;
             m_nAccountAuthority = nAuthority;
         }
 
@@ -224,10 +226,15 @@ namespace AccountManage
         }
 
         private void btnDel_Click(object sender, EventArgs e)
-        {
+        {            
             int nIndex = UserGridView.CurrentCell.RowIndex;
-            UserGridView.Rows.RemoveAt(nIndex);
             AccountInfo value = m_lstUser[nIndex];
+            if (value.nUserId == m_nLoginUserId || value.UserStatus == 1)
+            {
+                MessageBox.Show("账户已登录，不能删除。");
+                return;
+            }
+            UserGridView.Rows.RemoveAt(nIndex);
             value.eDbFlag = DbStateFlag.eDbDelete;
             m_lstUser[nIndex] = value;
             SaveLstDataToDb();
