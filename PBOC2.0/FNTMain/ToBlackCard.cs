@@ -137,8 +137,10 @@ namespace FNTMain
 
             if (eSettingState == CardStateSetting.CardToRePublish)
             {
-                //补卡,返回新卡的卡号
+                //补卡,返回新卡的卡号                
+                m_CardControl = new RePublishController(m_CardId, ContactCard.Checked, cmbDevType.SelectedIndex, m_DBInfo);
                 string strRePublishId = m_CardControl.RePublishCard(m_CardId);
+                m_CardControl.ReleaseController();
                 if (!string.IsNullOrEmpty(strRePublishId))
                     RePublishCardRecord(ObjSql,strRePublishId);
             }
@@ -154,30 +156,23 @@ namespace FNTMain
             if (m_SettingState == CardStateSetting.CardToRePublish)
             {
                 ContactCard.Checked = false;
-                ContactCard.Enabled = false;
-                m_CardControl = new RePublishController(m_CardId,ContactCard.Checked, cmbDevType.SelectedIndex, m_DBInfo);                
-                cmbDevType.SelectedIndexChanged += new System.EventHandler(this.cmbDevType_SelectedIndexChanged);
+                ContactCard.Enabled = false;                
             }
         }
 
         private void cmbDevType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int nSel = cmbDevType.SelectedIndex;
-            ContactCard.Enabled = false;
-            if (nSel == 1)
+            int nSel = cmbDevType.SelectedIndex;            
+            if(nSel == 0)
+            {
+                ContactCard.Checked = false;
+                ContactCard.Enabled = false;
+            }
+            else
+            {
                 ContactCard.Enabled = true;
+            }
 
-            m_CardControl.ReleaseController();
-            ContactCard.Checked = false;
-            m_CardControl = new RePublishController(m_CardId,ContactCard.Checked, cmbDevType.SelectedIndex, m_DBInfo);
-        }
-
-        private void ToBlackCard_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (m_CardControl == null)
-                return;
-            m_CardControl.ReleaseController();
-            m_CardControl = null;
         }
 
         private void RePublishCardRecord(SqlHelper ObjSql,string strNewCardId)

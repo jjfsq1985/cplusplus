@@ -378,10 +378,42 @@ namespace ApduDaHua
             return true;
         }
 
+        public bool createInitSamPurchaseCmd(byte[] DataVal)
+        {
+            int nLen = DataVal.Length;
+            if (nLen != 28)
+                return false;
+            m_CLA = 0x80;
+            m_INS = 0x70;
+            m_P1 = 0x00;
+            m_P2 = 0x00;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            Buffer.BlockCopy(DataVal, 0, m_Data, 0, 28);
+            m_le = 0x0C;
+            m_nTotalLen = 34;
+            return true;
+        }
+
         public bool createVerifyMAC2Cmd(byte[] MAC2)
         {
             m_CLA = 0xE0;
             m_INS = 0x42;
+            m_P1 = 0x00;
+            m_P2 = 0x00;
+            int nLen = 4;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            Buffer.BlockCopy(MAC2, 0, m_Data, 0, 4);
+            m_le = 0;
+            m_nTotalLen = 9;
+            return true;
+        }
+
+        public bool createVerifyPurchaseMAC2Cmd(byte[] MAC2)
+        {
+            m_CLA = 0x80;
+            m_INS = 0x72;
             m_P1 = 0x00;
             m_P2 = 0x00;
             int nLen = 4;

@@ -33,7 +33,11 @@ namespace ApduInterface
 
         bool createInitSamGrayLockCmd(byte[] DataVal);
 
+        bool createInitSamPurchaseCmd(byte[] DataVal);
+
         bool createVerifyMAC2Cmd(byte[] MAC2);
+
+        bool createVerifyPurchaseMAC2Cmd(byte[] MAC2);
         
         bool createCalcGMACCmd(byte BusinessType,byte[] ASN, int nOfflineSn, int nAmount);
     }

@@ -692,14 +692,14 @@ namespace ApduLoh
         }
 
         //灰锁初始化
-        public bool createrInitForGrayCmd(byte[] TermialID, BalanceType eType)
+        public bool createrInitForGrayCmd(byte[] TermialID)
         {
             if (TermialID.Length != 6)
                 return false;
             m_CLA = 0xE0;
             m_INS = 0x7A;
             m_P1 = 0x08;
-            m_P2 = (byte)eType;//ED电子存折0x01; EP电子钱包0x02
+            m_P2 = 0x01;
             int nLen = 7;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
@@ -707,6 +707,29 @@ namespace ApduLoh
             Buffer.BlockCopy(TermialID, 0, m_Data, 1, 6);
             m_le = 0x0F; //应答长度
             m_nTotalLen = 13;
+            return true;
+        }
+
+        public bool createrInitForPurchaseCmd(byte[] TerminalID, int nLyAmount)
+        {
+            if (TerminalID.Length != 6)
+                return false;
+            m_CLA = 0x80;
+            m_INS = 0x50;
+            m_P1 = 0x01;
+            m_P2 = 0x02;//积分消费：电子钱包
+            int nLen = 11;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            m_Data[0] = 0x01;
+            byte[] byteValue = BitConverter.GetBytes(nLyAmount);
+            m_Data[1] = byteValue[3];
+            m_Data[2] = byteValue[2];
+            m_Data[3] = byteValue[1];
+            m_Data[4] = byteValue[0];
+            Buffer.BlockCopy(TerminalID, 0, m_Data, 5, 6);
+            m_le = 0x0F; //应答长度
+            m_nTotalLen = 17;
             return true;
         }
 
@@ -724,6 +747,23 @@ namespace ApduLoh
             Buffer.BlockCopy(DataVal,0,m_Data,0,nLen);
             m_le = 0x08;
             m_nTotalLen = 25;
+            return true;
+        }
+
+        public bool createrLyPurchaseCmd(byte[] DataVal)
+        {
+            int nLen = DataVal.Length;
+            if (nLen != 15)
+                return false;
+            m_CLA = 0x80;
+            m_INS = 0x54;
+            m_P1 = 0x01;
+            m_P2 = 0x00;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            Buffer.BlockCopy(DataVal, 0, m_Data, 0, nLen);
+            m_le = 0x08;
+            m_nTotalLen = 21;
             return true;
         }
 
@@ -768,7 +808,7 @@ namespace ApduLoh
             return true;
         }
 
-        public bool createDebitForUnlockCmd(byte[] DebitData, BalanceType eType)
+        public bool createDebitForUnlockCmd(byte[] DebitData)
         {
             int nLen = DebitData.Length;
             if (nLen != 27)
@@ -776,7 +816,7 @@ namespace ApduLoh
             m_CLA = 0xE0;
             m_INS = 0x7E;
             m_P1 = 0x08;
-            m_P2 = (byte)eType;//ED电子存折0x01; EP电子钱包0x02
+            m_P2 = 0x01;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
             Buffer.BlockCopy(DebitData, 0, m_Data, 0, 27);            

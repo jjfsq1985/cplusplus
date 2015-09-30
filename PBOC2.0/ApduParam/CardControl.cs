@@ -69,7 +69,7 @@ namespace CardControl
         }
 
 
-        //计算过程密钥
+        //计算非消费过程密钥
         public static byte[] GetProcessKey(byte[] ASN, byte[] MasterKey, byte[] RandVal, byte[] byteSn)
         {
             if (ASN.Length != 8)

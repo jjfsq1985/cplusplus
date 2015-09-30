@@ -42,25 +42,39 @@ namespace CardOperating
             m_strPIN = textPIN.Text;
         }
 
+        /// <summary>
+        /// 圈存
+        /// </summary>
+        /// <param name="nMoneyLoad">圈存金额（单位：分）</param>
+        /// <param name="TerminalId">圈存终端机编号</param>        
+        private bool MoneyLoad(int nMoneyLoad, byte[] TerminalId)
+        {
+            if (!ReadUserCardAsn(1))
+                return false;
+            if (m_UserCardCtrl.VerifyUserPin(m_strPIN) != 1)
+                return false;
+            m_UserCardCtrl.UserCardLoad(m_ASN, TerminalId, nMoneyLoad, false);
+            return true;
+        }
+
         //圈存
         private void btnCardLoad_Click(object sender, EventArgs e)
         {
-            if (m_nAppIndex != 1 || !OpenUserCard() || !ReadUserCardAsn(1))
+            decimal MoneyValue = 0;
+            decimal.TryParse(textMoney.Text, out MoneyValue);
+            double dbMoneyLoad = decimal.ToDouble(MoneyValue);
+            if (MoneyValue < 1 || m_nAppIndex != 1 || !OpenUserCard())
                 return;
-            decimal MoneyLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
-            double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
+
+            byte[] TerminalId = new byte[6];
+            if (PublicFunc.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
+                Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
+            else
+                Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
             //圈存
             string strInfo = string.Format("对卡号{0}圈存{1}元", BitConverter.ToString(m_ASN), dbMoneyLoad.ToString("F2"));
             OnMessageOutput(new MsgOutEvent(0, strInfo));
-            if (m_UserCardCtrl.VerifyUserPin(m_strPIN) == 1)
-            {
-                byte[] TerminalId = new byte[6];
-                if (PublicFunc.ByteDataEquals(TerminalId, m_TermialId))//未读到终端机编号，使用固定编号
-                    Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
-                else
-                    Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
-                m_UserCardCtrl.UserCardLoad(m_ASN, TerminalId, (int)(dbMoneyLoad * 100.0), false);
-            }
+            MoneyLoad((int)(dbMoneyLoad * 100.0), TerminalId);
             CloseUserCard();
         }
 
@@ -128,7 +142,7 @@ namespace CardOperating
                     Buffer.BlockCopy(m_FixedTermialId, 0, TerminalId, 0, 6);
                 else
                     Buffer.BlockCopy(m_TermialId, 0, TerminalId, 0, 6);
-                if (m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0), false))
+                if (m_UserCardCtrl.UnLockGrayCard(m_ASN, TerminalId, (int)(BusinessMoney * 100.0), false,1))
                     m_bGray = false;
             }
             CloseUserCard();
@@ -148,7 +162,7 @@ namespace CardOperating
                 return;
             //灰锁初始化
             byte[] outData = new byte[15];
-            m_UserCardCtrl.InitForGray(m_TermialId, outData, BalanceType.Balance_ED);
+            m_UserCardCtrl.InitForGray(m_TermialId, outData);
             byte[] byteBalance = new byte[4];
             Buffer.BlockCopy(outData, 0, byteBalance, 0, 4);//ET余额
             byte[] OfflineSn = new byte[2];//ET脱机交易序号
@@ -169,7 +183,7 @@ namespace CardOperating
             byte[] MAC2 = new byte[4];
             if (!m_UserCardCtrl.GrayLock(GrayLockData, GTAC, MAC2))
                 return;
-            if (!m_SamCardCtrl.VerifyMAC2(bSamSlot, MAC2))//验证MAC2
+            if (!m_SamCardCtrl.VerifyMAC2(bSamSlot, MAC2,1))//验证MAC2
                 return;
             m_nBusinessSn = (int)((OfflineSn[0] << 8) | OfflineSn[1]);
             m_nTerminalSn = (int)((GrayLockData[0] << 24) | (GrayLockData[1] << 16) | (GrayLockData[2] << 8) | GrayLockData[3]);
@@ -182,8 +196,11 @@ namespace CardOperating
             byte[] DebitData = new byte[27];
             //计算GMAC
             const byte BusinessType = 0x93;//交易类型: 解0扣
-            decimal Amount = decimal.Parse(textPurchase.Text, System.Globalization.NumberStyles.Number);
+            decimal Amount = 0;
+            decimal.TryParse(textPurchase.Text, out Amount);
             double dbAmount = decimal.ToDouble(Amount);
+            if (dbAmount < 1)
+                return null;
             int nMoneyAmount = (int)(dbAmount * 100.0); ////气票消费金额
             byte[] GMAC = new byte[4];
             if (!m_SamCardCtrl.CalcGMAC(bSamSlot, BusinessType, m_ASN, m_nBusinessSn, nMoneyAmount, GMAC))
@@ -225,7 +242,7 @@ namespace CardOperating
             if (UnlockData != null)
             {
                 //解扣debit for unlock
-                if (m_UserCardCtrl.DebitForUnlock(UnlockData, BalanceType.Balance_ED))
+                if (m_UserCardCtrl.DebitForUnlock(UnlockData))
                 {
                     //清TACUF （即 读灰锁状态，但其中P1 == 0x01）
                     m_UserCardCtrl.ClearTACUF();
@@ -273,8 +290,11 @@ namespace CardOperating
                 return;
             if (!OpenUserCard() || !ReadUserCardAsn(1))
                 return;
-            decimal MoneyUnLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
+            decimal MoneyUnLoad = 0;
+            decimal.TryParse(textMoney.Text, out MoneyUnLoad);
             double dbMoneyUnLoad = decimal.ToDouble(MoneyUnLoad);
+            if (dbMoneyUnLoad < 1)
+                return;
             //圈提
             string strInfo = string.Format("对卡号{0}圈提{1}元", BitConverter.ToString(m_ASN), dbMoneyUnLoad.ToString("F2"));
             OnMessageOutput(new MsgOutEvent(0, strInfo));

@@ -130,7 +130,7 @@
             this.ContactCard.Size = new System.Drawing.Size(60, 16);
             this.ContactCard.TabIndex = 107;
             this.ContactCard.Text = "接触式";
-            this.ContactCard.UseVisualStyleBackColor = true;
+            this.ContactCard.UseVisualStyleBackColor = true;            
             // 
             // LabelCardType
             // 
@@ -153,6 +153,7 @@
             this.cmbDevType.Name = "cmbDevType";
             this.cmbDevType.Size = new System.Drawing.Size(139, 20);
             this.cmbDevType.TabIndex = 106;
+            this.cmbDevType.SelectedIndexChanged += new System.EventHandler(this.cmbDevType_SelectedIndexChanged);
             // 
             // ToBlackCard
             // 
@@ -175,8 +176,7 @@
             this.MinimizeBox = false;
             this.Name = "ToBlackCard";
             this.Text = "卡状态设置";
-            this.Load += new System.EventHandler(this.ToBlackCard_Load);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ToBlackCard_FormClosing);
+            this.Load += new System.EventHandler(this.ToBlackCard_Load);            
             this.ResumeLayout(false);
             this.PerformLayout();
 

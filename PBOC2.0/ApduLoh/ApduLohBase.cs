@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ApduParam;
 using ApduInterface;
+using System.Diagnostics;
 
 namespace ApduLoh
 {
@@ -43,6 +44,12 @@ namespace ApduLoh
             }
             if (m_nTotalLen > nOffset)
                 outByte[nOffset] = m_le;
+
+            string strOut = "";
+            for (int i = 0; i < m_nTotalLen; i++)
+                strOut += outByte[i].ToString("X2");
+            Trace.WriteLine("Out:" + strOut);
+
             return outByte;
         }
 

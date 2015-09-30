@@ -107,7 +107,8 @@ namespace ApduCtrl
             else if (m_Domain == ApduDomain.LoH_at_MT)
                 m_LohMTDomain.Close_Device();
         }
-
+        
+        //非接触式卡片
         public bool OpenCard(ref string CardAtr)
         {
             if (m_Domain == ApduDomain.DaHua)
@@ -120,12 +121,13 @@ namespace ApduCtrl
                 return false;
         }
 
+        //CPU卡命令
         public int CmdExchange(bool bContact,byte[] data, int datalen, byte[] outdata, ref int outdatalen)
         {
             if (m_Domain == ApduDomain.DaHua)
             {
                 if (bContact)
-                    return -1;
+                    return m_DahuaDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
                 else
                     return m_DahuaDomain.CmdExchange(data, datalen, outdata, ref outdatalen);
             }
@@ -139,7 +141,7 @@ namespace ApduCtrl
             else if (m_Domain == ApduDomain.LoH_at_MT)
             {
                 if (bContact)
-                    return -1;
+                    return m_LohMTDomain.IccCmdExchange(data, datalen, outdata, ref outdatalen);
                 else
                     return m_LohMTDomain.CmdExchange(data, datalen, outdata, ref outdatalen);
             }
@@ -161,16 +163,24 @@ namespace ApduCtrl
 
         public bool OpenContactCard(ref string CardAtr)
         {
-            if (m_Domain == ApduDomain.LongHuan)
+            if(m_Domain == ApduDomain.DaHua)
+                return m_DahuaDomain.IccPowerOn(ref CardAtr);
+            else if (m_Domain == ApduDomain.LongHuan)
                 return m_LongHuanDomain.OpenContactCard(ref CardAtr);
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                return m_LohMTDomain.IccPowerOn(ref CardAtr);
             else
                 return false;
         }
 
         public void CloseContactCard()
         {
-            if (m_Domain == ApduDomain.LongHuan)
+            if (m_Domain == ApduDomain.DaHua)
+                m_DahuaDomain.IccPowerOff();
+            else if (m_Domain == ApduDomain.LongHuan)
                 m_LongHuanDomain.CloseContactCard();
+            else if (m_Domain == ApduDomain.LoH_at_MT)
+                m_LohMTDomain.IccPowerOff();
         }
 
         public bool IccPowerOn(ref string CardAtr)
@@ -215,7 +225,7 @@ namespace ApduCtrl
                 return m_LohMTDomain.IccPowerOn(ref CardAtr);
             else if (m_Domain == ApduDomain.LongHuan)
             {
-                if (bSamSlot)
+                if (bSamSlot)//拆开盖子后里面的卡槽
                     return m_LongHuanDomain.OpenSAM(ref CardAtr);
                 else
                     return m_LongHuanDomain.IccPowerOn(ref CardAtr);

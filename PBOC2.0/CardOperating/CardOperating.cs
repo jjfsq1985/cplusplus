@@ -495,36 +495,6 @@ namespace CardOperating
 
         }
 
-        private void btnMethod_Click(object sender, EventArgs e)
-        {
-            if (!m_DevControl.IsDeviceOpen())
-                return;
-            if (!m_CardMethod.Visible && m_bShowPanel)
-            {
-                m_CardPSAM.Hide();
-                m_CardUser.Hide();
-                m_CardMethod.Show();
-                m_CardMethod.SetDeviceHandler(m_DevControl, ContactCard.Checked);
-            }
-            else
-            {
-                m_bShowPanel = !m_bShowPanel;
-                if (m_bShowPanel)
-                {
-                    CardInfoPanel.Visible = true;
-                    m_CardMethod.Show();
-                    m_CardMethod.SetDeviceHandler(m_DevControl,ContactCard.Checked);
-                    this.Width += CardInfoPanel.Width;                                        
-                }
-                else
-                {                    
-                    CardInfoPanel.Visible = false;
-                    m_CardMethod.Hide();
-                    this.Width -= CardInfoPanel.Width;
-                }                
-            }
-        }
-
         private bool IsExistPsamId(byte[] psamID)
         {            
             SqlHelper ObjSql = new SqlHelper();
@@ -574,7 +544,7 @@ namespace CardOperating
             {
                 m_DevControl = new ApduController(ApduDomain.LoH_at_MT);
                 ContactCard.Checked = false;
-                ContactCard.Enabled = false;
+                ContactCard.Enabled = true;
             }
             else
             {
@@ -619,6 +589,46 @@ namespace CardOperating
             if (!m_UserCardCtrl.UpdateLoyaltyApp(cardInfo, null))
                 return;
             WriteMsg(0, "积分应用写入成功");
+        }
+
+        private void UserCardAppTest()
+        {
+            if (!m_DevControl.IsDeviceOpen())
+                return;
+            if (!m_CardMethod.Visible && m_bShowPanel)
+            {
+                m_CardPSAM.Hide();
+                m_CardUser.Hide();
+                m_CardMethod.Show();
+                m_CardMethod.SetDeviceHandler(m_DevControl, ContactCard.Checked);
+            }
+            else
+            {
+                m_bShowPanel = !m_bShowPanel;
+                if (m_bShowPanel)
+                {
+                    CardInfoPanel.Visible = true;
+                    m_CardMethod.Show();
+                    m_CardMethod.SetDeviceHandler(m_DevControl, ContactCard.Checked);
+                    this.Width += CardInfoPanel.Width;
+                }
+                else
+                {
+                    CardInfoPanel.Visible = false;
+                    m_CardMethod.Hide();
+                    this.Width -= CardInfoPanel.Width;
+                }
+            }
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.Alt | Keys.T))
+            {
+                UserCardAppTest();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
     }

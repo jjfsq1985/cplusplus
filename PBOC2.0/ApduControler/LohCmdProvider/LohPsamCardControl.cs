@@ -650,17 +650,7 @@ namespace LohApduCtrl
             return false;
         }
 
-        private byte[] calcUserCardMAC1(byte[] ASN, byte[] rand, byte[] BusinessSn, byte[] TermialSn, byte[] TermialRand, byte[] srcData)
-        {
-            byte[] MAC1 = new byte[4];
-            byte[] sespk = GetPrivateProcessKey(ASN, m_MPK, rand, BusinessSn, TermialSn, TermialRand);
-            if (sespk == null)
-                return MAC1;
-             MAC1 = m_CmdProvider.CalcMacVal_DES(srcData, sespk);
-             return MAC1;
-        }
-
-        public bool InitSamGrayLock(bool bSamSlot,byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData)
+        public bool InitSamGrayLock(bool bSamSlot, byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteBalance, byte BusinessType, byte[] ASN, byte[] outData)
         {
             byte[] SysTime = PublicFunc.GetBCDTime();
             byte[] byteData = new byte[36]; //28字节数据+8字节分散因子
@@ -681,37 +671,38 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot,data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "SAM卡MAC1计算初始化失败"));
+                OnTextOutput(new MsgOutEvent(nRet, "SAM卡MAC1计算失败"));
                 return false;
             }
             else
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
-                OnTextOutput(new MsgOutEvent(0, "SAM卡MAC1计算初始化应答：" + strData));
+                OnTextOutput(new MsgOutEvent(0, "SAM卡MAC1计算应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
-                //输出数据按灰锁命令数据域排列:终端交易序号，终端随机数，BCD时间，MAC1
+                //输出数据按命令数据域排列:终端交易序号，终端随机数，BCD时间，MAC1
                 Buffer.BlockCopy(RecvData, 0, outData, 0, 4);
                 Buffer.BlockCopy(RecvData, 4, outData, 4, 4);
-                Buffer.BlockCopy(RecvData, 8, outData, 15, 4);                
+                Buffer.BlockCopy(SysTime, 0, outData, 8, 7);
+                Buffer.BlockCopy(RecvData, 8, outData, 15, 4); //MAC1
+
                 //PSAM卡计算的MAC1
                 byte[] PSAM_MAC1 = new byte[4];
                 Buffer.BlockCopy(RecvData, 8, PSAM_MAC1, 0, 4);
-
-                 //加气专用过程密钥 计算
-                byte[] TermialSn = new byte[4];                
+                //////////////////////////////////////////////////////////////////////////
+                byte[] TermialSn = new byte[4];
                 byte[] TermialRandom = new byte[4];
                 Buffer.BlockCopy(RecvData, 0, TermialSn, 0, 4);
                 Buffer.BlockCopy(RecvData, 4, TermialRandom, 0, 4);
+
+                //加气专用过程密钥 计算
                 byte[] srcData = new byte[14];//用于计算MAC1的原始数据                                
                 srcData[0] = BusinessType;
                 Buffer.BlockCopy(TermialID, 0, srcData, 1, 6);
                 Buffer.BlockCopy(SysTime, 0, srcData, 7, 7);
                 //龙寰卡使用消费密钥进行两次分散后计算MAC1
-                byte[] MAC1 = calcUserCardMAC1(ASN, random, BusinessSn, TermialSn, TermialRandom, srcData);                      
-                Buffer.BlockCopy(SysTime, 0, outData, 8, 7);
-                Buffer.BlockCopy(PSAM_MAC1, 0, outData, 15, 4);//MAC1
-                string strInfo = string.Format("SAM卡MAC1计算初始化 MAC: {0} PC Calc MAC: {1}", BitConverter.ToString(PSAM_MAC1), BitConverter.ToString(MAC1));
+                byte[] MAC1 = calcUserCardMAC1(ASN, random, BusinessSn, TermialSn, TermialRandom, srcData);                
+                string strInfo = string.Format("SAM卡MAC1: {0} My Calc MAC1: {1}", BitConverter.ToString(PSAM_MAC1), BitConverter.ToString(MAC1));
                 System.Diagnostics.Trace.WriteLine(strInfo);
                 if (!PublicFunc.ByteDataEquals(MAC1, PSAM_MAC1))
                 {
@@ -721,6 +712,16 @@ namespace LohApduCtrl
                 }
             }
             return true;
+        }
+
+        private byte[] calcUserCardMAC1(byte[] ASN, byte[] rand, byte[] BusinessSn, byte[] TermialSn, byte[] TermialRand, byte[] srcData)
+        {
+            byte[] MAC1 = new byte[4];
+            byte[] sespk = GetPrivateProcessKey(ASN, m_MPK, rand, BusinessSn, TermialSn, TermialRand);
+            if (sespk == null)
+                return MAC1;
+            MAC1 = m_CmdProvider.CalcMacVal_DES(srcData, sespk);
+            return MAC1;
         }
 
         /// <summary>
@@ -764,9 +765,108 @@ namespace LohApduCtrl
             return byteSESPK;
         }
 
-        public bool VerifyMAC2(bool bSamSlot,byte[] MAC2)
+        public bool InitSamPurchase(bool bSamSlot, byte[] TermialID, byte[] random, byte[] BusinessSn, byte[] byteAmount, byte BusinessType, byte[] ASN, byte[] outData)
         {
-            m_CmdProvider.createVerifyMAC2Cmd(MAC2);
+            byte[] SysTime = PublicFunc.GetBCDTime();
+            byte[] byteData = new byte[36]; //28字节数据+8字节分散因子
+            Buffer.BlockCopy(random, 0, byteData, 0, 4);
+            Buffer.BlockCopy(BusinessSn, 0, byteData, 4, 2);
+            Buffer.BlockCopy(byteAmount, 0, byteData, 6, 4);
+            byteData[10] = BusinessType;
+            Buffer.BlockCopy(SysTime, 0, byteData, 11, 7);
+            byteData[18] = 0x01;//Key Ver
+            byteData[19] = 0x00; // Key Flag
+            Buffer.BlockCopy(ASN, 0, byteData, 20, 8);
+            Buffer.BlockCopy(ASN, 0, byteData, 28, 8); //用户卡序列号作为分散因子
+            m_CmdProvider.createInitSamPurchaseCmd(byteData);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot, data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "SAM卡普通消费MAC1计算失败"));
+                return false;
+            }
+            else
+            {
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                OnTextOutput(new MsgOutEvent(0, "SAM卡普通消费MAC1计算：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+                //输出数据按命令数据域排列:终端交易序号，BCD时间，MAC1
+                Buffer.BlockCopy(RecvData, 0, outData, 0, 4);
+                Buffer.BlockCopy(SysTime, 0, outData, 4, 7);
+                Buffer.BlockCopy(RecvData, 4, outData, 11, 4);//MAC1                
+
+                //PSAM卡计算的MAC1
+                byte[] PSAM_MAC1 = new byte[4];
+                Buffer.BlockCopy(RecvData, 4, PSAM_MAC1, 0, 4);
+                byte[] TermialSn = new byte[4];
+                Buffer.BlockCopy(RecvData, 0, TermialSn, 0, 4);
+
+                //加气专用过程密钥 计算
+                byte[] srcData = new byte[18];//用于计算MAC1的原始数据                                
+                Buffer.BlockCopy(byteAmount, 0, srcData, 0, 4);
+                srcData[4] = BusinessType;
+                Buffer.BlockCopy(TermialID, 0, srcData, 5, 6);
+                Buffer.BlockCopy(SysTime, 0, srcData, 11, 7);
+                //普通消费计算MAC1
+                byte[] MAC1 = calcPurchaseMAC1(ASN, random, BusinessSn, TermialSn,srcData);
+                string strInfo = string.Format("SAM卡普通消费MAC1: {0} My Calc MAC: {1}", BitConverter.ToString(PSAM_MAC1), BitConverter.ToString(MAC1));
+                System.Diagnostics.Trace.WriteLine(strInfo);
+                if (!PublicFunc.ByteDataEquals(MAC1, PSAM_MAC1))
+                {
+                    string strMessage = string.Format("MAC1计算验证失败：终端机编号{0}，用户卡号{1}", BitConverter.ToString(TermialID), BitConverter.ToString(ASN));
+                    OnTextOutput(new MsgOutEvent(0, strMessage));
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private byte[] calcPurchaseMAC1(byte[] ASN, byte[] rand, byte[] BusinessSn, byte[] TerminalSn,byte[] srcData)
+        {
+            if (ASN.Length != 8)
+                return null;
+            //中间密钥,两次分散
+            byte[] DPKKey = new byte[16];
+            byte[] LeftDiversify = DesCryptography.TripleEncryptData(ASN, m_MPK);
+            byte[] XorASN = new byte[8];
+            for (int i = 0; i < 8; i++)
+                XorASN[i] = (byte)(ASN[i] ^ 0xFF);
+            byte[] RightDiversify = DesCryptography.TripleEncryptData(XorASN, m_MPK);
+            Buffer.BlockCopy(LeftDiversify, 0, DPKKey, 0, 8);
+            Buffer.BlockCopy(RightDiversify, 0, DPKKey, 8, 8);
+
+            byte[] SecondDPKKey = new byte[16];
+            byte[] LeftDPK = DesCryptography.TripleEncryptData(ASN, DPKKey);
+            byte[] RightDPK = DesCryptography.TripleEncryptData(XorASN, DPKKey);
+            Buffer.BlockCopy(LeftDPK, 0, SecondDPKKey, 0, 8);
+            Buffer.BlockCopy(RightDPK, 0, SecondDPKKey, 8, 8);
+
+            byte[] byteData = new byte[8];
+            Buffer.BlockCopy(rand, 0, byteData, 0, 4);
+            Buffer.BlockCopy(BusinessSn, 0, byteData, 4, 2);
+            Buffer.BlockCopy(TerminalSn, 2, byteData, 6, 2);
+            //中间密钥
+            byte[] MAC1 = new byte[4];
+            byte[] sespk = DesCryptography.TripleEncryptData(byteData, SecondDPKKey);
+            if (sespk == null)
+                return MAC1;
+            MAC1 = m_CmdProvider.CalcMacVal_DES(srcData, sespk);
+            return MAC1;
+        }
+
+        public bool VerifyMAC2(bool bSamSlot, byte[] MAC2, int nAppIndex)
+        {
+            if (nAppIndex == 1)
+                m_CmdProvider.createVerifyMAC2Cmd(MAC2);
+            else if (nAppIndex == 2)
+                m_CmdProvider.createVerifyPurchaseMAC2Cmd(MAC2);
+            else
+                return false;
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
