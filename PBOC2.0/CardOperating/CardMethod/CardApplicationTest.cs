@@ -261,5 +261,44 @@ namespace CardOperating
                 m_nAppIndex = 1;
         }
 
+        //积分转金额
+        private void btnToED_Click(object sender, EventArgs e)
+        {
+            int nLyAmount = 0;
+            int.TryParse(textLyPurchase.Text, out nLyAmount);//消费积分金额
+            if (nLyAmount < 1)
+                return;
+            decimal LyRate = 0;
+            decimal.TryParse(textRate.Text, out LyRate);
+            double dbLyRate = decimal.ToDouble(LyRate);
+            if (dbLyRate < 1)
+                return;
+            int nRealMoney = Convert.ToInt32(Math.Floor(nLyAmount / dbLyRate));//单位：元
+
+            bool bSamSlot = LySamSlot.Checked;
+            nLyAmount = (int)(nRealMoney * dbLyRate);  //修正扣除积分
+
+            if (m_bGray || m_bLyGray)
+                return;
+            if (!OpenUserCard())
+                return;
+
+            if (!LoyaltyPurchase(nLyAmount))
+            {
+                CloseUserCard();
+                return;
+            }
+            //圈存单位为分
+            if (!MoneyLoad((int)(nRealMoney * 100.0), m_TermialId))
+            {
+                string strMsg = string.Format("转成金额失败。已扣除{0}积分，应转入金额{1}元！", nLyAmount.ToString(), nRealMoney.ToString());
+                MessageBox.Show(strMsg);
+                CloseUserCard();
+                return;
+            }
+            string strOkMsg = string.Format("成功转入金额{0}元", nRealMoney.ToString());
+            MessageBox.Show(strOkMsg);
+            CloseUserCard();
+        }
     }
 }

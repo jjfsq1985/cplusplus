@@ -57,15 +57,19 @@ namespace ApduInterface
 
         bool createrCardGrayCmd(bool bClearTAC);
 
-        bool createrInitForGrayCmd(byte[] TermialID, BalanceType eType);        
+        bool createrInitForGrayCmd(byte[] TermialID);
 
-        bool createrGrayLockCmd(byte[] DataVal);        
+        bool createrInitForPurchaseCmd(byte[] TerminalID, int nLyAmount);
+
+        bool createrGrayLockCmd(byte[] DataVal);
+
+        bool createrLyPurchaseCmd(byte[] DataVal);
 
         bool createrInitForUnlockCardCmd(byte[] TermialID);
 
         bool createGreyCardUnLockCmd(int nMoney, byte[] byteMAC2, byte[] TimeBcd);
 
-        bool createDebitForUnlockCmd(byte[] DebitData, BalanceType eType);
+        bool createDebitForUnlockCmd(byte[] DebitData);
 
         bool createReadRecordCmd(byte ResponseLen, int nRecordId);
 

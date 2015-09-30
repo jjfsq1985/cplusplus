@@ -879,8 +879,13 @@ namespace CardOperating
                 return;
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
-            decimal MoneyLoad = decimal.Parse(textMoney.Text, System.Globalization.NumberStyles.Number);
+
+            decimal MoneyLoad = 0;
+            decimal.TryParse(textMoney.Text, out MoneyLoad);
             double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
+            if (dbMoneyLoad < 1)
+                return;
+
             byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
             if (ASN == null)
             {
@@ -1094,7 +1099,7 @@ namespace CardOperating
             int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
             if (nRet == 1)
             {
-                if (m_UserCardCtrl.UnLockGrayCard(ASN, m_TermialId, (int)(GrayInfo.Money * 100.0), true))
+                if (m_UserCardCtrl.UnLockGrayCard(ASN, m_TermialId, (int)(GrayInfo.Money * 100.0), true,1))
                 {
                     m_bGray = false;
                     SaveUnGrayRecord(GrayInfo);
@@ -1334,7 +1339,7 @@ namespace CardOperating
                 CloseDevice();
                 m_DevControl = new ApduController(ApduDomain.LoH_at_MT);
                 ContactCard.Checked = false;
-                ContactCard.Enabled = false;
+                ContactCard.Enabled = true;
                 OpenDevice();
             }
             else
@@ -1520,7 +1525,10 @@ namespace CardOperating
                 byte[] MotherAsn = PublicFunc.StringToBCD(strMotherCardAsn);
                 //获取母卡余额
                 string strBalance = GlobalControl.GetPublishedCardInfoFormDb(m_DBInfo, MotherAsn, "AccountBalance", 1);
-                double dbBalance = decimal.ToDouble(decimal.Parse(strBalance, System.Globalization.NumberStyles.Number));
+                decimal Balance = 0;
+                decimal.TryParse(strBalance,out Balance);
+                double dbBalance = decimal.ToDouble(Balance);
+                
                 if (dbBalance < dbMoneyLoad)
                 {
                     string strMsg = string.Format("单位母卡的余额{0}元，不能对单位子卡圈存{1}元",dbBalance.ToString("F2"),dbMoneyLoad.ToString("F2"));
@@ -1535,7 +1543,9 @@ namespace CardOperating
             {
                 //母卡充值
                 string strBalance = GlobalControl.GetPublishedCardInfoFormDb(m_DBInfo, ASN, "AccountBalance", 1);
-                double dbBalance = decimal.ToDouble(decimal.Parse(strBalance, System.Globalization.NumberStyles.Number));
+                decimal Balance = 0;
+                decimal.TryParse(strBalance, out Balance);
+                double dbBalance = decimal.ToDouble(Balance);
 
                 SaveLoadRecord(ASN, dbMoneyLoad, dbBalance, "AccountBalance");//单位母卡充值后更新字段不一样
                 string strInfo = string.Format("成功对单位母卡{0}充值{1}元.", BitConverter.ToString(ASN).Replace("-", ""), dbMoneyLoad.ToString("F2"));
@@ -1545,13 +1555,18 @@ namespace CardOperating
 
         private void LoadLoyalty_Click(object sender, EventArgs e)
         {
+            int LoadLoyalty = 0;
+            int.TryParse(textLoadValue.Text, out LoadLoyalty);
+            if (LoadLoyalty < 1)
+                return;
+
             if (!OpenUserCard())
                 return;
             if (!m_UserCardCtrl.SelectCardApp(2))
                 return;
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
-            int LoadLoyalty = int.Parse(textLoadValue.Text, System.Globalization.NumberStyles.Number);            
+                    
             byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
             if (ASN == null)
             {
@@ -1689,7 +1704,7 @@ namespace CardOperating
             int nRet = m_UserCardCtrl.VerifyUserPin(m_strPin_Ly);
             if (nRet == 1)
             {
-                if (m_UserCardCtrl.UnLockGrayCard(ASN, m_TermialId_Ly, nUnGrayLoyalty, true))
+                if (m_UserCardCtrl.UnLockGrayCard(ASN, m_TermialId_Ly, nUnGrayLoyalty, true, 2))
                 {
                     m_bGray_Ly = false;                    
                 }

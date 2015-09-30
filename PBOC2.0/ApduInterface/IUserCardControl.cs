@@ -11,6 +11,8 @@ namespace ApduInterface
 
         int InitCard(bool bMainKey);
 
+        void GetCosVer();
+
         bool CreateEFInMF();        
 
         void CreateKey();
@@ -43,15 +45,19 @@ namespace ApduInterface
 
         bool UserCardGray(ref int nStatus, byte[] PSAM_TID,byte[] GTAC);
 
-        bool InitForGray(byte[] TermialID, byte[] outData, BalanceType eType);        
+        bool InitForGray(byte[] TermialID, byte[] outData);
+
+        bool InitForPurchase(byte[] TerminalID, int nLyAmount, byte[] outData);
                 
-        bool GrayLock(byte[] Data, byte[] outGTAC, byte[] outMAC2);        
+        bool GrayLock(byte[] Data, byte[] outGTAC, byte[] outMAC2);
+
+        bool LyPurchase(byte[] Data, byte[] outTAC, byte[] outMAC2);
                 
         bool InitForUnlockGreyCard(byte[] TermialID, byte[] outData);
 
-        bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney, bool bReadKey);
+        bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney, bool bReadKey, int nAppIndex);
 
-        bool DebitForUnlock(byte[] byteData, BalanceType eType);        
+        bool DebitForUnlock(byte[] byteData);        
 
         bool ClearTACUF();
 

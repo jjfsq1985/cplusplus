@@ -963,7 +963,7 @@ namespace CardOperating
 
             string CardNoMin = companyId + "022100000000";//按公司代码获取单位母卡卡号
             string CardNoMax = companyId + "022100999999"; //最大单位母卡卡号
-            SqlParameter[] sqlparams = new SqlParameter[3];
+            SqlParameter[] sqlparams = new SqlParameter[2];
             sqlparams[0] = ObjSql.MakeParam("CardNoMin", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMin);
             sqlparams[1] = ObjSql.MakeParam("CardNoMax", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMax);
 
@@ -987,8 +987,8 @@ namespace CardOperating
         private void cmbMotherCard_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbMotherCard.SelectedIndex >= 0)
-            {                
-                m_CardInfoPar.SetMotherCard(cmbMotherCard.SelectedText);
+            {
+                m_CardInfoPar.SetMotherCard((string)cmbMotherCard.Items[cmbMotherCard.SelectedIndex]);
             }
         }
 

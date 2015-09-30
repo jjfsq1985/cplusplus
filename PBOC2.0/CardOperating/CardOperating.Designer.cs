@@ -52,7 +52,6 @@
             this.btnInitIccCard = new System.Windows.Forms.Button();
             this.btnCleanInfo = new System.Windows.Forms.Button();
             this.CardInfoPanel = new System.Windows.Forms.Panel();
-            this.btnMethod = new System.Windows.Forms.Button();
             this.cmbDevType = new System.Windows.Forms.ComboBox();
             this.Card.SuspendLayout();
             this.ICC_Card.SuspendLayout();
@@ -312,16 +311,6 @@
             this.CardInfoPanel.TabIndex = 9;
             this.CardInfoPanel.Visible = false;
             // 
-            // btnMethod
-            // 
-            this.btnMethod.Location = new System.Drawing.Point(384, 12);
-            this.btnMethod.Name = "btnMethod";
-            this.btnMethod.Size = new System.Drawing.Size(75, 23);
-            this.btnMethod.TabIndex = 3;
-            this.btnMethod.Text = "卡应用测试";
-            this.btnMethod.UseVisualStyleBackColor = true;
-            this.btnMethod.Click += new System.EventHandler(this.btnMethod_Click);
-            // 
             // cmbDevType
             // 
             this.cmbDevType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -340,7 +329,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.ClientSize = new System.Drawing.Size(518, 632);
             this.Controls.Add(this.cmbDevType);
-            this.Controls.Add(this.btnMethod);
             this.Controls.Add(this.CardInfoPanel);
             this.Controls.Add(this.btnCleanInfo);
             this.Controls.Add(this.ICC_Card);
@@ -389,7 +377,6 @@
         private System.Windows.Forms.Panel CardInfoPanel;
         private System.Windows.Forms.Button btnUserCardReset;
         private System.Windows.Forms.Button btnIccCardReset;
-        private System.Windows.Forms.Button btnMethod;
         private System.Windows.Forms.ComboBox cmbDevType;
         private System.Windows.Forms.CheckBox ContactCard;
         private System.Windows.Forms.Button btnLoyalty;

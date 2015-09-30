@@ -24,9 +24,8 @@ namespace LohApduCtrl
         private bool m_bContactCard = false;
 
         private static byte[] m_PSE = new byte[] { 0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31 };//"1PAY.SYS.DDF01"
-        private static byte[] m_ADF01 = new byte[] { 0x86, 0x98, 0x07, 0x01 };
-        private static byte[] m_ADF02 = new byte[] { 0x86, 0x98, 0x07, 0x02 };
-
+        private static byte[] m_ADF01 = new byte[] { 0x53, 0x49, 0x4E, 0x4F, 0x50, 0x45, 0x43 };//SINOPEC
+        private static byte[] m_ADF02 = new byte[] { 0x4C, 0x4F, 0x59, 0x41, 0x4C, 0x54, 0x59 };//LOYALTY
         //加气应用主控密钥MAMK
         private static byte[] m_MAMK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
         //加气消费密钥MPK1
@@ -291,6 +290,11 @@ namespace LohApduCtrl
                 return 1;
             InitWhiteCard();
             return 0;
+        }
+
+        public void GetCosVer()
+        {
+
         }
 
         private bool CreateFCI()
@@ -1189,9 +1193,9 @@ namespace LohApduCtrl
 
 
 
-        public bool InitForGray(byte[] TermialID, byte[] outData, BalanceType eType)
+        public bool InitForGray(byte[] TermialID, byte[] outData)
         {
-            m_CmdProvider.createrInitForGrayCmd(TermialID, eType);
+            m_CmdProvider.createrInitForGrayCmd(TermialID);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -1206,6 +1210,31 @@ namespace LohApduCtrl
             {
                 string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
                 OnTextOutput(new MsgOutEvent(0, "灰锁初始化应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+                Buffer.BlockCopy(RecvData, 0, outData, 0, 15);
+            }
+            return true;
+        }
+
+        //积分应用消费：只用于电子钱包 EP
+        public bool InitForPurchase(byte[] TerminalID, int nLyAmount, byte[] outData)
+        {
+            m_CmdProvider.createrInitForPurchaseCmd(TerminalID, nLyAmount);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "积分消费初始化失败"));
+                return false;
+            }
+            else
+            {
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                OnTextOutput(new MsgOutEvent(0, "积分消费初始化应答：" + strData));
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return false;
                 Buffer.BlockCopy(RecvData, 0, outData, 0, 15);
@@ -1239,6 +1268,32 @@ namespace LohApduCtrl
             return true;
         }
 
+        //积分消费
+        public bool LyPurchase(byte[] Data, byte[] outTAC, byte[] outMAC2)
+        {
+            m_CmdProvider.createrLyPurchaseCmd(Data);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "积分消费失败"));
+                return false;
+            }
+            else
+            {
+                string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
+                OnTextOutput(new MsgOutEvent(0, "积分消费应答：" + strData));
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+                Buffer.BlockCopy(RecvData, 0, outTAC, 0, 4);
+                Buffer.BlockCopy(RecvData, 4, outMAC2, 0, 4);
+            }
+            return true;
+        }
+
         //联机解扣初始化
         public bool InitForUnlockGreyCard(byte[] TermialID, byte[] outData)
         {
@@ -1265,18 +1320,25 @@ namespace LohApduCtrl
         }
 
         //联机解扣
-        public bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney, bool bReadKey)
+        public bool UnLockGrayCard(byte[] ASN, byte[] TermialID, int nUnlockMoney, bool bReadKey, int nAppIndex)
         {
+            byte[] byteMUGK = new byte[16];
+            if (nAppIndex == 1)
+                Buffer.BlockCopy(m_MUGK, 0, byteMUGK, 0, 16);
+            else if (nAppIndex == 2)
+                Buffer.BlockCopy(m_MUGK_Ly, 0, byteMUGK, 0, 16);
+            else
+                return false;
             //获取已发卡的圈存密钥,测试时用数据库存储的默认密钥
             if (bReadKey)
             {
-                byte[] keyUnlockGray = GetApplicationKeyVal(ASN, "AppUnGrayKey", 1);
+                byte[] keyUnlockGray = GetApplicationKeyVal(ASN, "AppUnGrayKey", nAppIndex);
                 if (keyUnlockGray == null)
                 {
                     MessageBox.Show("无解灰密钥，不能解灰。");
                     return false;
                 }
-                Buffer.BlockCopy(keyUnlockGray, 0, m_MUGK, 0, 16);
+                Buffer.BlockCopy(keyUnlockGray, 0, byteMUGK, 0, 16);
             }
             const byte BusinessType = 0x95; //交易类型标识：联机解0扣
             byte[] outData = new byte[18];
@@ -1296,7 +1358,7 @@ namespace LohApduCtrl
             byte[] MAC1 = new byte[4];
             Buffer.BlockCopy(outData, 14, MAC1, 0, 4);
             //判断MAC1是否正确
-            byte[] sesukk = GlobalControl.GetProcessKey(ASN, m_MUGK, rand, OnlineSn);//联机解扣密钥
+            byte[] sesukk = GlobalControl.GetProcessKey(ASN, byteMUGK, rand, OnlineSn);//联机解扣密钥
             if (sesukk == null)
                 return false;
             byte[] srcData = new byte[13];//用于计算MAC1的原始数据
@@ -1340,9 +1402,9 @@ namespace LohApduCtrl
             return true;
         }
 
-        public bool DebitForUnlock(byte[] byteData, BalanceType eType)
+        public bool DebitForUnlock(byte[] byteData)
         {
-            m_CmdProvider.createDebitForUnlockCmd(byteData, eType);
+            m_CmdProvider.createDebitForUnlockCmd(byteData);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];

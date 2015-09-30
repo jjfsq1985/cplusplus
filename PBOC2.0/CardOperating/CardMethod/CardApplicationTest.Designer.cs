@@ -71,11 +71,13 @@
             this.LoadLoyalty = new System.Windows.Forms.Label();
             this.LabelLyPin = new System.Windows.Forms.Label();
             this.groupLyTest = new System.Windows.Forms.GroupBox();
+            this.textRate = new System.Windows.Forms.TextBox();
+            this.LabelRate = new System.Windows.Forms.Label();
             this.LySamSlot = new System.Windows.Forms.CheckBox();
-            this.btnLockLy = new System.Windows.Forms.Button();
+            this.btnLyPurchase = new System.Windows.Forms.Button();
             this.DebitLy = new System.Windows.Forms.Label();
-            this.btnUnlockLy = new System.Windows.Forms.Button();
-            this.textDebitLy = new System.Windows.Forms.TextBox();
+            this.btnToED = new System.Windows.Forms.Button();
+            this.textLyPurchase = new System.Windows.Forms.TextBox();
             this.btnReadLy = new System.Windows.Forms.Button();
             this.Loyalty = new System.Windows.Forms.Label();
             this.textLoyalty = new System.Windows.Forms.TextBox();
@@ -499,64 +501,84 @@
             // 
             // groupLyTest
             // 
+            this.groupLyTest.Controls.Add(this.textRate);
+            this.groupLyTest.Controls.Add(this.LabelRate);
             this.groupLyTest.Controls.Add(this.LySamSlot);
-            this.groupLyTest.Controls.Add(this.btnLockLy);
+            this.groupLyTest.Controls.Add(this.btnLyPurchase);
             this.groupLyTest.Controls.Add(this.DebitLy);
-            this.groupLyTest.Controls.Add(this.btnUnlockLy);
-            this.groupLyTest.Controls.Add(this.textDebitLy);
+            this.groupLyTest.Controls.Add(this.btnToED);
+            this.groupLyTest.Controls.Add(this.textLyPurchase);
             this.groupLyTest.Location = new System.Drawing.Point(27, 177);
             this.groupLyTest.Name = "groupLyTest";
-            this.groupLyTest.Size = new System.Drawing.Size(363, 99);
+            this.groupLyTest.Size = new System.Drawing.Size(363, 100);
             this.groupLyTest.TabIndex = 31;
             this.groupLyTest.TabStop = false;
             this.groupLyTest.Text = "积分消费测试";
             // 
+            // textRate
+            // 
+            this.textRate.Location = new System.Drawing.Point(92, 52);
+            this.textRate.Name = "textRate";
+            this.textRate.Size = new System.Drawing.Size(68, 21);
+            this.textRate.TabIndex = 7;
+            this.textRate.Text = "100";
+            this.textRate.MouseHover += new System.EventHandler(this.textRate_MouseHover);
+            // 
+            // LabelRate
+            // 
+            this.LabelRate.AutoSize = true;
+            this.LabelRate.Location = new System.Drawing.Point(21, 57);
+            this.LabelRate.Name = "LabelRate";
+            this.LabelRate.Size = new System.Drawing.Size(65, 12);
+            this.LabelRate.TabIndex = 6;
+            this.LabelRate.Text = "转换比例：";
+            // 
             // LySamSlot
             // 
             this.LySamSlot.AutoSize = true;
-            this.LySamSlot.Location = new System.Drawing.Point(116, 76);
+            this.LySamSlot.Location = new System.Drawing.Point(121, 81);
             this.LySamSlot.Name = "LySamSlot";
             this.LySamSlot.Size = new System.Drawing.Size(84, 16);
             this.LySamSlot.TabIndex = 5;
             this.LySamSlot.Text = "PSAM卡内置";
             this.LySamSlot.UseVisualStyleBackColor = true;
             // 
-            // btnLockLy
+            // btnLyPurchase
             // 
-            this.btnLockLy.Location = new System.Drawing.Point(11, 40);
-            this.btnLockLy.Name = "btnLockLy";
-            this.btnLockLy.Size = new System.Drawing.Size(86, 23);
-            this.btnLockLy.TabIndex = 0;
-            this.btnLockLy.Text = "积分消费锁定";
-            this.btnLockLy.UseVisualStyleBackColor = true;
-            this.btnLockLy.Click += new System.EventHandler(this.btnLockLy_Click);
+            this.btnLyPurchase.Location = new System.Drawing.Point(232, 23);
+            this.btnLyPurchase.Name = "btnLyPurchase";
+            this.btnLyPurchase.Size = new System.Drawing.Size(80, 23);
+            this.btnLyPurchase.TabIndex = 0;
+            this.btnLyPurchase.Text = "积分消费";
+            this.btnLyPurchase.UseVisualStyleBackColor = true;
+            this.btnLyPurchase.Click += new System.EventHandler(this.btnLyPurchase_Click);
             // 
             // DebitLy
             // 
             this.DebitLy.AutoSize = true;
-            this.DebitLy.Location = new System.Drawing.Point(103, 45);
+            this.DebitLy.Location = new System.Drawing.Point(21, 28);
             this.DebitLy.Name = "DebitLy";
             this.DebitLy.Size = new System.Drawing.Size(41, 12);
             this.DebitLy.TabIndex = 1;
             this.DebitLy.Text = "消费：";
             // 
-            // btnUnlockLy
+            // btnToED
             // 
-            this.btnUnlockLy.Location = new System.Drawing.Point(277, 40);
-            this.btnUnlockLy.Name = "btnUnlockLy";
-            this.btnUnlockLy.Size = new System.Drawing.Size(80, 23);
-            this.btnUnlockLy.TabIndex = 4;
-            this.btnUnlockLy.Text = "扣积分解锁";
-            this.btnUnlockLy.UseVisualStyleBackColor = true;
-            this.btnUnlockLy.Click += new System.EventHandler(this.btnUnlockLy_Click);
+            this.btnToED.Location = new System.Drawing.Point(232, 52);
+            this.btnToED.Name = "btnToED";
+            this.btnToED.Size = new System.Drawing.Size(80, 23);
+            this.btnToED.TabIndex = 4;
+            this.btnToED.Text = "转成金额";
+            this.btnToED.UseVisualStyleBackColor = true;
+            this.btnToED.Click += new System.EventHandler(this.btnToED_Click);
             // 
-            // textDebitLy
+            // textLyPurchase
             // 
-            this.textDebitLy.Location = new System.Drawing.Point(145, 42);
-            this.textDebitLy.Name = "textDebitLy";
-            this.textDebitLy.Size = new System.Drawing.Size(97, 21);
-            this.textDebitLy.TabIndex = 2;
-            this.textDebitLy.Text = "200.00";
+            this.textLyPurchase.Location = new System.Drawing.Point(92, 25);
+            this.textLyPurchase.Name = "textLyPurchase";
+            this.textLyPurchase.Size = new System.Drawing.Size(100, 21);
+            this.textLyPurchase.TabIndex = 2;
+            this.textLyPurchase.Text = "200";
             // 
             // btnReadLy
             // 
@@ -708,15 +730,17 @@
         private System.Windows.Forms.Label LabelLyPin;
         private System.Windows.Forms.GroupBox groupLyTest;
         private System.Windows.Forms.CheckBox LySamSlot;
-        private System.Windows.Forms.Button btnLockLy;
+        private System.Windows.Forms.Button btnLyPurchase;
         private System.Windows.Forms.Label DebitLy;
-        private System.Windows.Forms.Button btnUnlockLy;
-        private System.Windows.Forms.TextBox textDebitLy;
+        private System.Windows.Forms.Button btnToED;
+        private System.Windows.Forms.TextBox textLyPurchase;
         private System.Windows.Forms.Button btnReadLy;
         private System.Windows.Forms.Label Loyalty;
         private System.Windows.Forms.TextBox textLoyalty;
         private System.Windows.Forms.Button btnUnGrayLy;
         private System.Windows.Forms.CheckBox LyGrayFlag;
+        private System.Windows.Forms.TextBox textRate;
+        private System.Windows.Forms.Label LabelRate;
 
     }
 }

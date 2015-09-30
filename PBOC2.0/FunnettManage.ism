@@ -1388,36 +1388,36 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
-		<row><td>accountmanage.dll</td><td>AccountManage.dll</td><td>ACCOUN~1.DLL|AccountManage.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\AccountManage.dll</td><td>1</td><td/></row>
-		<row><td>apducontroler.dll</td><td>ApduControler.dll</td><td>APDUCO~1.DLL|ApduControler.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ApduControler.dll</td><td>1</td><td/></row>
-		<row><td>apdudahua.dll</td><td>ApduDaHua.dll</td><td>APDUDA~1.DLL|ApduDaHua.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ApduDaHua.dll</td><td>1</td><td/></row>
-		<row><td>apduinterface.dll</td><td>ApduInterface.dll</td><td>APDUIN~1.DLL|ApduInterface.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ApduInterface.dll</td><td>1</td><td/></row>
-		<row><td>apduloh.dll</td><td>ApduLoh.dll</td><td>ApduLoh.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ApduLoh.dll</td><td>1</td><td/></row>
-		<row><td>apduparam.dll</td><td>ApduParam.dll</td><td>APDUPA~1.DLL|ApduParam.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ApduParam.dll</td><td>1</td><td/></row>
-		<row><td>borlndmm.dll</td><td>borlndmm.dll</td><td>borlndmm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\borlndmm.dll</td><td>1</td><td/></row>
-		<row><td>cardoperating.dll</td><td>CardOperating.dll</td><td>CARDOP~1.DLL|CardOperating.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\CardOperating.dll</td><td>1</td><td/></row>
-		<row><td>clientmanage.dll</td><td>ClientManage.dll</td><td>CLIENT~1.DLL|ClientManage.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ClientManage.dll</td><td>1</td><td/></row>
-		<row><td>codetable.dll</td><td>CodeTable.dll</td><td>CODETA~1.DLL|CodeTable.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\CodeTable.dll</td><td>1</td><td/></row>
-		<row><td>dbconfig.xml</td><td>AllOtherFiles1</td><td>DbConfig.xml</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\DbConfig.xml</td><td>1</td><td/></row>
-		<row><td>dbmanage.dll</td><td>DbManage.dll</td><td>DbManage.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\DbManage.dll</td><td>1</td><td/></row>
-		<row><td>dualcarddll.dll</td><td>DualCardDll.dll</td><td>DUALCA~1.DLL|DualCardDll.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\DualCardDll.dll</td><td>1</td><td/></row>
-		<row><td>fnt_ms.exe</td><td>FNT_MS.exe</td><td>FNT_MS.exe</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\FNT_MS.exe</td><td>1</td><td/></row>
-		<row><td>fnt_ms.ini</td><td>AllOtherFiles</td><td>FNT_MS.ini</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\FNT_MS.ini</td><td>1</td><td/></row>
-		<row><td>fnt_ms.res</td><td>AllOtherFiles</td><td>FNT_MS.res</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\FNT_MS.res</td><td>1</td><td/></row>
-		<row><td>fnt_ms.txt</td><td>AllOtherFiles</td><td>FNT_MS.txt</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\FNT_MS.txt</td><td>1</td><td/></row>
-		<row><td>fntmain.exe</td><td>FNTMain.exe</td><td>FNTMain.exe</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\FNTMain.exe</td><td>1</td><td/></row>
-		<row><td>gasinfomanage.dll</td><td>GasInfoManage.dll</td><td>GASINF~1.DLL|GasInfoManage.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\GasInfoManage.dll</td><td>1</td><td/></row>
-		<row><td>ifuncplugin.dll</td><td>IFuncPlugin.dll</td><td>IFUNCP~1.DLL|IFuncPlugin.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\IFuncPlugin.dll</td><td>1</td><td/></row>
-		<row><td>ifuncplugin.dll1</td><td>IFuncPlugin.dll1</td><td>IFUNCP~1.DLL|IFuncPlugin.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\IFuncPlugin.dll</td><td>1</td><td/></row>
-		<row><td>keyvaluecfg.xml</td><td>AllOtherFiles2</td><td>KEYVAL~1.XML|KeyValueCfg.xml</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\KeyValueCfg.xml</td><td>1</td><td/></row>
-		<row><td>logonform.dll</td><td>LogonForm.dll</td><td>LOGONF~1.DLL|LogonForm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\LogonForm.dll</td><td>1</td><td/></row>
-		<row><td>mt_32.dll</td><td>mt_32.dll</td><td>mt_32.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\mt_32.dll</td><td>1</td><td/></row>
-		<row><td>publishcardoperator.dll</td><td>PublishCardOperator.dll</td><td>PUBLIS~1.DLL|PublishCardOperator.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\PublishCardOperator.dll</td><td>1</td><td/></row>
-		<row><td>splash.jpg</td><td>AllOtherFiles</td><td>splash.jpg</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\splash.jpg</td><td>1</td><td/></row>
-		<row><td>sqlserverhelper.dll</td><td>SqlServerHelper.dll</td><td>SQLSER~1.DLL|SqlServerHelper.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\SqlServerHelper.dll</td><td>1</td><td/></row>
-		<row><td>sqlserverhelper.dll1</td><td>SqlServerHelper.dll1</td><td>SQLSER~1.DLL|SqlServerHelper.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\SqlServerHelper.dll</td><td>1</td><td/></row>
-		<row><td>stationmanage.dll</td><td>StationManage.dll</td><td>STATIO~1.DLL|StationManage.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\StationManage.dll</td><td>1</td><td/></row>
-		<row><td>winscard.dll</td><td>WinSCard.dll</td><td>WinSCard.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\WinSCard.dll</td><td>1</td><td/></row>
+		<row><td>accountmanage.dll</td><td>AccountManage.dll</td><td>ACCOUN~1.DLL|AccountManage.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\AccountManage.dll</td><td>17</td><td/></row>
+		<row><td>apducontroler.dll</td><td>ApduControler.dll</td><td>APDUCO~1.DLL|ApduControler.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ApduControler.dll</td><td>17</td><td/></row>
+		<row><td>apdudahua.dll</td><td>ApduDaHua.dll</td><td>APDUDA~1.DLL|ApduDaHua.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ApduDaHua.dll</td><td>17</td><td/></row>
+		<row><td>apduinterface.dll</td><td>ApduInterface.dll</td><td>APDUIN~1.DLL|ApduInterface.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ApduInterface.dll</td><td>17</td><td/></row>
+		<row><td>apduloh.dll</td><td>ApduLoh.dll</td><td>ApduLoh.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ApduLoh.dll</td><td>17</td><td/></row>
+		<row><td>apduparam.dll</td><td>ApduParam.dll</td><td>APDUPA~1.DLL|ApduParam.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ApduParam.dll</td><td>17</td><td/></row>
+		<row><td>borlndmm.dll</td><td>borlndmm.dll</td><td>borlndmm.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\borlndmm.dll</td><td>17</td><td/></row>
+		<row><td>cardoperating.dll</td><td>CardOperating.dll</td><td>CARDOP~1.DLL|CardOperating.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\CardOperating.dll</td><td>17</td><td/></row>
+		<row><td>clientmanage.dll</td><td>ClientManage.dll</td><td>CLIENT~1.DLL|ClientManage.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\ClientManage.dll</td><td>17</td><td/></row>
+		<row><td>codetable.dll</td><td>CodeTable.dll</td><td>CODETA~1.DLL|CodeTable.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\CodeTable.dll</td><td>17</td><td/></row>
+		<row><td>dbconfig.xml</td><td>AllOtherFiles1</td><td>DbConfig.xml</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\DbConfig.xml</td><td>17</td><td/></row>
+		<row><td>dbmanage.dll</td><td>DbManage.dll</td><td>DbManage.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\DbManage.dll</td><td>17</td><td/></row>
+		<row><td>dualcarddll.dll</td><td>DualCardDll.dll</td><td>DUALCA~1.DLL|DualCardDll.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\DualCardDll.dll</td><td>17</td><td/></row>
+		<row><td>fnt_ms.exe</td><td>FNT_MS.exe</td><td>FNT_MS.exe</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\FNT_MS.exe</td><td>17</td><td/></row>
+		<row><td>fnt_ms.ini</td><td>AllOtherFiles</td><td>FNT_MS.ini</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\FNT_MS.ini</td><td>17</td><td/></row>
+		<row><td>fnt_ms.res</td><td>AllOtherFiles</td><td>FNT_MS.res</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\FNT_MS.res</td><td>17</td><td/></row>
+		<row><td>fnt_ms.txt</td><td>AllOtherFiles</td><td>FNT_MS.txt</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\FNT_MS.txt</td><td>17</td><td/></row>
+		<row><td>fntmain.exe</td><td>FNTMain.exe</td><td>FNTMain.exe</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\FNTMain.exe</td><td>17</td><td/></row>
+		<row><td>gasinfomanage.dll</td><td>GasInfoManage.dll</td><td>GASINF~1.DLL|GasInfoManage.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\GasInfoManage.dll</td><td>17</td><td/></row>
+		<row><td>ifuncplugin.dll</td><td>IFuncPlugin.dll</td><td>IFUNCP~1.DLL|IFuncPlugin.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\IFuncPlugin.dll</td><td>17</td><td/></row>
+		<row><td>ifuncplugin.dll1</td><td>IFuncPlugin.dll1</td><td>IFUNCP~1.DLL|IFuncPlugin.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\IFuncPlugin.dll</td><td>17</td><td/></row>
+		<row><td>keyvaluecfg.xml</td><td>AllOtherFiles2</td><td>KEYVAL~1.XML|KeyValueCfg.xml</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\KeyValueCfg.xml</td><td>17</td><td/></row>
+		<row><td>logonform.dll</td><td>LogonForm.dll</td><td>LOGONF~1.DLL|LogonForm.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\LogonForm.dll</td><td>17</td><td/></row>
+		<row><td>mt_32.dll</td><td>mt_32.dll</td><td>mt_32.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\mt_32.dll</td><td>17</td><td/></row>
+		<row><td>publishcardoperator.dll</td><td>PublishCardOperator.dll</td><td>PUBLIS~1.DLL|PublishCardOperator.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\PublishCardOperator.dll</td><td>17</td><td/></row>
+		<row><td>splash.jpg</td><td>AllOtherFiles</td><td>splash.jpg</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\splash.jpg</td><td>17</td><td/></row>
+		<row><td>sqlserverhelper.dll</td><td>SqlServerHelper.dll</td><td>SQLSER~1.DLL|SqlServerHelper.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\SqlServerHelper.dll</td><td>17</td><td/></row>
+		<row><td>sqlserverhelper.dll1</td><td>SqlServerHelper.dll1</td><td>SQLSER~1.DLL|SqlServerHelper.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\SqlServerHelper.dll</td><td>17</td><td/></row>
+		<row><td>stationmanage.dll</td><td>StationManage.dll</td><td>STATIO~1.DLL|StationManage.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\StationManage.dll</td><td>17</td><td/></row>
+		<row><td>winscard.dll</td><td>WinSCard.dll</td><td>WinSCard.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\plugins\WinSCard.dll</td><td>17</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">
@@ -2085,7 +2085,7 @@
 		<row><td>Product Configuration</td><td>PackageCode</td><td>{1A1F43DF-4823-46D2-9BD3-A92D680F382A}</td></row>
 		<row><td>Product Configuration</td><td>ProductCode</td><td>{2BA9BAA0-06A0-4544-9E55-008969D3916F}</td></row>
 		<row><td>Product Configuration</td><td>ProductName</td><td>富耐特管理系统</td></row>
-		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.06.0826</td></row>
+		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.06.0921</td></row>
 		<row><td>Product Configuration</td><td>SetupFileName</td><td>加气站管理系统</td></row>
 		<row><td>Product Configuration</td><td>UpgradeCode</td><td>{386FC082-B9CB-4C41-8B38-0FDA56F1E3BF}</td></row>
 	</table>
@@ -4257,7 +4257,7 @@ UgBlAGwAZQBhAHMAZQABAFAAcgBvAGQAdQBjAHQAIABDAG8AbgBmAGkAZwB1AHIAYQB0AGkAbwBuAA==
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{372328D7-4C8E-4625-9ACB-6F1A9808E2F9}</td><td/></row>
 		<row><td>ProductName</td><td>FunnettManage</td><td/></row>
-		<row><td>ProductVersion</td><td>1.06.0826</td><td/></row>
+		<row><td>ProductVersion</td><td>1.06.0921</td><td/></row>
 		<row><td>REBOOT</td><td>Suppress</td><td/></row>
 		<row><td>STANDARD_USE_SETUPEXE</td><td>##IDS_STANDARD_USE_SETUPEXE##</td><td/></row>
 		<row><td>SecureCustomProperties</td><td>ISALWAYSINSTALLELEVATED;ISSETUPDRIVEN;ARPSYSTEMCOMPONENT;ARPNOMODIFY;ARPNOREMOVE;INSTALLDIR;ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;IS_SQLSERVER_LIST;IS_SQLSERVER_DATABASE;IS_SQLSERVER_AUTHENTICATION;IS_SQLSERVER_USERNAME;IS_SQLSERVER_SERVER;IS_SQLSERVER_PASSWORD;IS_NET_API_LOGON_USERNAME;IS_NET_API_LOGON_PASSWORD;IS_NEW_USER_CONFIRM_TEXT;IS_NEW_USER_SERVER_TEXT;IS_NEW_USER_GROUP_TEXT;IS_NEW_USER_NAME_TEXT;IS_NET_API_NEW_USER_PASSWORD;IS_NET_API_NEW_USER_NAME;IS_NET_API_NEW_USER_CONFIRM;IS_NEW_USER_PASSWORD_TEXT;IS_NET_API_NEW_USER_SERVER;IS_NET_API_NEW_USER_GROUP;IS_NET_API_GROUP_LIST;IS_NET_API_SERVER_LIST;IS_NET_API_SERVER_NEW_USER_LIST;IS_NET_API_USER_LIST;IS_NET_API_LOGON_DOMAIN_TOKEN;IS_NET_API_LOGON_USERNAME_TOKEN;SUPPORTDIR</td><td/></row>
