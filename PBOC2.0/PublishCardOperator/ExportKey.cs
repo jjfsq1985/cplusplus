@@ -133,17 +133,15 @@ namespace PublishCardOperator
                     XmlNode CpuKeyRoot = xml.CreateNode(XmlNodeType.Element, "UserKeyValue_App1", "");
 
                     XmlNode DescribeNode = xml.CreateNode(XmlNodeType.Element, "Describe", "");
-                    string strData = DateTime.Now.ToString("F") + (string)dataReader["InfoRemark"];
-                    DescribeNode.InnerText = strData;
+                    DescribeNode.InnerText = (string)dataReader["InfoRemark"];
                     CpuKeyRoot.AppendChild(DescribeNode);
 
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "MasterKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "MasterTendingKey", EncryptKey);
                     node = xml.CreateNode(XmlNodeType.Element, "Describe", "");
-                    node.InnerText = BitConverter.ToString(InitKey).Replace("-", "");
+                    node.InnerText = DateTime.Now.ToString("F");
                     Root.AppendChild(node);
 
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "MasterKey", EncryptKey);
-                    KeyToXmlNode(dataReader, xml, CpuKeyRoot, "MasterTendingKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppMasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppTendingKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, CpuKeyRoot, "AppInternalAuthKey", EncryptKey);
@@ -194,9 +192,8 @@ namespace PublishCardOperator
                 {
                     XmlNode PsamKeyRoot = xml.CreateNode(XmlNodeType.Element, "PsamKeyValue", "");
 
-                    XmlNode DescribeNode = xml.CreateNode(XmlNodeType.Element, "Describe", "");
-                    string strData = DateTime.Now.ToString("F") + (string)dataReader["InfoRemark"];
-                    DescribeNode.InnerText = strData;
+                    XmlNode DescribeNode = xml.CreateNode(XmlNodeType.Element, "Describe", "");                    
+                    DescribeNode.InnerText = (string)dataReader["InfoRemark"];
                     PsamKeyRoot.AppendChild(DescribeNode);
 
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "MasterKey", EncryptKey);
@@ -250,7 +247,7 @@ namespace PublishCardOperator
             }
             textData.Text = strData;
             Guid temp = Guid.NewGuid();
-            textKey.Text = temp.ToString().Replace("-", "");
+            textKey.Text = temp.ToString().Replace("-", "").ToUpper();
         }
 
         private void btnExportCardKey_Click(object sender, EventArgs e)

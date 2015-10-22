@@ -2404,7 +2404,7 @@ namespace LohApduCtrl
             }
 
             byte[] ConsumerKey = GlobalControl.GetPrivateKeyFromXml(m_ctrlApdu.m_strCardKeyPath, "PsamKeyValue", "ConsumerMasterKey");
-            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK) || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK_Ly))
+            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK) || (CpuKey_Ly != null && !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK_Ly)) )
             {
                 OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
                 MessageBox.Show("加气或积分消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);

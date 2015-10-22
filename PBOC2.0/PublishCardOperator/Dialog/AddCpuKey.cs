@@ -54,7 +54,7 @@ namespace PublishCardOperator.Dialog
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (!FillKeyValue(textAppMasterKey.Text, m_CpuKey.MasterKey, "卡片主控密钥"))
+            if (!FillKeyValue(textMasterKey.Text, m_CpuKey.MasterKey, "卡片主控密钥"))
                 return;
             if (!FillKeyValue(textTendingKey.Text, m_CpuKey.MasterTendingKey, "卡片维护密钥"))
                 return;
@@ -101,8 +101,7 @@ namespace PublishCardOperator.Dialog
             item.SubItems.Add(BitConverter.ToString(newAppKey.ConsumerMasterKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.LoadKey).Replace("-", ""));
             item.SubItems.Add(BitConverter.ToString(newAppKey.TacMasterKey).Replace("-", ""));
-            item.SubItems.Add(BitConverter.ToString(newAppKey.UnGrayKey).Replace("-", ""));
-            item.SubItems.Add(BitConverter.ToString(newAppKey.UnLoadKey).Replace("-", ""));
+            item.SubItems.Add(BitConverter.ToString(newAppKey.UnGrayKey).Replace("-", ""));            
             item.SubItems.Add(BitConverter.ToString(newAppKey.OverdraftKey).Replace("-", ""));            
             listAppKey.Items.Add(item);
         }
@@ -116,22 +115,23 @@ namespace PublishCardOperator.Dialog
             m_CpuKey.LstAppKeyGroup.RemoveAt(nCount - 1);
         }
 
+
         private void InitKey()
         {
             Guid temp = Guid.Empty;
             string strKey = "";
-            
-            temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-","");
-            textAppMasterKey.Text = strKey;
 
             temp = Guid.NewGuid();
             strKey = temp.ToString().Replace("-", "");
+            textMasterKey.Text = strKey;  
+
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textTendingKey.Text = strKey;
 
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textAuthKey.Text = strKey;
         }
 

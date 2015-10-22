@@ -136,11 +136,15 @@ namespace PublishCardOperator
             xml.Save(strXmlPath);
 
             if (ReadXml.Checked)
+            {
                 MessageBox.Show("配置成功，以后制卡从XML文件读取密钥。");
+                if(MessageBox.Show("密钥是否导入数据库中？\n如果已导入数据库，请不要重复导入。", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    SaveKeyToDB(textXmlPath.Text);
+            }
             else
+            {
                 MessageBox.Show("配置成功，以后制卡从数据库读取密钥。");
-
-            SaveKeyToDB(strXmlPath);
+            }
         }
 
         //xml配置写入DB数据库

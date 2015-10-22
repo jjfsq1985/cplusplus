@@ -38,8 +38,6 @@
             this.textAppTendingKey = new System.Windows.Forms.TextBox();
             this.ConsumerMasterLabel = new System.Windows.Forms.Label();
             this.textConsumerMasterKey = new System.Windows.Forms.TextBox();
-            this.GrayLockLabel = new System.Windows.Forms.Label();
-            this.textGrayLockKey = new System.Windows.Forms.TextBox();
             this.MacEncryptLabel = new System.Windows.Forms.Label();
             this.textMACEncryptKey = new System.Windows.Forms.TextBox();
             this.IsValid = new System.Windows.Forms.CheckBox();
@@ -135,27 +133,10 @@
             this.textConsumerMasterKey.Size = new System.Drawing.Size(229, 21);
             this.textConsumerMasterKey.TabIndex = 9;
             // 
-            // GrayLockLabel
-            // 
-            this.GrayLockLabel.AutoSize = true;
-            this.GrayLockLabel.Location = new System.Drawing.Point(45, 266);
-            this.GrayLockLabel.Name = "GrayLockLabel";
-            this.GrayLockLabel.Size = new System.Drawing.Size(53, 12);
-            this.GrayLockLabel.TabIndex = 10;
-            this.GrayLockLabel.Text = "灰锁密钥";
-            // 
-            // textGrayLockKey
-            // 
-            this.textGrayLockKey.Location = new System.Drawing.Point(124, 262);
-            this.textGrayLockKey.MaxLength = 32;
-            this.textGrayLockKey.Name = "textGrayLockKey";
-            this.textGrayLockKey.Size = new System.Drawing.Size(229, 21);
-            this.textGrayLockKey.TabIndex = 11;
-            // 
             // MacEncryptLabel
             // 
             this.MacEncryptLabel.AutoSize = true;
-            this.MacEncryptLabel.Location = new System.Drawing.Point(36, 312);
+            this.MacEncryptLabel.Location = new System.Drawing.Point(36, 270);
             this.MacEncryptLabel.Name = "MacEncryptLabel";
             this.MacEncryptLabel.Size = new System.Drawing.Size(71, 12);
             this.MacEncryptLabel.TabIndex = 12;
@@ -163,7 +144,7 @@
             // 
             // textMACEncryptKey
             // 
-            this.textMACEncryptKey.Location = new System.Drawing.Point(124, 308);
+            this.textMACEncryptKey.Location = new System.Drawing.Point(124, 266);
             this.textMACEncryptKey.MaxLength = 32;
             this.textMACEncryptKey.Name = "textMACEncryptKey";
             this.textMACEncryptKey.Size = new System.Drawing.Size(229, 21);
@@ -172,7 +153,7 @@
             // IsValid
             // 
             this.IsValid.AutoSize = true;
-            this.IsValid.Location = new System.Drawing.Point(82, 414);
+            this.IsValid.Location = new System.Drawing.Point(82, 372);
             this.IsValid.Name = "IsValid";
             this.IsValid.Size = new System.Drawing.Size(72, 16);
             this.IsValid.TabIndex = 14;
@@ -181,7 +162,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(142, 447);
+            this.btnOK.Location = new System.Drawing.Point(142, 405);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 15;
@@ -191,7 +172,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(249, 447);
+            this.btnCancel.Location = new System.Drawing.Point(249, 405);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 16;
@@ -201,7 +182,7 @@
             // 
             // textKeyDetail
             // 
-            this.textKeyDetail.Location = new System.Drawing.Point(124, 352);
+            this.textKeyDetail.Location = new System.Drawing.Point(124, 310);
             this.textKeyDetail.MaxLength = 32;
             this.textKeyDetail.Multiline = true;
             this.textKeyDetail.Name = "textKeyDetail";
@@ -211,7 +192,7 @@
             // KeyDetail
             // 
             this.KeyDetail.AutoSize = true;
-            this.KeyDetail.Location = new System.Drawing.Point(47, 367);
+            this.KeyDetail.Location = new System.Drawing.Point(47, 325);
             this.KeyDetail.Name = "KeyDetail";
             this.KeyDetail.Size = new System.Drawing.Size(53, 12);
             this.KeyDetail.TabIndex = 37;
@@ -219,7 +200,7 @@
             // 
             // btnGenerate
             // 
-            this.btnGenerate.Location = new System.Drawing.Point(35, 447);
+            this.btnGenerate.Location = new System.Drawing.Point(35, 405);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(75, 22);
             this.btnGenerate.TabIndex = 39;
@@ -231,7 +212,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(376, 475);
+            this.ClientSize = new System.Drawing.Size(376, 444);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.textKeyDetail);
             this.Controls.Add(this.KeyDetail);
@@ -240,8 +221,6 @@
             this.Controls.Add(this.IsValid);
             this.Controls.Add(this.textMACEncryptKey);
             this.Controls.Add(this.MacEncryptLabel);
-            this.Controls.Add(this.textGrayLockKey);
-            this.Controls.Add(this.GrayLockLabel);
             this.Controls.Add(this.textConsumerMasterKey);
             this.Controls.Add(this.ConsumerMasterLabel);
             this.Controls.Add(this.textAppTendingKey);
@@ -274,8 +253,6 @@
         private System.Windows.Forms.TextBox textAppTendingKey;
         private System.Windows.Forms.Label ConsumerMasterLabel;
         private System.Windows.Forms.TextBox textConsumerMasterKey;
-        private System.Windows.Forms.Label GrayLockLabel;
-        private System.Windows.Forms.TextBox textGrayLockKey;
         private System.Windows.Forms.Label MacEncryptLabel;
         private System.Windows.Forms.TextBox textMACEncryptKey;
         private System.Windows.Forms.CheckBox IsValid;

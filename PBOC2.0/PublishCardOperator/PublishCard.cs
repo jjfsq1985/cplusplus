@@ -79,15 +79,15 @@ namespace PublishCardOperator
         public static byte[] GetCpuConsumerKey(SqlHelper sqlHelp)
         {
             SqlDataReader dataReader = null;
-                SqlParameter[] sqlparam = new SqlParameter[1];
-                sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, 1);
-                sqlHelp.ExecuteProc("PROC_GetCpuKey", sqlparam, out dataReader);
+            SqlParameter[] sqlparam = new SqlParameter[1];
+            sqlparam[0] = sqlHelp.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, 1);
+            sqlHelp.ExecuteProc("PROC_GetCpuKey", sqlparam, out dataReader);
             if (dataReader == null)
-                return null;
+                return new byte[16];
             if (!dataReader.HasRows)
             {
                 dataReader.Close();
-                return null;
+                return new byte[16];
             }
             else
             {
@@ -97,7 +97,7 @@ namespace PublishCardOperator
                     string strKey = (string)dataReader["AppConsumerKey"];
                     byte[] BcdKey = PublicFunc.StringToBCD(strKey);
                     Trace.Assert(BcdKey.Length == 16);
-                    Buffer.BlockCopy(BcdKey, 0, ConsumerKey, 0, 16);                    
+                    Buffer.BlockCopy(BcdKey, 0, ConsumerKey, 0, 16);
                 }
                 dataReader.Close();
                 return ConsumerKey;
@@ -109,11 +109,11 @@ namespace PublishCardOperator
             SqlDataReader dataReader = null;
             sqlHelp.ExecuteProc("PROC_GetPsamKey", out dataReader);
             if (dataReader == null)
-                return null;
+                return new byte[16];
             if (!dataReader.HasRows)
             {
                 dataReader.Close();
-                return null;
+                return new byte[16];
             }
             else
             {

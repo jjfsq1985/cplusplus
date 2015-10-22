@@ -109,6 +109,7 @@ namespace CardOperating
             m_IccCardInfoPar.CompanyIssue = textCompanyFrom.Text;
             m_IccCardInfoPar.CompanyRecv = textCompanyTo.Text;
             m_IccCardInfoPar.Remark = textRemark.Text;
+            MessageBox.Show("±£´æ³É¹¦");
         }
 
         private void textPSAMNo_KeyPress(object sender, KeyPressEventArgs e)

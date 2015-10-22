@@ -52,16 +52,6 @@ namespace LohApduCtrl
                 Buffer.BlockCopy(byteKey, 0, m_KeyPsamMaintain, 0, 16);
         }
 
-        public byte[] CardKeyToDb(bool bOrg, CardCategory eCategory)
-        {
-            if (eCategory == CardCategory.CpuCard)
-                return m_KeyMain;
-            else if (eCategory == CardCategory.PsamCard)
-                return m_KeyPsamMain;
-            else
-                return null;
-        }
-
         public byte[] GetKeyVal(bool bMainKey, CardCategory eCategory)
         {
             byte[] key = null;

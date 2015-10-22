@@ -317,7 +317,7 @@
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>AccountManage.dll</td><td>{B3ECE9DE-D2FC-4354-AD3D-1F432F4EB32A}</td><td>PLUGINS</td><td>8</td><td/><td>accountmanage.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>AllOtherFiles</td><td>{99995780-9DB8-4D26-B4C1-D9A54323C570}</td><td>LNGMANAGE1</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>AllOtherFiles</td><td>{99995780-9DB8-4D26-B4C1-D9A54323C570}</td><td>LNGMANAGE</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>AllOtherFiles1</td><td>{8EACC067-7304-49D4-9732-19A4805EAC19}</td><td>ICMANAGE</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>AllOtherFiles2</td><td>{C9120B21-71C7-4A19-97ED-D6FFA5BA71C0}</td><td>PLUGINS</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ApduControler.dll</td><td>{F97E1831-1FEE-4F66-94E4-CB222F607718}</td><td>PLUGINS</td><td>8</td><td/><td>apducontroler.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -331,8 +331,7 @@
 		<row><td>DbManage.dll</td><td>{A4B74D05-03E2-4410-AD1D-D39D4EBA6C67}</td><td>PLUGINS</td><td>8</td><td/><td>dbmanage.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>DualCardDll.dll</td><td>{E46D2FB4-32C5-4530-862E-3BDA3841BC69}</td><td>PLUGINS</td><td>8</td><td/><td>dualcarddll.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>FNTMain.exe</td><td>{864978E7-C888-400F-BAC6-004D516840D7}</td><td>ICMANAGE</td><td>8</td><td/><td>fntmain.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>FNTMain.vshost.exe</td><td>{9192FE11-2CC2-488F-A5AC-E6F8CED04F51}</td><td>ICMANAGE</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>FNT_MS.exe</td><td>{3EA31ACD-51E9-49A9-AFA6-E88E1DD6B156}</td><td>LNGMANAGE1</td><td>8</td><td/><td>fnt_ms.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>FNT_MS.exe</td><td>{3EA31ACD-51E9-49A9-AFA6-E88E1DD6B156}</td><td>LNGMANAGE</td><td>8</td><td/><td>fnt_ms.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>GasInfoManage.dll</td><td>{AF543FD3-2523-43CF-B21E-52E55A0AFF9F}</td><td>PLUGINS</td><td>8</td><td/><td>gasinfomanage.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>IFuncPlugin.dll</td><td>{B4218243-4FA9-4F53-909E-66D4F837EA21}</td><td>ICMANAGE</td><td>8</td><td/><td>ifuncplugin.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>IFuncPlugin.dll1</td><td>{8F9EA011-EF99-40D2-98A4-7FF1BF7D63D4}</td><td>PLUGINS</td><td>8</td><td/><td>ifuncplugin.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -345,7 +344,7 @@
 		<row><td>base_card.sql_SQLComponent</td><td>{CE19792B-18A1-4DD8-B97C-65488A76E62F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>base_client.sql_SQLComponent</td><td>{390E4157-578B-49BF-9AAA-9E9F2EDF7CEF}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>base_station.sql_SQLComponent</td><td>{A0E1008B-D634-47EE-A3FA-F75F51794A80}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>borlndmm.dll</td><td>{550730E9-B501-4E34-833A-7A7C81F7D9CD}</td><td>LNGMANAGE1</td><td>8</td><td/><td>borlndmm.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>borlndmm.dll</td><td>{550730E9-B501-4E34-833A-7A7C81F7D9CD}</td><td>LNGMANAGE</td><td>8</td><td/><td>borlndmm.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>checkdata_proc.sql_SQLComponent</td><td>{051F3F78-A3FB-4DB4-8E70-BA082ADEFB87}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>config_sysparams.sql_SQLComponent</td><td>{ADEC8D3E-6243-48A0-8C38-2C60018DE6DF}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>cs_setgun.sql_SQLComponent</td><td>{24A2CA66-ED69-4764-B2D7-86D163C9BAEB}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -453,7 +452,6 @@
 	<table name="CreateFolder">
 		<col key="yes" def="s72">Directory_</col>
 		<col key="yes" def="s72">Component_</col>
-		<row><td>ICMANAGE</td><td>FNTMain.vshost.exe</td></row>
 		<row><td>INSTALLDIR</td><td>base_card.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>base_client.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>base_station.sql_SQLComponent</td></row>
@@ -586,9 +584,8 @@
 		<row><td>GlobalAssemblyCache</td><td>TARGETDIR</td><td>.:Global~1|GlobalAssemblyCache</td><td/><td>0</td><td/></row>
 		<row><td>ICMANAGE</td><td>INSTALLDIR</td><td>ICManage</td><td/><td>0</td><td/></row>
 		<row><td>INSTALLDIR</td><td>FUNNETTMANAGESYSTEM</td><td>.</td><td/><td>0</td><td/></row>
-		<row><td>ISMyProductDir</td><td>FUNNETTMANAGESYSTEM</td><td>ICManage</td><td/><td>0</td><td/></row>
-		<row><td>LNGMANAGE</td><td>FUNNETTMANAGESYSTEM</td><td>LNGMAN~1|LNGManage</td><td/><td>0</td><td/></row>
-		<row><td>LNGMANAGE1</td><td>FUNNETTMANAGESYSTEM</td><td>LNGMAN~1|LNGManage</td><td/><td>0</td><td/></row>
+		<row><td>ISMyProductDir</td><td>FUNNETTMANAGESYSTEM</td><td>.</td><td/><td>0</td><td/></row>
+		<row><td>LNGMANAGE</td><td>INSTALLDIR</td><td>LNGMAN~1|LNGManage</td><td/><td>0</td><td/></row>
 		<row><td>LocalAppDataFolder</td><td>TARGETDIR</td><td>.:LocalA~1|LocalAppData</td><td/><td>0</td><td/></row>
 		<row><td>MyPicturesFolder</td><td>TARGETDIR</td><td>.:MyPict~1|MyPictures</td><td/><td>0</td><td/></row>
 		<row><td>PLUGINS</td><td>ICMANAGE</td><td>plugins</td><td/><td>0</td><td/></row>
@@ -598,6 +595,7 @@
 		<row><td>ProgramFilesFolder</td><td>TARGETDIR</td><td>.:PROGRA~1|program files</td><td/><td>0</td><td/></row>
 		<row><td>ProgramMenuFolder</td><td>TARGETDIR</td><td>.:Programs</td><td/><td>3</td><td/></row>
 		<row><td>SendToFolder</td><td>TARGETDIR</td><td>.:SendTo</td><td/><td>3</td><td/></row>
+		<row><td>SetupName</td><td>StartMenuFolder</td><td>##ID_STRING4##</td><td/><td>1</td><td/></row>
 		<row><td>StartMenuFolder</td><td>TARGETDIR</td><td>.:STARTM~1|Start Menu</td><td/><td>3</td><td/></row>
 		<row><td>StartupFolder</td><td>TARGETDIR</td><td>.:StartUp</td><td/><td>3</td><td/></row>
 		<row><td>System16Folder</td><td>TARGETDIR</td><td>.:System</td><td/><td>0</td><td/></row>
@@ -609,7 +607,6 @@
 		<row><td>USERPROFILE</td><td>TARGETDIR</td><td>.:USERPR~1|UserProfile</td><td/><td>0</td><td/></row>
 		<row><td>WindowsFolder</td><td>TARGETDIR</td><td>.:Windows</td><td/><td>0</td><td/></row>
 		<row><td>WindowsVolume</td><td>TARGETDIR</td><td>.:WinRoot</td><td/><td>0</td><td/></row>
-		<row><td>newfolder1</td><td>StartMenuFolder</td><td>##ID_STRING4##</td><td/><td>1</td><td/></row>
 	</table>
 
 	<table name="DrLocator">
@@ -1301,7 +1298,6 @@
 		<row><td>ICFeatures</td><td>DbManage.dll</td></row>
 		<row><td>ICFeatures</td><td>DualCardDll.dll</td></row>
 		<row><td>ICFeatures</td><td>FNTMain.exe</td></row>
-		<row><td>ICFeatures</td><td>FNTMain.vshost.exe</td></row>
 		<row><td>ICFeatures</td><td>GasInfoManage.dll</td></row>
 		<row><td>ICFeatures</td><td>IFuncPlugin.dll</td></row>
 		<row><td>ICFeatures</td><td>IFuncPlugin.dll1</td></row>
@@ -1681,7 +1677,6 @@
 		<row><td>DbManage.dll</td><td/><td/><td>_FAA51FE3_6B74_4D96_88B5_3B6CE32319B8_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>DualCardDll.dll</td><td/><td/><td>_2CBD7E50_872F_4D48_B3DC_9330CD93F55D_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>FNTMain.exe</td><td/><td/><td>_01FF73DA_E1CA_4A21_A16F_7CEA0E7BFC3D_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>FNTMain.vshost.exe</td><td/><td/><td>_FBF470D8_96F2_4B42_B480_3CA6E6482517_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>FNT_MS.exe</td><td/><td/><td>_E14097FE_0E42_4DEA_B26E_3880DE39FF2D_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>GasInfoManage.dll</td><td/><td/><td>_6B32B5C0_A2EB_40A5_AAE1_91407716599C_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>IFuncPlugin.dll</td><td/><td/><td>_FC886918_5CEB_4AB0_A114_194DF98F2F47_FILTER</td><td/><td/><td/><td/></row>
@@ -2085,7 +2080,7 @@
 		<row><td>Product Configuration</td><td>PackageCode</td><td>{1A1F43DF-4823-46D2-9BD3-A92D680F382A}</td></row>
 		<row><td>Product Configuration</td><td>ProductCode</td><td>{2BA9BAA0-06A0-4544-9E55-008969D3916F}</td></row>
 		<row><td>Product Configuration</td><td>ProductName</td><td>富耐特管理系统</td></row>
-		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.06.0930</td></row>
+		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.06.1022</td></row>
 		<row><td>Product Configuration</td><td>SetupFileName</td><td>加气站管理系统</td></row>
 		<row><td>Product Configuration</td><td>UpgradeCode</td><td>{386FC082-B9CB-4C41-8B38-0FDA56F1E3BF}</td></row>
 	</table>
@@ -4257,7 +4252,7 @@ UgBlAGwAZQBhAHMAZQABAFAAcgBvAGQAdQBjAHQAIABDAG8AbgBmAGkAZwB1AHIAYQB0AGkAbwBuAA==
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{372328D7-4C8E-4625-9ACB-6F1A9808E2F9}</td><td/></row>
 		<row><td>ProductName</td><td>FunnettManage</td><td/></row>
-		<row><td>ProductVersion</td><td>1.06.0930</td><td/></row>
+		<row><td>ProductVersion</td><td>1.06.1022</td><td/></row>
 		<row><td>REBOOT</td><td>Suppress</td><td/></row>
 		<row><td>STANDARD_USE_SETUPEXE</td><td>##IDS_STANDARD_USE_SETUPEXE##</td><td/></row>
 		<row><td>SecureCustomProperties</td><td>ISALWAYSINSTALLELEVATED;ISSETUPDRIVEN;ARPSYSTEMCOMPONENT;ARPNOMODIFY;ARPNOREMOVE;INSTALLDIR;ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;IS_SQLSERVER_LIST;IS_SQLSERVER_DATABASE;IS_SQLSERVER_AUTHENTICATION;IS_SQLSERVER_USERNAME;IS_SQLSERVER_SERVER;IS_SQLSERVER_PASSWORD;IS_NET_API_LOGON_USERNAME;IS_NET_API_LOGON_PASSWORD;IS_NEW_USER_CONFIRM_TEXT;IS_NEW_USER_SERVER_TEXT;IS_NEW_USER_GROUP_TEXT;IS_NEW_USER_NAME_TEXT;IS_NET_API_NEW_USER_PASSWORD;IS_NET_API_NEW_USER_NAME;IS_NET_API_NEW_USER_CONFIRM;IS_NEW_USER_PASSWORD_TEXT;IS_NET_API_NEW_USER_SERVER;IS_NET_API_NEW_USER_GROUP;IS_NET_API_GROUP_LIST;IS_NET_API_SERVER_LIST;IS_NET_API_SERVER_NEW_USER_LIST;IS_NET_API_USER_LIST;IS_NET_API_LOGON_DOMAIN_TOKEN;IS_NET_API_LOGON_USERNAME_TOKEN;SUPPORTDIR</td><td/></row>
@@ -4309,8 +4304,8 @@ UgBlAGwAZQBhAHMAZQABAFAAcgBvAGQAdQBjAHQAIABDAG8AbgBmAGkAZwB1AHIAYQB0AGkAbwBuAA==
 		<col def="L255">FileName</col>
 		<col def="s72">DirProperty</col>
 		<col def="i2">InstallMode</col>
-		<row><td>NewShortcut1</td><td>FNTMain.exe</td><td/><td>newfolder1</td><td>2</td></row>
-		<row><td>NewShortcut2</td><td>FNT_MS.exe</td><td/><td>newfolder1</td><td>2</td></row>
+		<row><td>NewShortcut1</td><td>FNTMain.exe</td><td/><td>SetupName</td><td>2</td></row>
+		<row><td>NewShortcut2</td><td>FNT_MS.exe</td><td/><td>SetupName</td><td>2</td></row>
 	</table>
 
 	<table name="RemoveIniFile">
@@ -4396,10 +4391,10 @@ UgBlAGwAZQBhAHMAZQABAFAAcgBvAGQAdQBjAHQAIABDAG8AbgBmAGkAZwB1AHIAYQB0AGkAbwBuAA==
 		<col def="S255">ISComments</col>
 		<col def="S255">ISShortcutName</col>
 		<col def="I4">ISAttributes</col>
-		<row><td>NewShortcut1</td><td>newfolder1</td><td>##ID_STRING5##</td><td>FNTMain.exe</td><td>[INSTALLDIR]ICManage\FNTMain.exe</td><td/><td/><td/><td>NewShortcut1_A8AC6ADA4E2747458F37C437CEA3B60D.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>NewShortcut2</td><td>newfolder1</td><td>##ID_STRING6##</td><td>FNT_MS.exe</td><td>[ProgramFilesFolder]FunnettManageSystem\LNGManage\FNT_MS.exe</td><td/><td/><td/><td>NewShortcut2_BEBD85ADEB6740EA87A2A646E09B259B.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>NewShortcut1</td><td>SetupName</td><td>##ID_STRING5##</td><td>FNTMain.exe</td><td>[INSTALLDIR]ICManage\FNTMain.exe</td><td/><td/><td/><td>NewShortcut1_A8AC6ADA4E2747458F37C437CEA3B60D.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>NewShortcut2</td><td>SetupName</td><td>##ID_STRING6##</td><td>FNT_MS.exe</td><td>[INSTALLDIR]LNGManage\FNT_MS.exe</td><td/><td/><td/><td>NewShortcut2_BEBD85ADEB6740EA87A2A646E09B259B.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>NewShortcut3</td><td>DesktopFolder</td><td>##ID_STRING7##</td><td>FNTMain.exe</td><td>[INSTALLDIR]ICManage\FNTMain.exe</td><td/><td/><td/><td>NewShortcut3_B9895AF5A4D14983919F75EF5776F69A.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>NewShortcut4</td><td>DesktopFolder</td><td>##ID_STRING8##</td><td>FNT_MS.exe</td><td>[ProgramFilesFolder]FunnettManageSystem\LNGManage\FNT_MS.exe</td><td/><td/><td/><td>NewShortcut4_87CEA0F43DCD42FA8DBF79203B1DF9B2.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>NewShortcut4</td><td>DesktopFolder</td><td>##ID_STRING8##</td><td>FNT_MS.exe</td><td>[INSTALLDIR]LNGManage\FNT_MS.exe</td><td/><td/><td/><td>NewShortcut4_87CEA0F43DCD42FA8DBF79203B1DF9B2.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="Signature">

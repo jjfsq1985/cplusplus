@@ -33,7 +33,7 @@
             this.Mlabel = new System.Windows.Forms.Label();
             this.TLabel = new System.Windows.Forms.Label();
             this.AuthLabel = new System.Windows.Forms.Label();
-            this.textAppMasterKey = new System.Windows.Forms.TextBox();
+            this.textMasterKey = new System.Windows.Forms.TextBox();
             this.textTendingKey = new System.Windows.Forms.TextBox();
             this.textAuthKey = new System.Windows.Forms.TextBox();
             this.IsValid = new System.Windows.Forms.CheckBox();
@@ -46,7 +46,6 @@
             this.PINUnlockKey = new System.Windows.Forms.ColumnHeader();
             this.AppConsumerKey = new System.Windows.Forms.ColumnHeader();
             this.AppLoadKey = new System.Windows.Forms.ColumnHeader();
-            this.AppUnLoadKey = new System.Windows.Forms.ColumnHeader();
             this.AppTacKey = new System.Windows.Forms.ColumnHeader();
             this.UnGrayKey = new System.Windows.Forms.ColumnHeader();
             this.OverdraftKey = new System.Windows.Forms.ColumnHeader();
@@ -106,13 +105,13 @@
             this.AuthLabel.TabIndex = 26;
             this.AuthLabel.Text = "内部认证密钥";
             // 
-            // textAppMasterKey
+            // textMasterKey
             // 
-            this.textAppMasterKey.Location = new System.Drawing.Point(143, 22);
-            this.textAppMasterKey.MaxLength = 32;
-            this.textAppMasterKey.Name = "textAppMasterKey";
-            this.textAppMasterKey.Size = new System.Drawing.Size(223, 21);
-            this.textAppMasterKey.TabIndex = 27;
+            this.textMasterKey.Location = new System.Drawing.Point(143, 22);
+            this.textMasterKey.MaxLength = 32;
+            this.textMasterKey.Name = "textMasterKey";
+            this.textMasterKey.Size = new System.Drawing.Size(223, 21);
+            this.textMasterKey.TabIndex = 27;
             // 
             // textTendingKey
             // 
@@ -151,14 +150,13 @@
             this.PINUnlockKey,
             this.AppConsumerKey,
             this.AppLoadKey,
-            this.AppUnLoadKey,
             this.AppTacKey,
             this.UnGrayKey,
             this.OverdraftKey});
             this.listAppKey.FullRowSelect = true;
             this.listAppKey.GridLines = true;
             this.listAppKey.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listAppKey.Location = new System.Drawing.Point(51, 44);
+            this.listAppKey.Location = new System.Drawing.Point(45, 31);
             this.listAppKey.MultiSelect = false;
             this.listAppKey.Name = "listAppKey";
             this.listAppKey.Size = new System.Drawing.Size(607, 156);
@@ -204,11 +202,6 @@
             // 
             this.AppLoadKey.Text = "圈存密钥";
             this.AppLoadKey.Width = 150;
-            // 
-            // AppUnLoadKey
-            // 
-            this.AppUnLoadKey.Text = "圈提密钥";
-            this.AppUnLoadKey.Width = 150;
             // 
             // AppTacKey
             // 
@@ -274,14 +267,14 @@
             this.textKeyDetail.Size = new System.Drawing.Size(410, 21);
             this.textKeyDetail.TabIndex = 34;
             // 
-            // Refresh
+            // KeyRefresh
             // 
             this.KeyRefresh.BackgroundImage = global::PublishCardOperator.Properties.Resources.Refresh;
             this.KeyRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.KeyRefresh.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.KeyRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.KeyRefresh.Location = new System.Drawing.Point(508, 22);
-            this.KeyRefresh.Name = "Refresh";
+            this.KeyRefresh.Name = "KeyRefresh";
             this.KeyRefresh.Size = new System.Drawing.Size(22, 21);
             this.KeyRefresh.TabIndex = 54;
             this.KeyRefresh.UseVisualStyleBackColor = true;
@@ -299,7 +292,7 @@
             this.Controls.Add(this.IsValid);
             this.Controls.Add(this.textAuthKey);
             this.Controls.Add(this.textTendingKey);
-            this.Controls.Add(this.textAppMasterKey);
+            this.Controls.Add(this.textMasterKey);
             this.Controls.Add(this.AuthLabel);
             this.Controls.Add(this.TLabel);
             this.Controls.Add(this.Mlabel);
@@ -323,7 +316,7 @@
         private System.Windows.Forms.Label Mlabel;
         private System.Windows.Forms.Label TLabel;
         private System.Windows.Forms.Label AuthLabel;
-        private System.Windows.Forms.TextBox textAppMasterKey;
+        private System.Windows.Forms.TextBox textMasterKey;
         private System.Windows.Forms.TextBox textTendingKey;
         private System.Windows.Forms.TextBox textAuthKey;
         private System.Windows.Forms.CheckBox IsValid;
@@ -336,7 +329,6 @@
         private System.Windows.Forms.ColumnHeader PINUnlockKey;
         private System.Windows.Forms.ColumnHeader AppConsumerKey;
         private System.Windows.Forms.ColumnHeader AppLoadKey;
-        private System.Windows.Forms.ColumnHeader AppUnLoadKey;
         private System.Windows.Forms.ColumnHeader AppTacKey;
         private System.Windows.Forms.ColumnHeader UnGrayKey;
         private System.Windows.Forms.ColumnHeader OverdraftKey;

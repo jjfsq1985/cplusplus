@@ -64,8 +64,8 @@ namespace PublishCardOperator.Dialog
                 return;
             if (!FillAppKeyValue(textUnGrayKey.Text, m_AppKeyVal.UnGrayKey, "联机解扣密钥"))
                 return;
-            if (!FillAppKeyValue(textAppLoadKey.Text, m_AppKeyVal.UnLoadKey, "圈提密钥"))
-                return;
+            //解扣密钥必须和圈提密钥一致，但界面上只能输入解扣密钥
+            Buffer.BlockCopy(m_AppKeyVal.UnGrayKey, 0, m_AppKeyVal.UnLoadKey, 0, 16);
             if (!FillAppKeyValue(textOverdraftKey.Text, m_AppKeyVal.OverdraftKey, "修改透支限额密钥"))
                 return;
             DialogResult = DialogResult.OK;
@@ -90,58 +90,54 @@ namespace PublishCardOperator.Dialog
             string strKey = "";
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textAMKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textAMTendingKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textAMTendingKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textAIAuthKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textPinResetKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textPinUnlockKey.Text = strKey;
 
             if (bNewConsumerKey)
             {
                 temp = Guid.NewGuid();
-                strKey = temp.ToString().Replace("-", "");
+                strKey = temp.ToString().Replace("-", "").ToUpper();
                 textCMKey.Text = strKey;
             }
             else
             {
-                textCMKey.Text = BitConverter.ToString(m_RelatedConsumerKey).Replace("-","");
+                textCMKey.Text = BitConverter.ToString(m_RelatedConsumerKey).Replace("-", "").ToUpper();
             }
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textAppLoadKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textTacKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textUnGrayKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
-            textAppUnLoadKey.Text = strKey;
-
-            temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textOverdraftKey.Text = strKey;
         }
 

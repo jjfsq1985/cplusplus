@@ -1207,9 +1207,9 @@ namespace DaHuaApduCtrl
             sqlparams[6] = ObjSql.MakeParam("CompanyTo", SqlDbType.VarChar, 16, ParameterDirection.Input, strDbVal);
             sqlparams[7] = ObjSql.MakeParam("Remark", SqlDbType.NVarChar, 50, ParameterDirection.Input, PsamInfoPar.Remark);
             //√‹‘ø
-            strDbVal = BitConverter.ToString(CardKeyToDb(true, CardCategory.PsamCard)).Replace("-", "");
+            strDbVal = BitConverter.ToString(GetKeyVal(false, CardCategory.PsamCard)).Replace("-", "");
             sqlparams[8] = ObjSql.MakeParam("OrgKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
-            strDbVal = BitConverter.ToString(CardKeyToDb(false, CardCategory.PsamCard)).Replace("-", "");
+            strDbVal = BitConverter.ToString(GetKeyVal(true, CardCategory.PsamCard)).Replace("-", "");
             sqlparams[9] = ObjSql.MakeParam("PsamMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
             if (ObjSql.ExecuteProc("PROC_PublishPsamCard", sqlparams) == 0)
                 bSuccess = true;

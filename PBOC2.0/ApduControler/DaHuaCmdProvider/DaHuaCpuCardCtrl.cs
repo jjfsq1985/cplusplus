@@ -2522,7 +2522,7 @@ namespace DaHuaApduCtrl
                 return false;
             CpuKeyData CpuKey_Ly = new CpuKeyData();
             CpuKey_Ly.nAppIndex = 2;
-            if (!GlobalControl.GetXmlCpuKeyVal(m_ctrlApdu.m_strCardKeyPath, CpuKey))
+            if (!GlobalControl.GetXmlCpuKeyVal(m_ctrlApdu.m_strCardKeyPath, CpuKey_Ly))
                 CpuKey_Ly = null;
 
             SetOrgKeyValue(CpuKey.OrgKeyVal, CardCategory.CpuCard);
@@ -2542,19 +2542,19 @@ namespace DaHuaApduCtrl
 
             if (CpuKey_Ly != null)
             {
-                Buffer.BlockCopy(CpuKey.AppMasterKey, 0, m_MAMK_Ly, 0, 16);
-                Buffer.BlockCopy(CpuKey.AppTendingKey, 0, m_MAMTK_Ly, 0, 16);
-                Buffer.BlockCopy(CpuKey.AppInternalAuthKey, 0, m_MIAK_Ly, 0, 16);
-                Buffer.BlockCopy(CpuKey.AppPinResetKey, 0, m_MRPK_Ly, 0, 16);
-                Buffer.BlockCopy(CpuKey.AppPinUnlockKey, 0, m_MPUK_Ly, 0, 16);
-                Buffer.BlockCopy(CpuKey.AppConsumerKey, 0, m_MPK_Ly, 0, 16);
-                Buffer.BlockCopy(CpuKey.AppLoadKey, 0, m_MLK_Ly, 0, 16);
-                Buffer.BlockCopy(CpuKey.AppTacKey, 0, m_MTK_Ly, 0, 16);
-                Buffer.BlockCopy(CpuKey.AppUnGrayKey, 0, m_MUGK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey_Ly.AppMasterKey, 0, m_MAMK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey_Ly.AppTendingKey, 0, m_MAMTK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey_Ly.AppInternalAuthKey, 0, m_MIAK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey_Ly.AppPinResetKey, 0, m_MRPK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey_Ly.AppPinUnlockKey, 0, m_MPUK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey_Ly.AppConsumerKey, 0, m_MPK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey_Ly.AppLoadKey, 0, m_MLK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey_Ly.AppTacKey, 0, m_MTK_Ly, 0, 16);
+                Buffer.BlockCopy(CpuKey_Ly.AppUnGrayKey, 0, m_MUGK_Ly, 0, 16);
             }
 
             byte[] ConsumerKey = GlobalControl.GetPrivateKeyFromXml(m_ctrlApdu.m_strCardKeyPath, "PsamKeyValue", "ConsumerMasterKey");
-            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK) || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK_Ly))
+            if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK) || (CpuKey_Ly != null && !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK_Ly)) )
             {
                 OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
                 MessageBox.Show("加气或积分消费需要消费密钥一致，但当前使用的消费密钥不一致。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);

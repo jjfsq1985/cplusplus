@@ -64,6 +64,8 @@ CREATE PROCEDURE PROC_UpdateOrgKeyRoot(
 					update Config_SysParams set OrgKeyId = @KeyId;
 				else if(@KeyType = 1 and @OrgPsamKeyId <> @KeyId)
 					update Config_SysParams set OrgPsamKeyId = @KeyId;
+				else
+					update Config_SysParams set OrgKeyId = @KeyId, OrgPsamKeyId = @KeyId;
 				end
 			if(@@error<>0) 
 				begin
@@ -91,6 +93,8 @@ CREATE PROCEDURE PROC_UpdateOrgKeyRoot(
 				update Config_SysParams set OrgKeyId = @@IDENTITY;
 			else if(@KeyType = 1 and @OrgPsamKeyId <> @@IDENTITY)
 				update Config_SysParams set OrgPsamKeyId = @@IDENTITY;
+			else
+				update Config_SysParams set  OrgKeyId = @@IDENTITY, OrgPsamKeyId = @@IDENTITY;
 			end
 		if(@@error<>0) 
 			 begin
@@ -113,9 +117,11 @@ CREATE PROCEDURE PROC_UpdateOrgKeyRoot(
 		select @OrgKeyId = OrgKeyId, @OrgPsamKeyId = OrgPsamKeyId from Config_SysParams;
 		select @KeyIdDel = ISNULL(MAX(KeyId),1) from Key_OrgRoot;
 		if(@KeyType = 0 and @OrgKeyId = @KeyId)
-				update Config_SysParams set OrgKeyId = @KeyIdDel;
+			update Config_SysParams set OrgKeyId = @KeyIdDel;
 		else if(@KeyType = 1 and @OrgPsamKeyId = @KeyId)
-				update Config_SysParams set OrgPsamKeyId = @KeyIdDel;
+			update Config_SysParams set OrgPsamKeyId = @KeyIdDel;
+		else
+			update Config_SysParams set OrgKeyId = @KeyIdDel, OrgPsamKeyId = @KeyIdDel;	
 		if(@@error<>0) 
 			 begin
 			 rollback tran maintran

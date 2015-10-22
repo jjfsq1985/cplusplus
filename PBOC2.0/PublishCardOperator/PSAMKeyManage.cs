@@ -91,7 +91,6 @@ namespace PublishCardOperator
             PsamKeyView.Columns.Add("AppMasterKey", "应用主控密钥");
             PsamKeyView.Columns.Add("AppTendingKey", "应用维护密钥");
             PsamKeyView.Columns.Add("ConsumerMasterKey", "消费主密钥");
-            PsamKeyView.Columns.Add("GrayCardKey", "灰锁密钥");
             PsamKeyView.Columns.Add("MacEncryptKey", "MAC加密密钥");
             PsamKeyView.Columns.Add("KeyValid", "状态");
             for (int i = 0; i < PsamKeyView.Columns.Count; i++)
@@ -198,6 +197,8 @@ namespace PublishCardOperator
                         PsamKeyView.Rows[index].Cells[1].Value = keyval.KeyDetail;
                         strKey = FillKeyValue(dataReader, keyval.MasterKey, "MasterKey");
                         PsamKeyView.Rows[index].Cells[2].Value = strKey;
+                        PsamKeyView.Rows[index].Cells[2].Style.BackColor = Color.LightGray;
+                        PsamKeyView.Rows[index].Cells[2].ReadOnly = true;
                         strKey = FillKeyValue(dataReader, keyval.MasterTendingKey, "MasterTendingKey");
                         PsamKeyView.Rows[index].Cells[3].Value = strKey;
                         strKey = FillKeyValue(dataReader, keyval.AppMasterKey, "ApplicationMasterKey");
@@ -206,18 +207,19 @@ namespace PublishCardOperator
                         PsamKeyView.Rows[index].Cells[5].Value = strKey;
                         strKey = FillKeyValue(dataReader, keyval.ConsumerMasterKey, "ConsumerMasterKey");
                         PsamKeyView.Rows[index].Cells[6].Value = strKey;
-                        strKey = FillKeyValue(dataReader, keyval.GrayCardKey, "GrayCardKey");
-                        PsamKeyView.Rows[index].Cells[7].Value = strKey;
+                        //灰锁密钥不显示
+                        FillKeyValue(dataReader, keyval.GrayCardKey, "GrayCardKey");
+                        
                         strKey = FillKeyValue(dataReader, keyval.MacEncryptKey, "MacEncryptKey");
-                        PsamKeyView.Rows[index].Cells[8].Value = strKey;
+                        PsamKeyView.Rows[index].Cells[7].Value = strKey;
                         if (nId == nPsamKeyId)
                         {
                             keyval.bValid = true;
-                            PsamKeyView.Rows[index].Cells[9].Value = "使用";
+                            PsamKeyView.Rows[index].Cells[8].Value = "使用";
                         }
                         else
                         {
-                            PsamKeyView.Rows[index].Cells[9].Value = "未使用";
+                            PsamKeyView.Rows[index].Cells[8].Value = "未使用";
                         }
                         m_lstPsamKey.Add(keyval);
                         nCount++;
@@ -243,17 +245,16 @@ namespace PublishCardOperator
             PsamKeyView.Rows[index].Cells[4].Value = BitConverter.ToString(newPsamKey.AppMasterKey).Replace("-", "");
             PsamKeyView.Rows[index].Cells[5].Value = BitConverter.ToString(newPsamKey.AppTendingKey).Replace("-", "");
             PsamKeyView.Rows[index].Cells[6].Value = BitConverter.ToString(newPsamKey.ConsumerMasterKey).Replace("-", "");
-            PsamKeyView.Rows[index].Cells[7].Value = BitConverter.ToString(newPsamKey.GrayCardKey).Replace("-", "");
-            PsamKeyView.Rows[index].Cells[8].Value = BitConverter.ToString(newPsamKey.MacEncryptKey).Replace("-", "");            
+            PsamKeyView.Rows[index].Cells[7].Value = BitConverter.ToString(newPsamKey.MacEncryptKey).Replace("-", "");            
             SaveLstDataToDb();
             //存数据库后重新获取配置的KeyId
             m_nValidPsamKeyId = 1;
             GetPsamKeyValid(ref m_nValidPsamKeyId);
             int nAddId = m_lstPsamKey[index].nKeyId;
             if (nAddId == m_nValidPsamKeyId)
-                PsamKeyView.Rows[index].Cells[9].Value = "使用";
+                PsamKeyView.Rows[index].Cells[8].Value = "使用";
             else
-                PsamKeyView.Rows[index].Cells[9].Value = "未使用";
+                PsamKeyView.Rows[index].Cells[8].Value = "未使用";
             UpdatePsamKeyValid(m_nValidPsamKeyId);
         }
 
@@ -266,7 +267,7 @@ namespace PublishCardOperator
                 if (value.nKeyId == nValidPsamKeyId)
                     continue;
                 value.bValid = false;
-                PsamKeyView.Rows[i].Cells[9].Value = "未使用";
+                PsamKeyView.Rows[i].Cells[8].Value = "未使用";
             }
         }
 
@@ -287,7 +288,7 @@ namespace PublishCardOperator
             btnSaveEdit.Enabled = m_bEditData ? true : false;
 
             int nItem = PsamKeyView.CurrentCell.ColumnIndex;
-            if (nItem >= 1 && nItem <= 9)
+            if (nItem >= 1 && nItem <= 8)
             {
                 //开始编辑
                 int nIndex = PsamKeyView.CurrentCell.RowIndex;
@@ -343,12 +344,9 @@ namespace PublishCardOperator
                         CheckItemText(nIndex, nItem, value.ConsumerMasterKey);
                         break;
                     case 7:
-                        CheckItemText(nIndex, nItem, value.GrayCardKey);
-                        break;
-                    case 8:
                         CheckItemText(nIndex, nItem, value.MacEncryptKey);
                         break;
-                    case 9:
+                    case 8:
                         DataGridViewComboBoxCell comboCell = new DataGridViewComboBoxCell();
                         comboCell.Items.Add("未使用");
                         comboCell.Items.Add("使用");
@@ -446,23 +444,13 @@ namespace PublishCardOperator
                             if (KeyVal != null)
                             {
                                 Buffer.BlockCopy(KeyVal, 0, value.ConsumerMasterKey, 0, 16);
-                                value.eDbFlag = DbStateFlag.eDbDirty;
-                            }
-
-                        }
-                        break;
-                    case 7:
-                        {
-                            byte[] KeyVal = GetPsamKeyByte(nIndex, nItem, value.GrayCardKey);
-                            if (KeyVal != null)
-                            {
                                 Buffer.BlockCopy(KeyVal, 0, value.GrayCardKey, 0, 16);
                                 value.eDbFlag = DbStateFlag.eDbDirty;
                             }
 
                         }
                         break;
-                    case 8:
+                     case 7:
                         {
                             byte[] KeyVal = GetPsamKeyByte(nIndex, nItem, value.MacEncryptKey);
                             if (KeyVal != null)
@@ -473,7 +461,7 @@ namespace PublishCardOperator
 
                         }
                         break;
-                    case 9:
+                    case 8:
                         {
                             string strContent = (string)PsamKeyView.Rows[nIndex].Cells[nItem].EditedFormattedValue;
                             bool bValid = strContent == "使用" ? true : false;
@@ -502,7 +490,7 @@ namespace PublishCardOperator
         private void ViewInputValidated()
         {
             int nItem = PsamKeyView.CurrentCell.ColumnIndex;
-            if (nItem >= 1 && nItem <= 9)
+            if (nItem >= 1 && nItem <= 8)
             {
                 //结束编辑
                 int nIndex = PsamKeyView.CurrentCell.RowIndex;
@@ -586,7 +574,7 @@ namespace PublishCardOperator
 
         private void PsamKeyView_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (!m_bEditData || e.ColumnIndex < 1 || e.ColumnIndex > 9)
+            if (!m_bEditData || e.ColumnIndex < 1 || e.ColumnIndex > 8)
                 return;
             //PsamKeyView 行列相同时修改Cell（DataGridViewTextBoxCell-〉DataGridViewComboBoxCell）会引起SetCurrentCellAddressCore可重入调用
             if (m_nEntered == e.ColumnIndex && e.ColumnIndex == e.RowIndex)
@@ -600,7 +588,7 @@ namespace PublishCardOperator
 
         private void PsamKeyView_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            if (!m_bEditData || e.ColumnIndex < 1 || e.ColumnIndex > 9)
+            if (!m_bEditData || e.ColumnIndex < 1 || e.ColumnIndex > 8)
                 return;
             SetModifyView(e.RowIndex, e.ColumnIndex, m_lstPsamKey[e.RowIndex]);
             PsamKeyView.EndEdit();

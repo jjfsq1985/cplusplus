@@ -178,7 +178,7 @@ namespace CardControl
             sqlparam[0] = ObjSql.MakeParam("CardNum", SqlDbType.Char, 16, ParameterDirection.Input, strDbAsn);
             sqlparam[1] = ObjSql.MakeParam("ApplicationIndex", SqlDbType.Int, 4, ParameterDirection.Input, nAppIndex);
             ObjSql.ExecuteProc("PROC_GetPublishedCard", sqlparam, out dataReader);
-            string strData = "";
+            object objData = null;
             if (dataReader != null)
             {
                 if (!dataReader.HasRows)
@@ -189,7 +189,7 @@ namespace CardControl
                     {
                         if (!dataReader.IsDBNull(dataReader.GetOrdinal(strInfoName)))
                         {
-                            strData = (string)dataReader[strInfoName];
+                            objData = dataReader[strInfoName];
                         }
                     }
                     dataReader.Close();
@@ -197,7 +197,11 @@ namespace CardControl
             }
             ObjSql.CloseConnection();
             ObjSql = null;
-            return strData;
+
+            if (objData != null)
+                return objData.ToString();
+            else
+                return "";
         }
 
         /// <summary>

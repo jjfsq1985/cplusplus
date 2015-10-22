@@ -389,12 +389,6 @@ namespace CardOperating
                 m_CardInfoPar.ClientID = m_ListClientInfo[cmbClientName.SelectedIndex].ClientId;
             m_CardInfoPar.SetCardId(textCompanyId.Text);
 
-            if (m_CardInfoPar.UserCardType == CardType.CompanySubCard && m_CardInfoPar.GetRelatedMotherCardID() == null)
-            {
-                MessageBox.Show("请选择单位子卡关联的母卡卡号。\n如果关联母卡列表为空，请先制单位母卡。", "单位子卡", MessageBoxButtons.OK);
-                return;
-            }
-
             if (DateFrom.Value < DateTo.Value)
             {
                 m_CardInfoPar.ValidCardBegin = DateFrom.Value;
@@ -462,6 +456,7 @@ namespace CardOperating
             m_CardInfoPar.BoalFactoryID = textBoalFactoryNo.Text;
             m_CardInfoPar.BusDistance = textBusDistance.Text;
             m_CardInfoPar.Remark = textRemark.Text;
+            MessageBox.Show("保存成功");
         }
 
         private byte GetAreaLimit(int nSelectIndex)
@@ -634,12 +629,16 @@ namespace CardOperating
             sqlparams[1] = ObjSql.MakeParam("CardNoMax", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMax);
 
             SqlDataReader dataReader = null;
-            ObjSql.ExecuteCommand("select count(CardNum) as OrderNo from Base_Card where CardNum > @CardNoMin and CardNum < @CardNoMax", sqlparams, out dataReader);
+            ObjSql.ExecuteCommand("select Max(CardNum) as OrderNo from Base_Card where CardNum > @CardNoMin and CardNum < @CardNoMax", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows && dataReader.Read())
                 {
-                    nOrderNo = (int)dataReader["OrderNo"] + 1;
+                    if (!dataReader.IsDBNull(dataReader.GetOrdinal("OrderNo")))
+                    {
+                        string strValue = (string)dataReader["OrderNo"];
+                        nOrderNo = Convert.ToInt32(strValue.Substring(10, 6)) + 1;
+                    }
                 }
                 dataReader.Close();
             }
@@ -908,7 +907,6 @@ namespace CardOperating
                 textSelfId.Enabled = true;
                 textSelfId.Visible = true;
                 textCarNo.Enabled = true;
-                textPriceLevel.Enabled = true;
                 textDiscountRate.Enabled = true;
                 DiscountRateExprieValid.Enabled = true;
                 LabelMotherCard.Visible = false;
@@ -922,7 +920,6 @@ namespace CardOperating
                 textSelfId.Enabled = true;
                 textSelfId.Visible = true;
                 textCarNo.Enabled = true;
-                textPriceLevel.Enabled = true;
                 textDiscountRate.Enabled = true;
                 DiscountRateExprieValid.Enabled = true;
                 LabelMotherCard.Visible = true;
@@ -935,7 +932,6 @@ namespace CardOperating
                 cmbCarCategory.Enabled = false;
                 textCarNo.Text = "";
                 textCarNo.Enabled = false;
-                textPriceLevel.Enabled = false;                
                 textDiscountRate.Enabled = false;
                 DiscountRateExprieValid.Enabled = false;
                 textSelfId.Text = "";

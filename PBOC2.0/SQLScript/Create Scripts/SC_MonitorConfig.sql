@@ -21,6 +21,7 @@ CREATE TABLE [dbo].[SC_MonitorConfig](
 	[FReceiveBytes] [int] NULL,
 	[FRollcallTime] [int] NULL,
 	[FGunS] [varchar](254) NOT NULL,
+	[FGasVariety] [varchar](10) NULL,
 	[FDtrControl] [varchar](10) NULL,
 	[FRtsControl] [varchar](10) NULL,
 	[FProtocol] [varchar](300) NULL,
@@ -35,7 +36,7 @@ GO
 SET ANSI_PADDING OFF
 GO
 
-insert into SC_MonitorConfig values('COM1',38400,'Odd','8','1',NULL,NULL,1000,'1','DtrDisable','RtsDisable',NULL);
+insert into SC_MonitorConfig values('COM1',38400,'Odd','8','1',NULL,NULL,1000,'1','2','DtrDisable','RtsDisable',NULL);
 GO
 
 

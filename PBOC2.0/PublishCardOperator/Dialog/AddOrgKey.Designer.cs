@@ -144,7 +144,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddOrgKey";
-            this.Text = "厂商初始卡片密钥";
+            this.Text = " 卡商初始卡片密钥";
             this.ResumeLayout(false);
             this.PerformLayout();
 

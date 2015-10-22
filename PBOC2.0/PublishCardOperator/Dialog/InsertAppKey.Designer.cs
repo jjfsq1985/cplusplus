@@ -50,14 +50,12 @@
             this.ODLabel = new System.Windows.Forms.Label();
             this.textTacKey = new System.Windows.Forms.TextBox();
             this.TACLabel = new System.Windows.Forms.Label();
-            this.textAppUnLoadKey = new System.Windows.Forms.TextBox();
-            this.ULMLabel = new System.Windows.Forms.Label();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(252, 514);
+            this.btnCancel.Location = new System.Drawing.Point(312, 477);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 24;
@@ -67,7 +65,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(142, 514);
+            this.btnOK.Location = new System.Drawing.Point(172, 477);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 23;
@@ -213,7 +211,7 @@
             // 
             // textOverdraftKey
             // 
-            this.textOverdraftKey.Location = new System.Drawing.Point(143, 461);
+            this.textOverdraftKey.Location = new System.Drawing.Point(143, 424);
             this.textOverdraftKey.MaxLength = 32;
             this.textOverdraftKey.Name = "textOverdraftKey";
             this.textOverdraftKey.Size = new System.Drawing.Size(229, 21);
@@ -222,7 +220,7 @@
             // ODLabel
             // 
             this.ODLabel.AutoSize = true;
-            this.ODLabel.Location = new System.Drawing.Point(30, 464);
+            this.ODLabel.Location = new System.Drawing.Point(30, 427);
             this.ODLabel.Name = "ODLabel";
             this.ODLabel.Size = new System.Drawing.Size(101, 12);
             this.ODLabel.TabIndex = 10;
@@ -245,26 +243,9 @@
             this.TACLabel.TabIndex = 7;
             this.TACLabel.Text = "TAC密钥";
             // 
-            // textAppUnLoadKey
-            // 
-            this.textAppUnLoadKey.Location = new System.Drawing.Point(143, 418);
-            this.textAppUnLoadKey.MaxLength = 32;
-            this.textAppUnLoadKey.Name = "textAppUnLoadKey";
-            this.textAppUnLoadKey.Size = new System.Drawing.Size(229, 21);
-            this.textAppUnLoadKey.TabIndex = 20;
-            // 
-            // ULMLabel
-            // 
-            this.ULMLabel.AutoSize = true;
-            this.ULMLabel.Location = new System.Drawing.Point(54, 421);
-            this.ULMLabel.Name = "ULMLabel";
-            this.ULMLabel.Size = new System.Drawing.Size(53, 12);
-            this.ULMLabel.TabIndex = 9;
-            this.ULMLabel.Text = "圈提密钥";
-            // 
             // btnGenerate
             // 
-            this.btnGenerate.Location = new System.Drawing.Point(32, 514);
+            this.btnGenerate.Location = new System.Drawing.Point(32, 477);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(75, 23);
             this.btnGenerate.TabIndex = 22;
@@ -276,10 +257,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(426, 562);
+            this.ClientSize = new System.Drawing.Size(426, 519);
             this.Controls.Add(this.btnGenerate);
-            this.Controls.Add(this.textAppUnLoadKey);
-            this.Controls.Add(this.ULMLabel);
             this.Controls.Add(this.textTacKey);
             this.Controls.Add(this.TACLabel);
             this.Controls.Add(this.textOverdraftKey);
@@ -336,8 +315,6 @@
         private System.Windows.Forms.Label ODLabel;
         private System.Windows.Forms.TextBox textTacKey;
         private System.Windows.Forms.Label TACLabel;
-        private System.Windows.Forms.TextBox textAppUnLoadKey;
-        private System.Windows.Forms.Label ULMLabel;
         private System.Windows.Forms.Button btnGenerate;
     }
 }

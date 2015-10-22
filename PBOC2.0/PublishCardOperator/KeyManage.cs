@@ -108,7 +108,6 @@ namespace PublishCardOperator
             AppKeyGridView.Columns.Add("LoadKey", "圈存密钥");
             AppKeyGridView.Columns.Add("TacMasterKey", "TAC密钥");
             AppKeyGridView.Columns.Add("UnGrayKey", "联机解扣密钥");
-            AppKeyGridView.Columns.Add("UnloadKey", "圈提密钥");
             AppKeyGridView.Columns.Add("OverdraftKey", "修改透支限额\n密钥");
             for (int i = 0; i < AppKeyGridView.Columns.Count; i++)
                 AppKeyGridView.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -218,6 +217,8 @@ namespace PublishCardOperator
                         CpuKeyGridView.Rows[index].Cells[1].Value = keyval.KeyDetail;
                         strKey = FillKeyValue(dataReader, keyval.MasterKey, "MasterKey");
                         CpuKeyGridView.Rows[index].Cells[2].Value = strKey;
+                        CpuKeyGridView.Rows[index].Cells[2].Style.BackColor = Color.LightGray;
+                        CpuKeyGridView.Rows[index].Cells[2].ReadOnly = true;
                         strKey = FillKeyValue(dataReader, keyval.MasterTendingKey, "MasterTendingKey");
                         CpuKeyGridView.Rows[index].Cells[3].Value = strKey;
                         strKey = FillKeyValue(dataReader, keyval.InternalAuthKey, "InternalAuthKey");
@@ -301,9 +302,8 @@ namespace PublishCardOperator
                 AppKeyGridView.Rows[index].Cells[7].Value = BitConverter.ToString(AppKeyGroup.ConsumerMasterKey).Replace("-", "");
                 AppKeyGridView.Rows[index].Cells[8].Value = BitConverter.ToString(AppKeyGroup.LoadKey).Replace("-", "");
                 AppKeyGridView.Rows[index].Cells[9].Value = BitConverter.ToString(AppKeyGroup.TacMasterKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[10].Value = BitConverter.ToString(AppKeyGroup.UnGrayKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[11].Value = BitConverter.ToString(AppKeyGroup.UnLoadKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[12].Value = BitConverter.ToString(AppKeyGroup.OverdraftKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[10].Value = BitConverter.ToString(AppKeyGroup.UnGrayKey).Replace("-", "");                
+                AppKeyGridView.Rows[index].Cells[11].Value = BitConverter.ToString(AppKeyGroup.OverdraftKey).Replace("-", "");
             }
         }
 
@@ -412,13 +412,8 @@ namespace PublishCardOperator
             if (m_lstCpuKey.Count <= 0 || CpuKeyGridView.CurrentCell == null)
                 return;
             int nIndex = CpuKeyGridView.CurrentCell.RowIndex;
-            int nRelatedId = m_lstCpuKey[nIndex].nKeyId;
-            if (m_nFocusKeyId != nRelatedId)
-            {
-                m_nFocusKeyId = nRelatedId;
-                FillAppGridView(m_nFocusKeyId);
-            }
-
+            m_nFocusKeyId = m_lstCpuKey[nIndex].nKeyId;
+            FillAppGridView(m_nFocusKeyId);
         }
 
         private int GetFocusAppKeyIndex(int nRelatedKeyId)
@@ -689,9 +684,6 @@ namespace PublishCardOperator
                         CheckItemText(nAppIndex, nItem, AppKeyVal.UnGrayKey);
                         break;
                     case 11:
-                        CheckItemText(nAppIndex, nItem, AppKeyVal.UnLoadKey);
-                        break;
-                    case 12:
                         CheckItemText(nAppIndex, nItem, AppKeyVal.OverdraftKey);
                         break;
                 }
@@ -831,21 +823,12 @@ namespace PublishCardOperator
                             if (KeyVal != null)
                             {
                                 Buffer.BlockCopy(KeyVal, 0, AppKeyVal.UnGrayKey, 0, 16);
-                                AppKeyVal.eDbFlag = DbStateFlag.eDbDirty;
-                            }
-                        }
-                        break;
-                    case 11:
-                        {
-                            byte[] KeyVal = GetCpuKeyByte(AppKeyGridView, nAppIndex, nItem, AppKeyVal.UnLoadKey);
-                            if (KeyVal != null)
-                            {
                                 Buffer.BlockCopy(KeyVal, 0, AppKeyVal.UnLoadKey, 0, 16);
                                 AppKeyVal.eDbFlag = DbStateFlag.eDbDirty;
                             }
                         }
                         break;
-                    case 12:
+                    case 11:
                         {
                             byte[] KeyVal = GetCpuKeyByte(AppKeyGridView, nAppIndex, nItem, AppKeyVal.OverdraftKey);
                             if (KeyVal != null)
@@ -953,14 +936,12 @@ namespace PublishCardOperator
                         strBcd = BitConverter.ToString(AppKey.TacMasterKey).Replace("-", "");
                         sqlparams[9] = m_ObjSql.MakeParam("TacMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
+                        //----达华卡联机解扣密钥与圈提密钥一致，而且从测试结果分析，联机解扣使用的是圈提密钥
                         strBcd = BitConverter.ToString(AppKey.UnGrayKey).Replace("-", "");
                         sqlparams[10] = m_ObjSql.MakeParam("UnGrayKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
-
-                        if (AppKey.AppIndex == 1)
-                            strBcd = BitConverter.ToString(AppKey.UnLoadKey).Replace("-", "");
-                        else
-                            strBcd = "00000000000000000000000000000000";
+                        strBcd = BitConverter.ToString(AppKey.UnLoadKey).Replace("-", "");
                         sqlparams[11] = m_ObjSql.MakeParam("UnLoadKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+                        //-------------
                         
                         if (AppKey.AppIndex == 1)
                             strBcd = BitConverter.ToString(AppKey.OverdraftKey).Replace("-", "");
@@ -1081,9 +1062,8 @@ namespace PublishCardOperator
                 AppKeyGridView.Rows[index].Cells[7].Value = BitConverter.ToString(newAppKey.ConsumerMasterKey).Replace("-", "");
                 AppKeyGridView.Rows[index].Cells[8].Value = BitConverter.ToString(newAppKey.LoadKey).Replace("-", "");
                 AppKeyGridView.Rows[index].Cells[9].Value = BitConverter.ToString(newAppKey.TacMasterKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[10].Value = BitConverter.ToString(newAppKey.UnGrayKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[11].Value = BitConverter.ToString(newAppKey.UnLoadKey).Replace("-", "");
-                AppKeyGridView.Rows[index].Cells[12].Value = BitConverter.ToString(newAppKey.OverdraftKey).Replace("-", "");
+                AppKeyGridView.Rows[index].Cells[10].Value = BitConverter.ToString(newAppKey.UnGrayKey).Replace("-", "");                
+                AppKeyGridView.Rows[index].Cells[11].Value = BitConverter.ToString(newAppKey.OverdraftKey).Replace("-", "");
                 SaveLstDataToDb();
             }
         }

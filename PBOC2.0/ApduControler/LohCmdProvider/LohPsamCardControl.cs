@@ -1008,7 +1008,7 @@ namespace LohApduCtrl
             //√‹‘ø
             strDbVal = "";
             sqlparams[8] = ObjSql.MakeParam("OrgKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
-            strDbVal = BitConverter.ToString(CardKeyToDb(false,CardCategory.PsamCard)).Replace("-", "");
+            strDbVal = BitConverter.ToString(GetKeyVal(true, CardCategory.PsamCard)).Replace("-", "");
             sqlparams[9] = ObjSql.MakeParam("PsamMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
             if (ObjSql.ExecuteProc("PROC_PublishPsamCard", sqlparams) == 0)
                 bSuccess = true;

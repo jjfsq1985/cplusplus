@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Management;
 using System.Windows.Forms;
 
 namespace IFuncPlugin
@@ -79,6 +80,44 @@ namespace IFuncPlugin
                     break;
             }
             return strCardType;
+        }
+
+        public static byte[] GetPhysicalAddressData()
+        {
+            try
+            {
+                string mac = "";
+                ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+                ManagementObjectCollection moc = mc.GetInstances();
+                foreach (ManagementObject mo in moc)
+                {
+                    if ((bool)mo["IPEnabled"] == true)
+                    {
+                        mac = mo["MacAddress"].ToString();
+                        break;
+                    }
+                }
+                moc = null;
+                mc = null;
+                string strSplit = ":";
+                string[] macVal = mac.Split(strSplit.ToCharArray(), 6);
+                byte[] byteVal = new byte[16];
+                int i = 0;
+                foreach (string strMac in macVal)
+                {
+                    byteVal[i] = Convert.ToByte(strMac, 16);
+                    i++;
+                }                
+                byteVal[6] = 0x55;
+                byteVal[7] = 0xAA;
+                for (i = 0; i < 8; i++)
+                    byteVal[8 + i] = (byte)(byteVal[i] ^ 0xFF);
+                return byteVal;
+            }
+            catch
+            {
+                return new byte[16];
+            }
         }
 
     }

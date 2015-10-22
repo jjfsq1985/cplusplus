@@ -54,8 +54,9 @@ namespace PublishCardOperator.Dialog
                 return;
             if (!FillPsamKeyValue(textConsumerMasterKey.Text, m_PsamKey.ConsumerMasterKey, "消费主密钥"))
                 return;
-            if (!FillPsamKeyValue(textGrayLockKey.Text, m_PsamKey.GrayCardKey, "灰锁密钥"))
-                return;
+            //灰锁密钥必须与消费主密钥一致
+            Buffer.BlockCopy(m_PsamKey.ConsumerMasterKey, 0, m_PsamKey.GrayCardKey, 0, 16);
+
             if (!FillPsamKeyValue(textMACEncryptKey.Text, m_PsamKey.MacEncryptKey, "MAC加密密钥"))
                 return;
             if (string.IsNullOrEmpty(textKeyDetail.Text))
@@ -91,34 +92,30 @@ namespace PublishCardOperator.Dialog
             textMasterKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textMasterTendingKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textAppMasterKey.Text = strKey;
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textAppTendingKey.Text = strKey;
 
             if (bNewConsumerKey)
             {
                 temp = Guid.NewGuid();
-                strKey = temp.ToString().Replace("-", "");
+                strKey = temp.ToString().Replace("-", "").ToUpper();
                 textConsumerMasterKey.Text = strKey;
             }
             else
             {
-                textConsumerMasterKey.Text = BitConverter.ToString(m_RelatedConsumerKey).Replace("-", "");
+                textConsumerMasterKey.Text = BitConverter.ToString(m_RelatedConsumerKey).Replace("-", "").ToUpper();
             }
 
             temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
-            textGrayLockKey.Text = strKey;
-
-            temp = Guid.NewGuid();
-            strKey = temp.ToString().Replace("-", "");
+            strKey = temp.ToString().Replace("-", "").ToUpper();
             textMACEncryptKey.Text = strKey;
         }
     }
