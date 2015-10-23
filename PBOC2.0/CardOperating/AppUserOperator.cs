@@ -306,17 +306,17 @@ namespace CardOperating
             textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
             if (cmbClientName.Items.Count > 0)
                 cmbClientName.SelectedIndex = GetClientIdIndex(m_CardInfoPar.ClientID);
-            ReadMotherCardList(m_CardInfoPar.CompanyID, m_CardInfoPar.UserCardType);
             SetControlState(m_CardInfoPar.UserCardType);           
             if (m_CardInfoPar.UserCardType == CardType.CompanySubCard)
             {
                 byte[] MotherCard = m_CardInfoPar.GetRelatedMotherCardID();
                 if (MotherCard != null)
-                {
-                    cmbMotherCard.SelectedText = BitConverter.ToString(MotherCard).Replace("-", "");                    
+                {                    
+                    cmbMotherCard.Text = BitConverter.ToString(MotherCard).Replace("-", "");
                 }
                 else
                 {
+                    ReadMotherCardList(m_CardInfoPar.CompanyID, m_CardInfoPar.UserCardType);
                     cmbMotherCard.Enabled = true;
                 }
             }
@@ -631,6 +631,12 @@ namespace CardOperating
                     bHaveRecordInDb = true;
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("ClientId")))
                         CardInfo.ClientID = (int)dataReader["ClientId"];
+                    if (!dataReader.IsDBNull(dataReader.GetOrdinal("RelatedMotherCard")))
+                    {
+                        string strMotherCard = (string)dataReader["RelatedMotherCard"];
+                        if(strMotherCard != new string(' ',16))//母卡为空时，读取到的卡号为16个空格
+                            CardInfo.SetMotherCard(strMotherCard);
+                    }
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("DriverTel")))
                         CardInfo.TelePhone = (string)dataReader["DriverTel"];
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("SelfId")))

@@ -90,8 +90,8 @@ namespace CardOperating
             if (cmbClientName.Items.Count > 0)
                 cmbClientName.SelectedIndex = GetClientIdIndex(m_CardInfoPar.ClientID);
             textCompanyId.Text = m_CardInfoPar.CompanyID;
-            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
             byte nCardType = (byte)m_CardInfoPar.UserCardType;
+            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID, nCardType);//从数据库读出
             textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
             DateFrom.Value = m_CardInfoPar.ValidCardBegin;
             DateTo.Value = m_CardInfoPar.ValidCardEnd;
@@ -612,7 +612,7 @@ namespace CardOperating
             }
         }
 
-        private string GetCardOrderNoFromDb(string companyId)
+        private string GetCardOrderNoFromDb(string companyId, byte cardType)
         {
             int nOrderNo = 1;
             SqlHelper ObjSql = new SqlHelper();
@@ -621,9 +621,9 @@ namespace CardOperating
                 ObjSql = null;
                 return nOrderNo.ToString().PadLeft(6, '0');
             }
-
-            string CardNoMin = companyId + "020100000000";//按公司代码计算卡流水号
-            string CardNoMax = companyId + "022900999999"; //最大卡号
+            string strType = cardType.ToString("X2");
+            string CardNoMin = companyId + "02" + strType + "00000000";//按公司代码计算卡流水号
+            string CardNoMax = companyId + "02" + strType + "00999999"; //最大卡号
             SqlParameter[] sqlparams = new SqlParameter[2];
             sqlparams[0] = ObjSql.MakeParam("CardNoMin", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMin);
             sqlparams[1] = ObjSql.MakeParam("CardNoMax", SqlDbType.Char, 16, ParameterDirection.Input, CardNoMax);
@@ -651,7 +651,7 @@ namespace CardOperating
         {
             m_CardInfoPar.CompanyID = textCompanyId.Text.PadLeft(4, '0');
             byte nCardType = (byte)m_CardInfoPar.UserCardType;
-            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
+            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID, nCardType);//从数据库读出
             textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
 
             //从数据库读出母卡列表
@@ -878,19 +878,19 @@ namespace CardOperating
 
         private void CardIdRefresh_Click(object sender, EventArgs e)
         {            
-            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
             byte nCardType = (byte)m_CardInfoPar.UserCardType;
+            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID, nCardType);//从数据库读出
             textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
         }
 
         private void cmbUserCardType_SelectedIndexChanged(object sender, EventArgs e)
         {
             m_CardInfoPar.UserCardType = GetCardType(cmbUserCardType.SelectedIndex);
-            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID);//从数据库读出
+            byte nCardType = (byte)m_CardInfoPar.UserCardType;
+            m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID, nCardType);//从数据库读出
 
             SetControlState(m_CardInfoPar.UserCardType);
 
-            byte nCardType = (byte)m_CardInfoPar.UserCardType;
             textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
 
             //从数据库读出母卡列表

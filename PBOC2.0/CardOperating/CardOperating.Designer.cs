@@ -32,7 +32,7 @@
             this.btnInitCard = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
             this.btnDisconnect = new System.Windows.Forms.Button();
-            this.OutputText = new System.Windows.Forms.TextBox();
+            this.OutputText = new System.Windows.Forms.RichTextBox();
             this.Card = new System.Windows.Forms.GroupBox();
             this.btnLoyalty = new System.Windows.Forms.Button();
             this.ContactCard = new System.Windows.Forms.CheckBox();
@@ -101,11 +101,11 @@
             // OutputText
             // 
             this.OutputText.Location = new System.Drawing.Point(125, 45);
-            this.OutputText.Multiline = true;
             this.OutputText.Name = "OutputText";
-            this.OutputText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.OutputText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.OutputText.Size = new System.Drawing.Size(381, 536);
             this.OutputText.TabIndex = 6;
+            this.OutputText.Text = "";
             // 
             // Card
             // 
@@ -349,7 +349,6 @@
             this.Card.PerformLayout();
             this.ICC_Card.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -359,7 +358,7 @@
         private System.Windows.Forms.Button btnInitCard;
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Button btnDisconnect;
-        private System.Windows.Forms.TextBox OutputText;
+        private System.Windows.Forms.RichTextBox OutputText;
         private System.Windows.Forms.GroupBox Card;
         private System.Windows.Forms.GroupBox ICC_Card;
         private System.Windows.Forms.Button btnInitIccCard;

@@ -25,10 +25,16 @@ namespace StationManage
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
         private int m_nStationAuthority = 0;
 
+        private void DealErr(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            Trace.WriteLine("站点信息：行" + e.RowIndex.ToString() + "，列:" + e.ColumnIndex.ToString() + "数据不正确");
+        }
 
         public StationManage()
         {
             InitializeComponent();
+
+            this.StationView.DataError += new DataGridViewDataErrorEventHandler(DealErr);
         }
 
         public MenuType GetMenuType()
@@ -340,7 +346,7 @@ namespace StationManage
 
         private string GetClientName(int nClientID)
         {
-            string strClient = "未定义";
+            string strClient = "";
             foreach (ClientParam val in m_lstClient)
             {
                 if (val.ClientId == nClientID)

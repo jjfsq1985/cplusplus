@@ -47,6 +47,13 @@
     <Compile Include="FntAboutBox.Designer.cs">
       <DependentUpon>FntAboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="LicenseCalc.cs" />
+    <Compile Include="LicenseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LicenseForm.Designer.cs">
+      <DependentUpon>LicenseForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +70,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ApduParam\ApduParam.csproj">
+      <Project>{0391A3A8-5A8C-4ADA-9DEC-788C2244072A}</Project>
+      <Name>ApduParam</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CardOperating\CardOperating.csproj">
       <Project>{867C4012-8C2A-44E7-BB89-BB21716884DA}</Project>
       <Name>CardOperating</Name>
@@ -84,6 +95,9 @@
     <EmbeddedResource Include="FntAboutBox.resx">
       <DependentUpon>FntAboutBox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LicenseForm.resx">
+      <DependentUpon>LicenseForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -96,6 +110,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\logoPictureBox.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="reg.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

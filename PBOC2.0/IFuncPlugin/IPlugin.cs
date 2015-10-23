@@ -82,7 +82,7 @@ namespace IFuncPlugin
             return strCardType;
         }
 
-        public static byte[] GetPhysicalAddressData()
+        public static string GetPhysicalAddress()
         {
             try
             {
@@ -111,12 +111,12 @@ namespace IFuncPlugin
                 byteVal[6] = 0x55;
                 byteVal[7] = 0xAA;
                 for (i = 0; i < 8; i++)
-                    byteVal[8 + i] = (byte)(byteVal[i] ^ 0xFF);
-                return byteVal;
+                    byteVal[8 + i] = (byte)(byteVal[i] ^ 0xFF);                
+                return BitConverter.ToString(byteVal).Replace("-", "");
             }
             catch
             {
-                return new byte[16];
+                return "";
             }
         }
 

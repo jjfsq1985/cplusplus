@@ -28,54 +28,54 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textRemark = new System.Windows.Forms.TextBox();
+            this.textRemark = new System.Windows.Forms.RichTextBox();
             this.Remark = new System.Windows.Forms.Label();
-            this.textBusDistance = new System.Windows.Forms.TextBox();
+            this.textBusDistance = new System.Windows.Forms.RichTextBox();
             this.BusDistance = new System.Windows.Forms.Label();
             this.cmbClientName = new System.Windows.Forms.ComboBox();
             this.ClientName = new System.Windows.Forms.Label();
-            this.textBoalVol = new System.Windows.Forms.TextBox();
-            this.textBoalCount = new System.Windows.Forms.TextBox();
+            this.textBoalVol = new System.Windows.Forms.RichTextBox();
+            this.textBoalCount = new System.Windows.Forms.RichTextBox();
             this.BoalVol = new System.Windows.Forms.Label();
             this.BoalCount = new System.Windows.Forms.Label();
-            this.textTelephone = new System.Windows.Forms.TextBox();
-            this.textSelfId = new System.Windows.Forms.TextBox();
+            this.textTelephone = new System.Windows.Forms.RichTextBox();
+            this.textSelfId = new System.Windows.Forms.RichTextBox();
             this.cmbCarCategory = new System.Windows.Forms.ComboBox();
             this.SelfId = new System.Windows.Forms.Label();
             this.CarNo = new System.Windows.Forms.Label();
             this.CarType = new System.Windows.Forms.Label();
             this.TelephoneLabel = new System.Windows.Forms.Label();
             this.RateFlag = new System.Windows.Forms.Label();
-            this.textDiscountRate = new System.Windows.Forms.TextBox();
+            this.textDiscountRate = new System.Windows.Forms.RichTextBox();
             this.DiscountRateExprieValid = new System.Windows.Forms.DateTimePicker();
             this.DiscountRateValid = new System.Windows.Forms.Label();
             this.DiscountRate = new System.Windows.Forms.Label();
-            this.textBoalFactoryNo = new System.Windows.Forms.TextBox();
+            this.textBoalFactoryNo = new System.Windows.Forms.RichTextBox();
             this.BoalFactoryNo = new System.Windows.Forms.Label();
-            this.textCarNo = new System.Windows.Forms.TextBox();
-            this.textBoalNo = new System.Windows.Forms.TextBox();
+            this.textCarNo = new System.Windows.Forms.RichTextBox();
+            this.textBoalNo = new System.Windows.Forms.RichTextBox();
             this.BoalNo = new System.Windows.Forms.Label();
             this.BoalExprieValid = new System.Windows.Forms.DateTimePicker();
             this.BoalExprie = new System.Windows.Forms.Label();
-            this.textPriceLevel = new System.Windows.Forms.TextBox();
+            this.textPriceLevel = new System.Windows.Forms.RichTextBox();
             this.PriceLevel = new System.Windows.Forms.Label();
-            this.textUserIdentity = new System.Windows.Forms.TextBox();
+            this.textUserIdentity = new System.Windows.Forms.RichTextBox();
             this.UserID = new System.Windows.Forms.Label();
-            this.textUserName = new System.Windows.Forms.TextBox();
+            this.textUserName = new System.Windows.Forms.RichTextBox();
             this.UserName = new System.Windows.Forms.Label();
-            this.textUserCardId = new System.Windows.Forms.TextBox();
+            this.textUserCardId = new System.Windows.Forms.RichTextBox();
             this.UserCardId = new System.Windows.Forms.Label();
             this.DateTo = new System.Windows.Forms.DateTimePicker();
-            this.textFlag = new System.Windows.Forms.Label();
+            this.labelFlag = new System.Windows.Forms.Label();
             this.DateFrom = new System.Windows.Forms.DateTimePicker();
             this.DateValid = new System.Windows.Forms.Label();
             this.groupLimit = new System.Windows.Forms.GroupBox();
             this.cmbLimitGasType = new System.Windows.Forms.ComboBox();
             this.LimitCarNo = new System.Windows.Forms.CheckBox();
             this.listLimitArea = new System.Windows.Forms.CheckedListBox();
-            this.textGasAmount = new System.Windows.Forms.TextBox();
+            this.textGasAmount = new System.Windows.Forms.RichTextBox();
             this.GasAmount = new System.Windows.Forms.Label();
-            this.textGasCount = new System.Windows.Forms.TextBox();
+            this.textGasCount = new System.Windows.Forms.RichTextBox();
             this.GasCount = new System.Windows.Forms.Label();
             this.LimitAreaCode = new System.Windows.Forms.Label();
             this.cmbAreaLimit = new System.Windows.Forms.ComboBox();
@@ -85,22 +85,25 @@
             this.btnModifyCard = new System.Windows.Forms.Button();
             this.CardInfoPanel = new System.Windows.Forms.SplitContainer();
             this.CardInfo = new System.Windows.Forms.GroupBox();
+            this.cmbMotherCard = new System.Windows.Forms.ComboBox();
+            this.LabelMotherCard = new System.Windows.Forms.Label();
+            this.cmbCardType = new System.Windows.Forms.ComboBox();
             this.cmbIdType = new System.Windows.Forms.ComboBox();
             this.IdTypeLabel = new System.Windows.Forms.Label();
             this.CardApp = new System.Windows.Forms.GroupBox();
             this.tabApp = new System.Windows.Forms.TabControl();
             this.tabSINOPEC = new System.Windows.Forms.TabPage();
-            this.textPIN = new System.Windows.Forms.TextBox();
+            this.textPIN = new System.Windows.Forms.RichTextBox();
             this.PINOperate = new System.Windows.Forms.GroupBox();
             this.btnPinChange = new System.Windows.Forms.Button();
             this.btnPinReset = new System.Windows.Forms.Button();
-            this.textNewPIN = new System.Windows.Forms.TextBox();
-            this.textOldPIN = new System.Windows.Forms.TextBox();
+            this.textNewPIN = new System.Windows.Forms.RichTextBox();
+            this.textOldPIN = new System.Windows.Forms.RichTextBox();
             this.OldPIN = new System.Windows.Forms.Label();
             this.NewPIN = new System.Windows.Forms.Label();
             this.btnPinUnlock = new System.Windows.Forms.Button();
             this.btnCardLoad = new System.Windows.Forms.Button();
-            this.textMoney = new System.Windows.Forms.TextBox();
+            this.textMoney = new System.Windows.Forms.RichTextBox();
             this.LabelPIN = new System.Windows.Forms.Label();
             this.Money = new System.Windows.Forms.Label();
             this.Balance = new System.Windows.Forms.Label();
@@ -108,23 +111,23 @@
             this.btnUnlockGrayCard = new System.Windows.Forms.Button();
             this.btnBalance = new System.Windows.Forms.Button();
             this.GrayFlag = new System.Windows.Forms.CheckBox();
-            this.textBalance = new System.Windows.Forms.TextBox();
+            this.textBalance = new System.Windows.Forms.RichTextBox();
             this.Unit1 = new System.Windows.Forms.Label();
             this.tabLOYALTY = new System.Windows.Forms.TabPage();
-            this.textPIN_Ly = new System.Windows.Forms.TextBox();
-            this.textLyBalance = new System.Windows.Forms.TextBox();
+            this.textPIN_Ly = new System.Windows.Forms.RichTextBox();
+            this.textLyBalance = new System.Windows.Forms.RichTextBox();
             this.PINOperate_Ly = new System.Windows.Forms.GroupBox();
             this.ChangePin_Ly = new System.Windows.Forms.Button();
             this.PinReset_Ly = new System.Windows.Forms.Button();
-            this.textNewPin_Ly = new System.Windows.Forms.TextBox();
-            this.textOldPin_Ly = new System.Windows.Forms.TextBox();
+            this.textNewPin_Ly = new System.Windows.Forms.RichTextBox();
+            this.textOldPin_Ly = new System.Windows.Forms.RichTextBox();
             this.LyOldPin = new System.Windows.Forms.Label();
             this.LyNewPin = new System.Windows.Forms.Label();
             this.PinUnlock_Ly = new System.Windows.Forms.Button();
             this.UnitLy2 = new System.Windows.Forms.Label();
             this.LoadLoyalty = new System.Windows.Forms.Button();
             this.ChkGrayLy = new System.Windows.Forms.CheckBox();
-            this.textLoadValue = new System.Windows.Forms.TextBox();
+            this.textLoadValue = new System.Windows.Forms.RichTextBox();
             this.ReadLoyalty = new System.Windows.Forms.Button();
             this.LabelPIN_Ly = new System.Windows.Forms.Label();
             this.UnGrayLy = new System.Windows.Forms.Button();
@@ -134,16 +137,6 @@
             this.cmbDevType = new System.Windows.Forms.ComboBox();
             this.CardReader = new System.Windows.Forms.Label();
             this.ContactCard = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.cmbCardType = new System.Windows.Forms.ComboBox();
-            this.cmbMotherCard = new System.Windows.Forms.ComboBox();
-            this.LabelMotherCard = new System.Windows.Forms.Label();
             this.groupLimit.SuspendLayout();
             this.CardInfoPanel.Panel1.SuspendLayout();
             this.CardInfoPanel.Panel2.SuspendLayout();
@@ -161,9 +154,11 @@
             // 
             this.textRemark.Location = new System.Drawing.Point(109, 539);
             this.textRemark.MaxLength = 50;
+            this.textRemark.Multiline = false;
             this.textRemark.Name = "textRemark";
             this.textRemark.Size = new System.Drawing.Size(246, 21);
             this.textRemark.TabIndex = 100;
+            this.textRemark.Text = "";
             // 
             // Remark
             // 
@@ -178,9 +173,11 @@
             // 
             this.textBusDistance.Location = new System.Drawing.Point(109, 514);
             this.textBusDistance.MaxLength = 10;
+            this.textBusDistance.Multiline = false;
             this.textBusDistance.Name = "textBusDistance";
             this.textBusDistance.Size = new System.Drawing.Size(100, 21);
             this.textBusDistance.TabIndex = 98;
+            this.textBusDistance.Text = "";
             // 
             // BusDistance
             // 
@@ -213,17 +210,21 @@
             // 
             this.textBoalVol.Location = new System.Drawing.Point(310, 439);
             this.textBoalVol.MaxLength = 4;
+            this.textBoalVol.Multiline = false;
             this.textBoalVol.Name = "textBoalVol";
             this.textBoalVol.Size = new System.Drawing.Size(100, 21);
             this.textBoalVol.TabIndex = 92;
+            this.textBoalVol.Text = "";
             // 
             // textBoalCount
             // 
             this.textBoalCount.Location = new System.Drawing.Point(109, 439);
             this.textBoalCount.MaxLength = 1;
+            this.textBoalCount.Multiline = false;
             this.textBoalCount.Name = "textBoalCount";
             this.textBoalCount.Size = new System.Drawing.Size(100, 21);
             this.textBoalCount.TabIndex = 90;
+            this.textBoalCount.Text = "";
             // 
             // BoalVol
             // 
@@ -247,17 +248,21 @@
             // 
             this.textTelephone.Location = new System.Drawing.Point(101, 155);
             this.textTelephone.MaxLength = 15;
+            this.textTelephone.Multiline = false;
             this.textTelephone.Name = "textTelephone";
             this.textTelephone.Size = new System.Drawing.Size(123, 21);
             this.textTelephone.TabIndex = 83;
+            this.textTelephone.Text = "";
             // 
             // textSelfId
             // 
             this.textSelfId.Location = new System.Drawing.Point(310, 239);
             this.textSelfId.MaxLength = 20;
+            this.textSelfId.Multiline = false;
             this.textSelfId.Name = "textSelfId";
             this.textSelfId.Size = new System.Drawing.Size(112, 21);
             this.textSelfId.TabIndex = 85;
+            this.textSelfId.Text = "";
             // 
             // cmbCarCategory
             // 
@@ -322,9 +327,12 @@
             // textDiscountRate
             // 
             this.textDiscountRate.Location = new System.Drawing.Point(101, 182);
+            this.textDiscountRate.MaxLength = 2;
+            this.textDiscountRate.Multiline = false;
             this.textDiscountRate.Name = "textDiscountRate";
             this.textDiscountRate.Size = new System.Drawing.Size(52, 21);
             this.textDiscountRate.TabIndex = 74;
+            this.textDiscountRate.Text = "";
             this.textDiscountRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textDiscountRate_KeyPress);
             // 
             // DiscountRateExprieValid
@@ -356,9 +364,11 @@
             // 
             this.textBoalFactoryNo.Location = new System.Drawing.Point(109, 489);
             this.textBoalFactoryNo.MaxLength = 7;
+            this.textBoalFactoryNo.Multiline = false;
             this.textBoalFactoryNo.Name = "textBoalFactoryNo";
             this.textBoalFactoryNo.Size = new System.Drawing.Size(155, 21);
             this.textBoalFactoryNo.TabIndex = 96;
+            this.textBoalFactoryNo.Text = "";
             // 
             // BoalFactoryNo
             // 
@@ -373,17 +383,21 @@
             // 
             this.textCarNo.Location = new System.Drawing.Point(101, 235);
             this.textCarNo.MaxLength = 10;
+            this.textCarNo.Multiline = false;
             this.textCarNo.Name = "textCarNo";
             this.textCarNo.Size = new System.Drawing.Size(112, 21);
             this.textCarNo.TabIndex = 81;
+            this.textCarNo.Text = "";
             // 
             // textBoalNo
             // 
             this.textBoalNo.Location = new System.Drawing.Point(109, 414);
             this.textBoalNo.MaxLength = 16;
+            this.textBoalNo.Multiline = false;
             this.textBoalNo.Name = "textBoalNo";
             this.textBoalNo.Size = new System.Drawing.Size(218, 21);
             this.textBoalNo.TabIndex = 88;
+            this.textBoalNo.Text = "";
             // 
             // BoalNo
             // 
@@ -414,9 +428,11 @@
             // 
             this.textPriceLevel.Location = new System.Drawing.Point(310, 101);
             this.textPriceLevel.MaxLength = 2;
+            this.textPriceLevel.Multiline = false;
             this.textPriceLevel.Name = "textPriceLevel";
             this.textPriceLevel.Size = new System.Drawing.Size(43, 21);
             this.textPriceLevel.TabIndex = 68;
+            this.textPriceLevel.Text = "";
             this.textPriceLevel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPriceLevel_KeyPress);
             // 
             // PriceLevel
@@ -432,9 +448,11 @@
             // 
             this.textUserIdentity.Location = new System.Drawing.Point(310, 133);
             this.textUserIdentity.MaxLength = 18;
+            this.textUserIdentity.Multiline = false;
             this.textUserIdentity.Name = "textUserIdentity";
             this.textUserIdentity.Size = new System.Drawing.Size(194, 21);
             this.textUserIdentity.TabIndex = 70;
+            this.textUserIdentity.Text = "";
             this.textUserIdentity.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textUserIdentity_KeyPress);
             // 
             // UserID
@@ -450,9 +468,11 @@
             // 
             this.textUserName.Location = new System.Drawing.Point(101, 100);
             this.textUserName.MaxLength = 10;
+            this.textUserName.Multiline = false;
             this.textUserName.Name = "textUserName";
             this.textUserName.Size = new System.Drawing.Size(101, 21);
             this.textUserName.TabIndex = 66;
+            this.textUserName.Text = "";
             // 
             // UserName
             // 
@@ -468,10 +488,12 @@
             this.textUserCardId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textUserCardId.Location = new System.Drawing.Point(101, 19);
             this.textUserCardId.MaxLength = 6;
+            this.textUserCardId.Multiline = false;
             this.textUserCardId.Name = "textUserCardId";
             this.textUserCardId.ReadOnly = true;
             this.textUserCardId.Size = new System.Drawing.Size(170, 21);
             this.textUserCardId.TabIndex = 56;
+            this.textUserCardId.Text = "";
             // 
             // UserCardId
             // 
@@ -489,14 +511,14 @@
             this.DateTo.Size = new System.Drawing.Size(121, 21);
             this.DateTo.TabIndex = 60;
             // 
-            // textFlag
+            // labelFlag
             // 
-            this.textFlag.AutoSize = true;
-            this.textFlag.Location = new System.Drawing.Point(235, 80);
-            this.textFlag.Name = "textFlag";
-            this.textFlag.Size = new System.Drawing.Size(11, 12);
-            this.textFlag.TabIndex = 59;
-            this.textFlag.Text = "-";
+            this.labelFlag.AutoSize = true;
+            this.labelFlag.Location = new System.Drawing.Point(235, 80);
+            this.labelFlag.Name = "labelFlag";
+            this.labelFlag.Size = new System.Drawing.Size(11, 12);
+            this.labelFlag.TabIndex = 59;
+            this.labelFlag.Text = "-";
             // 
             // DateFrom
             // 
@@ -570,9 +592,11 @@
             // 
             this.textGasAmount.Location = new System.Drawing.Point(111, 99);
             this.textGasAmount.MaxLength = 32;
+            this.textGasAmount.Multiline = false;
             this.textGasAmount.Name = "textGasAmount";
             this.textGasAmount.Size = new System.Drawing.Size(64, 21);
             this.textGasAmount.TabIndex = 10;
+            this.textGasAmount.Text = "";
             this.textGasAmount.Validated += new System.EventHandler(this.textGasAmount_Validated);
             this.textGasAmount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textGasAmount_KeyPress);
             // 
@@ -589,9 +613,11 @@
             // 
             this.textGasCount.Location = new System.Drawing.Point(111, 69);
             this.textGasCount.MaxLength = 2;
+            this.textGasCount.Multiline = false;
             this.textGasCount.Name = "textGasCount";
             this.textGasCount.Size = new System.Drawing.Size(64, 21);
             this.textGasCount.TabIndex = 8;
+            this.textGasCount.Text = "";
             this.textGasCount.Validated += new System.EventHandler(this.textGasCount_Validated);
             this.textGasCount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textGasCount_KeyPress);
             // 
@@ -697,7 +723,7 @@
             this.CardInfo.Controls.Add(this.textRemark);
             this.CardInfo.Controls.Add(this.DateFrom);
             this.CardInfo.Controls.Add(this.Remark);
-            this.CardInfo.Controls.Add(this.textFlag);
+            this.CardInfo.Controls.Add(this.labelFlag);
             this.CardInfo.Controls.Add(this.textBusDistance);
             this.CardInfo.Controls.Add(this.DateTo);
             this.CardInfo.Controls.Add(this.BusDistance);
@@ -740,6 +766,41 @@
             this.CardInfo.TabIndex = 103;
             this.CardInfo.TabStop = false;
             this.CardInfo.Text = "卡信息";
+            // 
+            // cmbMotherCard
+            // 
+            this.cmbMotherCard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMotherCard.FormattingEnabled = true;
+            this.cmbMotherCard.Location = new System.Drawing.Point(301, 50);
+            this.cmbMotherCard.Name = "cmbMotherCard";
+            this.cmbMotherCard.Size = new System.Drawing.Size(156, 20);
+            this.cmbMotherCard.TabIndex = 107;
+            // 
+            // LabelMotherCard
+            // 
+            this.LabelMotherCard.AutoSize = true;
+            this.LabelMotherCard.Location = new System.Drawing.Point(242, 53);
+            this.LabelMotherCard.Name = "LabelMotherCard";
+            this.LabelMotherCard.Size = new System.Drawing.Size(53, 12);
+            this.LabelMotherCard.TabIndex = 106;
+            this.LabelMotherCard.Text = "关联母卡";
+            // 
+            // cmbCardType
+            // 
+            this.cmbCardType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCardType.Enabled = false;
+            this.cmbCardType.FormattingEnabled = true;
+            this.cmbCardType.Items.AddRange(new object[] {
+            "个人加气卡",
+            "管理卡",
+            "员工卡",
+            "维修卡",
+            "单位子卡",
+            "单位母卡"});
+            this.cmbCardType.Location = new System.Drawing.Point(310, 19);
+            this.cmbCardType.Name = "cmbCardType";
+            this.cmbCardType.Size = new System.Drawing.Size(82, 20);
+            this.cmbCardType.TabIndex = 105;
             // 
             // cmbIdType
             // 
@@ -812,9 +873,11 @@
             // 
             this.textPIN.Location = new System.Drawing.Point(106, 14);
             this.textPIN.MaxLength = 6;
+            this.textPIN.Multiline = false;
             this.textPIN.Name = "textPIN";
             this.textPIN.Size = new System.Drawing.Size(96, 21);
             this.textPIN.TabIndex = 46;
+            this.textPIN.Text = "";
             this.textPIN.Validated += new System.EventHandler(this.textPIN_Validated);
             this.textPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPIN_KeyPress);
             // 
@@ -858,18 +921,22 @@
             // 
             this.textNewPIN.Location = new System.Drawing.Point(86, 66);
             this.textNewPIN.MaxLength = 6;
+            this.textNewPIN.Multiline = false;
             this.textNewPIN.Name = "textNewPIN";
             this.textNewPIN.Size = new System.Drawing.Size(95, 21);
             this.textNewPIN.TabIndex = 51;
+            this.textNewPIN.Text = "";
             this.textNewPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNewPIN_KeyPress);
             // 
             // textOldPIN
             // 
             this.textOldPIN.Location = new System.Drawing.Point(86, 27);
             this.textOldPIN.MaxLength = 6;
+            this.textOldPIN.Multiline = false;
             this.textOldPIN.Name = "textOldPIN";
             this.textOldPIN.Size = new System.Drawing.Size(95, 21);
             this.textOldPIN.TabIndex = 50;
+            this.textOldPIN.Text = "";
             this.textOldPIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textOldPIN_KeyPress);
             // 
             // OldPIN
@@ -914,6 +981,7 @@
             // 
             this.textMoney.Location = new System.Drawing.Point(105, 48);
             this.textMoney.Name = "textMoney";
+            this.textMoney.Multiline = false;
             this.textMoney.Size = new System.Drawing.Size(97, 21);
             this.textMoney.TabIndex = 36;
             this.textMoney.Text = "10,000.00";
@@ -991,9 +1059,11 @@
             this.textBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBalance.Location = new System.Drawing.Point(106, 82);
             this.textBalance.Name = "textBalance";
+            this.textBalance.Multiline = false;
             this.textBalance.ReadOnly = true;
             this.textBalance.Size = new System.Drawing.Size(96, 21);
             this.textBalance.TabIndex = 40;
+            this.textBalance.Text = "";
             // 
             // Unit1
             // 
@@ -1031,20 +1101,24 @@
             // 
             this.textPIN_Ly.Location = new System.Drawing.Point(114, 14);
             this.textPIN_Ly.MaxLength = 6;
+            this.textPIN_Ly.Multiline = false;
             this.textPIN_Ly.Name = "textPIN_Ly";
             this.textPIN_Ly.Size = new System.Drawing.Size(96, 21);
             this.textPIN_Ly.TabIndex = 117;
-            this.textPIN_Ly.TextChanged += new System.EventHandler(this.textPIN_Ly_TextChanged);
+            this.textPIN_Ly.Text = "";
             this.textPIN_Ly.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPIN_Ly_KeyPress);
+            this.textPIN_Ly.TextChanged += new System.EventHandler(this.textPIN_Ly_TextChanged);
             // 
             // textLyBalance
             // 
             this.textLyBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textLyBalance.Location = new System.Drawing.Point(114, 82);
             this.textLyBalance.Name = "textLyBalance";
+            this.textLyBalance.Multiline = false;
             this.textLyBalance.ReadOnly = true;
             this.textLyBalance.Size = new System.Drawing.Size(96, 21);
             this.textLyBalance.TabIndex = 111;
+            this.textLyBalance.Text = "";
             // 
             // PINOperate_Ly
             // 
@@ -1086,17 +1160,21 @@
             // 
             this.textNewPin_Ly.Location = new System.Drawing.Point(94, 66);
             this.textNewPin_Ly.MaxLength = 6;
+            this.textNewPin_Ly.Multiline = false;
             this.textNewPin_Ly.Name = "textNewPin_Ly";
             this.textNewPin_Ly.Size = new System.Drawing.Size(95, 21);
             this.textNewPin_Ly.TabIndex = 51;
+            this.textNewPin_Ly.Text = "";
             // 
             // textOldPin_Ly
             // 
             this.textOldPin_Ly.Location = new System.Drawing.Point(94, 27);
             this.textOldPin_Ly.MaxLength = 6;
+            this.textOldPin_Ly.Multiline = false;
             this.textOldPin_Ly.Name = "textOldPin_Ly";
             this.textOldPin_Ly.Size = new System.Drawing.Size(95, 21);
             this.textOldPin_Ly.TabIndex = 50;
+            this.textOldPin_Ly.Text = "";
             // 
             // LyOldPin
             // 
@@ -1161,6 +1239,7 @@
             // 
             this.textLoadValue.Location = new System.Drawing.Point(113, 48);
             this.textLoadValue.Name = "textLoadValue";
+            this.textLoadValue.Multiline = false;
             this.textLoadValue.Size = new System.Drawing.Size(97, 21);
             this.textLoadValue.TabIndex = 107;
             this.textLoadValue.Text = "10,000";
@@ -1254,102 +1333,6 @@
             this.ContactCard.Text = "接触式";
             this.ContactCard.UseVisualStyleBackColor = true;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(122, 98);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(59, 23);
-            this.button1.TabIndex = 53;
-            this.button1.Text = "修改PIN";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(220, 65);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(59, 23);
-            this.button2.TabIndex = 52;
-            this.button2.Text = "PIN重装";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(86, 66);
-            this.textBox2.MaxLength = 6;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(95, 21);
-            this.textBox2.TabIndex = 51;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(86, 27);
-            this.textBox3.MaxLength = 6;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(95, 21);
-            this.textBox3.TabIndex = 50;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(28, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(47, 12);
-            this.label1.TabIndex = 49;
-            this.label1.Text = "原PIN码";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(28, 70);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 12);
-            this.label2.TabIndex = 48;
-            this.label2.Text = "新PIN码";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(220, 26);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(59, 23);
-            this.button3.TabIndex = 47;
-            this.button3.Text = "PIN解锁";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // cmbCardType
-            // 
-            this.cmbCardType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCardType.Enabled = false;
-            this.cmbCardType.FormattingEnabled = true;
-            this.cmbCardType.Items.AddRange(new object[] {
-            "个人加气卡",
-            "管理卡",
-            "员工卡",
-            "维修卡",
-            "单位子卡",
-            "单位母卡"});
-            this.cmbCardType.Location = new System.Drawing.Point(310, 19);
-            this.cmbCardType.Name = "cmbCardType";
-            this.cmbCardType.Size = new System.Drawing.Size(82, 20);
-            this.cmbCardType.TabIndex = 105;
-            // 
-            // cmbMotherCard
-            // 
-            this.cmbMotherCard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMotherCard.FormattingEnabled = true;
-            this.cmbMotherCard.Location = new System.Drawing.Point(301, 50);
-            this.cmbMotherCard.Name = "cmbMotherCard";
-            this.cmbMotherCard.Size = new System.Drawing.Size(180, 20);
-            this.cmbMotherCard.TabIndex = 107;
-            // 
-            // LabelMotherCard
-            // 
-            this.LabelMotherCard.AutoSize = true;
-            this.LabelMotherCard.Location = new System.Drawing.Point(242, 53);
-            this.LabelMotherCard.Name = "LabelMotherCard";
-            this.LabelMotherCard.Size = new System.Drawing.Size(53, 12);
-            this.LabelMotherCard.TabIndex = 106;
-            this.LabelMotherCard.Text = "关联母卡";
-            // 
             // AppUserOperator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1390,53 +1373,53 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textRemark;
+        private System.Windows.Forms.RichTextBox textRemark;
         private System.Windows.Forms.Label Remark;
-        private System.Windows.Forms.TextBox textBusDistance;
+        private System.Windows.Forms.RichTextBox textBusDistance;
         private System.Windows.Forms.Label BusDistance;
         private System.Windows.Forms.ComboBox cmbClientName;
         private System.Windows.Forms.Label ClientName;
-        private System.Windows.Forms.TextBox textBoalVol;
-        private System.Windows.Forms.TextBox textBoalCount;
+        private System.Windows.Forms.RichTextBox textBoalVol;
+        private System.Windows.Forms.RichTextBox textBoalCount;
         private System.Windows.Forms.Label BoalVol;
         private System.Windows.Forms.Label BoalCount;
-        private System.Windows.Forms.TextBox textTelephone;
-        private System.Windows.Forms.TextBox textSelfId;
+        private System.Windows.Forms.RichTextBox textTelephone;
+        private System.Windows.Forms.RichTextBox textSelfId;
         private System.Windows.Forms.ComboBox cmbCarCategory;
         private System.Windows.Forms.Label SelfId;
         private System.Windows.Forms.Label CarNo;
         private System.Windows.Forms.Label CarType;
         private System.Windows.Forms.Label TelephoneLabel;
         private System.Windows.Forms.Label RateFlag;
-        private System.Windows.Forms.TextBox textDiscountRate;
+        private System.Windows.Forms.RichTextBox textDiscountRate;
         private System.Windows.Forms.DateTimePicker DiscountRateExprieValid;
         private System.Windows.Forms.Label DiscountRateValid;
         private System.Windows.Forms.Label DiscountRate;
-        private System.Windows.Forms.TextBox textBoalFactoryNo;
+        private System.Windows.Forms.RichTextBox textBoalFactoryNo;
         private System.Windows.Forms.Label BoalFactoryNo;
-        private System.Windows.Forms.TextBox textCarNo;
-        private System.Windows.Forms.TextBox textBoalNo;
+        private System.Windows.Forms.RichTextBox textCarNo;
+        private System.Windows.Forms.RichTextBox textBoalNo;
         private System.Windows.Forms.Label BoalNo;
         private System.Windows.Forms.DateTimePicker BoalExprieValid;
         private System.Windows.Forms.Label BoalExprie;
-        private System.Windows.Forms.TextBox textPriceLevel;
+        private System.Windows.Forms.RichTextBox textPriceLevel;
         private System.Windows.Forms.Label PriceLevel;
-        private System.Windows.Forms.TextBox textUserIdentity;
+        private System.Windows.Forms.RichTextBox textUserIdentity;
         private System.Windows.Forms.Label UserID;
-        private System.Windows.Forms.TextBox textUserName;
+        private System.Windows.Forms.RichTextBox textUserName;
         private System.Windows.Forms.Label UserName;
-        private System.Windows.Forms.TextBox textUserCardId;
+        private System.Windows.Forms.RichTextBox textUserCardId;
         private System.Windows.Forms.Label UserCardId;
         private System.Windows.Forms.DateTimePicker DateTo;
-        private System.Windows.Forms.Label textFlag;
+        private System.Windows.Forms.Label labelFlag;
         private System.Windows.Forms.DateTimePicker DateFrom;
         private System.Windows.Forms.Label DateValid;
         private System.Windows.Forms.GroupBox groupLimit;
         private System.Windows.Forms.CheckBox LimitCarNo;
         private System.Windows.Forms.CheckedListBox listLimitArea;
-        private System.Windows.Forms.TextBox textGasAmount;
+        private System.Windows.Forms.RichTextBox textGasAmount;
         private System.Windows.Forms.Label GasAmount;
-        private System.Windows.Forms.TextBox textGasCount;
+        private System.Windows.Forms.RichTextBox textGasCount;
         private System.Windows.Forms.Label GasCount;
         private System.Windows.Forms.Label LimitAreaCode;
         private System.Windows.Forms.ComboBox cmbAreaLimit;
@@ -1455,17 +1438,17 @@
         private System.Windows.Forms.GroupBox CardApp;
         private System.Windows.Forms.TabControl tabApp;
         private System.Windows.Forms.TabPage tabSINOPEC;
-        private System.Windows.Forms.TextBox textPIN;
+        private System.Windows.Forms.RichTextBox textPIN;
         private System.Windows.Forms.GroupBox PINOperate;
         private System.Windows.Forms.Button btnPinChange;
         private System.Windows.Forms.Button btnPinReset;
-        private System.Windows.Forms.TextBox textNewPIN;
-        private System.Windows.Forms.TextBox textOldPIN;
+        private System.Windows.Forms.RichTextBox textNewPIN;
+        private System.Windows.Forms.RichTextBox textOldPIN;
         private System.Windows.Forms.Label OldPIN;
         private System.Windows.Forms.Label NewPIN;
         private System.Windows.Forms.Button btnPinUnlock;
         private System.Windows.Forms.Button btnCardLoad;
-        private System.Windows.Forms.TextBox textMoney;
+        private System.Windows.Forms.RichTextBox textMoney;
         private System.Windows.Forms.Label LabelPIN;
         private System.Windows.Forms.Label Money;
         private System.Windows.Forms.Label Balance;
@@ -1473,30 +1456,23 @@
         private System.Windows.Forms.Button btnUnlockGrayCard;
         private System.Windows.Forms.Button btnBalance;
         private System.Windows.Forms.CheckBox GrayFlag;
-        private System.Windows.Forms.TextBox textBalance;
+        private System.Windows.Forms.RichTextBox textBalance;
         private System.Windows.Forms.Label Unit1;
         private System.Windows.Forms.TabPage tabLOYALTY;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.TextBox textPIN_Ly;
-        private System.Windows.Forms.TextBox textLyBalance;
+        private System.Windows.Forms.RichTextBox textPIN_Ly;
+        private System.Windows.Forms.RichTextBox textLyBalance;
         private System.Windows.Forms.GroupBox PINOperate_Ly;
         private System.Windows.Forms.Button ChangePin_Ly;
         private System.Windows.Forms.Button PinReset_Ly;
-        private System.Windows.Forms.TextBox textNewPin_Ly;
-        private System.Windows.Forms.TextBox textOldPin_Ly;
+        private System.Windows.Forms.RichTextBox textNewPin_Ly;
+        private System.Windows.Forms.RichTextBox textOldPin_Ly;
         private System.Windows.Forms.Label LyOldPin;
         private System.Windows.Forms.Label LyNewPin;
         private System.Windows.Forms.Button PinUnlock_Ly;
         private System.Windows.Forms.Label UnitLy2;
         private System.Windows.Forms.Button LoadLoyalty;
         private System.Windows.Forms.CheckBox ChkGrayLy;
-        private System.Windows.Forms.TextBox textLoadValue;
+        private System.Windows.Forms.RichTextBox textLoadValue;
         private System.Windows.Forms.Button ReadLoyalty;
         private System.Windows.Forms.Label LabelPIN_Ly;
         private System.Windows.Forms.Button UnGrayLy;

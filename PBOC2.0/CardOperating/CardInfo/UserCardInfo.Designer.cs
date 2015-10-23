@@ -38,56 +38,56 @@
             this.cmbIdType = new System.Windows.Forms.ComboBox();
             this.DiscountRateValid = new System.Windows.Forms.Label();
             this.IdTypeLabel = new System.Windows.Forms.Label();
-            this.textDiscountRate = new System.Windows.Forms.TextBox();
+            this.textDiscountRate = new System.Windows.Forms.RichTextBox();
             this.RateFlag = new System.Windows.Forms.Label();
             this.cmbClientName = new System.Windows.Forms.ComboBox();
             this.ClientName = new System.Windows.Forms.Label();
-            this.textCompanyId = new System.Windows.Forms.TextBox();
-            this.textTelephone = new System.Windows.Forms.TextBox();
-            this.textSelfId = new System.Windows.Forms.TextBox();
+            this.textCompanyId = new System.Windows.Forms.RichTextBox();
+            this.textTelephone = new System.Windows.Forms.RichTextBox();
+            this.textSelfId = new System.Windows.Forms.RichTextBox();
             this.cmbCarCategory = new System.Windows.Forms.ComboBox();
             this.SelfId = new System.Windows.Forms.Label();
             this.CarNo = new System.Windows.Forms.Label();
             this.CarType = new System.Windows.Forms.Label();
             this.TelephoneLabel = new System.Windows.Forms.Label();
-            this.textCarNo = new System.Windows.Forms.TextBox();
-            this.textPriceLevel = new System.Windows.Forms.TextBox();
+            this.textCarNo = new System.Windows.Forms.RichTextBox();
+            this.textPriceLevel = new System.Windows.Forms.RichTextBox();
             this.PriceLevel = new System.Windows.Forms.Label();
-            this.textPassword = new System.Windows.Forms.TextBox();
+            this.textPassword = new System.Windows.Forms.RichTextBox();
             this.CustomPassword = new System.Windows.Forms.CheckBox();
-            this.textUserIdentity = new System.Windows.Forms.TextBox();
+            this.textUserIdentity = new System.Windows.Forms.RichTextBox();
             this.UserID = new System.Windows.Forms.Label();
-            this.textUserName = new System.Windows.Forms.TextBox();
+            this.textUserName = new System.Windows.Forms.RichTextBox();
             this.UserName = new System.Windows.Forms.Label();
             this.LabelCardType = new System.Windows.Forms.Label();
             this.cmbUserCardType = new System.Windows.Forms.ComboBox();
-            this.textUserCardId = new System.Windows.Forms.TextBox();
+            this.textUserCardId = new System.Windows.Forms.RichTextBox();
             this.UserCardId = new System.Windows.Forms.Label();
             this.DateTo = new System.Windows.Forms.DateTimePicker();
             this.DateFrom = new System.Windows.Forms.DateTimePicker();
             this.DateValid = new System.Windows.Forms.Label();
             this.CompanyId = new System.Windows.Forms.Label();
             this.SaveClose = new System.Windows.Forms.Button();
-            this.textRemark = new System.Windows.Forms.TextBox();
+            this.textRemark = new System.Windows.Forms.RichTextBox();
             this.Remark = new System.Windows.Forms.Label();
-            this.textBusDistance = new System.Windows.Forms.TextBox();
+            this.textBusDistance = new System.Windows.Forms.RichTextBox();
             this.BusDistance = new System.Windows.Forms.Label();
-            this.textBoalVol = new System.Windows.Forms.TextBox();
-            this.textBoalCount = new System.Windows.Forms.TextBox();
+            this.textBoalVol = new System.Windows.Forms.RichTextBox();
+            this.textBoalCount = new System.Windows.Forms.RichTextBox();
             this.BoalVol = new System.Windows.Forms.Label();
             this.BoalCount = new System.Windows.Forms.Label();
-            this.textBoalFactoryNo = new System.Windows.Forms.TextBox();
+            this.textBoalFactoryNo = new System.Windows.Forms.RichTextBox();
             this.BoalFactoryNo = new System.Windows.Forms.Label();
-            this.textBoalNo = new System.Windows.Forms.TextBox();
+            this.textBoalNo = new System.Windows.Forms.RichTextBox();
             this.BoalNo = new System.Windows.Forms.Label();
             this.BoalExprieValid = new System.Windows.Forms.DateTimePicker();
             this.BoalExprie = new System.Windows.Forms.Label();
             this.cmbLimitGasType = new System.Windows.Forms.ComboBox();
             this.LimitCarNo = new System.Windows.Forms.CheckBox();
             this.listLimitArea = new System.Windows.Forms.CheckedListBox();
-            this.textGasAmount = new System.Windows.Forms.TextBox();
+            this.textGasAmount = new System.Windows.Forms.RichTextBox();
             this.GasAmount = new System.Windows.Forms.Label();
-            this.textGasCount = new System.Windows.Forms.TextBox();
+            this.textGasCount = new System.Windows.Forms.RichTextBox();
             this.GasCount = new System.Windows.Forms.Label();
             this.LimitAreaCode = new System.Windows.Forms.Label();
             this.cmbAreaLimit = new System.Windows.Forms.ComboBox();
@@ -241,9 +241,12 @@
             // textDiscountRate
             // 
             this.textDiscountRate.Location = new System.Drawing.Point(84, 250);
+            this.textDiscountRate.MaxLength = 2;
+            this.textDiscountRate.Multiline = false;
             this.textDiscountRate.Name = "textDiscountRate";
             this.textDiscountRate.Size = new System.Drawing.Size(52, 21);
             this.textDiscountRate.TabIndex = 28;
+            this.textDiscountRate.Text = "";
             this.textDiscountRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textDiscountRate_KeyPress);
             // 
             // RateFlag
@@ -277,25 +280,31 @@
             // 
             this.textCompanyId.Location = new System.Drawing.Point(84, 46);
             this.textCompanyId.MaxLength = 4;
+            this.textCompanyId.Multiline = false;
             this.textCompanyId.Name = "textCompanyId";
             this.textCompanyId.Size = new System.Drawing.Size(85, 21);
             this.textCompanyId.TabIndex = 3;
+            this.textCompanyId.Text = "";
             // 
             // textTelephone
             // 
             this.textTelephone.Location = new System.Drawing.Point(84, 200);
             this.textTelephone.MaxLength = 15;
+            this.textTelephone.Multiline = false;
             this.textTelephone.Name = "textTelephone";
             this.textTelephone.Size = new System.Drawing.Size(123, 21);
             this.textTelephone.TabIndex = 24;
+            this.textTelephone.Text = "";
             // 
             // textSelfId
             // 
             this.textSelfId.Location = new System.Drawing.Point(264, 301);
             this.textSelfId.MaxLength = 20;
+            this.textSelfId.Multiline = false;
             this.textSelfId.Name = "textSelfId";
             this.textSelfId.Size = new System.Drawing.Size(155, 21);
             this.textSelfId.TabIndex = 37;
+            this.textSelfId.Text = "";
             // 
             // cmbCarCategory
             // 
@@ -352,17 +361,21 @@
             // 
             this.textCarNo.Location = new System.Drawing.Point(84, 300);
             this.textCarNo.MaxLength = 10;
+            this.textCarNo.Multiline = false;
             this.textCarNo.Name = "textCarNo";
             this.textCarNo.Size = new System.Drawing.Size(112, 21);
             this.textCarNo.TabIndex = 35;
+            this.textCarNo.Text = "";
             // 
             // textPriceLevel
             // 
             this.textPriceLevel.Location = new System.Drawing.Point(84, 225);
             this.textPriceLevel.MaxLength = 2;
+            this.textPriceLevel.Multiline = false;
             this.textPriceLevel.Name = "textPriceLevel";
             this.textPriceLevel.Size = new System.Drawing.Size(52, 21);
             this.textPriceLevel.TabIndex = 26;
+            this.textPriceLevel.Text = "";
             this.textPriceLevel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPriceLevel_KeyPress);
             // 
             // PriceLevel
@@ -378,9 +391,11 @@
             // 
             this.textPassword.Location = new System.Drawing.Point(84, 123);
             this.textPassword.MaxLength = 6;
+            this.textPassword.Multiline = false;
             this.textPassword.Name = "textPassword";
             this.textPassword.Size = new System.Drawing.Size(92, 21);
             this.textPassword.TabIndex = 16;
+            this.textPassword.Text = "";
             this.textPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPassword_KeyPress);
             // 
             // CustomPassword
@@ -397,9 +412,11 @@
             // 
             this.textUserIdentity.Location = new System.Drawing.Point(264, 176);
             this.textUserIdentity.MaxLength = 18;
+            this.textUserIdentity.Multiline = false;
             this.textUserIdentity.Name = "textUserIdentity";
             this.textUserIdentity.Size = new System.Drawing.Size(167, 21);
             this.textUserIdentity.TabIndex = 22;
+            this.textUserIdentity.Text = "";
             this.textUserIdentity.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textUserIdentity_KeyPress);
             // 
             // UserID
@@ -415,9 +432,11 @@
             // 
             this.textUserName.Location = new System.Drawing.Point(84, 150);
             this.textUserName.MaxLength = 10;
+            this.textUserName.Multiline = false;
             this.textUserName.Name = "textUserName";
             this.textUserName.Size = new System.Drawing.Size(101, 21);
             this.textUserName.TabIndex = 18;
+            this.textUserName.Text = "";
             // 
             // UserName
             // 
@@ -458,10 +477,12 @@
             this.textUserCardId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textUserCardId.Location = new System.Drawing.Point(264, 46);
             this.textUserCardId.MaxLength = 6;
+            this.textUserCardId.Multiline = false;
             this.textUserCardId.Name = "textUserCardId";
             this.textUserCardId.ReadOnly = true;
             this.textUserCardId.Size = new System.Drawing.Size(154, 21);
             this.textUserCardId.TabIndex = 5;
+            this.textUserCardId.Text = "";
             // 
             // UserCardId
             // 
@@ -518,9 +539,11 @@
             // 
             this.textRemark.Location = new System.Drawing.Point(108, 167);
             this.textRemark.MaxLength = 50;
+            this.textRemark.Multiline = false;
             this.textRemark.Name = "textRemark";
             this.textRemark.Size = new System.Drawing.Size(246, 21);
             this.textRemark.TabIndex = 13;
+            this.textRemark.Text = "";
             // 
             // Remark
             // 
@@ -535,9 +558,11 @@
             // 
             this.textBusDistance.Location = new System.Drawing.Point(108, 137);
             this.textBusDistance.MaxLength = 10;
+            this.textBusDistance.Multiline = false;
             this.textBusDistance.Name = "textBusDistance";
             this.textBusDistance.Size = new System.Drawing.Size(100, 21);
             this.textBusDistance.TabIndex = 11;
+            this.textBusDistance.Text = "";
             // 
             // BusDistance
             // 
@@ -552,17 +577,21 @@
             // 
             this.textBoalVol.Location = new System.Drawing.Point(297, 47);
             this.textBoalVol.MaxLength = 4;
+            this.textBoalVol.Multiline = false;
             this.textBoalVol.Name = "textBoalVol";
             this.textBoalVol.Size = new System.Drawing.Size(100, 21);
             this.textBoalVol.TabIndex = 5;
+            this.textBoalVol.Text = "";
             // 
             // textBoalCount
             // 
             this.textBoalCount.Location = new System.Drawing.Point(108, 47);
             this.textBoalCount.MaxLength = 1;
+            this.textBoalCount.Multiline = false;
             this.textBoalCount.Name = "textBoalCount";
             this.textBoalCount.Size = new System.Drawing.Size(100, 21);
             this.textBoalCount.TabIndex = 3;
+            this.textBoalCount.Text = "";
             // 
             // BoalVol
             // 
@@ -586,9 +615,11 @@
             // 
             this.textBoalFactoryNo.Location = new System.Drawing.Point(108, 107);
             this.textBoalFactoryNo.MaxLength = 7;
+            this.textBoalFactoryNo.Multiline = false;
             this.textBoalFactoryNo.Name = "textBoalFactoryNo";
             this.textBoalFactoryNo.Size = new System.Drawing.Size(155, 21);
             this.textBoalFactoryNo.TabIndex = 9;
+            this.textBoalFactoryNo.Text = "";
             // 
             // BoalFactoryNo
             // 
@@ -603,9 +634,11 @@
             // 
             this.textBoalNo.Location = new System.Drawing.Point(108, 17);
             this.textBoalNo.MaxLength = 16;
+            this.textBoalNo.Multiline = false;
             this.textBoalNo.Name = "textBoalNo";
             this.textBoalNo.Size = new System.Drawing.Size(218, 21);
             this.textBoalNo.TabIndex = 1;
+            this.textBoalNo.Text = "";
             // 
             // BoalNo
             // 
@@ -667,9 +700,11 @@
             // 
             this.textGasAmount.Location = new System.Drawing.Point(129, 139);
             this.textGasAmount.MaxLength = 32;
+            this.textGasAmount.Multiline = false;
             this.textGasAmount.Name = "textGasAmount";
             this.textGasAmount.Size = new System.Drawing.Size(64, 21);
             this.textGasAmount.TabIndex = 10;
+            this.textGasAmount.Text = "";
             this.textGasAmount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textGasAmount_KeyPress);
             // 
             // GasAmount
@@ -685,9 +720,11 @@
             // 
             this.textGasCount.Location = new System.Drawing.Point(129, 104);
             this.textGasCount.MaxLength = 2;
+            this.textGasCount.Multiline = false;
             this.textGasCount.Name = "textGasCount";
             this.textGasCount.Size = new System.Drawing.Size(64, 21);
             this.textGasCount.TabIndex = 8;
+            this.textGasCount.Text = "";
             this.textGasCount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textGasCount_KeyPress);
             // 
             // GasCount
@@ -828,38 +865,38 @@
         private System.Windows.Forms.Button SaveClose;
         private System.Windows.Forms.Label LabelCardType;
         private System.Windows.Forms.ComboBox cmbUserCardType;
-        private System.Windows.Forms.TextBox textUserCardId;
+        private System.Windows.Forms.RichTextBox textUserCardId;
         private System.Windows.Forms.Label UserCardId;
         private System.Windows.Forms.DateTimePicker DateTo;
         private System.Windows.Forms.DateTimePicker DateFrom;
         private System.Windows.Forms.Label DateValid;
         private System.Windows.Forms.Label CompanyId;
-        private System.Windows.Forms.TextBox textUserName;
+        private System.Windows.Forms.RichTextBox textUserName;
         private System.Windows.Forms.Label UserName;
         private System.Windows.Forms.Label UserID;
-        private System.Windows.Forms.TextBox textUserIdentity;
+        private System.Windows.Forms.RichTextBox textUserIdentity;
         private System.Windows.Forms.CheckBox CustomPassword;
-        private System.Windows.Forms.TextBox textPassword;
+        private System.Windows.Forms.RichTextBox textPassword;
         private System.Windows.Forms.Label PriceLevel;
-        private System.Windows.Forms.TextBox textPriceLevel;
+        private System.Windows.Forms.RichTextBox textPriceLevel;
         private System.Windows.Forms.ComboBox cmbAreaLimit;
         private System.Windows.Forms.Label LimitArea;
         private System.Windows.Forms.Label LimitAreaCode;
-        private System.Windows.Forms.TextBox textCarNo;
-        private System.Windows.Forms.TextBox textGasCount;
+        private System.Windows.Forms.RichTextBox textCarNo;
+        private System.Windows.Forms.RichTextBox textGasCount;
         private System.Windows.Forms.Label GasCount;
         private System.Windows.Forms.Label GasAmount;
-        private System.Windows.Forms.TextBox textGasAmount;
-        private System.Windows.Forms.TextBox textBoalNo;
+        private System.Windows.Forms.RichTextBox textGasAmount;
+        private System.Windows.Forms.RichTextBox textBoalNo;
         private System.Windows.Forms.Label BoalNo;
         private System.Windows.Forms.DateTimePicker BoalExprieValid;
         private System.Windows.Forms.Label BoalExprie;
-        private System.Windows.Forms.TextBox textBoalFactoryNo;
+        private System.Windows.Forms.RichTextBox textBoalFactoryNo;
         private System.Windows.Forms.Label BoalFactoryNo;
         private System.Windows.Forms.DateTimePicker DiscountRateExprieValid;
         private System.Windows.Forms.Label DiscountRateValid;
         private System.Windows.Forms.Label DiscountRate;
-        private System.Windows.Forms.TextBox textDiscountRate;
+        private System.Windows.Forms.RichTextBox textDiscountRate;
         private System.Windows.Forms.Label RateFlag;
         private System.Windows.Forms.Label LimitGas;
         private System.Windows.Forms.Label TelephoneLabel;
@@ -867,20 +904,20 @@
         private System.Windows.Forms.Label CarNo;
         private System.Windows.Forms.Label CarType;
         private System.Windows.Forms.ComboBox cmbCarCategory;
-        private System.Windows.Forms.TextBox textTelephone;
-        private System.Windows.Forms.TextBox textSelfId;
-        private System.Windows.Forms.TextBox textBoalVol;
-        private System.Windows.Forms.TextBox textBoalCount;
+        private System.Windows.Forms.RichTextBox textTelephone;
+        private System.Windows.Forms.RichTextBox textSelfId;
+        private System.Windows.Forms.RichTextBox textBoalVol;
+        private System.Windows.Forms.RichTextBox textBoalCount;
         private System.Windows.Forms.Label BoalVol;
         private System.Windows.Forms.Label BoalCount;
         private System.Windows.Forms.CheckedListBox listLimitArea;
         private System.Windows.Forms.CheckBox LimitCarNo;
-        private System.Windows.Forms.TextBox textCompanyId;
+        private System.Windows.Forms.RichTextBox textCompanyId;
         private System.Windows.Forms.ComboBox cmbClientName;
         private System.Windows.Forms.Label ClientName;
         private System.Windows.Forms.Label BusDistance;
-        private System.Windows.Forms.TextBox textBusDistance;
-        private System.Windows.Forms.TextBox textRemark;
+        private System.Windows.Forms.RichTextBox textBusDistance;
+        private System.Windows.Forms.RichTextBox textRemark;
         private System.Windows.Forms.Label Remark;
         private System.Windows.Forms.ComboBox cmbLimitGasType;
         private System.Windows.Forms.ComboBox cmbIdType;

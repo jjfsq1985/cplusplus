@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.groupIccCardInfo = new System.Windows.Forms.GroupBox();
-            this.textRemark = new System.Windows.Forms.TextBox();
+            this.textRemark = new System.Windows.Forms.RichTextBox();
             this.Remark = new System.Windows.Forms.Label();
             this.cmbClientName = new System.Windows.Forms.ComboBox();
             this.ClientName = new System.Windows.Forms.Label();
@@ -37,13 +37,13 @@
             this.AppDateFlag = new System.Windows.Forms.Label();
             this.AppValidDateFrom = new System.Windows.Forms.DateTimePicker();
             this.AppValid = new System.Windows.Forms.Label();
-            this.textCompanyTo = new System.Windows.Forms.TextBox();
-            this.textCompanyFrom = new System.Windows.Forms.TextBox();
+            this.textCompanyTo = new System.Windows.Forms.RichTextBox();
+            this.textCompanyFrom = new System.Windows.Forms.RichTextBox();
             this.CompanyTo = new System.Windows.Forms.Label();
             this.CompanyFrom = new System.Windows.Forms.Label();
-            this.textTermialID = new System.Windows.Forms.TextBox();
+            this.textTermialID = new System.Windows.Forms.RichTextBox();
             this.TermialID = new System.Windows.Forms.Label();
-            this.textPSAMNo = new System.Windows.Forms.TextBox();
+            this.textPSAMNo = new System.Windows.Forms.RichTextBox();
             this.IccCardNo = new System.Windows.Forms.Label();
             this.SaveClose = new System.Windows.Forms.Button();
             this.groupIccCardInfo.SuspendLayout();
@@ -79,6 +79,7 @@
             // 
             this.textRemark.Location = new System.Drawing.Point(119, 230);
             this.textRemark.MaxLength = 50;
+            this.textRemark.Multiline = false;
             this.textRemark.Name = "textRemark";
             this.textRemark.Size = new System.Drawing.Size(246, 21);
             this.textRemark.TabIndex = 52;
@@ -146,6 +147,7 @@
             // 
             this.textCompanyTo.Location = new System.Drawing.Point(119, 161);
             this.textCompanyTo.MaxLength = 16;
+            this.textCompanyTo.Multiline = false;
             this.textCompanyTo.Name = "textCompanyTo";
             this.textCompanyTo.ReadOnly = true;
             this.textCompanyTo.Size = new System.Drawing.Size(157, 21);
@@ -156,6 +158,7 @@
             // 
             this.textCompanyFrom.Location = new System.Drawing.Point(119, 128);
             this.textCompanyFrom.MaxLength = 16;
+            this.textCompanyFrom.Multiline = false;
             this.textCompanyFrom.Name = "textCompanyFrom";
             this.textCompanyFrom.ReadOnly = true;
             this.textCompanyFrom.Size = new System.Drawing.Size(157, 21);
@@ -184,6 +187,7 @@
             // 
             this.textTermialID.Location = new System.Drawing.Point(119, 95);
             this.textTermialID.MaxLength = 12;
+            this.textTermialID.Multiline = false;
             this.textTermialID.Name = "textTermialID";
             this.textTermialID.Size = new System.Drawing.Size(126, 21);
             this.textTermialID.TabIndex = 4;
@@ -202,6 +206,7 @@
             // 
             this.textPSAMNo.Location = new System.Drawing.Point(119, 62);
             this.textPSAMNo.MaxLength = 16;
+            this.textPSAMNo.Multiline = false;
             this.textPSAMNo.Name = "textPSAMNo";
             this.textPSAMNo.Size = new System.Drawing.Size(195, 21);
             this.textPSAMNo.TabIndex = 2;
@@ -250,21 +255,21 @@
 
         private System.Windows.Forms.GroupBox groupIccCardInfo;
         private System.Windows.Forms.Button SaveClose;
-        private System.Windows.Forms.TextBox textPSAMNo;
+        private System.Windows.Forms.RichTextBox textPSAMNo;
         private System.Windows.Forms.Label IccCardNo;
         private System.Windows.Forms.Label TermialID;
-        private System.Windows.Forms.TextBox textTermialID;
+        private System.Windows.Forms.RichTextBox textTermialID;
         private System.Windows.Forms.Label CompanyTo;
         private System.Windows.Forms.Label CompanyFrom;
-        private System.Windows.Forms.TextBox textCompanyTo;
-        private System.Windows.Forms.TextBox textCompanyFrom;
+        private System.Windows.Forms.RichTextBox textCompanyTo;
+        private System.Windows.Forms.RichTextBox textCompanyFrom;
         private System.Windows.Forms.Label AppValid;
         private System.Windows.Forms.DateTimePicker AppValidDateFrom;
         private System.Windows.Forms.Label AppDateFlag;
         private System.Windows.Forms.DateTimePicker AppValidDateTo;
         private System.Windows.Forms.ComboBox cmbClientName;
         private System.Windows.Forms.Label ClientName;
-        private System.Windows.Forms.TextBox textRemark;
+        private System.Windows.Forms.RichTextBox textRemark;
         private System.Windows.Forms.Label Remark;
     }
 }

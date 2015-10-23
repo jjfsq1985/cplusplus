@@ -31,7 +31,7 @@
             this.tabApp = new System.Windows.Forms.TabControl();
             this.tabPageApp1 = new System.Windows.Forms.TabPage();
             this.btnUnload = new System.Windows.Forms.Button();
-            this.textPIN = new System.Windows.Forms.TextBox();
+            this.textPIN = new System.Windows.Forms.RichTextBox();
             this.RecordInCard = new System.Windows.Forms.ListView();
             this.BusinessSn = new System.Windows.Forms.ColumnHeader();
             this.Amount = new System.Windows.Forms.ColumnHeader();
@@ -40,7 +40,7 @@
             this.BusinessTime = new System.Windows.Forms.ColumnHeader();
             this.btnCardLoad = new System.Windows.Forms.Button();
             this.btnReadRecord = new System.Windows.Forms.Button();
-            this.textMoney = new System.Windows.Forms.TextBox();
+            this.textMoney = new System.Windows.Forms.RichTextBox();
             this.Money = new System.Windows.Forms.Label();
             this.LabelPIN = new System.Windows.Forms.Label();
             this.Unit2 = new System.Windows.Forms.Label();
@@ -49,16 +49,16 @@
             this.btnLockCard = new System.Windows.Forms.Button();
             this.Purchase = new System.Windows.Forms.Label();
             this.btnUnlockCard = new System.Windows.Forms.Button();
-            this.textPurchase = new System.Windows.Forms.TextBox();
+            this.textPurchase = new System.Windows.Forms.RichTextBox();
             this.Unit3 = new System.Windows.Forms.Label();
             this.btnBalance = new System.Windows.Forms.Button();
             this.Balance = new System.Windows.Forms.Label();
-            this.textBalance = new System.Windows.Forms.TextBox();
+            this.textBalance = new System.Windows.Forms.RichTextBox();
             this.btnUnlockGrayCard = new System.Windows.Forms.Button();
             this.Unit1 = new System.Windows.Forms.Label();
             this.GrayFlag = new System.Windows.Forms.CheckBox();
             this.tabPageApp2 = new System.Windows.Forms.TabPage();
-            this.textLyPin = new System.Windows.Forms.TextBox();
+            this.textLyPin = new System.Windows.Forms.RichTextBox();
             this.LyRecordInCard = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
@@ -67,20 +67,20 @@
             this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
             this.btnLoadLy = new System.Windows.Forms.Button();
             this.btnReadLyRecord = new System.Windows.Forms.Button();
-            this.textLyLoad = new System.Windows.Forms.TextBox();
+            this.textLyLoad = new System.Windows.Forms.RichTextBox();
             this.LoadLoyalty = new System.Windows.Forms.Label();
             this.LabelLyPin = new System.Windows.Forms.Label();
             this.groupLyTest = new System.Windows.Forms.GroupBox();
-            this.textRate = new System.Windows.Forms.TextBox();
+            this.textRate = new System.Windows.Forms.RichTextBox();
             this.LabelRate = new System.Windows.Forms.Label();
             this.LySamSlot = new System.Windows.Forms.CheckBox();
             this.btnLyPurchase = new System.Windows.Forms.Button();
             this.DebitLy = new System.Windows.Forms.Label();
             this.btnToED = new System.Windows.Forms.Button();
-            this.textLyPurchase = new System.Windows.Forms.TextBox();
+            this.textLyPurchase = new System.Windows.Forms.RichTextBox();
             this.btnReadLy = new System.Windows.Forms.Button();
             this.Loyalty = new System.Windows.Forms.Label();
-            this.textLoyalty = new System.Windows.Forms.TextBox();
+            this.textLoyalty = new System.Windows.Forms.RichTextBox();
             this.btnUnGrayLy = new System.Windows.Forms.Button();
             this.LyGrayFlag = new System.Windows.Forms.CheckBox();
             this.ContactCard = new System.Windows.Forms.CheckBox();
@@ -143,6 +143,7 @@
             // 
             this.textPIN.Location = new System.Drawing.Point(117, 27);
             this.textPIN.MaxLength = 6;
+            this.textPIN.Multiline = false;
             this.textPIN.Name = "textPIN";
             this.textPIN.Size = new System.Drawing.Size(100, 21);
             this.textPIN.TabIndex = 3;
@@ -216,6 +217,7 @@
             // 
             this.textMoney.Location = new System.Drawing.Point(68, 136);
             this.textMoney.Name = "textMoney";
+            this.textMoney.Multiline = false;
             this.textMoney.Size = new System.Drawing.Size(97, 21);
             this.textMoney.TabIndex = 11;
             this.textMoney.Text = "10,000.00";
@@ -305,6 +307,7 @@
             // 
             this.textPurchase.Location = new System.Drawing.Point(145, 42);
             this.textPurchase.Name = "textPurchase";
+            this.textPurchase.Multiline = false;
             this.textPurchase.Size = new System.Drawing.Size(97, 21);
             this.textPurchase.TabIndex = 2;
             this.textPurchase.Text = "200.00";
@@ -342,6 +345,7 @@
             this.textBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBalance.Location = new System.Drawing.Point(68, 77);
             this.textBalance.Name = "textBalance";
+            this.textBalance.Multiline = false;
             this.textBalance.ReadOnly = true;
             this.textBalance.Size = new System.Drawing.Size(97, 21);
             this.textBalance.TabIndex = 5;
@@ -404,6 +408,7 @@
             // 
             this.textLyPin.Location = new System.Drawing.Point(132, 24);
             this.textLyPin.MaxLength = 6;
+            this.textLyPin.Multiline = false;
             this.textLyPin.Name = "textLyPin";
             this.textLyPin.Size = new System.Drawing.Size(100, 21);
             this.textLyPin.TabIndex = 19;
@@ -477,6 +482,7 @@
             // 
             this.textLyLoad.Location = new System.Drawing.Point(67, 133);
             this.textLyLoad.Name = "textLyLoad";
+            this.textLyLoad.Multiline = false;
             this.textLyLoad.Size = new System.Drawing.Size(97, 21);
             this.textLyLoad.TabIndex = 27;
             this.textLyLoad.Text = "10,000";
@@ -519,6 +525,7 @@
             // 
             this.textRate.Location = new System.Drawing.Point(92, 52);
             this.textRate.Name = "textRate";
+            this.textRate.Multiline = false;
             this.textRate.Size = new System.Drawing.Size(68, 21);
             this.textRate.TabIndex = 7;
             this.textRate.Text = "100";
@@ -576,6 +583,7 @@
             // 
             this.textLyPurchase.Location = new System.Drawing.Point(92, 25);
             this.textLyPurchase.Name = "textLyPurchase";
+            this.textLyPurchase.Multiline = false;
             this.textLyPurchase.Size = new System.Drawing.Size(100, 21);
             this.textLyPurchase.TabIndex = 2;
             this.textLyPurchase.Text = "200";
@@ -604,6 +612,7 @@
             this.textLoyalty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textLoyalty.Location = new System.Drawing.Point(90, 74);
             this.textLoyalty.Name = "textLoyalty";
+            this.textLoyalty.Multiline = false;
             this.textLoyalty.ReadOnly = true;
             this.textLoyalty.Size = new System.Drawing.Size(117, 21);
             this.textLoyalty.TabIndex = 21;
@@ -696,27 +705,27 @@
         private System.Windows.Forms.ColumnHeader TermID;
         private System.Windows.Forms.ColumnHeader BusinessTime;
         private System.Windows.Forms.Button btnReadRecord;
-        private System.Windows.Forms.TextBox textPIN;
+        private System.Windows.Forms.RichTextBox textPIN;
         private System.Windows.Forms.Label LabelPIN;
         private System.Windows.Forms.GroupBox groupCardTest;
         private System.Windows.Forms.CheckBox SamSlot;
         private System.Windows.Forms.Button btnLockCard;
         private System.Windows.Forms.Label Purchase;
         private System.Windows.Forms.Button btnUnlockCard;
-        private System.Windows.Forms.TextBox textPurchase;
+        private System.Windows.Forms.RichTextBox textPurchase;
         private System.Windows.Forms.Label Unit3;
         private System.Windows.Forms.Label Balance;
         private System.Windows.Forms.Button btnUnlockGrayCard;
         private System.Windows.Forms.CheckBox GrayFlag;
         private System.Windows.Forms.Label Unit1;
-        private System.Windows.Forms.TextBox textBalance;
+        private System.Windows.Forms.RichTextBox textBalance;
         private System.Windows.Forms.Button btnBalance;
         private System.Windows.Forms.Label Unit2;
         private System.Windows.Forms.Label Money;
-        private System.Windows.Forms.TextBox textMoney;
+        private System.Windows.Forms.RichTextBox textMoney;
         private System.Windows.Forms.Button btnCardLoad;
         private System.Windows.Forms.TabPage tabPageApp2;
-        private System.Windows.Forms.TextBox textLyPin;
+        private System.Windows.Forms.RichTextBox textLyPin;
         private System.Windows.Forms.ListView LyRecordInCard;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -725,7 +734,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.Button btnLoadLy;
         private System.Windows.Forms.Button btnReadLyRecord;
-        private System.Windows.Forms.TextBox textLyLoad;
+        private System.Windows.Forms.RichTextBox textLyLoad;
         private System.Windows.Forms.Label LoadLoyalty;
         private System.Windows.Forms.Label LabelLyPin;
         private System.Windows.Forms.GroupBox groupLyTest;
@@ -733,13 +742,13 @@
         private System.Windows.Forms.Button btnLyPurchase;
         private System.Windows.Forms.Label DebitLy;
         private System.Windows.Forms.Button btnToED;
-        private System.Windows.Forms.TextBox textLyPurchase;
+        private System.Windows.Forms.RichTextBox textLyPurchase;
         private System.Windows.Forms.Button btnReadLy;
         private System.Windows.Forms.Label Loyalty;
-        private System.Windows.Forms.TextBox textLoyalty;
+        private System.Windows.Forms.RichTextBox textLoyalty;
         private System.Windows.Forms.Button btnUnGrayLy;
         private System.Windows.Forms.CheckBox LyGrayFlag;
-        private System.Windows.Forms.TextBox textRate;
+        private System.Windows.Forms.RichTextBox textRate;
         private System.Windows.Forms.Label LabelRate;
 
     }

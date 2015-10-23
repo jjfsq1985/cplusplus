@@ -22,9 +22,3 @@ CREATE TABLE [dbo].[Log_PublishCard](
 
 GO
 
-
-insert into Log_PublishCard values('2015-07-10 15:00:00',
-									N'数据库结构修改：增加圈提密钥列,存储过程修改；列名称变化：圈存密钥，圈提密钥，联机解扣密钥。',
-									0,
-									'0000000000000000');
-GO
