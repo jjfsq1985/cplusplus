@@ -430,20 +430,57 @@ namespace StationManage
             StationView.Rows[nIndex].Cells[0].Selected = true;
         }
 
-        public bool IsStationListCompleted(List<StationParam> list)
+        private bool IsStationListCompleted(List<StationParam> list)
         {
             byte[] initByte = new byte[4];
             foreach (StationParam value in list)
             {
                 if ((value.strStationName == "") || (PublicFunc.ByteDataEquals(value.StationId, initByte))
                     || (value.ClientID == 0) || (value.ProvCode == 0x00)
-                    || (value.CityCode[0] == 0x00 && value.CityCode[1] == 0x00)
+                    //|| (value.CityCode[0] == 0x00 && value.CityCode[1] == 0x00) //直辖市地市代码为0000
                     || (value.SuperiorCode[0] == 0x00 && value.SuperiorCode[1] == 0x00))
+                {
+                    return false;
+                }
+                else if (value.CityCode[0] == 0x00 && value.CityCode[1] == 0x00 && !IsProvCity(value.ProvCode))
                 {
                     return false;
                 }
             }
             return true;
+        }
+
+        private bool IsProvCity(byte ProvCode)
+        {
+            bool bIsProvCity = false;
+            switch(ProvCode)
+            {
+                case 0x11:
+                    bIsProvCity = true;
+                    break;
+                case 0x12:
+                    bIsProvCity = true;
+                    break;
+                case 0x31:
+                    bIsProvCity = true;
+                    break;
+                case 0x50:
+                    bIsProvCity = true;
+                    break;
+                case 0x71:
+                    bIsProvCity = true;
+                    break;
+                case 0x81:
+                    bIsProvCity = true;
+                    break;
+                case 0x82:
+                    bIsProvCity = true;
+                    break;
+                default:
+                    break;
+
+            }
+            return bIsProvCity;
         }
 
         private int GetIndexOfList(int nRowIndex)

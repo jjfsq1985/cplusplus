@@ -202,28 +202,19 @@ namespace CardOperating
             switch (RecordType)
             {
                 case 0x01:
-                    strT = "圈存存折";
+                    strT = "圈存";
                     break;
                 case 0x02:
-                    strT = "圈存钱包";
+                    strT = "积分";
                     break;
                 case 0x03:
-                    strT = "存折圈提";
+                    strT = "圈提";
                     break;
                 case 0x93:
                     strT = "加气交易";
                     break;
                 case 0x95:
-                    strT = "联机交易解扣";
-                    break;
-                case 0xB1:
-                    strT = "积分圈存";
-                    break;
-                case 0xA3:
-                    strT = "积分消费";
-                    break;
-                case 0xA5:
-                    strT = "联机积分解扣";
+                    strT = "联机解扣";
                     break;
             }
             return strT;
@@ -265,11 +256,11 @@ namespace CardOperating
         private void btnToED_Click(object sender, EventArgs e)
         {
             int nLyAmount = 0;
-            int.TryParse(textLyPurchase.Text, out nLyAmount);//消费积分金额
+            int.TryParse(textLyPurchase.Text, System.Globalization.NumberStyles.AllowThousands, null, out nLyAmount);//消费积分金额
             if (nLyAmount < 1)
                 return;
             decimal LyRate = 0;
-            decimal.TryParse(textRate.Text, out LyRate);
+            decimal.TryParse(textRate.Text, System.Globalization.NumberStyles.AllowThousands, null, out LyRate);
             double dbLyRate = decimal.ToDouble(LyRate);
             if (dbLyRate < 1)
                 return;

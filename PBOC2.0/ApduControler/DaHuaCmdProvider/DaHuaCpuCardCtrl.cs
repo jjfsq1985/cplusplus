@@ -1051,9 +1051,6 @@ namespace DaHuaApduCtrl
             //更新持卡人基本数据文件EF16
             if (!UpdateEF16File(keyUpdate, UserCardInfoPar))
                 return false;
-            //验证PIN
-            if (VerifyPIN(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.CustomPassword) != 1)
-                return false;
             //更新普通信息数据文件EF0B
             if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag))
                 return false;
@@ -2143,8 +2140,8 @@ namespace DaHuaApduCtrl
             {
                 record = new CardRecord();
                 record.BusinessSn = (RecvData[0] << 8) + RecvData[1];
-                record.OverdraftMoney = ((RecvData[2] << 16) + (RecvData[3] << 8) + RecvData[4]) / 100.0f;
-                record.Amount = ((RecvData[5] << 24) + (RecvData[6] << 16) + (RecvData[7] << 8) + RecvData[8]) / 100.0f;
+                record.OverdraftMoney = ((RecvData[2] << 16) + (RecvData[3] << 8) + RecvData[4]) * 1.0f;
+                record.Amount = ((RecvData[5] << 24) + (RecvData[6] << 16) + (RecvData[7] << 8) + RecvData[8]) * 1.0f;
                 record.BusinessType = RecvData[9];
                 record.TerminalID = BitConverter.ToString(RecvData, 10, 6).Replace("-", "");
                 record.BusinessTime = BitConverter.ToString(RecvData, 16, 7).Replace("-", "");
@@ -2438,9 +2435,6 @@ namespace DaHuaApduCtrl
                 return false;
             //更新公共应用基本数据文件EF15
             if (!UpdateEF15File(keyUpdate, byteCardId, UserCardInfoPar.ValidCardBegin, UserCardInfoPar.ValidCardEnd))
-                return false;
-            //验证PIN
-            if (VerifyPIN(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.CustomPassword) != 1)
                 return false;
             //灰锁文件
             if (!UpdateEF10File(keyUpdate))

@@ -772,7 +772,7 @@ namespace CardOperating
             m_CardInfoPar.LimitGasFillCount = LimitGasCount;
             
             double dbAmount = 0;
-            double.TryParse(textGasAmount.Text, out dbAmount);
+            double.TryParse(textGasAmount.Text,System.Globalization.NumberStyles.AllowThousands,null, out dbAmount);
             if (dbAmount > 0 && dbAmount < 1000000.0)
             {
                 m_CardInfoPar.LimitGasFillAmount = (uint)(dbAmount * 100.0);
@@ -1001,9 +1001,9 @@ namespace CardOperating
             else
             {
                 m_UserCardCtrl.SaveCpuCardInfoToDb(m_CardInfoPar,true);
+                MessageBox.Show("修改卡片信息成功");
             }
             CloseUserCard();
-            MessageBox.Show("修改卡片信息成功");
         }
 
 
@@ -1029,7 +1029,7 @@ namespace CardOperating
             DateTime cardEnd = DateTime.MinValue;
 
             decimal MoneyLoad = 0;
-            decimal.TryParse(textMoney.Text, out MoneyLoad);
+            decimal.TryParse(textMoney.Text, System.Globalization.NumberStyles.AllowThousands, null, out MoneyLoad);
             double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
             if (dbMoneyLoad < 1)
                 return;
@@ -1570,7 +1570,7 @@ namespace CardOperating
         private void textGasAmount_Validated(object sender, EventArgs e)
         {
             double dbAmount = 0;
-            double.TryParse(textGasAmount.Text, out dbAmount);
+            double.TryParse(textGasAmount.Text, System.Globalization.NumberStyles.AllowThousands, null, out dbAmount);
             if (dbAmount <= 0 && dbAmount >= 1000000.0)
             {
                 textGasCount.Text = "";
@@ -1712,7 +1712,7 @@ namespace CardOperating
                 //获取母卡余额
                 string strBalance = GlobalControl.GetPublishedCardInfoFormDb(m_DBInfo, MotherAsn, "AccountBalance", 1);
                 decimal Balance = 0;
-                decimal.TryParse(strBalance,out Balance);
+                decimal.TryParse(strBalance, System.Globalization.NumberStyles.AllowThousands, null, out Balance);
                 double dbBalance = decimal.ToDouble(Balance);
                 
                 if (dbBalance < dbMoneyLoad)
@@ -1730,7 +1730,7 @@ namespace CardOperating
                 //母卡充值
                 string strBalance = GlobalControl.GetPublishedCardInfoFormDb(m_DBInfo, ASN, "AccountBalance", 1);
                 decimal Balance = 0;
-                decimal.TryParse(strBalance, out Balance);
+                decimal.TryParse(strBalance, System.Globalization.NumberStyles.AllowThousands, null, out Balance);
                 double dbBalance = decimal.ToDouble(Balance);
 
                 SaveLoadRecord(ASN, dbMoneyLoad, dbBalance, "AccountBalance");//单位母卡充值后更新字段不一样
@@ -1742,7 +1742,7 @@ namespace CardOperating
         private void LoadLoyalty_Click(object sender, EventArgs e)
         {
             int LoadLoyalty = 0;
-            int.TryParse(textLoadValue.Text, out LoadLoyalty);
+            int.TryParse(textLoadValue.Text,System.Globalization.NumberStyles.AllowThousands, null,out LoadLoyalty);
             if (LoadLoyalty < 1)
                 return;
 

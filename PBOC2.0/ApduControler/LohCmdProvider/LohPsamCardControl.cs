@@ -42,7 +42,8 @@ namespace LohApduCtrl
         {
             m_ctrlApdu = ApduCtrlObj;
             m_CmdProvider = m_ctrlApdu.GetPsamApduProvider();
-            m_DBInfo = DbInfo;
+            if (DbInfo != null)
+                m_DBInfo = DbInfo;
         }
 
         protected virtual void OnTextOutput(MsgOutEvent args)

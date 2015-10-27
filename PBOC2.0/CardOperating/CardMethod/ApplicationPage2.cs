@@ -43,7 +43,7 @@ namespace CardOperating
         private void btnLoadLy_Click(object sender, EventArgs e)
         {
             int LoadLoyalty = 0;
-            int.TryParse(textLyLoad.Text, out LoadLoyalty);
+            int.TryParse(textLyLoad.Text, System.Globalization.NumberStyles.AllowThousands, null, out LoadLoyalty);
             if (LoadLoyalty < 1)
                 return;
             if (m_nAppIndex != 2 || !OpenUserCard() || !ReadUserCardAsn(2))
@@ -138,7 +138,7 @@ namespace CardOperating
                 List<CardRecord> lstRecord = m_UserCardCtrl.ReadRecord();
                 if (lstRecord.Count > 0)
                 {
-                    FillListView(lstRecord);
+                    FillLyListView(lstRecord);
                 }
             }
             CloseUserCard();
@@ -151,11 +151,11 @@ namespace CardOperating
             {
                 ListViewItem item = new ListViewItem();
                 item.Text = record.BusinessSn.ToString();
-                item.SubItems.Add(record.Amount.ToString("F2"));
+                item.SubItems.Add(record.Amount.ToString("F0"));
                 item.SubItems.Add(RecordType(record.BusinessType));
                 item.SubItems.Add(record.TerminalID);
                 item.SubItems.Add(record.BusinessTime);
-                RecordInCard.Items.Add(item);
+                LyRecordInCard.Items.Add(item);
             }
         }
 
@@ -224,7 +224,7 @@ namespace CardOperating
         private void btnLyPurchase_Click(object sender, EventArgs e)
         {
             int nLyAmount = 0;
-            int.TryParse(textLyPurchase.Text, out nLyAmount);//消费积分金额
+            int.TryParse(textLyPurchase.Text, System.Globalization.NumberStyles.AllowThousands, null, out nLyAmount);//消费积分金额
             if (nLyAmount < 1)
                 return;
             if (m_bLyGray || m_nAppIndex != 2)

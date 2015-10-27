@@ -8,8 +8,8 @@ namespace ApduParam
     public class CardRecord
     {
         public int BusinessSn;  //交易序号
-        public double OverdraftMoney;  //透支限额
-        public double Amount;          //交易金额
+        public double OverdraftMoney;  //透支限额（分）
+        public double Amount;          //交易金额(分)/积分值
         public byte BusinessType;    //交易标识
         public string TerminalID;  //终端机编号
         public string BusinessTime;   //交易时间
