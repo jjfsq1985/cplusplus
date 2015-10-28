@@ -158,7 +158,7 @@ namespace CardOperating
                 return;
 
            bool bSamSlot = SamSlot.Checked;//使用SAM卡槽
-            if(!OpenSAMCard(bSamSlot,1))
+            if(!OpenSAMCard(bSamSlot))
                 return;
             //灰锁初始化
             byte[] outData = new byte[15];

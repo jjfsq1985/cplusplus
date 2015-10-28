@@ -74,7 +74,7 @@ namespace CardOperating
             ContactCard.Checked = m_bContactCard;
         }
 
-        private bool OpenSAMCard(bool bSamSlot, int nAppIndex)
+        private bool OpenSAMCard(bool bSamSlot)
         {
             if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
                 return false;

@@ -58,7 +58,7 @@
 		<comments>##ID_STRING1##</comments>
 		<template>Intel;1033</template>
 		<lastauthor>Administrator</lastauthor>
-		<revnumber>{6DA44071-2646-446F-8395-FA3EEFCC3D5E}</revnumber>
+		<revnumber>{3C411141-C924-4F2D-AFE1-2D7146CAE63C}</revnumber>
 		<lastprinted/>
 		<createdtm>06/21/1999 21:00</createdtm>
 		<lastsavedtm>07/15/2000 00:50</lastsavedtm>
@@ -341,67 +341,69 @@
 		<row><td>SqlServerHelper.dll1</td><td>{BDDDFCD6-C6E0-417D-B90D-085152698D69}</td><td>PLUGINS</td><td>8</td><td/><td>sqlserverhelper.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>StationManage.dll</td><td>{640D0EAF-4172-4FD8-AD24-CF56F97BEB9B}</td><td>PLUGINS</td><td>8</td><td/><td>stationmanage.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>WinSCard.dll</td><td>{2B5D9F71-2D41-4148-BE41-C89C9E270C15}</td><td>PLUGINS</td><td>8</td><td/><td>winscard.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>base_card.sql_SQLComponent</td><td>{CE19792B-18A1-4DD8-B97C-65488A76E62F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>base_client.sql_SQLComponent</td><td>{390E4157-578B-49BF-9AAA-9E9F2EDF7CEF}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>base_station.sql_SQLComponent</td><td>{A0E1008B-D634-47EE-A3FA-F75F51794A80}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>base_card.sql_SQLComponent</td><td>{4BECEAD7-8AB5-4ACC-9F4E-53C135FEAC8A}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>base_client.sql_SQLComponent</td><td>{2165543E-AFB9-41CB-B063-C81D20D86CBF}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>base_station.sql_SQLComponent</td><td>{3650959D-96B2-481C-AEA5-F6C3286AB74C}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>borlndmm.dll</td><td>{550730E9-B501-4E34-833A-7A7C81F7D9CD}</td><td>LNGMANAGE</td><td>8</td><td/><td>borlndmm.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>checkdata_proc.sql_SQLComponent</td><td>{051F3F78-A3FB-4DB4-8E70-BA082ADEFB87}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>config_sysparams.sql_SQLComponent</td><td>{ADEC8D3E-6243-48A0-8C38-2C60018DE6DF}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>cs_setgun.sql_SQLComponent</td><td>{24A2CA66-ED69-4764-B2D7-86D163C9BAEB}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>customreport_proc.sql_SQLComponent</td><td>{82F47250-0B2D-4499-8121-6891D24180D7}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>data_city.sql_SQLComponent</td><td>{848C10E0-C8D6-42E1-BE6A-1D28E39FA29B}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>data_greycardrecord.sql_SQLComponent</td><td>{A6BACB89-1E88-4364-A2B9-5C6A4794427B}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>data_province.sql_SQLComponent</td><td>{03A85CD7-147D-471C-AAA5-B74035025C36}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>data_superior.sql_SQLComponent</td><td>{99635556-A659-46F1-89C9-95C429B479F1}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>getcpukey_proc.sql_SQLComponent</td><td>{634D96BE-0302-49DA-83F4-2E192113870A}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>getgrayrecord_proc.sql_SQLComponent</td><td>{58BA6CA5-B729-465D-93A4-AB7D041DE011}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>getorgkey_proc.sql_SQLComponent</td><td>{C400BF81-B971-45BD-AF06-682CC80215A3}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>getpsamkey_proc.sql_SQLComponent</td><td>{D38FBEEC-7EDA-44D2-AF35-1E93F6655BAA}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>getpublishedcard_proc.sql_SQLComponent</td><td>{CC66735C-0534-4642-9DB5-53543EEC48C1}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>key_cpucard.sql_SQLComponent</td><td>{6C37ED03-A8D7-4ABC-9C79-4E82F21011E8}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>key_orgroot.sql_SQLComponent</td><td>{08F31B20-4738-4D55-B59B-77B1B297107F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>key_psamcard.sql_SQLComponent</td><td>{B42C5DCE-681A-4127-8D4F-44EE9CC23AE0}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>log_publishcard.sql_SQLComponent</td><td>{68EEAC36-CA39-4AC3-8203-E2177E8AAAF3}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>checkdata_proc.sql_SQLComponent</td><td>{58FB8CCF-21D2-4662-9709-AFE5883D064D}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>config_sysparams.sql_SQLComponent</td><td>{A750F06B-D725-457D-9657-A36EA339A3DA}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>cs_setgun.sql_SQLComponent</td><td>{E9476732-2FAD-4485-9C79-178E484F2691}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>customreport_proc.sql_SQLComponent</td><td>{3BF48C13-2988-4732-B2FE-BEEDECD2BCBB}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>data_city.sql_SQLComponent</td><td>{4E4C306B-F301-414F-9DEB-69B81BD777EE}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>data_greycardrecord.sql_SQLComponent</td><td>{FED5E1BB-EF22-4426-ABF1-2DBF559B6B46}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>data_province.sql_SQLComponent</td><td>{B279D669-0A25-4CDD-A7D3-5CCBC2355E68}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>data_superior.sql_SQLComponent</td><td>{1E70B568-F988-41E6-863E-84655A204412}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dbinit.sql_SQLComponent</td><td>{5F3D6CC8-A3E7-4F4D-8CFA-5E341D64241B}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>funnett_version.sql_SQLComponent</td><td>{15D6A26A-220D-472C-A79D-AF1358CD2814}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>getcpukey_proc.sql_SQLComponent</td><td>{1EE4181E-09F3-4E65-B88F-0ED20058FA9B}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>getgrayrecord_proc.sql_SQLComponent</td><td>{B2CFF63C-193E-4B21-9789-0AC530D8CC23}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>getorgkey_proc.sql_SQLComponent</td><td>{33605780-9ECE-4EEC-9BD0-4DFC257B9279}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>getpsamkey_proc.sql_SQLComponent</td><td>{9C5DA6F1-C105-4993-A03D-49B017A02F10}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>getpublishedcard_proc.sql_SQLComponent</td><td>{C1279AF1-AE5D-48AF-B481-AC48303736A8}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>key_cpucard.sql_SQLComponent</td><td>{7E7B4FF8-7627-4426-9138-C30FF84FDF3C}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>key_orgroot.sql_SQLComponent</td><td>{A2DA1EE5-085B-49D4-8C35-58BC8BB97117}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>key_psamcard.sql_SQLComponent</td><td>{491D0AB3-3EC2-46B2-A9C6-8CB56C44C768}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>log_publishcard.sql_SQLComponent</td><td>{BC94329D-3732-4271-B9AC-AF4C0587C51F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>mt_32.dll</td><td>{F36759B2-E455-4ACB-AF96-3A96A6CCC853}</td><td>PLUGINS</td><td>8</td><td/><td>mt_32.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>operatecard_proc.sql_SQLComponent</td><td>{5149C524-5EA9-43C4-A5E8-8E2D6CA0F019}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>operatecard_record.sql_SQLComponent</td><td>{AC9E0237-E773-4C44-BE0F-BA9416625EC7}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>psam_card.sql_SQLComponent</td><td>{9A4D8483-6A73-45E1-A362-EED38FD03160}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>publishcardkey_proc.sql_SQLComponent</td><td>{E5AF7BF5-A143-4D81-9877-2B3A5DB46F0F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>publishcpucard_proc.sql_SQLComponent</td><td>{5205E31F-6A5F-4E51-8E3F-FB55586AB60F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>publishpsamcard_proc.sql_SQLComponent</td><td>{E937BF81-C72C-433C-ADCC-490B82A683EA}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>rechargecardrecord.sql_SQLComponent</td><td>{8BF1DFDC-0FE1-4F8F-8AB6-90FF70A3F9A9}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>rewritecpucard_proc.sql_SQLComponent</td><td>{489F5220-E7F9-4A10-887B-5A6A3AF58470}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_blackaddcard.sql_SQLComponent</td><td>{78D66846-E4F6-45B4-8AF8-2805A02B2681}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_blackcard.sql_SQLComponent</td><td>{0A534BDE-C0A3-4B65-9583-DCDCD4F4B151}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_blackdelcard.sql_SQLComponent</td><td>{5019F33B-C67A-400D-9D3C-B1C3712037B1}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_config.sql_SQLComponent</td><td>{943A258F-9C95-4C86-A3E5-A466F31802D5}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_config_data.sql_SQLComponent</td><td>{6C6AF499-45A3-441D-BB37-173BDC76CC6F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_consumerdetail.sql_SQLComponent</td><td>{AA07EC6D-956E-49FA-9E5E-F36979736B3D}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_consumerdetail_proc.sql_SQLComponent</td><td>{72290A52-2A55-4D2F-A010-17AD54981C43}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_consumerdetailhistroy.sql_SQLComponent</td><td>{5AC5B787-D301-4E48-8312-288B9E458806}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_customreportinfo.sql_SQLComponent</td><td>{C3769AFD-B0DE-4D86-953C-2765B30C303F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_customreportinfo_data.sql_SQLComponent</td><td>{6A91B0D3-E0A9-4629-BA10-41F59ACA43F7}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_menuitem.sql_SQLComponent</td><td>{D3AC2C39-CB27-40C3-A3A9-CC14B5DC0551}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_menuitem_data.sql_SQLComponent</td><td>{D4E670D1-2733-4149-A17C-5C27B9145C73}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_monitorconfig.sql_SQLComponent</td><td>{11506E86-C1D5-49A7-AA43-8F194939F814}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_omissivedata.sql_SQLComponent</td><td>{AF408C9E-8FFC-46C8-B653-4425AD9D9F80}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_operator.sql_SQLComponent</td><td>{BE754A2C-3713-4457-980B-8A2A62274865}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_price.sql_SQLComponent</td><td>{DC747856-E942-418F-A514-EB04886B077E}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_secrettb.sql_SQLComponent</td><td>{B6600399-C811-4BB2-9FE9-10E2017B5084}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_senddetail.sql_SQLComponent</td><td>{8FDC12EB-751E-4B92-8B0C-8F7D21B20CD5}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_shift.sql_SQLComponent</td><td>{EC0137C3-CE20-4678-A8BE-C9CF5469D5C1}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_shift_proc.sql_SQLComponent</td><td>{6085397A-62DA-4FC4-B19D-50D0CE0841DB}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_stationinfo.sql_SQLComponent</td><td>{E36BF675-9D3D-458F-9885-E22A46E45788}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sc_whitecard.sql_SQLComponent</td><td>{855D2C6C-7F6F-4212-B494-7AAA1A8AFFD0}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sqlscript.sql_SQLComponent</td><td>{BB0BB281-4524-430D-8F72-AEE431395DD0}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>update_config_proc.sql_SQLComponent</td><td>{72E7EB93-710D-4013-A4F9-B02D41FA4216}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>updateaccount_proc.sql_SQLComponent</td><td>{20AFE57A-91A7-4599-95B8-4C54637C6F0B}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>updatecardstate_proc.sql_SQLComponent</td><td>{67DF8BDB-B4F9-4A11-B443-D88DC7A6FFA1}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>updateclientinfo_proc.sql_SQLComponent</td><td>{D694CD42-7AFD-4A8F-9CF5-F1A164E8521F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>updatecpukey_proc.sql_SQLComponent</td><td>{F70B0BE9-CB3E-46A6-9CCE-A98677DFD132}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>updateorgkeyroot_proc.sql_SQLComponent</td><td>{149FF4BA-01BD-4348-BE44-290DB115AE1E}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>updatepsamkey_proc.sql_SQLComponent</td><td>{F906190C-FE5C-4E74-8A9D-269862231AD3}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>userdb.sql_SQLComponent</td><td>{D31C7387-3BCC-491B-9C08-1AD870CC21CE}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>operatecard_proc.sql_SQLComponent</td><td>{CCE10ADC-9E5F-4EBF-8098-D821DD5E1FA0}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>operatecard_record.sql_SQLComponent</td><td>{D566E8F9-77CD-4F94-8080-ADD1CCB7529A}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>psam_card.sql_SQLComponent</td><td>{B46DF415-C8FC-4954-8EBB-C5BB3B6C190C}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>publishcardkey_proc.sql_SQLComponent</td><td>{B74D8E22-5A12-415A-B59F-1BEA72FA34D4}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>publishcpucard_proc.sql_SQLComponent</td><td>{43F1AEC9-11F2-49F1-9EB2-6DBC6CA77C2C}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>publishpsamcard_proc.sql_SQLComponent</td><td>{C6F455F2-F247-4A57-A6F6-94753B07AA75}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>rechargecardrecord.sql_SQLComponent</td><td>{6AB4AB17-1015-425A-9DC7-54CF290DA296}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>rewritecpucard_proc.sql_SQLComponent</td><td>{E9B52D6F-E76B-4DBB-AE31-84933C47B895}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_blackaddcard.sql_SQLComponent</td><td>{EFCD0D80-7AD7-4BCC-9E43-1FD550465E30}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_blackcard.sql_SQLComponent</td><td>{A919724D-3BB8-48FA-9891-75E18D314707}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_blackdelcard.sql_SQLComponent</td><td>{792A7FA7-3C63-47EB-BE84-200252DD5BE3}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_config.sql_SQLComponent</td><td>{B3C9FD75-F8A3-47EA-849A-E2515D8B402A}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_config_data.sql_SQLComponent</td><td>{E05D8693-7A28-4D68-AA39-5EC2B396728F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_consumerdetail.sql_SQLComponent</td><td>{8860B0A2-84E7-4741-A087-6A098A9639DA}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_consumerdetail_proc.sql_SQLComponent</td><td>{DE97D9AB-9B4A-4BEE-8629-F35589450154}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_consumerdetailhistroy.sql_SQLComponent</td><td>{C4BF0433-8FCE-48FB-A892-40B2F8783251}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_customreportinfo.sql_SQLComponent</td><td>{3A2F668E-6EF9-44ED-9A1D-86FF24150896}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_customreportinfo_data.sql_SQLComponent</td><td>{2337FD11-20BE-4DF3-8259-361E24652009}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_menuitem.sql_SQLComponent</td><td>{87420E98-EBED-4814-8BDD-09FCC44B5E52}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_menuitem_data.sql_SQLComponent</td><td>{146BC98E-0080-47F0-A321-2F889A406ABA}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_monitorconfig.sql_SQLComponent</td><td>{5FDB06E4-389A-4A69-BE46-A569478801FE}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_omissivedata.sql_SQLComponent</td><td>{2EBAF93C-781A-4E09-8D22-DEDA9BEE6518}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_operator.sql_SQLComponent</td><td>{44AED552-DC7F-4A60-8B85-EF3B6A33BFB6}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_price.sql_SQLComponent</td><td>{262C91CE-7FCB-4197-9420-EBF574A0D610}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_secrettb.sql_SQLComponent</td><td>{F1BF6036-E781-48FD-9015-CD0C23E3C0D2}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_senddetail.sql_SQLComponent</td><td>{898F9671-D9A5-4F1A-8C44-43F8E0945D18}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_shift.sql_SQLComponent</td><td>{AA233019-B26A-457D-94E8-89DF124B09FF}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_shift_proc.sql_SQLComponent</td><td>{C0610280-474A-43C3-B4E9-C73AC369F83F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_stationinfo.sql_SQLComponent</td><td>{824E87FC-4156-45EA-927D-28515862E145}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sc_whitecard.sql_SQLComponent</td><td>{9B7DAFA9-EE3F-4337-B14C-0E2B9D68A099}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>sqlscript.sql_SQLComponent</td><td>{772867FA-FF1E-49B4-A662-423177FC5F1A}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>update_config_proc.sql_SQLComponent</td><td>{F2DB35E3-FB17-4279-9C06-FF7D4DEF7C22}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>updateaccount_proc_.sql_SQLComponent</td><td>{F8359EBB-1BA9-4860-A86B-33EAEE1E0B26}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>updatecardstate_proc.sql_SQLComponent</td><td>{FE239791-A1CD-4BB5-A9D4-4831C93EFEBD}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>updateclientinfo_proc.sql_SQLComponent</td><td>{001BD9C5-95CD-4748-BE3A-CF1E3C975143}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>updatecpukey_proc.sql_SQLComponent</td><td>{9C4A6EDA-0CF1-4109-8DB7-CDCDD0179198}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>updateorgkeyroot_proc.sql_SQLComponent</td><td>{E3610579-9BB5-4C12-9460-BE85347E8A9F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>updatepsamkey_proc.sql_SQLComponent</td><td>{C9B12397-A783-40F0-AC6F-7F4C761A9F26}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>userdb.sql_SQLComponent</td><td>{4F829570-8EE5-44FE-9B6E-BD9970731EEA}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
 	<table name="Condition">
@@ -463,6 +465,8 @@
 		<row><td>INSTALLDIR</td><td>data_greycardrecord.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>data_province.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>data_superior.sql_SQLComponent</td></row>
+		<row><td>INSTALLDIR</td><td>dbinit.sql_SQLComponent</td></row>
+		<row><td>INSTALLDIR</td><td>funnett_version.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>getcpukey_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>getgrayrecord_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>getorgkey_proc.sql_SQLComponent</td></row>
@@ -504,7 +508,7 @@
 		<row><td>INSTALLDIR</td><td>sc_whitecard.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>sqlscript.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>update_config_proc.sql_SQLComponent</td></row>
-		<row><td>INSTALLDIR</td><td>updateaccount_proc.sql_SQLComponent</td></row>
+		<row><td>INSTALLDIR</td><td>updateaccount_proc_.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>updatecardstate_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>updateclientinfo_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>updatecpukey_proc.sql_SQLComponent</td></row>
@@ -1277,6 +1281,8 @@
 		<col def="S255">ISComments</col>
 		<col def="S255">ISFeatureCabName</col>
 		<col def="S255">ISProFeatureName</col>
+		<row><td>CheckFeatures</td><td/><td>##ID_STRING12##</td><td/><td>6</td><td>1</td><td>INSTALLDIR</td><td>0</td><td/><td/><td/><td/></row>
+		<row><td>DBFeatures</td><td/><td>##ID_STRING9##</td><td/><td>8</td><td>1</td><td>INSTALLDIR</td><td>0</td><td/><td/><td/><td/></row>
 		<row><td>ICFeatures</td><td/><td>##ID_STRING2##</td><td/><td>2</td><td>1</td><td>INSTALLDIR</td><td>0</td><td/><td/><td/><td/></row>
 		<row><td>LNGFeatures</td><td/><td>##ID_STRING3##</td><td/><td>4</td><td>1</td><td>INSTALLDIR</td><td>0</td><td/><td/><td/><td/></row>
 	</table>
@@ -1284,6 +1290,67 @@
 	<table name="FeatureComponents">
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
+		<row><td>CheckFeatures</td><td>sqlscript.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>base_card.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>base_client.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>base_station.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>checkdata_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>config_sysparams.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>cs_setgun.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>customreport_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>data_city.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>data_greycardrecord.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>data_province.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>data_superior.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>dbinit.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>funnett_version.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>getcpukey_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>getgrayrecord_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>getorgkey_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>getpsamkey_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>getpublishedcard_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>key_cpucard.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>key_orgroot.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>key_psamcard.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>log_publishcard.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>operatecard_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>operatecard_record.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>psam_card.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>publishcardkey_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>publishcpucard_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>publishpsamcard_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>rechargecardrecord.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>rewritecpucard_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_blackaddcard.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_blackcard.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_blackdelcard.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_config.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_config_data.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_consumerdetail.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_consumerdetail_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_consumerdetailhistroy.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_customreportinfo.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_customreportinfo_data.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_menuitem.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_menuitem_data.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_monitorconfig.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_omissivedata.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_operator.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_price.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_secrettb.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_senddetail.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_shift.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_shift_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_stationinfo.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>sc_whitecard.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>update_config_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>updateaccount_proc_.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>updatecardstate_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>updateclientinfo_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>updatecpukey_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>updateorgkeyroot_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>updatepsamkey_proc.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>userdb.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>AccountManage.dll</td></row>
 		<row><td>ICFeatures</td><td>AllOtherFiles1</td></row>
 		<row><td>ICFeatures</td><td>AllOtherFiles2</td></row>
@@ -1307,66 +1374,7 @@
 		<row><td>ICFeatures</td><td>SqlServerHelper.dll1</td></row>
 		<row><td>ICFeatures</td><td>StationManage.dll</td></row>
 		<row><td>ICFeatures</td><td>WinSCard.dll</td></row>
-		<row><td>ICFeatures</td><td>base_card.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>base_client.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>base_station.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>checkdata_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>config_sysparams.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>cs_setgun.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>customreport_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>data_city.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>data_greycardrecord.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>data_province.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>data_superior.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>getcpukey_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>getgrayrecord_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>getorgkey_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>getpsamkey_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>getpublishedcard_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>key_cpucard.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>key_orgroot.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>key_psamcard.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>log_publishcard.sql_SQLComponent</td></row>
 		<row><td>ICFeatures</td><td>mt_32.dll</td></row>
-		<row><td>ICFeatures</td><td>operatecard_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>operatecard_record.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>psam_card.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>publishcardkey_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>publishcpucard_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>publishpsamcard_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>rechargecardrecord.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>rewritecpucard_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_blackaddcard.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_blackcard.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_blackdelcard.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_config.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_config_data.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_consumerdetail.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_consumerdetail_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_consumerdetailhistroy.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_customreportinfo.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_customreportinfo_data.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_menuitem.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_menuitem_data.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_monitorconfig.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_omissivedata.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_operator.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_price.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_secrettb.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_senddetail.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_shift.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_shift_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_stationinfo.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sc_whitecard.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>sqlscript.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>update_config_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>updateaccount_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>updatecardstate_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>updateclientinfo_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>updatecpukey_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>updateorgkeyroot_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>updatepsamkey_proc.sql_SQLComponent</td></row>
-		<row><td>ICFeatures</td><td>userdb.sql_SQLComponent</td></row>
 		<row><td>LNGFeatures</td><td>AllOtherFiles</td></row>
 		<row><td>LNGFeatures</td><td>FNT_MS.exe</td></row>
 		<row><td>LNGFeatures</td><td>borlndmm.dll</td></row>
@@ -1687,67 +1695,69 @@
 		<row><td>SqlServerHelper.dll1</td><td/><td/><td>_2DEB1C98_2175_4F64_B71F_5545DFB24845_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>StationManage.dll</td><td/><td/><td>_21106871_1E81_4563_81D0_BEDB8BDA8AC1_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>WinSCard.dll</td><td/><td/><td>_15D19DC7_F5A0_47F6_A911_72829B066256_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>base_card.sql_SQLComponent</td><td/><td/><td>_A21A7D27_7EF8_4398_8E0B_2AD11E0C0454_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>base_client.sql_SQLComponent</td><td/><td/><td>_76D96ACF_C290_4EA7_A9B4_B0C312468283_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>base_station.sql_SQLComponent</td><td/><td/><td>_8D3837CF_AB90_4108_8139_C6F824B935E3_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>base_card.sql_SQLComponent</td><td/><td/><td>_16A013A1_05B0_4030_9A7A_8EB4BA923101_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>base_client.sql_SQLComponent</td><td/><td/><td>_B6AF3614_8388_4FE6_92EA_15C5A9D5A32A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>base_station.sql_SQLComponent</td><td/><td/><td>_94BB9445_BBE4_4F2E_9636_2FE34B481A3E_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>borlndmm.dll</td><td/><td/><td>_452F2414_8943_43B9_8E36_98E6EF033D67_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>checkdata_proc.sql_SQLComponent</td><td/><td/><td>_3EC2C228_B3D2_4542_A23C_463B34D163BC_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>config_sysparams.sql_SQLComponent</td><td/><td/><td>_BAED9E89_B286_417A_B560_3068040F2E04_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>cs_setgun.sql_SQLComponent</td><td/><td/><td>_78BB6697_E8B5_4F8F_878F_3E4BA8B84CA7_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>customreport_proc.sql_SQLComponent</td><td/><td/><td>_D86C7AC8_3C2E_4C28_83CB_2244240B1B78_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>data_city.sql_SQLComponent</td><td/><td/><td>_BC8B3D53_6F17_4AB1_8BA8_7C05E31AEB5B_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>data_greycardrecord.sql_SQLComponent</td><td/><td/><td>_241D7DFD_333B_4051_807F_5F375A9C85FB_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>data_province.sql_SQLComponent</td><td/><td/><td>_1F517535_FF2C_4742_B673_7D6608C89649_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>data_superior.sql_SQLComponent</td><td/><td/><td>_66608A13_9D73_4127_B0DD_F527F7DFD651_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>getcpukey_proc.sql_SQLComponent</td><td/><td/><td>_1D92DABE_C738_4033_9E86_287DC8D05D11_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>getgrayrecord_proc.sql_SQLComponent</td><td/><td/><td>_18BCC043_9BCE_4C0D_AE50_565E5074D58E_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>getorgkey_proc.sql_SQLComponent</td><td/><td/><td>_2174387C_2248_44E7_840F_ABE63D3AB197_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>getpsamkey_proc.sql_SQLComponent</td><td/><td/><td>_556C8CAF_ACEC_4692_BF4E_55BDA2A5B8A1_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>getpublishedcard_proc.sql_SQLComponent</td><td/><td/><td>_4727C994_BE3D_43EC_82AF_7C4895DB128D_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>key_cpucard.sql_SQLComponent</td><td/><td/><td>_FA0C9AD8_29EB_4CE2_BD4C_2C73ADFE5749_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>key_orgroot.sql_SQLComponent</td><td/><td/><td>_49755CCA_8210_4FF7_B00A_BA29376953CE_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>key_psamcard.sql_SQLComponent</td><td/><td/><td>_A0FAC809_B6EB_4527_9552_4503DEC5998A_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>log_publishcard.sql_SQLComponent</td><td/><td/><td>_0BEE7C61_D472_4470_8E62_0EB73C607D42_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>checkdata_proc.sql_SQLComponent</td><td/><td/><td>_878561E9_AD3F_423E_808C_DB658D02F727_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>config_sysparams.sql_SQLComponent</td><td/><td/><td>_E5E82B33_7C06_4D37_A5D2_0244EEF8D53D_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>cs_setgun.sql_SQLComponent</td><td/><td/><td>_0609BBAF_4657_4887_B26D_891DD064DFAE_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>customreport_proc.sql_SQLComponent</td><td/><td/><td>_6B57D877_04EE_4F6E_B039_7263007050DD_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>data_city.sql_SQLComponent</td><td/><td/><td>_FEF5BF04_3048_4630_8196_E212FFE57C48_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>data_greycardrecord.sql_SQLComponent</td><td/><td/><td>_799DFC8F_B2F5_42B0_AC36_1B0AD2899AF2_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>data_province.sql_SQLComponent</td><td/><td/><td>_57597191_ADF5_44AD_8889_C188444AF625_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>data_superior.sql_SQLComponent</td><td/><td/><td>_B5F5C78D_2D6E_4A90_B992_8E75A9B6BF8C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dbinit.sql_SQLComponent</td><td/><td/><td>_5EE77CF6_4E48_4759_8A87_0A2B7C8A6C8D_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>funnett_version.sql_SQLComponent</td><td/><td/><td>_ACF50CC9_FDB9_4C23_8184_A06992C1815E_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>getcpukey_proc.sql_SQLComponent</td><td/><td/><td>_B0B0022F_AD0F_42FD_AC83_ED12CDDABC30_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>getgrayrecord_proc.sql_SQLComponent</td><td/><td/><td>_BF6038AA_BA25_4DEA_BA6F_1BB4142E6ED8_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>getorgkey_proc.sql_SQLComponent</td><td/><td/><td>_6FEA6157_D597_4B95_88B0_ACDECF541437_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>getpsamkey_proc.sql_SQLComponent</td><td/><td/><td>_FDA4A0C1_2FCD_4738_A730_86FABA03F627_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>getpublishedcard_proc.sql_SQLComponent</td><td/><td/><td>_77527503_19E9_46BC_992D_64D16CF7C524_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>key_cpucard.sql_SQLComponent</td><td/><td/><td>_E26C09B0_09CD_419F_ADFC_272F25A1E2E1_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>key_orgroot.sql_SQLComponent</td><td/><td/><td>_23FE222F_7322_400E_A0BA_B56D4162A073_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>key_psamcard.sql_SQLComponent</td><td/><td/><td>_40829359_00B6_43F0_95A6_E26AA91D55F2_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>log_publishcard.sql_SQLComponent</td><td/><td/><td>_7D05B805_8888_41E8_BDC4_5A86D8E5B03B_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>mt_32.dll</td><td/><td/><td>_82709AC9_3E91_44FA_AE8D_26F593061BDE_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>operatecard_proc.sql_SQLComponent</td><td/><td/><td>_5B852597_B192_4D6D_980D_C43A69378B73_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>operatecard_record.sql_SQLComponent</td><td/><td/><td>_F3293401_5D7E_4A56_A3B1_AD8311B8A48B_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>psam_card.sql_SQLComponent</td><td/><td/><td>_76BC144B_96C2_4E42_823A_BC4350EAEA2C_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>publishcardkey_proc.sql_SQLComponent</td><td/><td/><td>_6845BE3B_5084_4F9E_B818_19829714CB9C_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>publishcpucard_proc.sql_SQLComponent</td><td/><td/><td>_EFFCE3AA_3A1D_416F_8F27_455FDC94E176_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>publishpsamcard_proc.sql_SQLComponent</td><td/><td/><td>_1F65860E_7F41_4E40_9EE6_F5804908F9CC_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>rechargecardrecord.sql_SQLComponent</td><td/><td/><td>_5001B9E1_F2AD_4E9C_8191_D485E13E9602_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>rewritecpucard_proc.sql_SQLComponent</td><td/><td/><td>_0973DCE7_A84B_4CAA_9200_87AEFAF848C8_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_blackaddcard.sql_SQLComponent</td><td/><td/><td>_0CCD35BA_2120_4AAC_BB9B_6A0ACEA7758F_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_blackcard.sql_SQLComponent</td><td/><td/><td>_21784337_3DFD_4114_9236_9B431A8F34A4_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_blackdelcard.sql_SQLComponent</td><td/><td/><td>_859806A0_0F28_4148_B909_FAA0F72C8510_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_config.sql_SQLComponent</td><td/><td/><td>_FB1092E8_0007_42EC_9CC4_D32A391FB231_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_config_data.sql_SQLComponent</td><td/><td/><td>_7C164F75_7221_4233_A7FB_0C002B4672F6_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_consumerdetail.sql_SQLComponent</td><td/><td/><td>_BA19C281_848B_458B_B0EA_B40E1F436515_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_consumerdetail_proc.sql_SQLComponent</td><td/><td/><td>_90D5004C_1FFF_4C78_BB69_1F2623965396_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_consumerdetailhistroy.sql_SQLComponent</td><td/><td/><td>_6C681E92_51B6_4F30_B589_1190000A4FFB_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_customreportinfo.sql_SQLComponent</td><td/><td/><td>_E7D8DC2B_E9CA_49EC_804A_F1CCD3F105AF_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_customreportinfo_data.sql_SQLComponent</td><td/><td/><td>_1EBE60DA_774F_4413_A05F_B431501F4B9B_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_menuitem.sql_SQLComponent</td><td/><td/><td>_4B4D2535_96A7_4BA5_BCE9_93D8C9DA9C0D_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_menuitem_data.sql_SQLComponent</td><td/><td/><td>_3DB8CD27_4C2A_4D36_BDDE_D82D3F4DFCCF_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_monitorconfig.sql_SQLComponent</td><td/><td/><td>_767EAA8D_8E86_4109_9E2F_B68B066C8B46_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_omissivedata.sql_SQLComponent</td><td/><td/><td>_D2CBE74E_9388_4F23_896E_2E4ECCABDD65_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_operator.sql_SQLComponent</td><td/><td/><td>_53B43EB1_C475_4FC5_BEBC_4F306A500BF4_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_price.sql_SQLComponent</td><td/><td/><td>_8B906E98_F55A_4809_8310_B6477515BFDC_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_secrettb.sql_SQLComponent</td><td/><td/><td>_746B727A_DE28_40B8_A982_EDC7487A6634_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_senddetail.sql_SQLComponent</td><td/><td/><td>_AEBFDAA0_2A90_4FED_841D_CC80BF96AF58_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_shift.sql_SQLComponent</td><td/><td/><td>_2A2E92C1_1464_4ED5_A31A_CBA2CE5182B9_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_shift_proc.sql_SQLComponent</td><td/><td/><td>_AE51E46D_CD2A_4A95_99E6_5D0D6FFD0116_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_stationinfo.sql_SQLComponent</td><td/><td/><td>_23975A02_963C_4C6A_9801_F9E056FA7301_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sc_whitecard.sql_SQLComponent</td><td/><td/><td>_80A9EA6E_3187_4AF3_BE10_DFF58D65A382_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sqlscript.sql_SQLComponent</td><td/><td/><td>_530ACF5A_6E6A_4A68_934C_E8F20838B033_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>update_config_proc.sql_SQLComponent</td><td/><td/><td>_B04D44D0_D4BC_4E2D_B2C5_2E86DA24E27C_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>updateaccount_proc.sql_SQLComponent</td><td/><td/><td>_8F41C8EE_1291_49E3_9F85_3B879834CE99_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>updatecardstate_proc.sql_SQLComponent</td><td/><td/><td>_64B2B972_0609_491E_A862_57E01B24ACCE_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>updateclientinfo_proc.sql_SQLComponent</td><td/><td/><td>_6AAC297E_DC35_430A_8815_9020BC21DC5A_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>updatecpukey_proc.sql_SQLComponent</td><td/><td/><td>_1CD5C449_C2DA_4471_BED9_7CB7CBD2AB9F_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>updateorgkeyroot_proc.sql_SQLComponent</td><td/><td/><td>_E4BA1562_ADA4_4853_9225_F310C2BE7ACD_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>updatepsamkey_proc.sql_SQLComponent</td><td/><td/><td>_CF7C7A1E_4695_41C7_8BCA_E247721F301D_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>userdb.sql_SQLComponent</td><td/><td/><td>_6203E1C9_D98C_448A_A5EF_41CBEFFDEC61_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>operatecard_proc.sql_SQLComponent</td><td/><td/><td>_106B3D9F_A59B_41B9_BB02_D9F91D95CF99_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>operatecard_record.sql_SQLComponent</td><td/><td/><td>_917E4C5E_876D_4356_B3C0_98D6E3021DDA_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>psam_card.sql_SQLComponent</td><td/><td/><td>_B7DB3337_6997_4061_BE11_E75115979868_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>publishcardkey_proc.sql_SQLComponent</td><td/><td/><td>_C219C059_B610_411C_8A9D_2BF4D66F3EAE_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>publishcpucard_proc.sql_SQLComponent</td><td/><td/><td>_4A6C60ED_6F22_4C89_9D2D_C7774BA3D6A7_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>publishpsamcard_proc.sql_SQLComponent</td><td/><td/><td>_2187FCED_6B00_4199_AF42_E9F29C1D68AF_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>rechargecardrecord.sql_SQLComponent</td><td/><td/><td>_6D21858D_E312_4C40_B7FC_1B4C8405FE34_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>rewritecpucard_proc.sql_SQLComponent</td><td/><td/><td>_954AFBBE_3728_451E_8C7C_BA7875326866_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_blackaddcard.sql_SQLComponent</td><td/><td/><td>_EEA666EA_EE59_4615_A7B4_E36AE1788DC8_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_blackcard.sql_SQLComponent</td><td/><td/><td>_1D8007DD_80E8_461B_836D_8F90A4E8EF3F_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_blackdelcard.sql_SQLComponent</td><td/><td/><td>_CBADE89D_652E_4C1A_8A1C_CFDBA79CFDBE_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_config.sql_SQLComponent</td><td/><td/><td>_3B98DD7C_59A9_46C1_A8C8_C24AB78F9A92_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_config_data.sql_SQLComponent</td><td/><td/><td>_5983C0C8_0805_42B5_9C54_9ABE0EB374EC_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_consumerdetail.sql_SQLComponent</td><td/><td/><td>_9BE82AE9_A47D_4C45_B286_F38446490F5A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_consumerdetail_proc.sql_SQLComponent</td><td/><td/><td>_B8773686_5C89_44FB_B063_C7FEFAA16EB2_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_consumerdetailhistroy.sql_SQLComponent</td><td/><td/><td>_60AF362E_8D3C_4669_9C1A_5FBF5BE43706_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_customreportinfo.sql_SQLComponent</td><td/><td/><td>_3BA2F0DF_8A99_4320_A576_0A572384846A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_customreportinfo_data.sql_SQLComponent</td><td/><td/><td>_12775D7B_9B35_4469_8F58_626727F204DD_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_menuitem.sql_SQLComponent</td><td/><td/><td>_EA6FC785_1289_40FF_A6C2_4447016BBA1B_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_menuitem_data.sql_SQLComponent</td><td/><td/><td>_4DEAA328_6DC3_4F75_9058_2888CFA29417_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_monitorconfig.sql_SQLComponent</td><td/><td/><td>_D60C7E75_CEA0_43D2_AA4C_F760ED1FACBD_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_omissivedata.sql_SQLComponent</td><td/><td/><td>_71A910A4_BFA3_41F0_A9E2_3BC2285A73FF_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_operator.sql_SQLComponent</td><td/><td/><td>_E025BB9A_D651_48C2_AD24_5062BC0B9CEB_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_price.sql_SQLComponent</td><td/><td/><td>_9BDB2375_6416_4C67_B9C3_45F7A69DB987_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_secrettb.sql_SQLComponent</td><td/><td/><td>_6FF674FC_42E5_43C5_9203_67624A15ABF4_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_senddetail.sql_SQLComponent</td><td/><td/><td>_A9C75295_A501_4C7E_B0A7_E469376A19A2_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_shift.sql_SQLComponent</td><td/><td/><td>_2FF6FB07_95DB_4F92_8025_9A315FB8B8E2_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_shift_proc.sql_SQLComponent</td><td/><td/><td>_9DD3B28C_F011_453F_B253_31C43730A359_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_stationinfo.sql_SQLComponent</td><td/><td/><td>_1DEE3CD9_5F26_4867_84B6_FC8A3576B1C8_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sc_whitecard.sql_SQLComponent</td><td/><td/><td>_6AD17824_3FFF_4550_B294_E046CBE4EB18_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>sqlscript.sql_SQLComponent</td><td/><td/><td>_7CA1E625_0816_491F_B804_C7954F47CA33_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>update_config_proc.sql_SQLComponent</td><td/><td/><td>_49CAE2EE_73C6_4304_80A1_10572C5A2202_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>updateaccount_proc_.sql_SQLComponent</td><td/><td/><td>_011B3533_B12C_4AE1_932C_34BA07514659_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>updatecardstate_proc.sql_SQLComponent</td><td/><td/><td>_FB620A5B_93F8_4C61_9C43_5451734F6AA9_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>updateclientinfo_proc.sql_SQLComponent</td><td/><td/><td>_86C3387F_FDDD_4968_98CF_F25467F7134B_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>updatecpukey_proc.sql_SQLComponent</td><td/><td/><td>_10885EE9_6A32_49F6_992A_AA6879D17BE4_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>updateorgkeyroot_proc.sql_SQLComponent</td><td/><td/><td>_5E2F8A45_59D1_42D3_A889_AE8E485AB540_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>updatepsamkey_proc.sql_SQLComponent</td><td/><td/><td>_5F35D44F_8247_43EE_8BEE_E371226F5DCF_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>userdb.sql_SQLComponent</td><td/><td/><td>_5C619BC2_D4A7_4D25_81A2_FFEFB9428ECC_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="ISCustomActionReference">
@@ -1821,6 +1831,8 @@
 		<col def="S255">Password</col>
 		<col def="S50">CDRomFolder</col>
 		<col def="S50">Moniker</col>
+		<row><td>CheckFeatures</td><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>DBFeatures</td><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ICFeatures</td><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>LNGFeatures</td><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
@@ -2077,12 +2089,12 @@
 		<col key="yes" def="s72">Property</col>
 		<col def="L255">Value</col>
 		<row><td>Product Configuration</td><td>IncludeActionHelp</td><td>1</td></row>
-		<row><td>Product Configuration</td><td>PackageCode</td><td>{1A1F43DF-4823-46D2-9BD3-A92D680F382A}</td></row>
-		<row><td>Product Configuration</td><td>ProductCode</td><td>{2BA9BAA0-06A0-4544-9E55-008969D3916F}</td></row>
+		<row><td>Product Configuration</td><td>PackageCode</td><td>{A83224EE-4570-4ED4-B556-968B82FCC97A}</td></row>
+		<row><td>Product Configuration</td><td>ProductCode</td><td>{4A2F2847-4017-4F48-9F40-F996576C4B85}</td></row>
 		<row><td>Product Configuration</td><td>ProductName</td><td>富耐特管理系统</td></row>
-		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.06.1024</td></row>
+		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.07.1028</td></row>
 		<row><td>Product Configuration</td><td>SetupFileName</td><td>加气站管理系统</td></row>
-		<row><td>Product Configuration</td><td>UpgradeCode</td><td>{386FC082-B9CB-4C41-8B38-0FDA56F1E3BF}</td></row>
+		<row><td>Product Configuration</td><td>UpgradeCode</td><td>{EDB97A3B-852B-4956-B4EE-D47459DFF2A3}</td></row>
 	</table>
 
 	<table name="ISRelease">
@@ -2204,65 +2216,67 @@
 		<col key="yes" def="s72">ISSQLConnection_</col>
 		<col key="yes" def="s72">ISSQLScriptFile_</col>
 		<col def="i2">Order</col>
-		<row><td>FunnettStation</td><td>DbInit.sql</td><td>1</td></row>
 		<row><td>FunnettStation</td><td>base_card.sql</td><td>10</td></row>
-		<row><td>FunnettStation</td><td>base_client.sql</td><td>12</td></row>
-		<row><td>FunnettStation</td><td>base_station.sql</td><td>13</td></row>
-		<row><td>FunnettStation</td><td>checkdata_proc.sql</td><td>39</td></row>
-		<row><td>FunnettStation</td><td>config_sysparams.sql</td><td>6</td></row>
-		<row><td>FunnettStation</td><td>cs_setgun.sql</td><td>24</td></row>
-		<row><td>FunnettStation</td><td>customreport_proc.sql</td><td>58</td></row>
+		<row><td>FunnettStation</td><td>base_client.sql</td><td>11</td></row>
+		<row><td>FunnettStation</td><td>base_station.sql</td><td>12</td></row>
+		<row><td>FunnettStation</td><td>checkdata_proc.sql</td><td>45</td></row>
+		<row><td>FunnettStation</td><td>config_sysparams.sql</td><td>5</td></row>
+		<row><td>FunnettStation</td><td>cs_setgun.sql</td><td>22</td></row>
+		<row><td>FunnettStation</td><td>customreport_proc.sql</td><td>41</td></row>
 		<row><td>FunnettStation</td><td>data_city.sql</td><td>14</td></row>
-		<row><td>FunnettStation</td><td>data_greycardrecord.sql</td><td>17</td></row>
-		<row><td>FunnettStation</td><td>data_province.sql</td><td>15</td></row>
-		<row><td>FunnettStation</td><td>data_superior.sql</td><td>16</td></row>
+		<row><td>FunnettStation</td><td>data_greycardrecord.sql</td><td>16</td></row>
+		<row><td>FunnettStation</td><td>data_province.sql</td><td>13</td></row>
+		<row><td>FunnettStation</td><td>data_superior.sql</td><td>15</td></row>
+		<row><td>FunnettStation</td><td>dbinit.sql</td><td>2</td></row>
+		<row><td>FunnettStation</td><td>funnett_version.sql</td><td>3</td></row>
 		<row><td>FunnettStation</td><td>getcpukey_proc.sql</td><td>40</td></row>
-		<row><td>FunnettStation</td><td>getgrayrecord_proc.sql</td><td>41</td></row>
-		<row><td>FunnettStation</td><td>getorgkey_proc.sql</td><td>42</td></row>
-		<row><td>FunnettStation</td><td>getpsamkey_proc.sql</td><td>43</td></row>
-		<row><td>FunnettStation</td><td>getpublishedcard_proc.sql</td><td>44</td></row>
+		<row><td>FunnettStation</td><td>getgrayrecord_proc.sql</td><td>42</td></row>
+		<row><td>FunnettStation</td><td>getorgkey_proc.sql</td><td>43</td></row>
+		<row><td>FunnettStation</td><td>getpsamkey_proc.sql</td><td>44</td></row>
+		<row><td>FunnettStation</td><td>getpublishedcard_proc.sql</td><td>46</td></row>
 		<row><td>FunnettStation</td><td>key_cpucard.sql</td><td>8</td></row>
-		<row><td>FunnettStation</td><td>key_orgroot.sql</td><td>7</td></row>
-		<row><td>FunnettStation</td><td>key_psamcard.sql</td><td>9</td></row>
-		<row><td>FunnettStation</td><td>log_publishcard.sql</td><td>32</td></row>
-		<row><td>FunnettStation</td><td>operatecard_proc.sql</td><td>59</td></row>
-		<row><td>FunnettStation</td><td>operatecard_record.sql</td><td>38</td></row>
-		<row><td>FunnettStation</td><td>psam_card.sql</td><td>11</td></row>
-		<row><td>FunnettStation</td><td>publishcardkey_proc.sql</td><td>45</td></row>
-		<row><td>FunnettStation</td><td>publishcpucard_proc.sql</td><td>46</td></row>
-		<row><td>FunnettStation</td><td>publishpsamcard_proc.sql</td><td>47</td></row>
-		<row><td>FunnettStation</td><td>rechargecardrecord.sql</td><td>18</td></row>
-		<row><td>FunnettStation</td><td>rewritecpucard_proc.sql</td><td>48</td></row>
-		<row><td>FunnettStation</td><td>sc_blackaddcard.sql</td><td>20</td></row>
-		<row><td>FunnettStation</td><td>sc_blackcard.sql</td><td>19</td></row>
-		<row><td>FunnettStation</td><td>sc_blackdelcard.sql</td><td>21</td></row>
-		<row><td>FunnettStation</td><td>sc_config.sql</td><td>4</td></row>
-		<row><td>FunnettStation</td><td>sc_config_data.sql</td><td>5</td></row>
-		<row><td>FunnettStation</td><td>sc_consumerdetail.sql</td><td>25</td></row>
-		<row><td>FunnettStation</td><td>sc_consumerdetail_proc.sql</td><td>49</td></row>
-		<row><td>FunnettStation</td><td>sc_consumerdetailhistroy.sql</td><td>26</td></row>
-		<row><td>FunnettStation</td><td>sc_customreportinfo.sql</td><td>34</td></row>
-		<row><td>FunnettStation</td><td>sc_customreportinfo_data.sql</td><td>35</td></row>
-		<row><td>FunnettStation</td><td>sc_menuitem.sql</td><td>36</td></row>
-		<row><td>FunnettStation</td><td>sc_menuitem_data.sql</td><td>37</td></row>
-		<row><td>FunnettStation</td><td>sc_monitorconfig.sql</td><td>27</td></row>
-		<row><td>FunnettStation</td><td>sc_omissivedata.sql</td><td>29</td></row>
-		<row><td>FunnettStation</td><td>sc_operator.sql</td><td>3</td></row>
-		<row><td>FunnettStation</td><td>sc_price.sql</td><td>28</td></row>
-		<row><td>FunnettStation</td><td>sc_secrettb.sql</td><td>31</td></row>
-		<row><td>FunnettStation</td><td>sc_senddetail.sql</td><td>33</td></row>
-		<row><td>FunnettStation</td><td>sc_shift.sql</td><td>30</td></row>
-		<row><td>FunnettStation</td><td>sc_shift_proc.sql</td><td>50</td></row>
-		<row><td>FunnettStation</td><td>sc_stationinfo.sql</td><td>23</td></row>
-		<row><td>FunnettStation</td><td>sc_whitecard.sql</td><td>22</td></row>
-		<row><td>FunnettStation</td><td>update_config_proc.sql</td><td>51</td></row>
-		<row><td>FunnettStation</td><td>updateaccount_proc.sql</td><td>52</td></row>
+		<row><td>FunnettStation</td><td>key_orgroot.sql</td><td>6</td></row>
+		<row><td>FunnettStation</td><td>key_psamcard.sql</td><td>7</td></row>
+		<row><td>FunnettStation</td><td>log_publishcard.sql</td><td>18</td></row>
+		<row><td>FunnettStation</td><td>operatecard_proc.sql</td><td>47</td></row>
+		<row><td>FunnettStation</td><td>operatecard_record.sql</td><td>48</td></row>
+		<row><td>FunnettStation</td><td>psam_card.sql</td><td>9</td></row>
+		<row><td>FunnettStation</td><td>publishcardkey_proc.sql</td><td>49</td></row>
+		<row><td>FunnettStation</td><td>publishcpucard_proc.sql</td><td>50</td></row>
+		<row><td>FunnettStation</td><td>publishpsamcard_proc.sql</td><td>51</td></row>
+		<row><td>FunnettStation</td><td>rechargecardrecord.sql</td><td>17</td></row>
+		<row><td>FunnettStation</td><td>rewritecpucard_proc.sql</td><td>52</td></row>
+		<row><td>FunnettStation</td><td>sc_blackaddcard.sql</td><td>34</td></row>
+		<row><td>FunnettStation</td><td>sc_blackcard.sql</td><td>31</td></row>
+		<row><td>FunnettStation</td><td>sc_blackdelcard.sql</td><td>32</td></row>
+		<row><td>FunnettStation</td><td>sc_config.sql</td><td>25</td></row>
+		<row><td>FunnettStation</td><td>sc_config_data.sql</td><td>29</td></row>
+		<row><td>FunnettStation</td><td>sc_consumerdetail.sql</td><td>27</td></row>
+		<row><td>FunnettStation</td><td>sc_consumerdetail_proc.sql</td><td>53</td></row>
+		<row><td>FunnettStation</td><td>sc_consumerdetailhistroy.sql</td><td>37</td></row>
+		<row><td>FunnettStation</td><td>sc_customreportinfo.sql</td><td>35</td></row>
+		<row><td>FunnettStation</td><td>sc_customreportinfo_data.sql</td><td>39</td></row>
+		<row><td>FunnettStation</td><td>sc_menuitem.sql</td><td>26</td></row>
+		<row><td>FunnettStation</td><td>sc_menuitem_data.sql</td><td>33</td></row>
+		<row><td>FunnettStation</td><td>sc_monitorconfig.sql</td><td>30</td></row>
+		<row><td>FunnettStation</td><td>sc_omissivedata.sql</td><td>38</td></row>
+		<row><td>FunnettStation</td><td>sc_operator.sql</td><td>36</td></row>
+		<row><td>FunnettStation</td><td>sc_price.sql</td><td>19</td></row>
+		<row><td>FunnettStation</td><td>sc_secrettb.sql</td><td>23</td></row>
+		<row><td>FunnettStation</td><td>sc_senddetail.sql</td><td>20</td></row>
+		<row><td>FunnettStation</td><td>sc_shift.sql</td><td>24</td></row>
+		<row><td>FunnettStation</td><td>sc_shift_proc.sql</td><td>54</td></row>
+		<row><td>FunnettStation</td><td>sc_stationinfo.sql</td><td>21</td></row>
+		<row><td>FunnettStation</td><td>sc_whitecard.sql</td><td>28</td></row>
+		<row><td>FunnettStation</td><td>sqlscript.sql</td><td>1</td></row>
+		<row><td>FunnettStation</td><td>update_config_proc.sql</td><td>55</td></row>
+		<row><td>FunnettStation</td><td>updateaccount_proc_.sql</td><td>56</td></row>
 		<row><td>FunnettStation</td><td>updatecardstate_proc.sql</td><td>57</td></row>
-		<row><td>FunnettStation</td><td>updateclientinfo_proc.sql</td><td>53</td></row>
-		<row><td>FunnettStation</td><td>updatecpukey_proc.sql</td><td>54</td></row>
-		<row><td>FunnettStation</td><td>updateorgkeyroot_proc.sql</td><td>55</td></row>
-		<row><td>FunnettStation</td><td>updatepsamkey_proc.sql</td><td>56</td></row>
-		<row><td>FunnettStation</td><td>userdb.sql</td><td>2</td></row>
+		<row><td>FunnettStation</td><td>updateclientinfo_proc.sql</td><td>58</td></row>
+		<row><td>FunnettStation</td><td>updatecpukey_proc.sql</td><td>59</td></row>
+		<row><td>FunnettStation</td><td>updateorgkeyroot_proc.sql</td><td>60</td></row>
+		<row><td>FunnettStation</td><td>updatepsamkey_proc.sql</td><td>61</td></row>
+		<row><td>FunnettStation</td><td>userdb.sql</td><td>4</td></row>
 	</table>
 
 	<table name="ISSQLDBMetaData">
@@ -2330,65 +2344,67 @@
 		<col def="i2">Attributes</col>
 		<col def="S15">Version</col>
 		<col def="S255">Condition</col>
-		<row><td>DbInit.sql</td><td>sqlscript.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sqlscript.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>base_card.sql</td><td>base_card.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\base_card.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>base_client.sql</td><td>base_client.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\base_client.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>base_station.sql</td><td>base_station.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\base_station.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>checkdata_proc.sql</td><td>checkdata_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\checkdata_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>config_sysparams.sql</td><td>config_sysparams.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\config_sysparams.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>cs_setgun.sql</td><td>cs_setgun.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\cs_setgun.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>customreport_proc.sql</td><td>customreport_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\customreport_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>data_city.sql</td><td>data_city.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\data_city.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>data_greycardrecord.sql</td><td>data_greycardrecord.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\data_greycardrecord.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>data_province.sql</td><td>data_province.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\data_province.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>data_superior.sql</td><td>data_superior.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\data_superior.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>getcpukey_proc.sql</td><td>getcpukey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\getcpukey_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>getgrayrecord_proc.sql</td><td>getgrayrecord_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\getgrayrecord_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>getorgkey_proc.sql</td><td>getorgkey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\getorgkey_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>getpsamkey_proc.sql</td><td>getpsamkey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\getpsamkey_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>getpublishedcard_proc.sql</td><td>getpublishedcard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\getpublishedcard_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>key_cpucard.sql</td><td>key_cpucard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\key_cpucard.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>key_orgroot.sql</td><td>key_orgroot.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\key_orgroot.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>key_psamcard.sql</td><td>key_psamcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\key_psamcard.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>log_publishcard.sql</td><td>log_publishcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\log_publishcard.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>operatecard_proc.sql</td><td>operatecard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\operatecard_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>operatecard_record.sql</td><td>operatecard_record.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\operatecard_record.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>psam_card.sql</td><td>psam_card.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\psam_card.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>publishcardkey_proc.sql</td><td>publishcardkey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\publishcardkey_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>publishcpucard_proc.sql</td><td>publishcpucard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\publishcpucard_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>publishpsamcard_proc.sql</td><td>publishpsamcard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\publishpsamcard_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>rechargecardrecord.sql</td><td>rechargecardrecord.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\rechargecardrecord.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>rewritecpucard_proc.sql</td><td>rewritecpucard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\rewritecpucard_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_blackaddcard.sql</td><td>sc_blackaddcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_blackaddcard.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_blackcard.sql</td><td>sc_blackcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_blackcard.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_blackdelcard.sql</td><td>sc_blackdelcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_blackdelcard.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_config.sql</td><td>sc_config.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_config.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_config_data.sql</td><td>sc_config_data.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_config_data.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_consumerdetail.sql</td><td>sc_consumerdetail.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_consumerdetail.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_consumerdetail_proc.sql</td><td>sc_consumerdetail_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_consumerdetail_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_consumerdetailhistroy.sql</td><td>sc_consumerdetailhistroy.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_consumerdetailhistroy.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_customreportinfo.sql</td><td>sc_customreportinfo.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_customreportinfo.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_customreportinfo_data.sql</td><td>sc_customreportinfo_data.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_customreportinfo_data.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_menuitem.sql</td><td>sc_menuitem.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_menuitem.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_menuitem_data.sql</td><td>sc_menuitem_data.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_menuitem_data.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_monitorconfig.sql</td><td>sc_monitorconfig.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_monitorconfig.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_omissivedata.sql</td><td>sc_omissivedata.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_omissivedata.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_operator.sql</td><td>sc_operator.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_operator.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_price.sql</td><td>sc_price.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_price.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_secrettb.sql</td><td>sc_secrettb.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_secrettb.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_senddetail.sql</td><td>sc_senddetail.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_senddetail.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_shift.sql</td><td>sc_shift.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_shift.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_shift_proc.sql</td><td>sc_shift_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_shift_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_stationinfo.sql</td><td>sc_stationinfo.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_stationinfo.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>sc_whitecard.sql</td><td>sc_whitecard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\sc_whitecard.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>update_config_proc.sql</td><td>update_config_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\update_config_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>updateaccount_proc.sql</td><td>updateaccount_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\updateaccount_proc .sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>updatecardstate_proc.sql</td><td>updatecardstate_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updatecardstate_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>updateclientinfo_proc.sql</td><td>updateclientinfo_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\updateclientinfo_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>updatecpukey_proc.sql</td><td>updatecpukey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\updatecpukey_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>updateorgkeyroot_proc.sql</td><td>updateorgkeyroot_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\updateorgkeyroot_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>updatepsamkey_proc.sql</td><td>updatepsamkey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\updatepsamkey_proc.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
-		<row><td>userdb.sql</td><td>userdb.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISProjectDataFolder&gt;\script files\userdb.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
+		<row><td>base_card.sql</td><td>base_card.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\base_card.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>base_client.sql</td><td>base_client.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\base_client.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>base_station.sql</td><td>base_station.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\base_station.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>checkdata_proc.sql</td><td>checkdata_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\checkdata_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>config_sysparams.sql</td><td>config_sysparams.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\config_sysparams.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>cs_setgun.sql</td><td>cs_setgun.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\cs_setgun.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>customreport_proc.sql</td><td>customreport_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\customreport_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>data_city.sql</td><td>data_city.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\data_city.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>data_greycardrecord.sql</td><td>data_greycardrecord.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\data_greycardrecord.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>data_province.sql</td><td>data_province.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\data_province.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>data_superior.sql</td><td>data_superior.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\data_superior.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>dbinit.sql</td><td>dbinit.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\dbinit.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>funnett_version.sql</td><td>funnett_version.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\funnett_version.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>getcpukey_proc.sql</td><td>getcpukey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\getcpukey_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>getgrayrecord_proc.sql</td><td>getgrayrecord_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\getgrayrecord_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>getorgkey_proc.sql</td><td>getorgkey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\getorgkey_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>getpsamkey_proc.sql</td><td>getpsamkey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\getpsamkey_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>getpublishedcard_proc.sql</td><td>getpublishedcard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\getpublishedcard_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>key_cpucard.sql</td><td>key_cpucard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\key_cpucard.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>key_orgroot.sql</td><td>key_orgroot.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\key_orgroot.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>key_psamcard.sql</td><td>key_psamcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\key_psamcard.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>log_publishcard.sql</td><td>log_publishcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\log_publishcard.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>operatecard_proc.sql</td><td>operatecard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\operatecard_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>operatecard_record.sql</td><td>operatecard_record.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\operatecard_record.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>psam_card.sql</td><td>psam_card.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\psam_card.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>publishcardkey_proc.sql</td><td>publishcardkey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\publishcardkey_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>publishcpucard_proc.sql</td><td>publishcpucard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\publishcpucard_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>publishpsamcard_proc.sql</td><td>publishpsamcard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\publishpsamcard_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>rechargecardrecord.sql</td><td>rechargecardrecord.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\rechargecardrecord.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>rewritecpucard_proc.sql</td><td>rewritecpucard_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\rewritecpucard_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_blackaddcard.sql</td><td>sc_blackaddcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_blackaddcard.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_blackcard.sql</td><td>sc_blackcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_blackcard.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_blackdelcard.sql</td><td>sc_blackdelcard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_blackdelcard.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_config.sql</td><td>sc_config.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_config.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_config_data.sql</td><td>sc_config_data.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_config_data.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_consumerdetail.sql</td><td>sc_consumerdetail.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_consumerdetail.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_consumerdetail_proc.sql</td><td>sc_consumerdetail_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_consumerdetail_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_consumerdetailhistroy.sql</td><td>sc_consumerdetailhistroy.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_consumerdetailhistroy.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_customreportinfo.sql</td><td>sc_customreportinfo.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_customreportinfo.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_customreportinfo_data.sql</td><td>sc_customreportinfo_data.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_customreportinfo_data.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_menuitem.sql</td><td>sc_menuitem.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_menuitem.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_menuitem_data.sql</td><td>sc_menuitem_data.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_menuitem_data.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_monitorconfig.sql</td><td>sc_monitorconfig.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_monitorconfig.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_omissivedata.sql</td><td>sc_omissivedata.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_omissivedata.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_operator.sql</td><td>sc_operator.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_operator.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_price.sql</td><td>sc_price.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_price.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_secrettb.sql</td><td>sc_secrettb.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_secrettb.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_senddetail.sql</td><td>sc_senddetail.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_senddetail.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_shift.sql</td><td>sc_shift.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_shift.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_shift_proc.sql</td><td>sc_shift_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_shift_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_stationinfo.sql</td><td>sc_stationinfo.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_stationinfo.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sc_whitecard.sql</td><td>sc_whitecard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_whitecard.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>sqlscript.sql</td><td>sqlscript.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sqlscript.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
+		<row><td>update_config_proc.sql</td><td>update_config_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\update_config_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>updateaccount_proc_.sql</td><td>updateaccount_proc_.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updateaccount_proc .sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>updatecardstate_proc.sql</td><td>updatecardstate_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updatecardstate_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>updateclientinfo_proc.sql</td><td>updateclientinfo_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updateclientinfo_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>updatecpukey_proc.sql</td><td>updatecpukey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updatecpukey_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>updateorgkeyroot_proc.sql</td><td>updateorgkeyroot_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updateorgkeyroot_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>updatepsamkey_proc.sql</td><td>updatepsamkey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updatepsamkey_proc.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
+		<row><td>userdb.sql</td><td>userdb.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\userdb.sql</td><td/><td>2</td><td>0</td><td/><td>Not MAINTENANCE and Not REMOVEONLY</td></row>
 	</table>
 
 	<table name="ISSQLScriptImport">
@@ -2401,7 +2417,6 @@
 		<col def="S0">IncludeTables</col>
 		<col def="S0">ExcludeTables</col>
 		<col def="i4">Attributes</col>
-		<row><td>DbInit.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>base_card.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>base_client.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>base_station.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
@@ -2413,6 +2428,8 @@
 		<row><td>data_greycardrecord.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>data_province.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>data_superior.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
+		<row><td>dbinit.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
+		<row><td>funnett_version.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>getcpukey_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>getgrayrecord_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>getorgkey_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
@@ -2452,8 +2469,9 @@
 		<row><td>sc_shift_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>sc_stationinfo.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>sc_whitecard.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
+		<row><td>sqlscript.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>update_config_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
-		<row><td>updateaccount_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
+		<row><td>updateaccount_proc_.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>updatecardstate_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>updateclientinfo_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>updatecpukey_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
@@ -2468,7 +2486,8 @@
 		<col def="S0">Search</col>
 		<col def="S0">Replace</col>
 		<col def="i4">Attributes</col>
-		<row><td>Replacement1</td><td>DbInit.sql</td><td>C:/</td><td>[INSTALLDIR]</td><td>2</td></row>
+		<row><td>Replacement1</td><td>sqlscript.sql</td><td>C:/</td><td>[INSTALLDIR]</td><td>2</td></row>
+		<row><td>Replacement2</td><td>sqlscript.sql</td><td>SoftwareVersion</td><td>[ProductVersion]</td><td>2</td></row>
 	</table>
 
 	<table name="ISScriptFile">
@@ -2533,6 +2552,8 @@
 	<table name="ISSetupTypeFeatures">
 		<col key="yes" def="s38">ISSetupType_</col>
 		<col key="yes" def="s38">Feature_</col>
+		<row><td>Complete</td><td>CheckFeatures</td></row>
+		<row><td>Complete</td><td>DBFeatures</td></row>
 		<row><td>Complete</td><td>ICFeatures</td></row>
 		<row><td>Complete</td><td>LNGFeatures</td></row>
 	</table>
@@ -2560,9 +2581,8 @@
 		<row><td>IDPROP_SETUPTYPE_COMPACT_DESC</td><td>2052</td><td>压缩说明</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_SETUPTYPE_COMPLETE</td><td>2052</td><td>完整安装</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_SETUPTYPE_COMPLETE_DESC</td><td>2052</td><td>完整安装</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_SETUPTYPE_CUSTOM</td><td>2052</td><td>自定义</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_SETUPTYPE_CUSTOM_DESC</td><td>2052</td><td>自定义说明</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_SETUPTYPE_CUSTOM_DESC_PRO</td><td>2052</td><td>自定义</td><td>0</td><td/><td/></row>
+		<row><td>IDPROP_SETUPTYPE_CUSTOM</td><td>2052</td><td>自定义</td><td>0</td><td/><td>-450636625</td></row>
+		<row><td>IDPROP_SETUPTYPE_CUSTOM_DESC</td><td>2052</td><td>自定义说明</td><td>0</td><td/><td>-450632529</td></row>
 		<row><td>IDPROP_SETUPTYPE_TYPICAL</td><td>2052</td><td>典型</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_SETUPTYPE_TYPICAL_DESC</td><td>2052</td><td>典型说明</td><td>0</td><td/><td/></row>
 		<row><td>IDS_ACTIONTEXT_1</td><td>2052</td><td>[1]</td><td>0</td><td/><td/></row>
@@ -3648,6 +3668,7 @@
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>2052</td><td>对于运行 [ProductName] 内存量不足。</td><td>0</td><td/><td/></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>2052</td><td>对于运行 [ProductName] 屏幕分辨率不足。</td><td>0</td><td/><td/></row>
 		<row><td>ID_STRING1</td><td>2052</td><td>Funnett</td><td>0</td><td/><td>-1809636880</td></row>
+		<row><td>ID_STRING12</td><td>2052</td><td>CheckFeatures</td><td>0</td><td/><td>-450686002</td></row>
 		<row><td>ID_STRING2</td><td>2052</td><td>ICFeatures</td><td>0</td><td/><td>-1809591983</td></row>
 		<row><td>ID_STRING3</td><td>2052</td><td>LNGFeatures</td><td>0</td><td/><td>-1809585839</td></row>
 		<row><td>ID_STRING4</td><td>2052</td><td>富耐特~1|富耐特管理系统</td><td>0</td><td/><td>-1809640528</td></row>
@@ -3655,6 +3676,7 @@
 		<row><td>ID_STRING6</td><td>2052</td><td>LNG加~1|LNG加气站管理系统</td><td>0</td><td/><td>-1809593424</td></row>
 		<row><td>ID_STRING7</td><td>2052</td><td>智能IC~1|智能IC卡管理系统</td><td>0</td><td/><td>-1809628208</td></row>
 		<row><td>ID_STRING8</td><td>2052</td><td>LNG加~1|LNG加气站管理系统</td><td>0</td><td/><td>-1809611824</td></row>
+		<row><td>ID_STRING9</td><td>2052</td><td>DBFeatures</td><td>0</td><td/><td>-450677014</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>2052</td><td>系统将不安装此功能。</td><td>0</td><td/><td/></row>
 	</table>
 
@@ -4250,13 +4272,13 @@ UgBlAGwAZQBhAHMAZQABAFAAcgBvAGQAdQBjAHQAIABDAG8AbgBmAGkAZwB1AHIAYQB0AGkAbwBuAA==
 		<row><td>PROGMSG_IIS_ROLLBACKAPPPOOLS</td><td>##IDS_PROGMSG_IIS_ROLLBACKAPPPOOLS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKVROOTS</td><td>##IDS_PROGMSG_IIS_ROLLBACKVROOTS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
-		<row><td>ProductCode</td><td>{372328D7-4C8E-4625-9ACB-6F1A9808E2F9}</td><td/></row>
+		<row><td>ProductCode</td><td>{DED54AFF-D433-418D-AAEF-78A5BEE462A8}</td><td/></row>
 		<row><td>ProductName</td><td>FunnettManage</td><td/></row>
-		<row><td>ProductVersion</td><td>1.06.1024</td><td/></row>
+		<row><td>ProductVersion</td><td>1.07.1028</td><td/></row>
 		<row><td>REBOOT</td><td>Suppress</td><td/></row>
 		<row><td>STANDARD_USE_SETUPEXE</td><td>##IDS_STANDARD_USE_SETUPEXE##</td><td/></row>
 		<row><td>SecureCustomProperties</td><td>ISALWAYSINSTALLELEVATED;ISSETUPDRIVEN;ARPSYSTEMCOMPONENT;ARPNOMODIFY;ARPNOREMOVE;INSTALLDIR;ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;IS_SQLSERVER_LIST;IS_SQLSERVER_DATABASE;IS_SQLSERVER_AUTHENTICATION;IS_SQLSERVER_USERNAME;IS_SQLSERVER_SERVER;IS_SQLSERVER_PASSWORD;IS_NET_API_LOGON_USERNAME;IS_NET_API_LOGON_PASSWORD;IS_NEW_USER_CONFIRM_TEXT;IS_NEW_USER_SERVER_TEXT;IS_NEW_USER_GROUP_TEXT;IS_NEW_USER_NAME_TEXT;IS_NET_API_NEW_USER_PASSWORD;IS_NET_API_NEW_USER_NAME;IS_NET_API_NEW_USER_CONFIRM;IS_NEW_USER_PASSWORD_TEXT;IS_NET_API_NEW_USER_SERVER;IS_NET_API_NEW_USER_GROUP;IS_NET_API_GROUP_LIST;IS_NET_API_SERVER_LIST;IS_NET_API_SERVER_NEW_USER_LIST;IS_NET_API_USER_LIST;IS_NET_API_LOGON_DOMAIN_TOKEN;IS_NET_API_LOGON_USERNAME_TOKEN;SUPPORTDIR</td><td/></row>
-		<row><td>UpgradeCode</td><td>{74D84B00-5661-48DB-A1B4-CE2B7EED716D}</td><td/></row>
+		<row><td>UpgradeCode</td><td>{1F198385-8E76-4D50-B0B3-A5192EC123D2}</td><td/></row>
 	</table>
 
 	<table name="PublishComponent">

@@ -27,6 +27,7 @@ namespace CardOperating
 
         private UserCardInfoParam m_CardInfoPar = new UserCardInfoParam();
         private IUserCardControl m_UserCardCtrl = null;
+        private ISamCardControl m_SamCardCtrl = null;
         private readonly byte[] m_FixedTermialId = new byte[] { 0x14, 0x32, 0x00, 0x00, 0x00, 0x01 };  //固定的终端机设备编号
 
         private static byte[] m_TermialId = new byte[6];            //终端机设备编号
@@ -1025,6 +1026,12 @@ namespace CardOperating
                 return;
             if (!m_UserCardCtrl.SelectCardApp(1))
                 return;
+            if (!OpenSAMCard(false))
+            {
+                MessageBox.Show("插入PSAM卡后才能圈存");
+                return;
+            }
+
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
 
@@ -1087,9 +1094,9 @@ namespace CardOperating
                     MessageBox.Show("PIN码验证失败!");
                 }
             }
-            
 
-            CloseUserCard();            
+            CloseSAMCard(false);
+            CloseUserCard();           
         }
 
         /// <summary>
@@ -1982,6 +1989,27 @@ namespace CardOperating
             }
             CloseUserCard();
         }
+
+        private bool OpenSAMCard(bool bSamSlot)
+        {
+            if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
+                return false;
+            m_SamCardCtrl = m_DevControl.SamCardConstructor(null);
+
+            string strCardInfo = "";
+            return m_DevControl.SAMPowerOn(bSamSlot, ref strCardInfo);
+        }
+
+
+        private bool CloseSAMCard(bool bSamSlot)
+        {
+            if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
+                return false;
+            m_DevControl.SAMPowerOff(bSamSlot);            
+            m_SamCardCtrl = null;
+            return true;
+        }
+
 
     }
 }

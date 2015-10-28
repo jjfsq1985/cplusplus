@@ -20,7 +20,7 @@
 // The keyword export identifies MyFunction() as an entry-point function.
 // The argument it accepts must be a handle to the Installer database.
     
-/* export prototype MyFunction(HWND); */
+/* export prototype MyFunction(HWND); */   
 prototype IsExistDB(STRING, STRING, STRING, BOOL);
 
 function OnBegin() 
@@ -256,10 +256,14 @@ Dlg_DbExist:
     bWinLogin = SQLRTGetConnectionAuthentication( "FunnettStation" );
 	bDbExist = IsExistDB(szServer,szUser,szPassword,bWinLogin);
 	if(bDbExist) then
-	    if(AskYesNo( "数据库已存在，安装程序将备份数据到安装目录，并清空数据库。\n如有需要，请在安装完成后还原数据。\n是否继续安装？", NO ) == NO) then
+	    if(AskYesNo( "数据库已存在，安装程序将不会修改数据库。\n如有需要，请在安装完成后手工更改。\n是否继续安装？", NO ) == NO) then
 	     abort;
-		endif;
+		endif; 
+		FeatureSelectItem(MEDIA,"DBFeatures", FALSE); 
+	else                                                  
+		FeatureSelectItem(MEDIA,"DBFeatures", TRUE); 
 	endif;
+	
 		
 Dlg_SdStartCopy:
     szTitle = "";

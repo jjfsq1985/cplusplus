@@ -172,7 +172,7 @@ namespace CardOperating
             if (m_UserCardCtrl.VerifyUserPin(m_strLyPin) != 1)
                 return false;
             bool bSamSlot = LySamSlot.Checked;//使用SAM卡槽
-            if (!OpenSAMCard(bSamSlot, 2))
+            if (!OpenSAMCard(bSamSlot))
                 return false;
             //积分消费初始化
             byte[] outData = new byte[15];

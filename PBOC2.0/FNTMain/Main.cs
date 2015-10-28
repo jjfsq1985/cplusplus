@@ -293,6 +293,7 @@ namespace FNTMain
             ShowPluginForm.Invoke(RechargeInfoObj, new object[] { MainPanel, m_dbConnectInfo });    
         }
 
+        //制卡操作，内部使用
         private void OnCardOperating_Click(object sender, EventArgs e)
         {
             if (!HaveManagementCardAuthority())
