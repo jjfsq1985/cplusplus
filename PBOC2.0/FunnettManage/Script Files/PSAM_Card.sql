@@ -24,6 +24,7 @@ CREATE TABLE [dbo].[Psam_Card](
 	[OperateDateTime] [datetime] NULL,	
 	[OrgKey]       [char](32) NOT NULL,
 	[PsamMasterKey]  [char](32) NOT NULL,
+	[MacEncryptKey]    [char](32) NOT NULL,
 	[UpLoadStatus] [int] NOT NULL,
  CONSTRAINT [PK_Psam_Card] PRIMARY KEY CLUSTERED 
 (
@@ -71,6 +72,9 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'卡片PSAM原始密
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PSAM主控密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Psam_Card', @level2type=N'COLUMN',@level2name=N'PsamMasterKey'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'计算MAC或加密密钥' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Psam_Card', @level2type=N'COLUMN',@level2name=N'MacEncryptKey'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否已上传（0-否，1-是）' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Psam_Card', @level2type=N'COLUMN',@level2name=N'UpLoadStatus'

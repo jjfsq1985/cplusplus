@@ -351,5 +351,33 @@ namespace ApduLoh
             m_nTotalLen = 21;
             return true;            
         }
+
+        public bool createInitDesCalcCmd(byte[] PsamAsn)
+        {
+            m_CLA = 0x80;
+            m_INS = 0x1A;
+            m_P1 = 0x08; //MAC、加密密钥
+            m_P2 = 0x01; //密钥版本            
+            m_Lc = 0;
+            m_Data = null;
+            m_le = 0;
+            m_nTotalLen = 5;
+            return true;
+        }
+
+        public bool createPsamDesCalcCmd(byte[] srcData)
+        {
+            m_CLA = 0x80;
+            m_INS = 0xFA;
+            m_P1 = 0x00;  //无后续块加密
+            m_P2 = 0x00;
+            int nLen = srcData.Length;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            Buffer.BlockCopy(srcData, 0, m_Data, 0, nLen);
+            m_le = 0;
+            m_nTotalLen = nLen + 5;
+            return true;
+        }
     }
 }

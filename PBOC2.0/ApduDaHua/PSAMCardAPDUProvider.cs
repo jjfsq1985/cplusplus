@@ -447,5 +447,37 @@ namespace ApduDaHua
             m_nTotalLen = 21;
             return true;            
         }
+
+        public bool createInitDesCalcCmd(byte[] PsamAsn)
+        {
+            m_CLA = 0x80;
+            m_INS = 0x1A;
+            m_P1 = 0x88; //MAC、加密密钥,达华PSAM为4次分散
+            m_P2 = 0x00; //密钥版本            
+            m_Lc = 32;
+            m_Data = new byte[32];
+            Buffer.BlockCopy(PsamAsn, 0, m_Data, 0, 8);
+            Buffer.BlockCopy(PsamAsn, 0, m_Data, 8, 8);
+            Buffer.BlockCopy(PsamAsn, 0, m_Data, 16, 8);
+            Buffer.BlockCopy(PsamAsn, 0, m_Data, 24, 8);
+            m_le = 0;
+            m_nTotalLen = 37;
+            return true;    
+        }
+
+        public bool createPsamDesCalcCmd(byte[] srcData)
+        {
+            m_CLA = 0x80;
+            m_INS = 0xFA;
+            m_P1 = 0x00;  //无后续块加密
+            m_P2 = 0x00;
+            int nLen = srcData.Length;
+            m_Lc = (byte)nLen;
+            m_Data = new byte[nLen];
+            Buffer.BlockCopy(srcData, 0, m_Data, 0, nLen);
+            m_le = 0;
+            m_nTotalLen = nLen + 5;
+            return true;     
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace DaHuaApduCtrl
         //DTK 
         private static byte[] m_DTK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
         //密钥（MAC加密等）
-        private static byte[] m_MADK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
+        private static byte[] m_MADK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
 
 
         public DaHuaIccCardCtrl(ApduController ApduCtrlObj, SqlConnectInfo DbInfo)
@@ -823,17 +823,19 @@ namespace DaHuaApduCtrl
             //TAC子密钥
             if (!StoragePsamKey(m_DTK, 0x8E, 0x01, false))
                 return false;
+            //////////////////////////////////////////////////////////////////////////
             //加密密钥1
-            if (!StoragePsamKey(m_MADK, 0x88, 0x00, false))
-                return false;
-            //加密密钥2
             if (!StoragePsamKey(m_MADK, 0x86, 0x00, false))
                 return false;
-            //加密密钥3
+            //加密密钥2
             if (!StoragePsamKey(m_MADK, 0x87, 0x00, false))
                 return false;
             //密钥（MAC加密等）
-            if (!StoragePsamKey(m_MADK, 0x89, 0x00, false))
+            if (!StoragePsamKey(m_MADK, 0x88, 0x00, false))
+                return false;
+            //////////////////////////////////////////////////////////////////////////
+            //应用主控密钥
+            if (!StoragePsamKey(m_MAMK, 0x89, 0x00, false))
                 return false;
             return true;
         }
@@ -1151,11 +1153,13 @@ namespace DaHuaApduCtrl
             int nRet = 0;
             if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
             {
+                OnTextOutput(new MsgOutEvent(0, "从Xml文件" + m_ctrlApdu.m_strCardKeyPath + "读取密钥"));
                 if (!ReadKeyFromXml())
                     nRet = 2;
             }
             else
             {
+                OnTextOutput(new MsgOutEvent(0, "从数据库读取密钥"));
                 if (!ReadKeyFromDb())
                     nRet = 1;
             }
@@ -1172,7 +1176,7 @@ namespace DaHuaApduCtrl
             SetOrgKeyValue(KeyVal.OrgKeyVal, CardCategory.PsamCard);
             SetMainKeyValue(KeyVal.MasterKeyVal, CardCategory.PsamCard);  //卡片主控密钥  
             SetMaintainKeyValue(KeyVal.MasterTendingKeyVal, CardCategory.PsamCard);  //卡片维护密钥
-            Buffer.BlockCopy(KeyVal.ApplicationMasterKey, 0, m_MAMK, 0, 16);//未用,psam卡无应用主控密钥安装
+            Buffer.BlockCopy(KeyVal.ApplicationMasterKey, 0, m_MAMK, 0, 16);//psam卡应用主控密钥
             Buffer.BlockCopy(KeyVal.ApplicationTendingKey, 0, m_MAMTK, 0, 16);
             Buffer.BlockCopy(KeyVal.ConsumerMasterKey, 0, m_MPK1, 0, 16);
             Buffer.BlockCopy(KeyVal.GrayCardKey, 0, m_MDK1, 0, 16);
@@ -1193,7 +1197,7 @@ namespace DaHuaApduCtrl
             }
 
             bool bSuccess = false;
-            SqlParameter[] sqlparams = new SqlParameter[10];
+            SqlParameter[] sqlparams = new SqlParameter[11];
             strDbVal = BitConverter.ToString(PsamInfoPar.GetBytePsamId()).Replace("-", "");
             sqlparams[0] = ObjSql.MakeParam("PsamCardId", SqlDbType.Char, 16, ParameterDirection.Input, strDbVal);
             strDbVal = BitConverter.ToString(PsamInfoPar.GetByteTermId()).Replace("-", "");
@@ -1212,6 +1216,9 @@ namespace DaHuaApduCtrl
             sqlparams[8] = ObjSql.MakeParam("OrgKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
             strDbVal = BitConverter.ToString(GetKeyVal(true, CardCategory.PsamCard)).Replace("-", "");
             sqlparams[9] = ObjSql.MakeParam("PsamMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
+            strDbVal = BitConverter.ToString(m_MADK).Replace("-", "");
+            sqlparams[10] = ObjSql.MakeParam("AppMADKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
+
             if (ObjSql.ExecuteProc("PROC_PublishPsamCard", sqlparams) == 0)
                 bSuccess = true;
             ObjSql.CloseConnection();
@@ -1395,7 +1402,7 @@ namespace DaHuaApduCtrl
 
             node = PsamKeyNode.SelectSingleNode("ApplicationMasterKey");
             byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey,0,m_MAMK,0,16);//未用,psam卡无应用主控密钥安装  
+            Buffer.BlockCopy(byteKey,0,m_MAMK,0,16);//应用主控密钥
 
             node = PsamKeyNode.SelectSingleNode("ApplicationTendingKey");
             byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
@@ -1414,6 +1421,100 @@ namespace DaHuaApduCtrl
             Buffer.BlockCopy(byteKey, 0, m_MADK, 0, 16);            
 
             return true;
+        }
+
+        public bool InitDesCalc(byte[] PsamAsn)
+        {
+            m_CmdProvider.createInitDesCalcCmd(PsamAsn);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "通用DES计算初始化失败"));
+                return false;
+            }
+            else
+            {
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+                return true;
+            }
+        }
+
+        public byte[] PsamDesCalc(byte[] srcData)
+        {
+            if (srcData.Length <= 0 || srcData.Length > 48)
+                return null;
+            m_CmdProvider.createPsamDesCalcCmd(srcData);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "通用DES计算失败"));
+                return null;
+            }
+            else
+            {
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return null;
+                else if (nRecvLen > 2)
+                {
+                    byte[] outData = new byte[nRecvLen - 2];
+                    Buffer.BlockCopy(RecvData, 0, outData, 0, nRecvLen - 2);
+                    return outData;
+                }
+                return null;
+            }
+        }
+
+        private byte[] GetPsamKeyValToCalc(string strKeyName)
+        {
+            if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
+            {
+                return GlobalControl.GetPrivateKeyFromXml(m_ctrlApdu.m_strCardKeyPath, "PsamKeyValue", strKeyName);
+            }
+            else
+            {
+                string strKeyVal = GlobalControl.GetPsamKeyFromDb(m_DBInfo, strKeyName);
+                return PublicFunc.StringToBCD(strKeyVal);
+            }
+        }
+
+
+        public byte[] DecryptDataForLoad(byte[] encryptData, byte[] PsamAsn)
+        {
+            if (PsamAsn.Length != 8)
+                return null;
+
+            byte[] MADkey = GetPsamKeyValToCalc("MacEncryptKey");
+            if (MADkey == null)
+            {
+                MessageBox.Show("未读取到PSAM卡加密密钥", "错误");
+                return null;
+            }
+            Buffer.BlockCopy(MADkey, 0, m_MADK, 0, 16);
+
+            byte[] xorPsamAsn = new byte[8];
+            for (int i = 0; i < 8; i++)
+                xorPsamAsn[i] = (byte)(PsamAsn[i] ^ 0xFF);
+            
+            byte[] tempKey = new byte[16];
+            Buffer.BlockCopy(m_MADK, 0, tempKey, 0, 16);
+            //达华PSAM为4次分散
+            for (int nCount = 0; nCount < 4; nCount++)
+            {
+                byte[] leftKey = DesCryptography.TripleEncryptData(PsamAsn, tempKey);
+                byte[] rightKey = DesCryptography.TripleEncryptData(xorPsamAsn, tempKey);
+                Buffer.BlockCopy(leftKey, 0, tempKey, 0, 8);
+                Buffer.BlockCopy(rightKey, 0, tempKey, 8, 8);
+            }
+            return DesCryptography.TripleDecryptData(encryptData, tempKey);            
         }
 
     }

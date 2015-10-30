@@ -953,11 +953,13 @@ namespace LohApduCtrl
             int nRet = 0;
             if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
             {
+                OnTextOutput(new MsgOutEvent(0, "从Xml文件" + m_ctrlApdu.m_strCardKeyPath + "读取密钥"));
                 if (!ReadKeyFromXml())
                     nRet = 2;
             }
             else
             {
+                OnTextOutput(new MsgOutEvent(0, "从数据库读取密钥"));
                 if (!ReadKeyFromDb())
                     nRet = 1;
             }
@@ -992,7 +994,7 @@ namespace LohApduCtrl
             }
 
             bool bSuccess = false;
-            SqlParameter[] sqlparams = new SqlParameter[10];
+            SqlParameter[] sqlparams = new SqlParameter[11];
             strDbVal = BitConverter.ToString(PsamInfoPar.GetBytePsamId()).Replace("-", "");
             sqlparams[0] = ObjSql.MakeParam("PsamCardId", SqlDbType.Char, 16, ParameterDirection.Input, strDbVal);
             strDbVal = BitConverter.ToString(PsamInfoPar.GetByteTermId()).Replace("-", "");
@@ -1011,6 +1013,9 @@ namespace LohApduCtrl
             sqlparams[8] = ObjSql.MakeParam("OrgKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
             strDbVal = BitConverter.ToString(GetKeyVal(true, CardCategory.PsamCard)).Replace("-", "");
             sqlparams[9] = ObjSql.MakeParam("PsamMasterKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
+            strDbVal = BitConverter.ToString(m_MADK).Replace("-", "");
+            sqlparams[10] = ObjSql.MakeParam("AppMADKey", SqlDbType.Char, 32, ParameterDirection.Input, strDbVal);
+
             if (ObjSql.ExecuteProc("PROC_PublishPsamCard", sqlparams) == 0)
                 bSuccess = true;
             ObjSql.CloseConnection();
@@ -1292,6 +1297,84 @@ namespace LohApduCtrl
             Buffer.BlockCopy(byteKey, 0, m_MADK, 0, 16);
 
             return true;
+        }
+
+        public bool InitDesCalc(byte[] PsamAsn)
+        {
+            m_CmdProvider.createInitDesCalcCmd(PsamAsn);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "通用DES计算初始化失败"));
+                return false;
+            }
+            else
+            {
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return false;
+                return true;
+            }
+        }
+
+        public byte[] PsamDesCalc(byte[] srcData)
+        {
+            if (srcData.Length <= 0 || srcData.Length > 48)
+                return null;
+            m_CmdProvider.createPsamDesCalcCmd(srcData);
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+            {
+                OnTextOutput(new MsgOutEvent(nRet, "通用DES计算失败"));
+                return null;
+            }
+            else
+            {
+                if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                    return null;
+                else if (nRecvLen > 2)
+                {
+                    byte[] outData = new byte[nRecvLen - 2];
+                    Buffer.BlockCopy(RecvData, 0, outData, 0, nRecvLen - 2);
+                    return outData;
+                }
+                return null;
+            }
+        }
+
+        private byte[] GetPsamKeyValToCalc(string strKeyName)
+        {
+            if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
+            {                
+                return GlobalControl.GetPrivateKeyFromXml(m_ctrlApdu.m_strCardKeyPath, "PsamKeyValue", strKeyName);
+            }
+            else
+            {
+                string strKeyVal = GlobalControl.GetPsamKeyFromDb(m_DBInfo, strKeyName);
+                return PublicFunc.StringToBCD(strKeyVal);
+            }
+        }
+
+        public byte[] DecryptDataForLoad(byte[] encryptData, byte[] PsamAsn)
+        {
+            if (PsamAsn.Length != 8)
+                return null;
+
+            byte[] MADkey = GetPsamKeyValToCalc("MacEncryptKey");
+            if (MADkey == null)
+            {
+                MessageBox.Show("未读取到PSAM卡加密密钥","错误");
+                return null;
+            }
+            Buffer.BlockCopy(MADkey, 0, m_MADK, 0, 16);
+            return DesCryptography.TripleDecryptData(encryptData, m_MADK);
         }
 
     }

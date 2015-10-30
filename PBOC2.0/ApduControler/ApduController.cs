@@ -38,7 +38,7 @@ namespace ApduCtrl
             {
                 XmlNode node = null;
                 XmlDocument xml = new XmlDocument();
-                string strXmlPath = Application.StartupPath + @"\plugins\KeyValueCfg.xml";
+                string strXmlPath = Application.StartupPath + @"\KeyValueCfg.xml";
                 xml.Load(strXmlPath);//按路径读xml文件
                 XmlNode root = xml.DocumentElement;//指向根节点                
                 node = root.SelectSingleNode("Source");

@@ -260,7 +260,7 @@ namespace CardOperating
             if (nLyAmount < 1)
                 return;
             decimal LyRate = 0;
-            decimal.TryParse(textRate.Text, System.Globalization.NumberStyles.AllowThousands, null, out LyRate);
+            decimal.TryParse(textRate.Text, out LyRate);
             double dbLyRate = decimal.ToDouble(LyRate);
             if (dbLyRate < 1)
                 return;

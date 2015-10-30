@@ -59,7 +59,7 @@ namespace FNTMain
 
         public void LoadPlugin()
         {
-            string[] pluginfiles = Directory.GetFiles(Application.StartupPath + @"\plugins");
+            string[] pluginfiles = Directory.GetFiles(Application.StartupPath);
             foreach (string strfile in pluginfiles)
             {
                 if (strfile.ToLower().EndsWith(".dll"))

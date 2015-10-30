@@ -796,7 +796,7 @@ namespace CardOperating
             m_CardInfoPar.LimitGasFillCount = LimitGasCount;
             
             double dbAmount = 0;
-            double.TryParse(textGasAmount.Text,System.Globalization.NumberStyles.AllowThousands,null, out dbAmount);
+            double.TryParse(textGasAmount.Text,out dbAmount);
             if (dbAmount > 0 && dbAmount < 1000000.0)
             {
                 m_CardInfoPar.LimitGasFillAmount = (uint)(dbAmount * 100.0);
@@ -1046,80 +1046,99 @@ namespace CardOperating
         private void btnCardLoad_Click(object sender, EventArgs e)
         {
             decimal MoneyLoad = 0;
-            decimal.TryParse(textMoney.Text, System.Globalization.NumberStyles.AllowThousands, null, out MoneyLoad);
+            decimal.TryParse(textMoney.Text, out MoneyLoad);
             double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
             if (dbMoneyLoad < 1)
                 return;
-
-            if (!OpenUserCard())
-                return;
-            if (!m_UserCardCtrl.SelectCardApp(1))
-                return;
             if (!OpenSAMCard(false))
             {
-                MessageBox.Show("插入PSAM卡后才能圈存");
+                MessageBox.Show("插入PSAM卡后才能圈存", "卡充值");
                 return;
             }
-
-            DateTime cardStart = DateTime.MinValue;
-            DateTime cardEnd = DateTime.MinValue;
-
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
-            if (ASN == null)
-            {
-                MessageBox.Show("未读到卡号");
+            if (!OpenUserCard())
                 return;
-            }
-            else if (ASN[3] == 0x02)
+            try
             {
-                MessageBox.Show("管理卡不能圈存", "卡充值",MessageBoxButtons.OK);
-                return;
-            }
-            else if (ASN[3] == 0x06)
-            {
-                MessageBox.Show("维修卡不能圈存", "卡充值", MessageBoxButtons.OK);
-                return;
-            }
-            else
-            {
-                string strCardType = PublicFunc.GetCardTypeString(ASN[3]);
-                string strTemp = "圈存";
-                if( (ASN[3] == 0x11) || (ASN[3] == 0x21) )
+                if (!m_UserCardCtrl.SelectCardApp(1))
+                    return;
+                byte[] TermialId = m_SamCardCtrl.GetTerminalId(false);
+                if (TermialId == null)
                 {
-                    strTemp = "充值";
-                }
-
-                string strMsg = "确实要对" + strCardType + BitConverter.ToString(ASN).Replace("-", "") + strTemp + dbMoneyLoad.ToString("F2") + "元吗？";
-                if (MessageBox.Show(strMsg, "卡充值", MessageBoxButtons.YesNo) == DialogResult.No)
-                {
+                    MessageBox.Show("读取终端机编号失败,请检查PSAM卡是否正常。", "卡充值");
                     return;
                 }
-            }
 
+                DateTime cardStart = DateTime.MinValue;
+                DateTime cardEnd = DateTime.MinValue;
 
-            if ((ASN[3] == 0x11) || (ASN[3] == 0x21))
-            {
-                RechargeCompanyCard(m_FixedTermialId, ASN, dbMoneyLoad);
-            }
-            else
-            {
-                int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
-                if (nRet == 1)
+                byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
+                if (ASN == null)
                 {
-                    LoadUserCard(m_FixedTermialId, ASN, dbMoneyLoad);
+                    MessageBox.Show("未读到卡号");
+                    return;
                 }
-                else if (nRet == 2)
+                else if (ASN[3] == 0x02)
                 {
-                    MessageBox.Show("PIN码已锁!");
+                    MessageBox.Show("管理卡不能圈存", "卡充值", MessageBoxButtons.OK);
+                    return;
+                }
+                else if (ASN[3] == 0x06)
+                {
+                    MessageBox.Show("维修卡不能圈存", "卡充值", MessageBoxButtons.OK);
+                    return;
                 }
                 else
                 {
-                    MessageBox.Show("PIN码验证失败!");
+                    if (!VerifyPSAMValid(ASN, (int)(dbMoneyLoad * 100.0), TermialId))
+                    {
+                        MessageBox.Show("PSAM卡验证失败，不能圈存", "卡充值", MessageBoxButtons.OK);
+                        return;
+                    }
+                    string strCardType = PublicFunc.GetCardTypeString(ASN[3]);
+                    string strTemp = "圈存";
+                    if ((ASN[3] == 0x11) || (ASN[3] == 0x21))
+                    {
+                        strTemp = "充值";
+                    }
+
+                    string strMsg = "确实要对" + strCardType + BitConverter.ToString(ASN).Replace("-", "") + strTemp + dbMoneyLoad.ToString("F2") + "元吗？";
+                    if (MessageBox.Show(strMsg, "卡充值", MessageBoxButtons.YesNo) == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+
+
+                if ((ASN[3] == 0x11) || (ASN[3] == 0x21))
+                {
+                    RechargeCompanyCard(TermialId, ASN, dbMoneyLoad);
+                }
+                else
+                {
+                    int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
+                    if (nRet == 1)
+                    {
+                        LoadUserCard(TermialId, ASN, dbMoneyLoad);
+                    }
+                    else if (nRet == 2)
+                    {
+                        MessageBox.Show("PIN码已锁!");
+                    }
+                    else
+                    {
+                        MessageBox.Show("PIN码验证失败!");
+                    }
                 }
             }
+            catch
+            {
 
-            CloseSAMCard(false);
-            CloseUserCard();           
+            }
+            finally
+            {
+                CloseSAMCard(false);
+                CloseUserCard();
+            }
         }
 
         /// <summary>
@@ -1137,7 +1156,7 @@ namespace CardOperating
                 if (m_UserCardCtrl.UserCardLoad(ASN, TerminalId, (int)(dbMoneyLoad * 100.0), true))
                 {
                     //写圈存数据库记录
-                    SaveLoadRecord(ASN, dbMoneyLoad, dbBalance, "CardBalance");
+                    SaveLoadRecord(ASN, dbMoneyLoad, dbBalance,TerminalId, "CardBalance");
                     string strInfo = string.Format("成功对卡号{0}圈存{1}元.", BitConverter.ToString(ASN).Replace("-", ""), dbMoneyLoad.ToString("F2"));
                     MessageBox.Show(strInfo);
                 }
@@ -1415,7 +1434,7 @@ namespace CardOperating
         /// <param name="dbLoadMoney">圈存金额</param>
         /// <param name="dbBalance">之前的余额</param>
         /// <param name="strCardBalanceField">更新字段名称</param>
-        private void SaveLoadRecord(byte[]  ASN, double dbLoadMoney,double dbBalance, string strUpdateField)
+        private void SaveLoadRecord(byte[]  ASN, double dbLoadMoney,double dbBalance,byte[] TerminalId, string strUpdateField)
         {
             string strCardId = BitConverter.ToString(ASN).Replace("-", "");
 
@@ -1427,6 +1446,7 @@ namespace CardOperating
             }
 
             double dblTotal = dbBalance + dbLoadMoney;
+            string strTermId = BitConverter.ToString(TerminalId).Replace("-", "");
 
             SqlParameter[] sqlparams = new SqlParameter[7];
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
@@ -1434,11 +1454,12 @@ namespace CardOperating
             sqlparams[2] = ObjSql.MakeParam("Recharge", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbLoadMoney));
             sqlparams[3] = ObjSql.MakeParam("Total", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dblTotal));
             sqlparams[4] = ObjSql.MakeParam("Time", SqlDbType.DateTime, 8, ParameterDirection.Input, DateTime.Now);
+            sqlparams[5] = ObjSql.MakeParam("TermId", SqlDbType.Int, 4, ParameterDirection.Input, strTermId);            
             sqlparams[5] = ObjSql.MakeParam("OperatorId", SqlDbType.Int, 4, ParameterDirection.Input, m_nLoginUserId);            
             sqlparams[6] = ObjSql.MakeParam("TimeStr", SqlDbType.VarChar, 10, ParameterDirection.Input, DateTime.Now.ToString("yyyyMMdd") + "01");
 
 
-            ObjSql.ExecuteCommand("insert into Data_RechargeCardRecord values(@CardId,N'充值',@Balance,@Recharge,0,@Recharge,@Total,@Time,@OperatorId,N'现金支付',@TimeStr,0)", sqlparams);
+            ObjSql.ExecuteCommand("insert into Data_RechargeCardRecord values(@CardId,N'充值',@Balance,@Recharge,0,@Recharge,@Total,@Time,@TermId,@OperatorId,N'现金支付',@TimeStr,0)", sqlparams);
 
             //更新Base_Card充值总额和当前卡余额
             double dbRechargeTotal = GetBaseCardMoneyValue(ObjSql, strCardId, "RechargeTotal") + dbLoadMoney;
@@ -1600,7 +1621,7 @@ namespace CardOperating
         private void textGasAmount_Validated(object sender, EventArgs e)
         {
             double dbAmount = 0;
-            double.TryParse(textGasAmount.Text, System.Globalization.NumberStyles.AllowThousands, null, out dbAmount);
+            double.TryParse(textGasAmount.Text, out dbAmount);
             if (dbAmount <= 0 && dbAmount >= 1000000.0)
             {
                 textGasCount.Text = "";
@@ -1742,7 +1763,7 @@ namespace CardOperating
                 //获取母卡余额
                 string strBalance = GlobalControl.GetPublishedCardInfoFormDb(m_DBInfo, MotherAsn, "AccountBalance", 1);
                 decimal Balance = 0;
-                decimal.TryParse(strBalance, System.Globalization.NumberStyles.AllowThousands, null, out Balance);
+                decimal.TryParse(strBalance, out Balance);
                 double dbBalance = decimal.ToDouble(Balance);
                 
                 if (dbBalance < dbMoneyLoad)
@@ -1760,10 +1781,10 @@ namespace CardOperating
                 //母卡充值
                 string strBalance = GlobalControl.GetPublishedCardInfoFormDb(m_DBInfo, ASN, "AccountBalance", 1);
                 decimal Balance = 0;
-                decimal.TryParse(strBalance, System.Globalization.NumberStyles.AllowThousands, null, out Balance);
+                decimal.TryParse(strBalance, out Balance);
                 double dbBalance = decimal.ToDouble(Balance);
 
-                SaveLoadRecord(ASN, dbMoneyLoad, dbBalance, "AccountBalance");//单位母卡充值后更新字段不一样
+                SaveLoadRecord(ASN, dbMoneyLoad, dbBalance, TerminalId,"AccountBalance");//单位母卡充值后更新字段不一样
                 string strInfo = string.Format("成功对单位母卡{0}充值{1}元.", BitConverter.ToString(ASN).Replace("-", ""), dbMoneyLoad.ToString("F2"));
                 MessageBox.Show(strInfo);                
             }
@@ -1772,61 +1793,82 @@ namespace CardOperating
         private void LoadLoyalty_Click(object sender, EventArgs e)
         {
             int LoadLoyalty = 0;
-            int.TryParse(textLoadValue.Text,System.Globalization.NumberStyles.AllowThousands, null,out LoadLoyalty);
+            int.TryParse(textLoadValue.Text, out LoadLoyalty);
             if (LoadLoyalty < 1)
-                return;
-
-            if (!OpenUserCard())
-                return;
-            if (!m_UserCardCtrl.SelectCardApp(2))
                 return;
 
             if (!OpenSAMCard(false))
             {
-                MessageBox.Show("插入PSAM卡后才能圈存");
+                MessageBox.Show("插入PSAM卡后才能圈存", "积分充值");
                 return;
             }
+            if (!OpenUserCard())
+                return;
 
-            DateTime cardStart = DateTime.MinValue;
-            DateTime cardEnd = DateTime.MinValue;
-                    
-            byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
-            if (ASN == null)
+            try
             {
-                MessageBox.Show("未读到卡号");
-                return;
-            }
-            else if (ASN[3] != 0x01)
-            {
-                MessageBox.Show("只有用户卡可以积分", "圈存", MessageBoxButtons.OK);
-                return;
-            }
-            else
-            {
-                string strMsg = "确实要对用户卡" + BitConverter.ToString(ASN).Replace("-", "") + "充值" + LoadLoyalty.ToString() + "积分吗？";
-                if (MessageBox.Show(strMsg, "积分充值", MessageBoxButtons.YesNo) == DialogResult.No)
+                if (!m_UserCardCtrl.SelectCardApp(2))
+                    return;
+                byte[] TermialId = m_SamCardCtrl.GetTerminalId(false);
+                if (TermialId == null)
                 {
+                    MessageBox.Show("读取终端机编号失败,请检查PSAM卡是否正常。", "积分充值");
                     return;
                 }
 
-            }
 
-            int nRet = m_UserCardCtrl.VerifyUserPin(m_strPin_Ly);
-            if (nRet == 1)
-            {
-                LoadUserCardLy(m_FixedTermialId, ASN, LoadLoyalty);
-            }
-            else if (nRet == 2)
-            {
-                MessageBox.Show("积分PIN码已锁!");
-            }
-            else
-            {
-                MessageBox.Show("积分PIN码验证失败!");
-            }
+                DateTime cardStart = DateTime.MinValue;
+                DateTime cardEnd = DateTime.MinValue;
 
-            CloseSAMCard(false);
-            CloseUserCard();    
+                byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
+                if (ASN == null)
+                {
+                    MessageBox.Show("未读到卡号");
+                    return;
+                }
+                else if (ASN[3] != 0x01)
+                {
+                    MessageBox.Show("只有用户卡可以积分", "圈存", MessageBoxButtons.OK);
+                    return;
+                }
+                else
+                {
+                    if (!VerifyPSAMValid(ASN, LoadLoyalty, TermialId))
+                    {
+                        MessageBox.Show("PSAM卡验证失败，不能圈存", "积分充值", MessageBoxButtons.OK);
+                        return;
+                    }
+                    string strMsg = "确实要对用户卡" + BitConverter.ToString(ASN).Replace("-", "") + "充值" + LoadLoyalty.ToString() + "积分吗？";
+                    if (MessageBox.Show(strMsg, "积分充值", MessageBoxButtons.YesNo) == DialogResult.No)
+                    {
+                        return;
+                    }
+
+                }
+
+                int nRet = m_UserCardCtrl.VerifyUserPin(m_strPin_Ly);
+                if (nRet == 1)
+                {
+                    LoadUserCardLy(m_FixedTermialId, ASN, LoadLoyalty);
+                }
+                else if (nRet == 2)
+                {
+                    MessageBox.Show("积分PIN码已锁!");
+                }
+                else
+                {
+                    MessageBox.Show("积分PIN码验证失败!");
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                CloseSAMCard(false);
+                CloseUserCard();
+            }
         }
 
         private void ReadLoyalty_Click(object sender, EventArgs e)
@@ -2039,6 +2081,42 @@ namespace CardOperating
             m_DevControl.SAMPowerOff(bSamSlot);            
             m_SamCardCtrl = null;
             return true;
+        }
+
+        //卡充值时PSAM卡验证
+        private bool VerifyPSAMValid(byte[] ASN, int nValue, byte[] TermId)
+        {
+            byte[] PsamAsn = m_SamCardCtrl.GetPsamASN(false);
+            if (PsamAsn == null)
+                return false;
+            if (!m_SamCardCtrl.SamAppSelect(false))
+                return false;
+            if (!m_SamCardCtrl.InitDesCalc(PsamAsn))
+                return false;
+            byte[] srcData = new byte[24];
+            Buffer.BlockCopy(ASN,0,srcData,0,8);
+            Buffer.BlockCopy(BitConverter.GetBytes(nValue),0,srcData,8,4);
+            Buffer.BlockCopy(TermId,0,srcData,12,6);
+            int nAppendLen = 6;
+            for (int i = 0; i < nAppendLen; i++)
+            {
+                if (i == 0)
+                    srcData[18 + i] = 0x80;
+                else
+                    srcData[18 + i] = 0x00;
+            }
+            bool bRet = false;
+            byte[] EncryptData = m_SamCardCtrl.PsamDesCalc(srcData);//无后续块加密
+            if (EncryptData != null)
+            {
+                byte[] dstData = m_SamCardCtrl.DecryptDataForLoad(EncryptData, PsamAsn);
+                if (dstData != null)
+                {
+                    if (PublicFunc.ByteDataEquals(srcData,dstData))
+                        bRet = true;
+                }
+            }
+            return bRet;
         }
 
 

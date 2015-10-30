@@ -8,6 +8,6 @@ IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'FunnettStatio
 	DECLARE @curTime datetime
 	set @curTime = GETDATE()
 	IF EXISTS (SELECT * FROM sysobjects WHERE ID = object_id(N'Funnett_Version') AND OBJECTPROPERTY(ID, N'IsTable') = 1)
-		INSERT INTO Funnett_Version VALUES('SoftwareVersion',@curTime,'1.0.0.3',@curTime,'数据库不作修改,只安装软件')	
+		INSERT INTO Funnett_Version VALUES('SoftwareVersion',@curTime,'1.0.0.4',@curTime,'数据库不作修改,只安装软件')	
 	END
 GO

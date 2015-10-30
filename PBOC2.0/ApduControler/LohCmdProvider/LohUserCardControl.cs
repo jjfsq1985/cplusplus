@@ -1485,11 +1485,13 @@ namespace LohApduCtrl
             int nRet = 0;
             if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
             {
+                OnTextOutput(new MsgOutEvent(0, "从Xml文件" + m_ctrlApdu.m_strCardKeyPath + "读取密钥"));
                 if (!ReadKeyFromXml())
                     nRet = 2;
             }
             else
             {
+                OnTextOutput(new MsgOutEvent(0, "从数据库读取密钥"));
                 if (!ReadKeyFromDb())
                     nRet = 1;
             }

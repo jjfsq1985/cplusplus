@@ -442,7 +442,7 @@ namespace CardOperating
             m_CardInfoPar.LimitGasFillCount = LimitGasCount;
 
             double dbAmount = 0;
-            double.TryParse(textGasAmount.Text, System.Globalization.NumberStyles.AllowThousands, null, out dbAmount);
+            double.TryParse(textGasAmount.Text, out dbAmount);
             if (dbAmount > 0 && dbAmount < 1000000.0)
             {
                 m_CardInfoPar.LimitGasFillAmount = (uint)(dbAmount * 100.0);

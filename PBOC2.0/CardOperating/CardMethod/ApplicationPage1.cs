@@ -61,7 +61,7 @@ namespace CardOperating
         private void btnCardLoad_Click(object sender, EventArgs e)
         {
             decimal MoneyValue = 0;
-            decimal.TryParse(textMoney.Text, System.Globalization.NumberStyles.AllowThousands, null, out MoneyValue);
+            decimal.TryParse(textMoney.Text, out MoneyValue);
             double dbMoneyLoad = decimal.ToDouble(MoneyValue);
             if (MoneyValue < 1 || m_nAppIndex != 1 || !OpenUserCard())
                 return;
@@ -197,7 +197,7 @@ namespace CardOperating
             //计算GMAC
             const byte BusinessType = 0x93;//交易类型: 解0扣
             decimal Amount = 0;
-            decimal.TryParse(textPurchase.Text, System.Globalization.NumberStyles.AllowThousands, null, out Amount);
+            decimal.TryParse(textPurchase.Text, out Amount);
             double dbAmount = decimal.ToDouble(Amount);
             if (dbAmount < 1)
                 return null;
@@ -292,7 +292,7 @@ namespace CardOperating
             if (!OpenUserCard() || !ReadUserCardAsn(1))
                 return;
             decimal MoneyUnLoad = 0;
-            decimal.TryParse(textMoney.Text, System.Globalization.NumberStyles.AllowThousands, null, out MoneyUnLoad);
+            decimal.TryParse(textMoney.Text, out MoneyUnLoad);
             double dbMoneyUnLoad = decimal.ToDouble(MoneyUnLoad);
             if (dbMoneyUnLoad < 1)
                 return;

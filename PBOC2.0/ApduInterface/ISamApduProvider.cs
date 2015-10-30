@@ -40,5 +40,9 @@ namespace ApduInterface
         bool createVerifyPurchaseMAC2Cmd(byte[] MAC2);
         
         bool createCalcGMACCmd(byte BusinessType,byte[] ASN, int nOfflineSn, int nAmount);
+
+        bool createInitDesCalcCmd(byte[] PsamAsn);
+
+        bool createPsamDesCalcCmd(byte[] srcData);
     }
 }

@@ -42,6 +42,12 @@ namespace ApduInterface
         byte[] GetTerminalId(bool bSamSlot);
         
         byte[] GetPsamASN(bool bMessage);
+
+        bool InitDesCalc(byte[] PsamAsn);
+
+        byte[] PsamDesCalc(byte[] srcData);
+
+        byte[] DecryptDataForLoad(byte[] encryptData, byte[] PsamAsn);
         
     }
 }

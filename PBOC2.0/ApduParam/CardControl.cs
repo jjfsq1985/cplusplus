@@ -204,6 +204,46 @@ namespace CardControl
                 return "";
         }
 
+        public static string GetPsamKeyFromDb(SqlConnectInfo dbInfo, string strInfoName)
+        {
+            try
+            {
+                SqlHelper ObjSql = new SqlHelper();
+                if (!ObjSql.OpenSqlServerConnection(dbInfo.strServerName, dbInfo.strDbName, dbInfo.strUser, dbInfo.strUserPwd))
+                {
+                    ObjSql = null;
+                    return "";
+                }
+                SqlDataReader dataReader = null;
+                ObjSql.ExecuteProc("PROC_GetPsamKey", out dataReader);
+                string strData = "";                
+                if (dataReader != null)
+                {
+                    if (!dataReader.HasRows)
+                        dataReader.Close();
+                    else
+                    {
+                        if (dataReader.Read())
+                        {
+                            if (!dataReader.IsDBNull(dataReader.GetOrdinal(strInfoName)))
+                            {
+                                strData = (string)dataReader[strInfoName];
+                            }
+                        }
+                        dataReader.Close();
+                    }
+                }
+                ObjSql.CloseConnection();
+                ObjSql = null;
+
+                return strData;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
