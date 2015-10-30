@@ -314,6 +314,7 @@ namespace CardOperating
                 if (MotherCard != null)
                 {                    
                     cmbMotherCard.Text = BitConverter.ToString(MotherCard).Replace("-", "");
+                    cmbMotherCard.Enabled = false;
                 }
                 else
                 {
@@ -321,7 +322,7 @@ namespace CardOperating
                     cmbMotherCard.Enabled = true;
                 }
             }
-
+            textEMNumber.Text = m_CardInfoPar.EM_NU.ToString();
             DateFrom.Value = m_CardInfoPar.ValidCardBegin;
             DateTo.Value = m_CardInfoPar.ValidCardEnd;
             textUserName.Text = m_CardInfoPar.UserName;
@@ -334,9 +335,15 @@ namespace CardOperating
             cmbCarCategory.SelectedIndex = GetCarCategoryIndex(m_CardInfoPar.CarType);
             if (!string.IsNullOrEmpty(m_CardInfoPar.CarNo))
                 textCarNo.Text = m_CardInfoPar.CarNo;
+            else
+                textCarNo.Text = "";
+
             textTelephone.Text = m_CardInfoPar.TelePhone;
+
             if (!string.IsNullOrEmpty(m_CardInfoPar.SelfId))
                 textSelfId.Text = m_CardInfoPar.SelfId;
+            else
+                textSelfId.Text = "";
 
             LimitCarNo.Checked = m_CardInfoPar.LimitCarNo;
             cmbLimitGasType.SelectedIndex = GetLimitGasTypeIndex(m_CardInfoPar.LimitGasType);            
@@ -368,7 +375,11 @@ namespace CardOperating
 
         private void SetControlState(CardType eType)
         {
+            cmbMotherCard.Visible = false;
+            LabelMotherCard.Visible = false;
             cmbMotherCard.Enabled = false;
+            LabelEM.Visible = false;
+            textEMNumber.Visible = false;
             if (eType == CardType.PersonalCard)
             {
                 LimitCarNo.Enabled = true;
@@ -378,9 +389,22 @@ namespace CardOperating
                 textSelfId.Visible = true;
                 textCarNo.Enabled = true;
                 textDiscountRate.Enabled = true;
-                DiscountRateExprieValid.Enabled = true;
-                LabelMotherCard.Visible = false;
-                cmbMotherCard.Visible = false;
+                DiscountRateExprieValid.Enabled = true;                
+            }
+            else if (eType == CardType.EmployeeCard)
+            {
+                LimitCarNo.Checked = false;
+                LimitCarNo.Enabled = false;
+                cmbCarCategory.Enabled = false;
+                textCarNo.Text = "";
+                textCarNo.Enabled = false;
+                textDiscountRate.Enabled = false;
+                DiscountRateExprieValid.Enabled = false;
+                textSelfId.Text = "";
+                textSelfId.Enabled = false;
+                textSelfId.Visible = false;
+                LabelEM.Visible = true;
+                textEMNumber.Visible = true;
             }
             else if (eType == CardType.CompanySubCard)
             {
@@ -407,8 +431,6 @@ namespace CardOperating
                 textSelfId.Text = "";
                 textSelfId.Enabled = false;
                 textSelfId.Visible = false;
-                LabelMotherCard.Visible = false;
-                cmbMotherCard.Visible = false;
             }
         }
 
@@ -738,7 +760,8 @@ namespace CardOperating
                 m_CardInfoPar.ValidCardBegin = DateFrom.Value;
                 m_CardInfoPar.ValidCardEnd = DateTo.Value;
             }
-                
+
+            m_CardInfoPar.EM_NU = Convert.ToInt32(textEMNumber.Text, 10);                
             m_CardInfoPar.UserName = textUserName.Text;
 
             double dbRate = 0;
@@ -1022,6 +1045,12 @@ namespace CardOperating
         //卡片圈存,未灰锁的卡读终端机编号为0，使用固定终端机编号
         private void btnCardLoad_Click(object sender, EventArgs e)
         {
+            decimal MoneyLoad = 0;
+            decimal.TryParse(textMoney.Text, System.Globalization.NumberStyles.AllowThousands, null, out MoneyLoad);
+            double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
+            if (dbMoneyLoad < 1)
+                return;
+
             if (!OpenUserCard())
                 return;
             if (!m_UserCardCtrl.SelectCardApp(1))
@@ -1034,12 +1063,6 @@ namespace CardOperating
 
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
-
-            decimal MoneyLoad = 0;
-            decimal.TryParse(textMoney.Text, System.Globalization.NumberStyles.AllowThousands, null, out MoneyLoad);
-            double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
-            if (dbMoneyLoad < 1)
-                return;
 
             byte[] ASN = m_UserCardCtrl.GetUserCardASN(false, ref cardStart, ref cardEnd);
             if (ASN == null)
@@ -1757,6 +1780,13 @@ namespace CardOperating
                 return;
             if (!m_UserCardCtrl.SelectCardApp(2))
                 return;
+
+            if (!OpenSAMCard(false))
+            {
+                MessageBox.Show("插入PSAM卡后才能圈存");
+                return;
+            }
+
             DateTime cardStart = DateTime.MinValue;
             DateTime cardEnd = DateTime.MinValue;
                     
@@ -1795,6 +1825,7 @@ namespace CardOperating
                 MessageBox.Show("积分PIN码验证失败!");
             }
 
+            CloseSAMCard(false);
             CloseUserCard();    
         }
 

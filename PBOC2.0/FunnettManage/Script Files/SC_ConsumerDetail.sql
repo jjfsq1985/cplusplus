@@ -109,6 +109,168 @@ GO
 SET ANSI_PADDING OFF
 GO
 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'唯一标识' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FGUID'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'自增ID' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FID'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'财务日' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FFinanceDate'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'加气启动时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FTradeDateTime'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'加气停止时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FStopDateTime'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'加气机数据保存时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FSaveDateTime'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'枪号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FGunNo'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'加气机存储序列号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FSerialNo'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'存储号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FStoredNo'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'加气气量' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FGas'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'挂牌价' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FPrice'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'加气金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FMoney'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用户卡号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FUserCardNo'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'卡类型' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FCardType'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'支付类型' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FPayWay'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'车辆类型' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FCarType'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'车牌号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FCarNo'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'公交路数' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FBusNo'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'班组号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FShiftNo'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'员工卡号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FOperatorCardNo'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'记录类型' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FRecordType'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'加气机启动方式' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FStartWay'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'加气机停止原因' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FStopReason'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'优先选择' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FPreferential'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'加气机总加气量' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FSumGas'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'总加气金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FSumMoney'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启动压力' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FStartPress'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'停止压力' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FStopPress'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'密度' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FDensity'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'质量' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FEquivalent'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'介质类型' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FFuelType'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'使用折扣' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FUseDiscount'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'扣款后剩余金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FResidualAmount'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'剩余优惠金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FResidualBenefits'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'扣款前余额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FBeforeAmount'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'区域号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FAreaNo'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'供气量' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FOfferGas'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'站点编号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FStationNO'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'公司编号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FCompanyNO'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'可透支余额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FT_BAL'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'卡交易序号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FCTC'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'电子签名' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FTAC'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'解灰认证码' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FGMAC'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PSAM应用号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FPSAM_TAC'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PSAM编号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FPSAM_ASN'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PSAM编号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FPSAM_TID'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PSAM_TTC' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FPSAM_TTC'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'扣款来源' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FDS'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'版本号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FVER'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'折扣率' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FDCT'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'无用' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FRecPrice'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'无用' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FRecMonry'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'单价版本' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FPriceVer'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'回气量' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SC_ConsumerDetail', @level2type=N'COLUMN',@level2name=N'FReGas'
+GO
+
 ALTER TABLE [dbo].[SC_ConsumerDetail]  WITH CHECK ADD  CONSTRAINT [CKC_FUPFLAG_SC_CONSU] CHECK  (([FUpFlag] IS NULL OR ([FUpFlag]='N' OR [FUpFlag]='Y')))
 GO
 

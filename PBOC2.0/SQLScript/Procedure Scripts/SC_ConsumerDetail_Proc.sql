@@ -56,6 +56,8 @@ CREATE PROCEDURE  Pro_SC_ConsumerDetail(
   @FPreMoney	decimal(15, 2),
   @FT_MAC	varchar(10),
   @FSaveDateTime	datetime,
+  @FReGas      decimal(8,2),
+  @FPriceVer   varchar(4),
   @RawData	varchar(600)
     ) With Encryption
 AS  
@@ -70,20 +72,15 @@ BEGIN
             FGUID,FSerialNo,FRecordType,FTradeDateTime,FUserCardNo,FCardType,FResidualAmount,FT_BAL,FMoney,FCTC,FTAC,FPSAM_TAC,
             FGMAC,FPSAM_ASN,FPSAM_TID,FPSAM_TTC,FDS,FVER,FGunNo,FFuelType,FGas,FPrice,FShiftNo,FSumGas,FDCT,FStopDateTime,
             FStartWay,FStopReason,FStartPress,FStopPress,FMediumTemperature,FMediumDensity,FDensity,FEquivalent,
-            FFinanceDate,FStoredNo,FPreMoney,FOperatorCardNo,FRecMonry,FRecPrice,FT_MAC,FSaveDateTime,FUpFlag--,RawData
+            FFinanceDate,FStoredNo,FPreMoney,FOperatorCardNo,FRecMonry,FRecPrice,FT_MAC,FSaveDateTime,FUpFlag,FReGas,FPriceVer--,RawData
            )  
         values(  
             @FGUID,@FSerialNo,@FRecordType,@FTradeDateTime,@FUserCardNo,@FCardType,@FResidualAmount,@FT_BAL,@FMoney,@FCTC,@FTAC,@FPSAM_TAC,
             @FGMAC,@FPSAM_ASN,@FPSAM_TID,@FPSAM_TTC,@FDS,@FVER,@FGunNo,@FFuelType,@FGas,@FPrice,@FShiftNo,@FSumGas,@FDCT,
             @FStopDateTime,@FStartWay,@FStopReason,@FStartPress,@FStopPress,@FMediumTemperature,@FMediumDensity,@FDensity,
-            @FEquivalent,@FFinanceDate,@FStoredNo,@FPreMoney,@FOperatorCardNo,@FRecMonry,@FRecPrice,@FT_MAC,@FSaveDateTime,'N'--,@RawData
-           )     
-		/* insert into SC_SendDetail(
-			  FGUID,FGunNo,FSerialNo,RawData
-		  )
-	   values(
-			  @FGUID,@FGunNo,@FSerialNo,@RawData
-		  )  */
+            @FEquivalent,@FFinanceDate,@FStoredNo,@FPreMoney,@FOperatorCardNo,@FRecMonry,@FRecPrice,@FT_MAC,@FSaveDateTime,'N',@FReGas,@FPriceVer--,@RawData
+           )
+           
        IF Exists( select 1 from SC_ConsumerDetail where FSerialNo < @FSerialNo)
          Update Base_Card set CardBalance = @FResidualAmount where CardNum = @FUserCardNo;
        delete SC_OmissiveData where FGunNo = @FGunNo and FSerialNo = @FSerialNo;

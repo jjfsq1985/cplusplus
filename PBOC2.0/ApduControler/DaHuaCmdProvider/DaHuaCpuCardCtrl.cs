@@ -930,9 +930,9 @@ namespace DaHuaApduCtrl
             return 1;
         }
 
-        private bool UpdateEF0BFile(bool bDefaultPwd)
+        private bool UpdateEF0BFile(bool bDefaultPwd, int EM_NU)
         {
-            m_CmdProvider.createUpdateEF0BFileCmd(bDefaultPwd);
+            m_CmdProvider.createUpdateEF0BFileCmd(bDefaultPwd, EM_NU);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -1052,7 +1052,7 @@ namespace DaHuaApduCtrl
             if (!UpdateEF16File(keyUpdate, UserCardInfoPar))
                 return false;
             //更新普通信息数据文件EF0B
-            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag))
+            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag,UserCardInfoPar.EM_NU))
                 return false;
             //敏感信息文件
             if (!UpdateEF1CFile(keyUpdate, UserCardInfoPar))
@@ -1967,6 +1967,8 @@ namespace DaHuaApduCtrl
                 }
                 if (nCount > 0)
                     CardInfo.UserName = Encoding.Unicode.GetString(RecvData, 2, nCount);
+                else
+                    CardInfo.UserName = "";
                 CardInfo.UserIdentity = Encoding.ASCII.GetString(RecvData, 22, 18);
                 CardInfo.IdType = (UserCardInfoParam.IdentityType)(RecvData[40]);//证件类型
                 string strValue = BitConverter.ToString(RecvData, 51, 2).Replace("-", "");

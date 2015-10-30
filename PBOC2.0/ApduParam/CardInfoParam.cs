@@ -278,6 +278,13 @@ namespace ApduParam
             set { m_strBusDistance = value; }
         }
 
+        private int m_EmNumber;
+        public int EM_NU
+        {
+            get { return m_EmNumber; }
+            set { m_EmNumber = value; }
+        }
+
         private string m_strRemark;
         public string Remark
         {
@@ -298,6 +305,7 @@ namespace ApduParam
             m_CardValidTo = new DateTime(2020, 12, 31);
             m_bDefaultPwd = true;
             m_strCustomPassword = "999999";
+            m_EmNumber = 1;
             m_UserName = "";
             m_strTelephone = "";
             m_IdentityType = IdentityType.IdentityCard;

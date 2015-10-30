@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupUserCardInfo = new System.Windows.Forms.GroupBox();
+            this.textEMNumber = new System.Windows.Forms.RichTextBox();
+            this.LabelEM = new System.Windows.Forms.Label();
             this.cmbMotherCard = new System.Windows.Forms.ComboBox();
             this.LabelMotherCard = new System.Windows.Forms.Label();
             this.FromTo = new System.Windows.Forms.Label();
@@ -104,6 +106,8 @@
             // 
             // groupUserCardInfo
             // 
+            this.groupUserCardInfo.Controls.Add(this.textEMNumber);
+            this.groupUserCardInfo.Controls.Add(this.LabelEM);
             this.groupUserCardInfo.Controls.Add(this.cmbMotherCard);
             this.groupUserCardInfo.Controls.Add(this.LabelMotherCard);
             this.groupUserCardInfo.Controls.Add(this.FromTo);
@@ -150,6 +154,27 @@
             this.groupUserCardInfo.TabStop = false;
             this.groupUserCardInfo.Text = "非接触式卡信息";
             // 
+            // textEMNumber
+            // 
+            this.textEMNumber.Location = new System.Drawing.Point(255, 122);
+            this.textEMNumber.MaxLength = 1;
+            this.textEMNumber.Multiline = false;
+            this.textEMNumber.Name = "textEMNumber";
+            this.textEMNumber.Size = new System.Drawing.Size(39, 24);
+            this.textEMNumber.TabIndex = 39;
+            this.textEMNumber.Text = "";
+            this.textEMNumber.Visible = false;
+            // 
+            // LabelEM
+            // 
+            this.LabelEM.AutoSize = true;
+            this.LabelEM.Location = new System.Drawing.Point(208, 127);
+            this.LabelEM.Name = "LabelEM";
+            this.LabelEM.Size = new System.Drawing.Size(41, 12);
+            this.LabelEM.TabIndex = 38;
+            this.LabelEM.Text = "员工号";
+            this.LabelEM.Visible = false;
+            // 
             // cmbMotherCard
             // 
             this.cmbMotherCard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -158,6 +183,7 @@
             this.cmbMotherCard.Name = "cmbMotherCard";
             this.cmbMotherCard.Size = new System.Drawing.Size(180, 20);
             this.cmbMotherCard.TabIndex = 10;
+            this.cmbMotherCard.Visible = false;
             this.cmbMotherCard.SelectedIndexChanged += new System.EventHandler(this.cmbMotherCard_SelectedIndexChanged);
             // 
             // LabelMotherCard
@@ -168,6 +194,7 @@
             this.LabelMotherCard.Size = new System.Drawing.Size(53, 12);
             this.LabelMotherCard.TabIndex = 9;
             this.LabelMotherCard.Text = "关联母卡";
+            this.LabelMotherCard.Visible = false;
             // 
             // FromTo
             // 
@@ -929,5 +956,7 @@
         private System.Windows.Forms.TabControl tabCardInfo;
         private System.Windows.Forms.TabPage tabLimit;
         private System.Windows.Forms.TabPage tabCylinder;
+        private System.Windows.Forms.Label LabelEM;
+        private System.Windows.Forms.RichTextBox textEMNumber;
     }
 }

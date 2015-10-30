@@ -44,4 +44,7 @@ GO
 --使用安装包升级软件时，更新软件升级时间； 数据库升级时间只在安装数据库或手动设置时更新
 declare @curTime datetime
 set @curTime = GETDATE()
-insert into Funnett_Version values('1.07.10.26',@curTime, '1.0.0.1', @curTime, '数据库初始化');
+insert into Funnett_Version values('1.07.10.26','2015-10-28 08:15:10', '1.0.0.1', '2015-10-28 08:15:10', '数据库第一版');
+insert into Funnett_Version values('1.07.10.28','2015-10-29 14:15:10', '1.0.0.2', '2015-10-29 14:15:10', '增加funnett_version,SC_MonitorConfig增加FGasVariety');
+insert into Funnett_Version values('1.07.10.30',@curTime, '1.0.0.3', @curTime, '存储过程Pro_SC_ConsumerDetail修改');
+GO

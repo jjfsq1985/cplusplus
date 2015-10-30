@@ -401,10 +401,36 @@ namespace CardOperating
             m_IccCardCtrl = null;
         }
 
+        private bool ReMakeIccCard()
+        {
+            IccCardInfoParam PSAMInfo = m_CardPSAM.GetPSAMCardParam();
+            m_IccCardId = PSAMInfo.GetBytePsamId();
+            if (m_IccCardId == null)
+            {
+                WriteMsg(0, "SAM卡号为空，请先进行信息设置。");
+                return false;
+            }
+            byte[] TermialId = PSAMInfo.GetByteTermId();
+            if (TermialId == null)
+            {
+                WriteMsg(0, "终端机编号为空，请先进行信息设置。");
+                return false;
+            }            
+            if (IsExistPsamId(m_IccCardId,TermialId))
+            {
+                if (MessageBox.Show("该卡的SAM序列号或终端机编号已存在，是否要重新制作？", "提示", MessageBoxButtons.YesNo) == DialogResult.No)
+                    return false;
+            }
+            return true;
+
+        }
+
         //删除白卡MF中的文件，只保留MF
         private void btnInitIccCard_Click(object sender, EventArgs e)
         {
             if (!m_DevControl.IsDeviceOpen() || m_IccCardCtrl == null)
+                return;
+            if (!ReMakeIccCard())
                 return;
             //动作            
             if (m_IccCardCtrl.InitIccCard(false) != 0)
@@ -414,6 +440,8 @@ namespace CardOperating
         private void btnIccCardReset_Click(object sender, EventArgs e)
         {
             if (!m_DevControl.IsDeviceOpen() || m_IccCardCtrl == null)
+                return;
+            if (!ReMakeIccCard())
                 return;
             //动作            
             if (m_IccCardCtrl.InitIccCard(true) != 0)
@@ -455,25 +483,7 @@ namespace CardOperating
                 return;
             IccCardInfoParam PSAMInfo = m_CardPSAM.GetPSAMCardParam();
             m_IccCardId = PSAMInfo.GetBytePsamId();
-            if (m_IccCardId == null)
-            {
-                WriteMsg(0, "SAM卡号为空，请先进行信息设置。");
-                return;
-            }
-
-            if (IsExistPsamId(m_IccCardId))
-            {
-                if (MessageBox.Show("该SAM卡号已存在，是否要重新制作该SAM卡？", "提示", MessageBoxButtons.YesNo) == DialogResult.No)
-                    return;                
-            }
-
-            byte[] TermialId = PSAMInfo.GetByteTermId();
-            if (TermialId == null)
-            {
-                WriteMsg(0, "终端机编号为空，请先进行信息设置。");
-                return;
-            }
-
+            byte[] TermialId = PSAMInfo.GetByteTermId();          
             WriteMsg(0, "SAM卡号：" + BitConverter.ToString(m_IccCardId));
             WriteMsg(0, "终端机编号：" + BitConverter.ToString(TermialId));
             if (!m_IccCardCtrl.CreateIccInfo(m_IccCardId, TermialId))
@@ -495,7 +505,7 @@ namespace CardOperating
 
         }
 
-        private bool IsExistPsamId(byte[] psamID)
+        private bool IsExistPsamId(byte[] psamID, byte[] TermId)
         {            
             SqlHelper ObjSql = new SqlHelper();
             if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
@@ -505,13 +515,15 @@ namespace CardOperating
             }
             bool bExist = false;
             string strPsamId = BitConverter.ToString(psamID).Replace("-", "");
+            string strTermId = BitConverter.ToString(TermId).Replace("-", "");
 
 
-            SqlParameter[] sqlparams = new SqlParameter[1];
+            SqlParameter[] sqlparams = new SqlParameter[2];
             sqlparams[0] = ObjSql.MakeParam("PsamId",SqlDbType.Char,16,ParameterDirection.Input,strPsamId);
+            sqlparams[1] = ObjSql.MakeParam("TermId", SqlDbType.VarChar, 12, ParameterDirection.Input, strTermId);
 
             SqlDataReader dataReader = null;
-            ObjSql.ExecuteCommand("select * from Psam_Card where PsamId=@PsamId", sqlparams, out dataReader);
+            ObjSql.ExecuteCommand("select * from Psam_Card where PsamId=@PsamId or TerminalId=@TermId", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows && dataReader.Read())

@@ -725,9 +725,9 @@ namespace LohApduCtrl
             return 1;
         }
 
-        private bool UpdateEF0BFile(bool bDefaultPwd)
+        private bool UpdateEF0BFile(bool bDefaultPwd, int EM_NU)
         {
-            m_CmdProvider.createUpdateEF0BFileCmd(bDefaultPwd);
+            m_CmdProvider.createUpdateEF0BFileCmd(bDefaultPwd, EM_NU);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -824,7 +824,7 @@ namespace LohApduCtrl
             if (!UpdateEF16File(keyUpdate, UserCardInfoPar))
                 return false;
             //更新普通信息数据文件EF0B
-            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag))
+            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.EM_NU))
                 return false;
             //敏感信息文件EF1C
             if (!UpdateEF1CFile(keyUpdate, UserCardInfoPar))
@@ -2302,7 +2302,7 @@ namespace LohApduCtrl
             if (!UpdateEF16File(keyUpdate, UserCardInfoPar))
                 return false;
             //更新普通信息数据文件EF0B
-            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag))
+            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.EM_NU))
                 return false;
             return true;
         }

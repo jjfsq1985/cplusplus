@@ -26,33 +26,36 @@ prototype IsExistDB(STRING, STRING, STRING, BOOL);
 function OnBegin() 
 STRING sKey,sValue,sData;
 NUMBER nType, nSize,nResult;
-STRING szMsg,szFrmMsg,szWaitText; 
+STRING szMsg,szFrmMsg,szWaitText;
 begin
 	LoadStringFromStringTable("IDS_STRING_CHECK",szWaitText);
 	LoadStringFromStringTable("IDS_STRING_FRAMEWORKMSG",szFrmMsg);	
-	LoadStringFromStringTable("IDS_STRING_DBMSG",szMsg);
+	LoadStringFromStringTable("IDS_STRING_DBMSG",szMsg);   	
 	if !MAINTENANCE then   
-	SdShowMsg(szWaitText,TRUE); 
-	Delay(2); 
-	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
-	sKey = "Software\\Microsoft\\NET Framework Setup\\NDP\\v3.5";
-	nResult = RegDBGetKeyValueEx(sKey,"Version",nType,sData,nSize);
+	    SdShowMsg(szWaitText,TRUE); 
+	    Delay(2); 
+	    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+	    sKey = "Software\\Microsoft\\NET Framework Setup\\NDP\\v3.5";
+	    nResult = RegDBGetKeyValueEx(sKey,"Version",nType,sData,nSize);
 		if(nResult <0) then
-		SdShowMsg(szWaitText,FALSE); 
-		SdShowMsg(szFrmMsg,TRUE);
-		abort; 
+		    SdShowMsg(szWaitText,FALSE); 
+		    SdShowMsg(szFrmMsg,TRUE);
+		    abort; 
 		endif; 
-	nType = 0;      
-	sData = "";
-	nSize = 0;
-	sKey = "Software\\Microsoft\\Microsoft SQL Server\\Services\\SQL Server";
-	nResult = RegDBGetKeyValueEx(sKey,"Name",nType,sData,nSize);
+	    nType = 0;      
+	    sData = "";
+	    nSize = 0;
+	    sKey = "Software\\Microsoft\\Microsoft SQL Server\\Services\\SQL Server";
+	    nResult = RegDBGetKeyValueEx(sKey,"Name",nType,sData,nSize);
 		if(nResult <0) then  
-		SdShowMsg(szWaitText,FALSE);
-		SdShowMsg(szMsg,TRUE);
-		abort; 
+		    SdShowMsg(szWaitText,FALSE);
+		    SdShowMsg(szMsg,TRUE);
+		    abort; 
 		endif;
-	SdShowMsg(szWaitText,FALSE);
+	    SdShowMsg(szWaitText,FALSE);  
+	    MsiSetProperty( ISMSI_HANDLE, "SQL_SKIP", "0" );
+	else                                                
+		MsiSetProperty( ISMSI_HANDLE, "SQL_SKIP", "1" );		
 	endif;	
 end;
 //---------------------------------------------------------------------------
@@ -180,7 +183,7 @@ begin
  
     // Filter file groups by current language.
     FeatureFilterLanguage(MEDIA, ISLANG_ALL, TRUE);
-    FeatureFilterLanguage(MEDIA, STANDARD_SELECTED_LANGUAGE, FALSE);
+    FeatureFilterLanguage(MEDIA, STANDARD_SELECTED_LANGUAGE, FALSE);        
 end;
 //---------------------------------------------------------------------------
 // OnFirstUIBefore
@@ -215,7 +218,7 @@ begin
 		abort;
     endif;
     
-	nSetupType = TYPICAL;	
+	nSetupType = COMPLETE;
 
 Dlg_SdWelcome:
     szTitle = "智能IC卡管理系统";
@@ -282,36 +285,72 @@ Dlg_SdStartCopy:
  
     return 0;
 end;   
+       
+//VS2008之后默认不支持SQLDMO对象
+//function IsExistDB(szServer, szLogin, szPwd, bWinLogin)
+//BOOL bExist;
+//NUMBER i;
+//STRING szTemp;
+//VARIANT objSQL;
+//begin  
+//	bExist = FALSE;
+//	objSQL = CoCreateObject("SQLDMO.SQLServer");
+//	if ( !IsObject( objSQL ) ) then
+//	    return bExist;
+//    endif;
+//	if(bWinLogin) then		
+//		objSQL.LoginSecure = TRUE;
+//	  	objSQL.Connect(szServer);
+//	else
+//		objSQL.LoginSecure = FALSE;
+//	  	objSQL.Connect(szServer,szLogin,szPwd);
+//	endif;
+//      for i = 1 to objSQL.Databases.Count
+//     	szTemp = objSQL.Databases.Item(i).Name;
+//        if (szTemp == "FunnettStation") then
+//        	objSQL.DisConnect();
+//        	bExist = TRUE;
+//        	return bExist;
+//        endif;
+//      endfor; 
+//  objSQL.DisConnect();
+//  return bExist;
+//end;
 
 function IsExistDB(szServer, szLogin, szPwd, bWinLogin)
 BOOL bExist;
-NUMBER i;
-STRING szTemp;
-VARIANT objSQL;
-begin  
-	bExist = FALSE;
-	objSQL = CoCreateObject("SQLDMO.SQLServer");
-	if ( !IsObject( objSQL ) ) then
+VARIANT objSQL, RecordSetObj;
+STRING szConnString, szSQL;
+begin          
+    bExist = FALSE;
+    objSQL = CoCreateObject("ADODB.Connection");
+    if ( !IsObject( objSQL ) ) then
 	    return bExist;
     endif;
-	if(bWinLogin) then		
-		objSQL.LoginSecure = TRUE;
-	  	objSQL.Connect(szServer);
+    szConnString = "driver={SQL Server};";
+	szConnString = szConnString + "server=" + szServer + ";";
+	if(bWinLogin) then	
+	    szConnString = szConnString + "Trusted_Connection=yes;";
 	else
-		objSQL.LoginSecure = FALSE;
-	  	objSQL.Connect(szServer,szLogin,szPwd);
+	    szConnString = szConnString + "uid=" + szLogin + ";";
+	    szConnString = szConnString + "pwd=" + szPwd + ";";
 	endif;
-      for i = 1 to objSQL.Databases.Count
-      	szTemp = objSQL.Databases.Item(i).Name;
-        if (szTemp == "FunnettStation") then
-        	objSQL.DisConnect();
-        	bExist = TRUE;
-        	return bExist;
-        endif;
-      endfor; 
-  objSQL.DisConnect();
-  return bExist;
+	szConnString = szConnString + "database=master";
+	objSQL.Open(szConnString);
+	
+	RecordSetObj = CoCreateObject("ADODB.Recordset");	
+	RecordSetObj.CursorType = 3;
+	RecordSetObj.ActiveConnection = objSQL;	
+	szSQL = "Select name from sysdatabases where name='FunnettStation'"; 
+	RecordSetObj.Open(szSQL);
+    if (RecordSetObj.RecordCount = 1) then
+		bExist = TRUE;
+	endif; 
+	objSQL = NOTHING;
+	RecordSetObj = NOTHING;    
+	return bExist;
 end;
+
 
 
 //---------------------------------------------------------------------------

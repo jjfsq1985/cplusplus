@@ -636,7 +636,7 @@ namespace ApduDaHua
             return true;
         }
 
-        public bool createUpdateEF0BFileCmd(bool bDefaultPwd)
+        public bool createUpdateEF0BFileCmd(bool bDefaultPwd, int EM_NU)
         {
             m_CLA = 0x04;
             m_INS = 0xD6;
@@ -645,7 +645,8 @@ namespace ApduDaHua
             m_Lc = (byte)32;
             m_Data = new byte[32];
             m_Data[0] = (byte)(bDefaultPwd ? 0x00 : 0x01);
-            m_Data[1] = 0x01;//内部卡：员工号，其他：备用
+            int nVal = (EM_NU > 1 && EM_NU <= 9) ? EM_NU : 0x01;
+            m_Data[1] = (byte)nVal;//内部卡：员工号，其他：备用
             //内部卡：员工密码，其他：备用
             m_Data[2] = 0x12;
             m_Data[3] = 0x34;

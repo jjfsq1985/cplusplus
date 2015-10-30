@@ -225,7 +225,7 @@
             // 
             // btnIccCardReset
             // 
-            this.btnIccCardReset.Location = new System.Drawing.Point(12, 92);
+            this.btnIccCardReset.Location = new System.Drawing.Point(12, 126);
             this.btnIccCardReset.Name = "btnIccCardReset";
             this.btnIccCardReset.Size = new System.Drawing.Size(75, 23);
             this.btnIccCardReset.TabIndex = 2;
@@ -235,7 +235,7 @@
             // 
             // IccCardSetting
             // 
-            this.IccCardSetting.Location = new System.Drawing.Point(12, 126);
+            this.IccCardSetting.Location = new System.Drawing.Point(12, 58);
             this.IccCardSetting.Name = "IccCardSetting";
             this.IccCardSetting.Size = new System.Drawing.Size(75, 23);
             this.IccCardSetting.TabIndex = 3;
@@ -285,7 +285,7 @@
             // 
             // btnInitIccCard
             // 
-            this.btnInitIccCard.Location = new System.Drawing.Point(12, 58);
+            this.btnInitIccCard.Location = new System.Drawing.Point(12, 92);
             this.btnInitIccCard.Name = "btnInitIccCard";
             this.btnInitIccCard.Size = new System.Drawing.Size(75, 23);
             this.btnInitIccCard.TabIndex = 1;

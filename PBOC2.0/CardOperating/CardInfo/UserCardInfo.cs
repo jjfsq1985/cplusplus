@@ -99,6 +99,7 @@ namespace CardOperating
             CustomPassword.Checked = m_CardInfoPar.DefaultPwdFlag ? false : true;
             textPassword.Enabled = m_CardInfoPar.DefaultPwdFlag ? false : true;
             textPassword.Text = m_CardInfoPar.CustomPassword;
+            textEMNumber.Text = m_CardInfoPar.EM_NU.ToString();
             textUserName.Text = m_CardInfoPar.UserName;
             textPriceLevel.Text = m_CardInfoPar.PriceLevel.ToString();
             cmbIdType.SelectedIndex = GetIDTypeIndex(m_CardInfoPar.IdType);
@@ -404,6 +405,8 @@ namespace CardOperating
             {
                 m_CardInfoPar.CustomPassword = "999999";
             }
+
+            m_CardInfoPar.EM_NU = Convert.ToInt32(textEMNumber.Text, 10);
 
             m_CardInfoPar.UserName = textUserName.Text;
 
@@ -886,8 +889,12 @@ namespace CardOperating
         private void cmbUserCardType_SelectedIndexChanged(object sender, EventArgs e)
         {
             m_CardInfoPar.UserCardType = GetCardType(cmbUserCardType.SelectedIndex);
+            
             byte nCardType = (byte)m_CardInfoPar.UserCardType;
             m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID, nCardType);//从数据库读出
+            if (m_CardInfoPar.UserCardType != CardType.EmployeeCard)
+                m_CardInfoPar.EM_NU = 1;
+            textEMNumber.Text = m_CardInfoPar.EM_NU.ToString();
 
             SetControlState(m_CardInfoPar.UserCardType);
 
@@ -899,6 +906,11 @@ namespace CardOperating
 
         private void SetControlState(CardType eType)
         {
+            cmbMotherCard.Visible = false;
+            LabelMotherCard.Visible = false;
+            cmbMotherCard.Enabled = false;
+            LabelEM.Visible = false;
+            textEMNumber.Visible = false;            
             if (eType == CardType.PersonalCard)
             {
                 LimitCarNo.Enabled = true;
@@ -909,8 +921,21 @@ namespace CardOperating
                 textCarNo.Enabled = true;
                 textDiscountRate.Enabled = true;
                 DiscountRateExprieValid.Enabled = true;
-                LabelMotherCard.Visible = false;
-                cmbMotherCard.Visible = false;
+            }
+            else if (eType == CardType.EmployeeCard)
+            {
+                LimitCarNo.Checked = false;
+                LimitCarNo.Enabled = false;
+                cmbCarCategory.Enabled = false;
+                textCarNo.Text = "";
+                textCarNo.Enabled = false;
+                textDiscountRate.Enabled = false;
+                DiscountRateExprieValid.Enabled = false;
+                textSelfId.Text = "";
+                textSelfId.Enabled = false;
+                textSelfId.Visible = false;
+                LabelEM.Visible = true;
+                textEMNumber.Visible = true;
             }
             else if(eType == CardType.CompanySubCard)
             {
@@ -937,8 +962,6 @@ namespace CardOperating
                 textSelfId.Text = "";
                 textSelfId.Enabled = false;
                 textSelfId.Visible = false;
-                LabelMotherCard.Visible = false;
-                cmbMotherCard.Visible = false;
             }
         }
 

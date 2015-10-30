@@ -85,6 +85,8 @@
             this.btnModifyCard = new System.Windows.Forms.Button();
             this.CardInfoPanel = new System.Windows.Forms.SplitContainer();
             this.CardInfo = new System.Windows.Forms.GroupBox();
+            this.textEMNumber = new System.Windows.Forms.RichTextBox();
+            this.LabelEM = new System.Windows.Forms.Label();
             this.cmbMotherCard = new System.Windows.Forms.ComboBox();
             this.LabelMotherCard = new System.Windows.Forms.Label();
             this.cmbCardType = new System.Windows.Forms.ComboBox();
@@ -446,7 +448,7 @@
             // 
             // textUserIdentity
             // 
-            this.textUserIdentity.Location = new System.Drawing.Point(310, 133);
+            this.textUserIdentity.Location = new System.Drawing.Point(310, 129);
             this.textUserIdentity.MaxLength = 18;
             this.textUserIdentity.Multiline = false;
             this.textUserIdentity.Name = "textUserIdentity";
@@ -458,7 +460,7 @@
             // UserID
             // 
             this.UserID.AutoSize = true;
-            this.UserID.Location = new System.Drawing.Point(242, 137);
+            this.UserID.Location = new System.Drawing.Point(242, 133);
             this.UserID.Name = "UserID";
             this.UserID.Size = new System.Drawing.Size(53, 12);
             this.UserID.TabIndex = 69;
@@ -710,6 +712,8 @@
             // 
             // CardInfo
             // 
+            this.CardInfo.Controls.Add(this.textEMNumber);
+            this.CardInfo.Controls.Add(this.LabelEM);
             this.CardInfo.Controls.Add(this.cmbMotherCard);
             this.CardInfo.Controls.Add(this.LabelMotherCard);
             this.CardInfo.Controls.Add(this.cmbCardType);
@@ -767,6 +771,27 @@
             this.CardInfo.TabStop = false;
             this.CardInfo.Text = "卡信息";
             // 
+            // textEMNumber
+            // 
+            this.textEMNumber.Location = new System.Drawing.Point(310, 50);
+            this.textEMNumber.MaxLength = 1;
+            this.textEMNumber.Multiline = false;
+            this.textEMNumber.Name = "textEMNumber";
+            this.textEMNumber.Size = new System.Drawing.Size(41, 21);
+            this.textEMNumber.TabIndex = 109;
+            this.textEMNumber.Text = "";
+            this.textEMNumber.Visible = false;
+            // 
+            // LabelEM
+            // 
+            this.LabelEM.AutoSize = true;
+            this.LabelEM.Location = new System.Drawing.Point(249, 54);
+            this.LabelEM.Name = "LabelEM";
+            this.LabelEM.Size = new System.Drawing.Size(41, 12);
+            this.LabelEM.TabIndex = 108;
+            this.LabelEM.Text = "员工号";
+            this.LabelEM.Visible = false;
+            // 
             // cmbMotherCard
             // 
             this.cmbMotherCard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -775,6 +800,7 @@
             this.cmbMotherCard.Name = "cmbMotherCard";
             this.cmbMotherCard.Size = new System.Drawing.Size(156, 20);
             this.cmbMotherCard.TabIndex = 107;
+            this.cmbMotherCard.Visible = false;
             // 
             // LabelMotherCard
             // 
@@ -784,6 +810,7 @@
             this.LabelMotherCard.Size = new System.Drawing.Size(53, 12);
             this.LabelMotherCard.TabIndex = 106;
             this.LabelMotherCard.Text = "关联母卡";
+            this.LabelMotherCard.Visible = false;
             // 
             // cmbCardType
             // 
@@ -811,7 +838,7 @@
             "驾驶证",
             "军官证",
             "其他证"});
-            this.cmbIdType.Location = new System.Drawing.Point(101, 130);
+            this.cmbIdType.Location = new System.Drawing.Point(101, 129);
             this.cmbIdType.Name = "cmbIdType";
             this.cmbIdType.Size = new System.Drawing.Size(89, 20);
             this.cmbIdType.TabIndex = 104;
@@ -980,8 +1007,8 @@
             // textMoney
             // 
             this.textMoney.Location = new System.Drawing.Point(105, 48);
-            this.textMoney.Name = "textMoney";
             this.textMoney.Multiline = false;
+            this.textMoney.Name = "textMoney";
             this.textMoney.Size = new System.Drawing.Size(97, 21);
             this.textMoney.TabIndex = 36;
             this.textMoney.Text = "10,000.00";
@@ -1058,8 +1085,8 @@
             // 
             this.textBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBalance.Location = new System.Drawing.Point(106, 82);
-            this.textBalance.Name = "textBalance";
             this.textBalance.Multiline = false;
+            this.textBalance.Name = "textBalance";
             this.textBalance.ReadOnly = true;
             this.textBalance.Size = new System.Drawing.Size(96, 21);
             this.textBalance.TabIndex = 40;
@@ -1113,8 +1140,8 @@
             // 
             this.textLyBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textLyBalance.Location = new System.Drawing.Point(114, 82);
-            this.textLyBalance.Name = "textLyBalance";
             this.textLyBalance.Multiline = false;
+            this.textLyBalance.Name = "textLyBalance";
             this.textLyBalance.ReadOnly = true;
             this.textLyBalance.Size = new System.Drawing.Size(96, 21);
             this.textLyBalance.TabIndex = 111;
@@ -1238,8 +1265,8 @@
             // textLoadValue
             // 
             this.textLoadValue.Location = new System.Drawing.Point(113, 48);
-            this.textLoadValue.Name = "textLoadValue";
             this.textLoadValue.Multiline = false;
+            this.textLoadValue.Name = "textLoadValue";
             this.textLoadValue.Size = new System.Drawing.Size(97, 21);
             this.textLoadValue.TabIndex = 107;
             this.textLoadValue.Text = "10,000";
@@ -1482,6 +1509,8 @@
         private System.Windows.Forms.ComboBox cmbCardType;
         private System.Windows.Forms.ComboBox cmbMotherCard;
         private System.Windows.Forms.Label LabelMotherCard;
+        private System.Windows.Forms.Label LabelEM;
+        private System.Windows.Forms.RichTextBox textEMNumber;
 
     }
 }

@@ -124,7 +124,7 @@ namespace IFuncPlugin
 
     public class GrobalVariable
     {
-        public static readonly string[] strAuthority = new string[] { "账户管理", "单位管理", "站点管理", "充值记录", "制卡密钥管理", "发卡密钥管理", "限制代码管理", "数据库管理" };
+        public static readonly string[] strAuthority = new string[] { "账户管理", "单位管理", "站点管理", "充值记录", "制卡密钥管理", "卡片管理", "限制代码管理", "数据库管理" };
 
         public static readonly int Authority_Config_Count = 8;
         //权限值
@@ -163,7 +163,8 @@ namespace IFuncPlugin
         eCityCode,      //地市代码表
         eCompanyCode,   //公司代码表
         eImportKeyXml, //密钥XML文件配置
-        eDbManage       //数据库备份还原
+        eDbManage,       //数据库备份还原
+        eToBlackCard     //卡挂失、补卡操作
     }
 
     //插件中各个控件的位置
