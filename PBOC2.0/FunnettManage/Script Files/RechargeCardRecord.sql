@@ -20,7 +20,8 @@ CREATE TABLE [dbo].[Data_RechargeCardRecord](
 	[PreferentialVal] [decimal](18, 2) NULL,
 	[ReceivedVal] [decimal](18, 2) NULL,
 	[CurrentBalance] [decimal](18, 2) NULL,
-	[RechargeDateTime] [datetime] NULL,
+	[RechargeDateTime] [datetime] NULL,      
+	[TerminalID]  [varchar](12) NOT NULL,
 	[OperatorId] [int] NULL,
 	[PaymentMethod] [nvarchar](50) NULL,
 	[ShiftNum] [varchar](10) NULL,
@@ -61,6 +62,9 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'充值后余额' , 
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'充值时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'RechargeDateTime'
+GO                              
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'终端机编号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'TerminalID'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作员编号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'OperatorId'

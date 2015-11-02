@@ -1448,15 +1448,15 @@ namespace CardOperating
             double dblTotal = dbBalance + dbLoadMoney;
             string strTermId = BitConverter.ToString(TerminalId).Replace("-", "");
 
-            SqlParameter[] sqlparams = new SqlParameter[7];
+            SqlParameter[] sqlparams = new SqlParameter[8];
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
             sqlparams[1] = ObjSql.MakeParam("Balance", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbBalance));
             sqlparams[2] = ObjSql.MakeParam("Recharge", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbLoadMoney));
             sqlparams[3] = ObjSql.MakeParam("Total", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dblTotal));
             sqlparams[4] = ObjSql.MakeParam("Time", SqlDbType.DateTime, 8, ParameterDirection.Input, DateTime.Now);
-            sqlparams[5] = ObjSql.MakeParam("TermId", SqlDbType.Int, 4, ParameterDirection.Input, strTermId);            
-            sqlparams[5] = ObjSql.MakeParam("OperatorId", SqlDbType.Int, 4, ParameterDirection.Input, m_nLoginUserId);            
-            sqlparams[6] = ObjSql.MakeParam("TimeStr", SqlDbType.VarChar, 10, ParameterDirection.Input, DateTime.Now.ToString("yyyyMMdd") + "01");
+            sqlparams[5] = ObjSql.MakeParam("TermId", SqlDbType.VarChar, 12, ParameterDirection.Input, strTermId);            
+            sqlparams[6] = ObjSql.MakeParam("OperatorId", SqlDbType.Int, 4, ParameterDirection.Input, m_nLoginUserId);            
+            sqlparams[7] = ObjSql.MakeParam("TimeStr", SqlDbType.VarChar, 10, ParameterDirection.Input, DateTime.Now.ToString("yyyyMMdd") + "01");
 
 
             ObjSql.ExecuteCommand("insert into Data_RechargeCardRecord values(@CardId,N'充值',@Balance,@Recharge,0,@Recharge,@Total,@Time,@TermId,@OperatorId,N'现金支付',@TimeStr,0)", sqlparams);
