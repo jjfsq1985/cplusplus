@@ -273,6 +273,8 @@ namespace PublishCardOperator
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            if (PsamKeyView.CurrentCell == null)
+                return;
             int nIndex = PsamKeyView.CurrentCell.RowIndex;
             PsamKeyView.Rows.RemoveAt(nIndex);
             PsamKeyValue value = m_lstPsamKey[nIndex];
@@ -283,6 +285,8 @@ namespace PublishCardOperator
 
         private void btnEditKey_Click(object sender, EventArgs e)
         {
+            if (PsamKeyView.CurrentCell == null)
+                return;
             m_bEditData = true;
             btnEditKey.Enabled = m_bEditData ? false : true;
             btnSaveEdit.Enabled = m_bEditData ? true : false;
@@ -489,6 +493,8 @@ namespace PublishCardOperator
 
         private void ViewInputValidated()
         {
+            if (PsamKeyView.CurrentCell == null)
+                return;
             int nItem = PsamKeyView.CurrentCell.ColumnIndex;
             if (nItem >= 1 && nItem <= 8)
             {

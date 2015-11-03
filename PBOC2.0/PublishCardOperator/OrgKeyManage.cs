@@ -231,6 +231,8 @@ namespace PublishCardOperator
 
         private void btnModifyOrgKey_Click(object sender, EventArgs e)
         {
+            if (OrgKeyGridView.CurrentCell == null)
+                return;
             m_bEditData = true;
             btnModifyOrgKey.Enabled = m_bEditData ? false : true;
             btnSaveEdit.Enabled = m_bEditData ? true : false;
@@ -381,6 +383,8 @@ namespace PublishCardOperator
 
         private void btnSaveEdit_Click(object sender, EventArgs e)
         {
+            if (OrgKeyGridView.CurrentCell == null)
+                return;
             int nItem = OrgKeyGridView.CurrentCell.ColumnIndex;
             if (nItem >= 1 && nItem <= 4)
             {
@@ -447,6 +451,8 @@ namespace PublishCardOperator
 
         private void btnDelOrgKey_Click(object sender, EventArgs e)
         {
+            if (OrgKeyGridView.CurrentCell == null)
+                return;
             int nIndex = OrgKeyGridView.CurrentCell.RowIndex;
             OrgKeyGridView.Rows.RemoveAt(nIndex);
             OrgKeyValue value = m_lstOrgKey[nIndex];

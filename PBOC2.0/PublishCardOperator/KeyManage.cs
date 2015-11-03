@@ -309,6 +309,8 @@ namespace PublishCardOperator
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            if ((m_nClickGridView == 1 && CpuKeyGridView.CurrentCell == null) || (m_nClickGridView == 2 && AppKeyGridView.CurrentCell == null))
+                return;
             if (m_nClickGridView == 1)
             {
                 int nIndex = CpuKeyGridView.CurrentCell.RowIndex;
@@ -340,6 +342,8 @@ namespace PublishCardOperator
 
         private void btnEditKey_Click(object sender, EventArgs e)
         {
+            if( (m_nClickGridView == 1 && CpuKeyGridView.CurrentCell == null) || (m_nClickGridView == 2 && AppKeyGridView.CurrentCell == null) )
+                return;
             m_bEditData = true;
             btnEditKey.Enabled = m_bEditData ? false : true;
             btnSaveEdit.Enabled = m_bEditData ? true : false;
@@ -371,6 +375,8 @@ namespace PublishCardOperator
 
         private void ViewInputValidated()
         {
+            if ((m_nClickGridView == 1 && CpuKeyGridView.CurrentCell == null) || (m_nClickGridView == 2 && AppKeyGridView.CurrentCell == null))
+                return;
             if (m_nClickGridView == 1)
             {
                 int nItem = CpuKeyGridView.CurrentCell.ColumnIndex;

@@ -149,6 +149,8 @@ namespace CodeTable
 
         private void ProvinceView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
+            if (ProvinceView.CurrentCell == null)
+                return;
             string strInput = (string)ProvinceView.CurrentCell.FormattedValue;
             if (strInput == "")
                 return;
@@ -260,6 +262,8 @@ namespace CodeTable
 
         private void btnDel_Click(object sender, EventArgs e)
         {
+            if (ProvinceView.CurrentCell == null)
+                return;
             int nRowIndex = ProvinceView.CurrentCell.RowIndex;
             int nListIndex = GetIndexOfList(nRowIndex);
             if(nListIndex != -1)

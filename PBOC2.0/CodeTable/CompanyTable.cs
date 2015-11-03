@@ -153,6 +153,8 @@ namespace CodeTable
 
         private void SuperiorView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
+            if (SuperiorView.CurrentCell == null)
+                return;
             string strInput = (string)SuperiorView.CurrentCell.FormattedValue;
             if (strInput == "")
                 return;
@@ -265,6 +267,8 @@ namespace CodeTable
 
         private void btnDel_Click(object sender, EventArgs e)
         {
+            if (SuperiorView.CurrentCell == null)
+                return;
             int nRowIndex = SuperiorView.CurrentCell.RowIndex;
             int nListIndex = GetIndexOfList(nRowIndex);
             if (nListIndex != -1)

@@ -15,10 +15,16 @@ namespace PublishCardOperator.Dialog
 
         private byte[] m_RelatedConsumerKey = new byte[16];
 
+        private bool m_bRelatedValued = false;
+
         public AddPsamKey(byte[] RelatedKey)
         {
             InitializeComponent();
-            Buffer.BlockCopy(RelatedKey, 0, m_RelatedConsumerKey, 0, 16);
+            if (!PublicFunc.ByteDataEquals(RelatedKey, new byte[16]))
+            {
+                Buffer.BlockCopy(RelatedKey, 0, m_RelatedConsumerKey, 0, 16);
+                m_bRelatedValued = true;
+            }             
             IsValid.Checked = false;
         }
 
@@ -76,10 +82,17 @@ namespace PublishCardOperator.Dialog
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("是否使用与用户卡一致的消费密钥？", "生成", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                InitKey(false);
+            if (m_bRelatedValued)
+            {
+                if (MessageBox.Show("是否使用与用户卡一致的消费密钥？", "生成", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    InitKey(false);
+                else
+                    InitKey(true);
+            }
             else
+            {
                 InitKey(true);
+            }
         }
 
         private void InitKey(bool bNewConsumerKey)

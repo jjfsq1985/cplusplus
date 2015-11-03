@@ -193,7 +193,7 @@ namespace AccountManage
 
         private void UserGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (!m_bEditData)
+            if (!m_bEditData || UserGridView.CurrentCell == null)
                 return;
             //修改权限和密码 
             AccountEdit modifyForm = new AccountEdit();
@@ -226,7 +226,9 @@ namespace AccountManage
         }
 
         private void btnDel_Click(object sender, EventArgs e)
-        {            
+        {
+            if (UserGridView.CurrentCell == null)
+                return;
             int nIndex = UserGridView.CurrentCell.RowIndex;
             AccountInfo value = m_lstUser[nIndex];
             if (value.nUserId == m_nLoginUserId || value.UserStatus == 1)

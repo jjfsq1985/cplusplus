@@ -153,6 +153,8 @@ namespace CodeTable
 
         private void CityView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
+            if (CityView.CurrentCell == null)
+                return;
             string strInput = (string)CityView.CurrentCell.FormattedValue;
             if (strInput == "")
                 return;
@@ -265,6 +267,8 @@ namespace CodeTable
 
         private void btnDel_Click(object sender, EventArgs e)
         {
+            if (CityView.CurrentCell == null)
+                return;
             int nRowIndex = CityView.CurrentCell.RowIndex;
             int nListIndex = GetIndexOfList(nRowIndex);
             if (nListIndex != -1)

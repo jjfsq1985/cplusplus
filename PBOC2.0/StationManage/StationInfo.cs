@@ -251,6 +251,8 @@ namespace StationManage
 
         private void StationView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
+            if (StationView.CurrentCell == null)
+                return;
             int nColumnIndex = StationView.CurrentCell.ColumnIndex;
             int nRowIndex = StationView.CurrentCell.RowIndex;
             if (nColumnIndex < 2 || nColumnIndex > 5)
@@ -501,6 +503,8 @@ namespace StationManage
 
         private void btnDel_Click(object sender, EventArgs e)
         {
+            if (StationView.CurrentCell == null)
+                return;
             int nRowIndex = StationView.CurrentCell.RowIndex;
             int nListIndex = GetIndexOfList(nRowIndex);
             if (nListIndex != -1)
@@ -518,6 +522,8 @@ namespace StationManage
 
         private void StationView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
+            if (StationView.CurrentCell == null)
+                return;
             string strInput = (string)StationView.CurrentCell.FormattedValue;
             if (strInput == "")
                 return;
@@ -662,7 +668,8 @@ namespace StationManage
                 e.Cancel = true;
                 return;
             }
-                     
+            if (StationView.CurrentCell == null)
+                return;                     
             int nColumnIndex = StationView.CurrentCell.ColumnIndex;
             int nRowIndex = StationView.CurrentCell.RowIndex;
             if (nColumnIndex >= 2 && nColumnIndex <= 5)
