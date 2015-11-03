@@ -1895,6 +1895,7 @@ namespace DaHuaApduCtrl
             CardInfo.ValidCardEnd = cardEnd;
 
             GetBaseInfo(CardInfo);
+            GetEmNumber(CardInfo);
             GetLimitInfo(CardInfo);
             GetCylinderInfo(CardInfo);
         }
@@ -1942,6 +1943,24 @@ namespace DaHuaApduCtrl
 
                 return UserCardASN;
             }
+        }
+
+        private void GetEmNumber(UserCardInfoParam CardInfo)
+        {
+            m_CmdProvider.createGetEFFileCmd(0x8B, 0x20);//基本数据(100+01011)0x0B文件长度32
+            byte[] data = m_CmdProvider.GetOutputCmd();
+            int datalen = data.Length;
+            byte[] RecvData = new byte[128];
+            int nRecvLen = 0;
+            int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
+            if (nRet < 0)
+                return;
+            if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
+                return;
+            if (RecvData[1] > 1 && RecvData[1] <= 9)
+                CardInfo.EM_NU = RecvData[1];
+            else
+                CardInfo.EM_NU = 1;
         }
 
         private void GetBaseInfo(UserCardInfoParam CardInfo)

@@ -183,6 +183,7 @@ namespace CardOperating
             else
             {
                 WriteMsg(0, "建立连接成功");
+                cmbDevType.Enabled = false;
                 btnDisconnect.Enabled = true;
             }
         }
@@ -196,6 +197,7 @@ namespace CardOperating
             m_DevControl.Close_Device();            
             WriteMsg(0, "断开连接成功");
             btnDisconnect.Enabled = false;
+            cmbDevType.Enabled = true;
         }
 
         private void btnOpenCard_Click(object sender, EventArgs e)

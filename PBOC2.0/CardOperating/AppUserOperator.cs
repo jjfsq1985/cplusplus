@@ -303,8 +303,11 @@ namespace CardOperating
         private void ShowDataToForm()
         {            
             cmbCardType.SelectedIndex = GetCardTypeIndex(m_CardInfoPar.UserCardType);
-            byte nCardType = (byte)m_CardInfoPar.UserCardType;
-            textUserCardId.Text = m_CardInfoPar.CompanyID + UserCardInfoParam.CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_CardInfoPar.CardOrderNo;
+            byte[] byteCardId = m_CardInfoPar.GetUserCardID();
+            if (byteCardId != null)
+                textUserCardId.Text = BitConverter.ToString(byteCardId).Replace("-", "");
+            else
+                textUserCardId.Text = "";
             if (cmbClientName.Items.Count > 0)
                 cmbClientName.SelectedIndex = GetClientIdIndex(m_CardInfoPar.ClientID);
             SetControlState(m_CardInfoPar.UserCardType);           
@@ -615,18 +618,24 @@ namespace CardOperating
                 MessageBox.Show("打开卡片失败");
                 return;
             }
-            ReadCardInfo(m_CardInfoPar);
-            ReadCardInfoFormDb(m_CardInfoPar.GetUserCardID(), m_CardInfoPar);
+            if (ReadCardInfo(m_CardInfoPar))
+            {
+                ReadCardInfoFormDb(m_CardInfoPar.GetUserCardID(), m_CardInfoPar);
+            }
             CloseUserCard();
 
             ShowDataToForm();
         }
 
-        private void ReadCardInfo(UserCardInfoParam CardInfo)
+        private bool ReadCardInfo(UserCardInfoParam CardInfo)
         {
             if (!m_UserCardCtrl.SelectCardApp(1))
-                return;            
+            {
+                MessageBox.Show("读取卡信息失败");
+                return false;
+            }
             m_UserCardCtrl.GetUserCardInfo(CardInfo);
+            return true;
         }
 
         private void ReadCardInfoFormDb(byte[] CardId, UserCardInfoParam CardInfo)
