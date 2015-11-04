@@ -222,7 +222,7 @@ namespace PublishCardOperator
             }
             string strBcd = "";
 
-            SqlParameter[] sqlparams = new SqlParameter[12];
+            SqlParameter[] sqlparams = new SqlParameter[13];
             sqlparams[0] = ObjSql.MakeParam("KeyId", SqlDbType.Int, 4, ParameterDirection.Input, 0);
 
             strBcd = BitConverter.ToString(XmlPsamKey.MasterKeyVal).Replace("-", "");
@@ -243,13 +243,16 @@ namespace PublishCardOperator
             strBcd = BitConverter.ToString(XmlPsamKey.GrayCardKey).Replace("-", "");
             sqlparams[6] = ObjSql.MakeParam("GrayCardKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
-            strBcd = BitConverter.ToString(XmlPsamKey.MacEncryptKey).Replace("-", "");
-            sqlparams[7] = ObjSql.MakeParam("MacEncryptKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+            strBcd = BitConverter.ToString(XmlPsamKey.TacKey).Replace("-", "");
+            sqlparams[7] = ObjSql.MakeParam("TacKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
-            sqlparams[8] = ObjSql.MakeParam("KeyDetail", SqlDbType.NVarChar, 50, ParameterDirection.Input, XmlPsamKey.strDescribe);
-            sqlparams[9] = ObjSql.MakeParam("KeyState", SqlDbType.Bit, 1, ParameterDirection.Input, true);
-            sqlparams[10] = ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, DbStateFlag.eDbAdd);
-            sqlparams[11] = ObjSql.MakeParam("AddKeyId", SqlDbType.Int, 4, ParameterDirection.Output, null);
+            strBcd = BitConverter.ToString(XmlPsamKey.MacEncryptKey).Replace("-", "");
+            sqlparams[8] = ObjSql.MakeParam("MacEncryptKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+            sqlparams[9] = ObjSql.MakeParam("KeyDetail", SqlDbType.NVarChar, 50, ParameterDirection.Input, XmlPsamKey.strDescribe);
+            sqlparams[10] = ObjSql.MakeParam("KeyState", SqlDbType.Bit, 1, ParameterDirection.Input, true);
+            sqlparams[11] = ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, DbStateFlag.eDbAdd);
+            sqlparams[12] = ObjSql.MakeParam("AddKeyId", SqlDbType.Int, 4, ParameterDirection.Output, null);
             ObjSql.ExecuteProc("PROC_UpdatePsamKey", sqlparams);
 
             ObjSql.CloseConnection();

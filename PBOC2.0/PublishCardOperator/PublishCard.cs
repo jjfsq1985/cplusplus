@@ -29,6 +29,7 @@ namespace PublishCardOperator
         public byte[] AppTendingKey = new byte[16]; //应用维护密钥
         public byte[] ConsumerMasterKey = new byte[16]; //消费主密钥
         public byte[] GrayCardKey = new byte[16]; //灰锁密钥
+        public byte[] TacKey = new byte[16];    //TAC密钥
         public byte[] MacEncryptKey = new byte[16]; //MAC加密密钥
         public string KeyDetail;  //密钥信息描述
         public bool bValid = false; //是否使用

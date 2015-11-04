@@ -46,12 +46,14 @@
             this.textKeyDetail = new System.Windows.Forms.TextBox();
             this.KeyDetail = new System.Windows.Forms.Label();
             this.btnGenerate = new System.Windows.Forms.Button();
+            this.textTACKey = new System.Windows.Forms.TextBox();
+            this.TACLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // MasterLabel
             // 
             this.MasterLabel.AutoSize = true;
-            this.MasterLabel.Location = new System.Drawing.Point(33, 36);
+            this.MasterLabel.Location = new System.Drawing.Point(27, 36);
             this.MasterLabel.Name = "MasterLabel";
             this.MasterLabel.Size = new System.Drawing.Size(77, 12);
             this.MasterLabel.TabIndex = 0;
@@ -60,7 +62,7 @@
             // MasterTendingLabel
             // 
             this.MasterTendingLabel.AutoSize = true;
-            this.MasterTendingLabel.Location = new System.Drawing.Point(33, 82);
+            this.MasterTendingLabel.Location = new System.Drawing.Point(27, 76);
             this.MasterTendingLabel.Name = "MasterTendingLabel";
             this.MasterTendingLabel.Size = new System.Drawing.Size(77, 12);
             this.MasterTendingLabel.TabIndex = 1;
@@ -69,7 +71,7 @@
             // AppMasterLabel
             // 
             this.AppMasterLabel.AutoSize = true;
-            this.AppMasterLabel.Location = new System.Drawing.Point(33, 128);
+            this.AppMasterLabel.Location = new System.Drawing.Point(27, 116);
             this.AppMasterLabel.Name = "AppMasterLabel";
             this.AppMasterLabel.Size = new System.Drawing.Size(77, 12);
             this.AppMasterLabel.TabIndex = 2;
@@ -78,7 +80,7 @@
             // AppTendingLabel
             // 
             this.AppTendingLabel.AutoSize = true;
-            this.AppTendingLabel.Location = new System.Drawing.Point(33, 174);
+            this.AppTendingLabel.Location = new System.Drawing.Point(27, 156);
             this.AppTendingLabel.Name = "AppTendingLabel";
             this.AppTendingLabel.Size = new System.Drawing.Size(77, 12);
             this.AppTendingLabel.TabIndex = 3;
@@ -94,7 +96,7 @@
             // 
             // textMasterTendingKey
             // 
-            this.textMasterTendingKey.Location = new System.Drawing.Point(124, 78);
+            this.textMasterTendingKey.Location = new System.Drawing.Point(124, 73);
             this.textMasterTendingKey.MaxLength = 32;
             this.textMasterTendingKey.Name = "textMasterTendingKey";
             this.textMasterTendingKey.Size = new System.Drawing.Size(229, 21);
@@ -102,7 +104,7 @@
             // 
             // textAppMasterKey
             // 
-            this.textAppMasterKey.Location = new System.Drawing.Point(124, 124);
+            this.textAppMasterKey.Location = new System.Drawing.Point(124, 113);
             this.textAppMasterKey.MaxLength = 32;
             this.textAppMasterKey.Name = "textAppMasterKey";
             this.textAppMasterKey.Size = new System.Drawing.Size(229, 21);
@@ -110,7 +112,7 @@
             // 
             // textAppTendingKey
             // 
-            this.textAppTendingKey.Location = new System.Drawing.Point(124, 170);
+            this.textAppTendingKey.Location = new System.Drawing.Point(124, 153);
             this.textAppTendingKey.MaxLength = 32;
             this.textAppTendingKey.Name = "textAppTendingKey";
             this.textAppTendingKey.Size = new System.Drawing.Size(229, 21);
@@ -119,7 +121,7 @@
             // ConsumerMasterLabel
             // 
             this.ConsumerMasterLabel.AutoSize = true;
-            this.ConsumerMasterLabel.Location = new System.Drawing.Point(39, 220);
+            this.ConsumerMasterLabel.Location = new System.Drawing.Point(39, 196);
             this.ConsumerMasterLabel.Name = "ConsumerMasterLabel";
             this.ConsumerMasterLabel.Size = new System.Drawing.Size(65, 12);
             this.ConsumerMasterLabel.TabIndex = 8;
@@ -127,7 +129,7 @@
             // 
             // textConsumerMasterKey
             // 
-            this.textConsumerMasterKey.Location = new System.Drawing.Point(124, 216);
+            this.textConsumerMasterKey.Location = new System.Drawing.Point(124, 193);
             this.textConsumerMasterKey.MaxLength = 32;
             this.textConsumerMasterKey.Name = "textConsumerMasterKey";
             this.textConsumerMasterKey.Size = new System.Drawing.Size(229, 21);
@@ -136,7 +138,7 @@
             // MacEncryptLabel
             // 
             this.MacEncryptLabel.AutoSize = true;
-            this.MacEncryptLabel.Location = new System.Drawing.Point(36, 270);
+            this.MacEncryptLabel.Location = new System.Drawing.Point(33, 276);
             this.MacEncryptLabel.Name = "MacEncryptLabel";
             this.MacEncryptLabel.Size = new System.Drawing.Size(71, 12);
             this.MacEncryptLabel.TabIndex = 12;
@@ -144,7 +146,7 @@
             // 
             // textMACEncryptKey
             // 
-            this.textMACEncryptKey.Location = new System.Drawing.Point(124, 266);
+            this.textMACEncryptKey.Location = new System.Drawing.Point(124, 273);
             this.textMACEncryptKey.MaxLength = 32;
             this.textMACEncryptKey.Name = "textMACEncryptKey";
             this.textMACEncryptKey.Size = new System.Drawing.Size(229, 21);
@@ -208,11 +210,30 @@
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
+            // textTACKey
+            // 
+            this.textTACKey.Location = new System.Drawing.Point(124, 233);
+            this.textTACKey.MaxLength = 32;
+            this.textTACKey.Name = "textTACKey";
+            this.textTACKey.Size = new System.Drawing.Size(229, 21);
+            this.textTACKey.TabIndex = 41;
+            // 
+            // TACLabel
+            // 
+            this.TACLabel.AutoSize = true;
+            this.TACLabel.Location = new System.Drawing.Point(53, 236);
+            this.TACLabel.Name = "TACLabel";
+            this.TACLabel.Size = new System.Drawing.Size(47, 12);
+            this.TACLabel.TabIndex = 40;
+            this.TACLabel.Text = "TAC密钥";
+            // 
             // AddPsamKey
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(376, 444);
+            this.Controls.Add(this.textTACKey);
+            this.Controls.Add(this.TACLabel);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.textKeyDetail);
             this.Controls.Add(this.KeyDetail);
@@ -261,5 +282,7 @@
         private System.Windows.Forms.TextBox textKeyDetail;
         private System.Windows.Forms.Label KeyDetail;
         private System.Windows.Forms.Button btnGenerate;
+        private System.Windows.Forms.TextBox textTACKey;
+        private System.Windows.Forms.Label TACLabel;
     }
 }

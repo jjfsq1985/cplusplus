@@ -23,8 +23,8 @@ namespace LohApduCtrl
         private ISamApduProvider m_CmdProvider = null;
 
         private static byte[] m_PSE = new byte[] { 0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31 };//"1PAY.SYS.DDF01"
-        private static byte[] m_ADF01 = new byte[] { 0x53, 0x49, 0x4E, 0x4F, 0x50, 0x45, 0x43};//SINOPEC
-        private static byte[] m_ADF02 = new byte[] { 0x4C, 0x4F, 0x59, 0x41, 0x4C, 0x54, 0x59};//LOYALTY
+        private static byte[] m_ADF01 = new byte[] { 0x53, 0x49, 0x4E, 0x4F, 0x50, 0x45, 0x43, 0x31 };//SINOPEC1
+        private static byte[] m_ADF02 = new byte[] { 0x53, 0x49, 0x4E, 0x4F, 0x50, 0x45, 0x43, 0x32 };//SINOPEC2
 
         //”¶”√÷˜øÿ√‹‘ø
         private static byte[] m_MAMK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
@@ -1291,6 +1291,10 @@ namespace LohApduCtrl
             node = PsamKeyNode.SelectSingleNode("ConsumerMasterKey");
             byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
             Buffer.BlockCopy(byteKey, 0, m_MPK, 0, 16);
+
+            node = PsamKeyNode.SelectSingleNode("TacKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_DTK, 0, 16);   
 
             node = PsamKeyNode.SelectSingleNode("MacEncryptKey");
             byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);

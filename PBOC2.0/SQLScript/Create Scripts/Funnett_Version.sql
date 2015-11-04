@@ -42,10 +42,9 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据库升级时间
 GO
 
 --使用安装包升级软件时，更新软件升级时间； 数据库升级时间只在安装数据库或手动设置时更新
-declare @curTime datetime
-set @curTime = GETDATE()
 insert into Funnett_Version values('1.07.10.26','2015-10-28 08:15:10', '1.0.0.1', '2015-10-28 08:15:10', '数据库第一版');
 insert into Funnett_Version values('1.07.10.28','2015-10-29 14:15:10', '1.0.0.2', '2015-10-29 14:15:10', '增加funnett_version,SC_MonitorConfig增加FGasVariety');
 insert into Funnett_Version values('1.07.10.30','2015-10-30 15:25:30', '1.0.0.3','2015-10-30 15:25:30', '存储过程Pro_SC_ConsumerDetail修改');
-insert into Funnett_Version values('1.07.10.30',@curTime, '1.0.0.4', @curTime, '存储过程PROC_PublishPsamCard修改,表Psam_Card结构修改');
+insert into Funnett_Version values('1.07.10.30','2015-11-03 15:00:00', '1.0.0.4', '2015-11-03 15:00:00', '存储过程PROC_PublishPsamCard修改,表Psam_Card结构修改');
+insert into Funnett_Version values('1.07.10.30','2015-11-04 11:05:10', '1.0.0.5','2015-11-04 11:05:10', '存储过程PROC_UpdatePsamKey修改,表Key_PsamCard结构修改');
 GO

@@ -23,10 +23,8 @@ namespace DaHuaApduCtrl
         private ISamApduProvider m_CmdProvider = null;
 
         private static byte[] m_PSE = new byte[] { 0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31 };//"1PAY.SYS.DDF01"
-        private static byte[] m_ADF01 = new byte[] { 0x45, 0x4E, 0x45, 0x52, 0x47, 0x59, 0x2E, 0x30, 0x31 };//ENERGY.01
-        private static byte[] m_ADF02 = new byte[] { 0x45, 0x4E, 0x45, 0x52, 0x47, 0x59, 0x2E, 0x30, 0x32 };//ENERGY.02
-        private static byte[] m_ADF03 = new byte[] { 0x45, 0x4E, 0x45, 0x52, 0x47, 0x59, 0x2E, 0x30, 0x33 };//ENERGY.03
-
+        private static byte[] m_ADF01 = new byte[] { 0x53, 0x49, 0x4E, 0x4F, 0x50, 0x45, 0x43, 0x31 };//SINOPEC1
+        private static byte[] m_ADF02 = new byte[] { 0x53, 0x49, 0x4E, 0x4F, 0x50, 0x45, 0x43, 0x32 };//SINOPEC2
         //应用主控密钥
         private static byte[] m_MAMK = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
         //应用维护密钥
@@ -231,8 +229,6 @@ namespace DaHuaApduCtrl
                 return "ADF01";
             else if (PublicFunc.ByteDataEquals(byteArray, m_ADF02))
                 return "ADF02";
-            else if (PublicFunc.ByteDataEquals(byteArray, m_ADF03))
-                return "ADF03";
             else
                 return "";
         }
@@ -513,9 +509,6 @@ namespace DaHuaApduCtrl
                 return false;
             //创建ADF02
             if (!CreateDIR(m_ADF02, 0x3F02))
-                return false;
-            //创建ADF03
-            if (!CreateDIR(m_ADF03, 0x3F03))
                 return false;
             return true;
         }
@@ -1415,6 +1408,10 @@ namespace DaHuaApduCtrl
             node = PsamKeyNode.SelectSingleNode("GrayCardKey");
             byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
             Buffer.BlockCopy(byteKey, 0, m_MDK1, 0, 16);
+
+            node = PsamKeyNode.SelectSingleNode("TacKey");
+            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+            Buffer.BlockCopy(byteKey, 0, m_DTK, 0, 16);    
 
             node = PsamKeyNode.SelectSingleNode("MacEncryptKey");
             byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);

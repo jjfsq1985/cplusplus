@@ -30,6 +30,7 @@ CREATE PROCEDURE PROC_UpdatePsamKey(
 	@AppTendingKey char(32),--应用维护密钥
 	@ConsumerMasterKey char(32),--消费主密钥
 	@GrayCardKey char(32),--灰锁密钥
+	@TacKey char(32),--Tac密钥        
 	@MacEncryptKey char(32),--MAC加密密钥        
 	@KeyDetail nvarchar(50), --密钥描述
 	@KeyState bit,--密钥状态 （0-不使用，1-使用）
@@ -57,6 +58,8 @@ CREATE PROCEDURE PROC_UpdatePsamKey(
 			return 2
 		if(len(@GrayCardKey)<>32)
 			return 2
+		if(len(@TacKey)<>32)
+			return 2
 		if(len(@MacEncryptKey)<>32)
 			return 2
 		end
@@ -76,6 +79,7 @@ CREATE PROCEDURE PROC_UpdatePsamKey(
 							ApplicationTendingKey = @AppTendingKey,
 							ConsumerMasterKey = @ConsumerMasterKey,
 							GrayCardKey = @GrayCardKey,
+							TacKey = @TacKey,
 							MacEncryptKey = @MacEncryptKey,
 							InfoRemark = @KeyDetail where KeyId = @KeyId;
 		if(@@ERROR <> 0)
@@ -98,7 +102,7 @@ CREATE PROCEDURE PROC_UpdatePsamKey(
 		begin
 		--开始事务
 		begin tran maintran
-		insert into Key_PsamCard values(@MasterKey,@MasterTendingKey,@AppMasterKey,@AppTendingKey,@ConsumerMasterKey,@GrayCardKey,@MacEncryptKey,@KeyDetail);
+		insert into Key_PsamCard values(@MasterKey,@MasterTendingKey,@AppMasterKey,@AppTendingKey,@ConsumerMasterKey,@GrayCardKey,@TacKey,@MacEncryptKey,@KeyDetail);
 		set @AddKeyId = @@IDENTITY
 		if(@@ERROR <> 0)
 			begin

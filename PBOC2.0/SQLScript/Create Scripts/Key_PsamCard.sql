@@ -19,6 +19,7 @@ CREATE TABLE [dbo].[Key_PsamCard](
 	[ApplicationTendingKey] [char](32) NOT NULL,
 	[ConsumerMasterKey] [char](32) NOT NULL,
 	[GrayCardKey] [char](32) NOT NULL,
+	[TacKey] [char](32) NOT NULL,
 	[MacEncryptKey] [char](32) NOT NULL,
 	[InfoRemark]  [nvarchar](50) NOT NULL,
  CONSTRAINT [PK_Key_PsamCard] PRIMARY KEY CLUSTERED 
@@ -53,6 +54,9 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ª“À¯√‹‘ø' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_PsamCard', @level2type=N'COLUMN',@level2name=N'GrayCardKey'
 GO
 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'TAC√‹‘ø' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_PsamCard', @level2type=N'COLUMN',@level2name=N'TacKey'
+GO
+
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'MACº”√‹√‹‘ø' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Key_PsamCard', @level2type=N'COLUMN',@level2name=N'MacEncryptKey'
 GO
 
@@ -66,6 +70,7 @@ GO
 --								'000102030405060708090A0B0C0D0E0F',
 --								'11111111111111111111111111111111',
 --								'11111111111111111111111111111111',
+--						--		'000102030405060708090A0B0C0D0E0F', --–¬‘ˆµƒTAC√‹‘ø
 --								'000102030405060708090A0B0C0D0E0F',
 --								N'≤‚ ‘√‹‘ø');
 --GO

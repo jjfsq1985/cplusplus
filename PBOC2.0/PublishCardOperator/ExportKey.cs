@@ -202,6 +202,7 @@ namespace PublishCardOperator
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "ApplicationTendingKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "ConsumerMasterKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "GrayCardKey", EncryptKey);
+                    KeyToXmlNode(dataReader, xml, PsamKeyRoot, "TacKey", EncryptKey);
                     KeyToXmlNode(dataReader, xml, PsamKeyRoot, "MacEncryptKey", EncryptKey);
 
                     Root.AppendChild(PsamKeyRoot);

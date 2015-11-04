@@ -91,6 +91,7 @@ namespace PublishCardOperator
             PsamKeyView.Columns.Add("AppMasterKey", "应用主控密钥");
             PsamKeyView.Columns.Add("AppTendingKey", "应用维护密钥");
             PsamKeyView.Columns.Add("ConsumerMasterKey", "消费主密钥");
+            PsamKeyView.Columns.Add("TacKey","TAC密钥");
             PsamKeyView.Columns.Add("MacEncryptKey", "MAC加密密钥");
             PsamKeyView.Columns.Add("KeyValid", "状态");
             for (int i = 0; i < PsamKeyView.Columns.Count; i++)
@@ -209,17 +210,19 @@ namespace PublishCardOperator
                         PsamKeyView.Rows[index].Cells[6].Value = strKey;
                         //灰锁密钥不显示
                         FillKeyValue(dataReader, keyval.GrayCardKey, "GrayCardKey");
-                        
-                        strKey = FillKeyValue(dataReader, keyval.MacEncryptKey, "MacEncryptKey");
+
+                        strKey = FillKeyValue(dataReader, keyval.TacKey, "TacKey");
                         PsamKeyView.Rows[index].Cells[7].Value = strKey;
+                        strKey = FillKeyValue(dataReader, keyval.MacEncryptKey, "MacEncryptKey");
+                        PsamKeyView.Rows[index].Cells[8].Value = strKey;
                         if (nId == nPsamKeyId)
                         {
                             keyval.bValid = true;
-                            PsamKeyView.Rows[index].Cells[8].Value = "使用";
+                            PsamKeyView.Rows[index].Cells[9].Value = "使用";
                         }
                         else
                         {
-                            PsamKeyView.Rows[index].Cells[8].Value = "未使用";
+                            PsamKeyView.Rows[index].Cells[9].Value = "未使用";
                         }
                         m_lstPsamKey.Add(keyval);
                         nCount++;
@@ -245,16 +248,17 @@ namespace PublishCardOperator
             PsamKeyView.Rows[index].Cells[4].Value = BitConverter.ToString(newPsamKey.AppMasterKey).Replace("-", "");
             PsamKeyView.Rows[index].Cells[5].Value = BitConverter.ToString(newPsamKey.AppTendingKey).Replace("-", "");
             PsamKeyView.Rows[index].Cells[6].Value = BitConverter.ToString(newPsamKey.ConsumerMasterKey).Replace("-", "");
-            PsamKeyView.Rows[index].Cells[7].Value = BitConverter.ToString(newPsamKey.MacEncryptKey).Replace("-", "");            
+            PsamKeyView.Rows[index].Cells[7].Value = BitConverter.ToString(newPsamKey.TacKey).Replace("-", "");   
+            PsamKeyView.Rows[index].Cells[8].Value = BitConverter.ToString(newPsamKey.MacEncryptKey).Replace("-", "");            
             SaveLstDataToDb();
             //存数据库后重新获取配置的KeyId
             m_nValidPsamKeyId = 1;
             GetPsamKeyValid(ref m_nValidPsamKeyId);
             int nAddId = m_lstPsamKey[index].nKeyId;
             if (nAddId == m_nValidPsamKeyId)
-                PsamKeyView.Rows[index].Cells[8].Value = "使用";
+                PsamKeyView.Rows[index].Cells[9].Value = "使用";
             else
-                PsamKeyView.Rows[index].Cells[8].Value = "未使用";
+                PsamKeyView.Rows[index].Cells[9].Value = "未使用";
             UpdatePsamKeyValid(m_nValidPsamKeyId);
         }
 
@@ -267,7 +271,7 @@ namespace PublishCardOperator
                 if (value.nKeyId == nValidPsamKeyId)
                     continue;
                 value.bValid = false;
-                PsamKeyView.Rows[i].Cells[8].Value = "未使用";
+                PsamKeyView.Rows[i].Cells[9].Value = "未使用";
             }
         }
 
@@ -292,7 +296,7 @@ namespace PublishCardOperator
             btnSaveEdit.Enabled = m_bEditData ? true : false;
 
             int nItem = PsamKeyView.CurrentCell.ColumnIndex;
-            if (nItem >= 1 && nItem <= 8)
+            if (nItem >= 1 && nItem <= 9)
             {
                 //开始编辑
                 int nIndex = PsamKeyView.CurrentCell.RowIndex;
@@ -348,9 +352,12 @@ namespace PublishCardOperator
                         CheckItemText(nIndex, nItem, value.ConsumerMasterKey);
                         break;
                     case 7:
-                        CheckItemText(nIndex, nItem, value.MacEncryptKey);
+                        CheckItemText(nIndex, nItem, value.TacKey);
                         break;
                     case 8:
+                        CheckItemText(nIndex, nItem, value.MacEncryptKey);
+                        break;
+                    case 9:
                         DataGridViewComboBoxCell comboCell = new DataGridViewComboBoxCell();
                         comboCell.Items.Add("未使用");
                         comboCell.Items.Add("使用");
@@ -456,6 +463,17 @@ namespace PublishCardOperator
                         break;
                      case 7:
                         {
+                            byte[] KeyVal = GetPsamKeyByte(nIndex, nItem, value.TacKey);
+                            if (KeyVal != null)
+                            {
+                                Buffer.BlockCopy(KeyVal, 0, value.TacKey, 0, 16);
+                                value.eDbFlag = DbStateFlag.eDbDirty;
+                            }
+
+                        }
+                        break;
+                     case 8:
+                        {
                             byte[] KeyVal = GetPsamKeyByte(nIndex, nItem, value.MacEncryptKey);
                             if (KeyVal != null)
                             {
@@ -465,7 +483,7 @@ namespace PublishCardOperator
 
                         }
                         break;
-                    case 8:
+                     case 9:
                         {
                             string strContent = (string)PsamKeyView.Rows[nIndex].Cells[nItem].EditedFormattedValue;
                             bool bValid = strContent == "使用" ? true : false;
@@ -496,7 +514,7 @@ namespace PublishCardOperator
             if (PsamKeyView.CurrentCell == null)
                 return;
             int nItem = PsamKeyView.CurrentCell.ColumnIndex;
-            if (nItem >= 1 && nItem <= 8)
+            if (nItem >= 1 && nItem <= 9)
             {
                 //结束编辑
                 int nIndex = PsamKeyView.CurrentCell.RowIndex;
@@ -525,7 +543,7 @@ namespace PublishCardOperator
                 PsamKeyValue value = m_lstPsamKey[i];
                 if (value.eDbFlag != DbStateFlag.eDbOK)
                 {
-                    SqlParameter[] sqlparams = new SqlParameter[12];
+                    SqlParameter[] sqlparams = new SqlParameter[13];
                     sqlparams[0] = m_ObjSql.MakeParam("KeyId", SqlDbType.Int, 4, ParameterDirection.Input, value.nKeyId);
 
                     strBcd = BitConverter.ToString(value.MasterKey).Replace("-", "");
@@ -546,13 +564,16 @@ namespace PublishCardOperator
                     strBcd = BitConverter.ToString(value.GrayCardKey).Replace("-", "");
                     sqlparams[6] = m_ObjSql.MakeParam("GrayCardKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
-                    strBcd = BitConverter.ToString(value.MacEncryptKey).Replace("-", "");
-                    sqlparams[7] = m_ObjSql.MakeParam("MacEncryptKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+                    strBcd = BitConverter.ToString(value.TacKey).Replace("-", "");
+                    sqlparams[7] = m_ObjSql.MakeParam("TacKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
 
-                    sqlparams[8] = m_ObjSql.MakeParam("KeyDetail", SqlDbType.NVarChar, 50, ParameterDirection.Input, value.KeyDetail);
-                    sqlparams[9] = m_ObjSql.MakeParam("KeyState", SqlDbType.Bit, 1, ParameterDirection.Input, value.bValid);
-                    sqlparams[10] = m_ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, value.eDbFlag);
-                    sqlparams[11] = m_ObjSql.MakeParam("AddKeyId", SqlDbType.Int, 4, ParameterDirection.Output, null);
+                    strBcd = BitConverter.ToString(value.MacEncryptKey).Replace("-", "");
+                    sqlparams[8] = m_ObjSql.MakeParam("MacEncryptKey", SqlDbType.Char, 32, ParameterDirection.Input, strBcd);
+
+                    sqlparams[9] = m_ObjSql.MakeParam("KeyDetail", SqlDbType.NVarChar, 50, ParameterDirection.Input, value.KeyDetail);
+                    sqlparams[10] = m_ObjSql.MakeParam("KeyState", SqlDbType.Bit, 1, ParameterDirection.Input, value.bValid);
+                    sqlparams[11] = m_ObjSql.MakeParam("DbState", SqlDbType.Int, 4, ParameterDirection.Input, value.eDbFlag);
+                    sqlparams[12] = m_ObjSql.MakeParam("AddKeyId", SqlDbType.Int, 4, ParameterDirection.Output, null);
                     if (m_ObjSql.ExecuteProc("PROC_UpdatePsamKey", sqlparams) == 0)
                     {
                         if (value.eDbFlag == DbStateFlag.eDbDelete)

@@ -22,6 +22,7 @@ namespace CardControl
         public byte[] ApplicationTendingKey = new byte[16];
         public byte[] ConsumerMasterKey = new byte[16];
         public byte[] GrayCardKey = new byte[16];
+        public byte[] TacKey = new byte[16];
         public byte[] MacEncryptKey = new byte[16];       
     }
 
@@ -312,6 +313,8 @@ namespace CardControl
                 GlobalControl.StrKeyToByte(strKey, PsamKey.ConsumerMasterKey);
                 strKey = (string)dataReader["GrayCardKey"];
                 GlobalControl.StrKeyToByte(strKey, PsamKey.GrayCardKey);
+                strKey = (string)dataReader["TacKey"];
+                GlobalControl.StrKeyToByte(strKey, PsamKey.TacKey);
                 strKey = (string)dataReader["MacEncryptKey"];
                 GlobalControl.StrKeyToByte(strKey, PsamKey.MacEncryptKey);
                 PsamKey.strDescribe = (string)dataReader["InfoRemark"];
@@ -530,6 +533,10 @@ namespace CardControl
                 node = PsamKeyNode.SelectSingleNode("GrayCardKey");
                 byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
                 Buffer.BlockCopy(byteKey, 0, KeyVal.GrayCardKey, 0, 16);
+
+                node = PsamKeyNode.SelectSingleNode("TacKey");
+                byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+                Buffer.BlockCopy(byteKey, 0, KeyVal.TacKey, 0, 16);
 
                 node = PsamKeyNode.SelectSingleNode("MacEncryptKey");
                 byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);

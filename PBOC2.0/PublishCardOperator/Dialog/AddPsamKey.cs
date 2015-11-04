@@ -63,6 +63,8 @@ namespace PublishCardOperator.Dialog
             //灰锁密钥必须与消费主密钥一致
             Buffer.BlockCopy(m_PsamKey.ConsumerMasterKey, 0, m_PsamKey.GrayCardKey, 0, 16);
 
+            if (!FillPsamKeyValue(textTACKey.Text, m_PsamKey.TacKey, "TAC密钥"))
+                return;
             if (!FillPsamKeyValue(textMACEncryptKey.Text, m_PsamKey.MacEncryptKey, "MAC加密密钥"))
                 return;
             if (string.IsNullOrEmpty(textKeyDetail.Text))
@@ -126,6 +128,10 @@ namespace PublishCardOperator.Dialog
             {
                 textConsumerMasterKey.Text = BitConverter.ToString(m_RelatedConsumerKey).Replace("-", "").ToUpper();
             }
+
+            temp = Guid.NewGuid();
+            strKey = temp.ToString().Replace("-", "").ToUpper();
+            textTACKey.Text = strKey;
 
             temp = Guid.NewGuid();
             strKey = temp.ToString().Replace("-", "").ToUpper();
