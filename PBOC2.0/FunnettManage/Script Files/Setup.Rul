@@ -261,10 +261,10 @@ Dlg_DbExist:
 	if(bDbExist) then
 	    if(AskYesNo( "数据库已存在，安装程序将不会修改数据库。\n如有需要，请在安装完成后手工更改。\n是否继续安装？", NO ) == NO) then
 	     abort;
-		endif; 
+		endif; 		
 		FeatureSelectItem(MEDIA,"DBFeatures", FALSE); 
-	else                                                  
-		FeatureSelectItem(MEDIA,"DBFeatures", TRUE); 
+	else                                                  		
+		FeatureSelectItem(MEDIA,"DBFeatures", TRUE);
 	endif;
 	
 		

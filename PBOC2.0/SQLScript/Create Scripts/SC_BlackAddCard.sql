@@ -12,7 +12,7 @@ SET ANSI_PADDING ON
 GO
 
 CREATE TABLE [dbo].[SC_BlackAddCard](
-	[ID] [int] NOT NULL,
+	[ID] [int] IDENTITY (1, 1) NOT NULL,
 	[FUserCardNo] [varchar](16) NOT NULL,
 	[FBlackDate] [date] NULL,
  CONSTRAINT [PK_SC_BlackAddCard] PRIMARY KEY CLUSTERED 

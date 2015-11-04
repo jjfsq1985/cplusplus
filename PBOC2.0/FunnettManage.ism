@@ -2238,28 +2238,28 @@
 		<row><td>FunnettStation</td><td>publishpsamcard_proc.sql</td><td>51</td></row>
 		<row><td>FunnettStation</td><td>rechargecardrecord.sql</td><td>17</td></row>
 		<row><td>FunnettStation</td><td>rewritecpucard_proc.sql</td><td>52</td></row>
-		<row><td>FunnettStation</td><td>sc_blackaddcard.sql</td><td>34</td></row>
-		<row><td>FunnettStation</td><td>sc_blackcard.sql</td><td>31</td></row>
-		<row><td>FunnettStation</td><td>sc_blackdelcard.sql</td><td>32</td></row>
+		<row><td>FunnettStation</td><td>sc_blackaddcard.sql</td><td>35</td></row>
+		<row><td>FunnettStation</td><td>sc_blackcard.sql</td><td>33</td></row>
+		<row><td>FunnettStation</td><td>sc_blackdelcard.sql</td><td>34</td></row>
 		<row><td>FunnettStation</td><td>sc_config.sql</td><td>25</td></row>
-		<row><td>FunnettStation</td><td>sc_config_data.sql</td><td>29</td></row>
-		<row><td>FunnettStation</td><td>sc_consumerdetail.sql</td><td>27</td></row>
+		<row><td>FunnettStation</td><td>sc_config_data.sql</td><td>26</td></row>
+		<row><td>FunnettStation</td><td>sc_consumerdetail.sql</td><td>29</td></row>
 		<row><td>FunnettStation</td><td>sc_consumerdetail_proc.sql</td><td>53</td></row>
-		<row><td>FunnettStation</td><td>sc_consumerdetailhistroy.sql</td><td>37</td></row>
-		<row><td>FunnettStation</td><td>sc_customreportinfo.sql</td><td>35</td></row>
-		<row><td>FunnettStation</td><td>sc_customreportinfo_data.sql</td><td>39</td></row>
-		<row><td>FunnettStation</td><td>sc_menuitem.sql</td><td>26</td></row>
-		<row><td>FunnettStation</td><td>sc_menuitem_data.sql</td><td>33</td></row>
-		<row><td>FunnettStation</td><td>sc_monitorconfig.sql</td><td>30</td></row>
-		<row><td>FunnettStation</td><td>sc_omissivedata.sql</td><td>38</td></row>
-		<row><td>FunnettStation</td><td>sc_operator.sql</td><td>36</td></row>
+		<row><td>FunnettStation</td><td>sc_consumerdetailhistroy.sql</td><td>30</td></row>
+		<row><td>FunnettStation</td><td>sc_customreportinfo.sql</td><td>36</td></row>
+		<row><td>FunnettStation</td><td>sc_customreportinfo_data.sql</td><td>37</td></row>
+		<row><td>FunnettStation</td><td>sc_menuitem.sql</td><td>27</td></row>
+		<row><td>FunnettStation</td><td>sc_menuitem_data.sql</td><td>28</td></row>
+		<row><td>FunnettStation</td><td>sc_monitorconfig.sql</td><td>32</td></row>
+		<row><td>FunnettStation</td><td>sc_omissivedata.sql</td><td>39</td></row>
+		<row><td>FunnettStation</td><td>sc_operator.sql</td><td>38</td></row>
 		<row><td>FunnettStation</td><td>sc_price.sql</td><td>19</td></row>
 		<row><td>FunnettStation</td><td>sc_secrettb.sql</td><td>23</td></row>
 		<row><td>FunnettStation</td><td>sc_senddetail.sql</td><td>20</td></row>
 		<row><td>FunnettStation</td><td>sc_shift.sql</td><td>24</td></row>
 		<row><td>FunnettStation</td><td>sc_shift_proc.sql</td><td>54</td></row>
 		<row><td>FunnettStation</td><td>sc_stationinfo.sql</td><td>21</td></row>
-		<row><td>FunnettStation</td><td>sc_whitecard.sql</td><td>28</td></row>
+		<row><td>FunnettStation</td><td>sc_whitecard.sql</td><td>31</td></row>
 		<row><td>FunnettStation</td><td>sqlscript.sql</td><td>1</td></row>
 		<row><td>FunnettStation</td><td>update_config_proc.sql</td><td>55</td></row>
 		<row><td>FunnettStation</td><td>updateaccount_proc_.sql</td><td>56</td></row>

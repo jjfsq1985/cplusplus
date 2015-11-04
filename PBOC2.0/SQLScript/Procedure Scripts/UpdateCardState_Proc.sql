@@ -37,26 +37,23 @@ CREATE PROCEDURE PROC_UpdateCardState(
 		return 2
 begin
 	declare @Today varchar(32)
-	set @Today = Convert(varchar(32),GetDate(),120)
-	declare @NewId int
-	
+	set @Today = Convert(varchar(32),GetDate(),120)	
 		--开始事务
-		begin tran maintran
-			select @NewId = count(CardNum)+1 from Base_Card;
+		begin tran maintran			
 			update Base_Card set CardState = @CardState, OperateDateTime = GetDate() where CardNum=@CardId;
 			if(@BlackCard = 1)
 				begin	--新增黑名单					
 				if not exists(select * from SC_BlackCard where FUserCardNo=@CardId)
 					begin
-					insert into SC_BlackAddCard values(@NewId,@CardId,Left(@Today,10));
-					insert into SC_BlackCard values(@NewId,@CardId,Left(@Today,10));
+					insert into SC_BlackAddCard values(@CardId,Left(@Today,10));
+					insert into SC_BlackCard values(@CardId,Left(@Today,10));
 					end				
 				end
 			else
 				begin --新删黑名单
 				if exists(select * from SC_BlackCard where FUserCardNo=@CardId)
 					begin
-					insert into SC_BlackDelCard values(@NewId,@CardId,Left(@Today,10));				
+					insert into SC_BlackDelCard values(@CardId,Left(@Today,10));				
 					delete from SC_BlackCard where FUserCardNo = @CardId;
 					end
 				end

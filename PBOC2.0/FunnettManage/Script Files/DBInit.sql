@@ -1,6 +1,3 @@
-CREATE DATABASE [FunnettStation]
-GO
-	
 exec sp_dboption N'FunnettStation', N'autoclose', N'false'
 GO
 
