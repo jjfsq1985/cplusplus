@@ -59,7 +59,7 @@
             // 
             // CardOprQuit
             // 
-            this.CardOprQuit.Location = new System.Drawing.Point(430, 598);
+            this.CardOprQuit.Location = new System.Drawing.Point(431, 607);
             this.CardOprQuit.Name = "CardOprQuit";
             this.CardOprQuit.Size = new System.Drawing.Size(75, 23);
             this.CardOprQuit.TabIndex = 8;
@@ -79,7 +79,7 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(159, 12);
+            this.btnConnect.Location = new System.Drawing.Point(184, 12);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 23);
             this.btnConnect.TabIndex = 1;
@@ -90,7 +90,7 @@
             // btnDisconnect
             // 
             this.btnDisconnect.Enabled = false;
-            this.btnDisconnect.Location = new System.Drawing.Point(293, 12);
+            this.btnDisconnect.Location = new System.Drawing.Point(265, 12);
             this.btnDisconnect.Name = "btnDisconnect";
             this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
             this.btnDisconnect.TabIndex = 2;
@@ -103,7 +103,7 @@
             this.OutputText.Location = new System.Drawing.Point(125, 45);
             this.OutputText.Name = "OutputText";
             this.OutputText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.OutputText.Size = new System.Drawing.Size(381, 536);
+            this.OutputText.Size = new System.Drawing.Size(381, 555);
             this.OutputText.TabIndex = 6;
             this.OutputText.Text = "";
             // 
@@ -295,7 +295,7 @@
             // 
             // btnCleanInfo
             // 
-            this.btnCleanInfo.Location = new System.Drawing.Point(125, 586);
+            this.btnCleanInfo.Location = new System.Drawing.Point(334, 607);
             this.btnCleanInfo.Name = "btnCleanInfo";
             this.btnCleanInfo.Size = new System.Drawing.Size(91, 23);
             this.btnCleanInfo.TabIndex = 7;
@@ -321,13 +321,13 @@
             "龙寰-明泰 MT3"});
             this.cmbDevType.Location = new System.Drawing.Point(12, 13);
             this.cmbDevType.Name = "cmbDevType";
-            this.cmbDevType.Size = new System.Drawing.Size(141, 20);
+            this.cmbDevType.Size = new System.Drawing.Size(166, 20);
             this.cmbDevType.TabIndex = 0;
             // 
             // CardOperating
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(518, 632);
+            this.ClientSize = new System.Drawing.Size(512, 632);
             this.Controls.Add(this.cmbDevType);
             this.Controls.Add(this.CardInfoPanel);
             this.Controls.Add(this.btnCleanInfo);

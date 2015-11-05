@@ -70,7 +70,6 @@
             // 
             // DetailInfo
             // 
-            this.DetailInfo.Controls.Add(this.btnModify);
             this.DetailInfo.Controls.Add(this.textRemark);
             this.DetailInfo.Controls.Add(this.Remark);
             this.DetailInfo.Controls.Add(this.textBankAccount);
@@ -91,7 +90,7 @@
             this.DetailInfo.Controls.Add(this.Telephone);
             this.DetailInfo.Controls.Add(this.textLinkMan);
             this.DetailInfo.Controls.Add(this.LinkMan);
-            this.DetailInfo.Location = new System.Drawing.Point(317, 75);
+            this.DetailInfo.Location = new System.Drawing.Point(317, 55);
             this.DetailInfo.Name = "DetailInfo";
             this.DetailInfo.Size = new System.Drawing.Size(352, 470);
             this.DetailInfo.TabIndex = 2;
@@ -100,7 +99,7 @@
             // 
             // btnModify
             // 
-            this.btnModify.Location = new System.Drawing.Point(271, 20);
+            this.btnModify.Location = new System.Drawing.Point(594, 26);
             this.btnModify.Name = "btnModify";
             this.btnModify.Size = new System.Drawing.Size(75, 23);
             this.btnModify.TabIndex = 4;
@@ -110,15 +109,15 @@
             // 
             // textRemark
             // 
-            this.textRemark.Location = new System.Drawing.Point(87, 396);
+            this.textRemark.Location = new System.Drawing.Point(87, 425);
             this.textRemark.Name = "textRemark";
-            this.textRemark.Size = new System.Drawing.Size(126, 21);
+            this.textRemark.Size = new System.Drawing.Size(244, 21);
             this.textRemark.TabIndex = 22;
             // 
             // Remark
             // 
             this.Remark.AutoSize = true;
-            this.Remark.Location = new System.Drawing.Point(48, 399);
+            this.Remark.Location = new System.Drawing.Point(24, 429);
             this.Remark.Name = "Remark";
             this.Remark.Size = new System.Drawing.Size(29, 12);
             this.Remark.TabIndex = 21;
@@ -126,15 +125,15 @@
             // 
             // textBankAccount
             // 
-            this.textBankAccount.Location = new System.Drawing.Point(87, 356);
+            this.textBankAccount.Location = new System.Drawing.Point(87, 381);
             this.textBankAccount.Name = "textBankAccount";
-            this.textBankAccount.Size = new System.Drawing.Size(126, 21);
+            this.textBankAccount.Size = new System.Drawing.Size(244, 21);
             this.textBankAccount.TabIndex = 20;
             // 
             // BankAccount
             // 
             this.BankAccount.AutoSize = true;
-            this.BankAccount.Location = new System.Drawing.Point(24, 359);
+            this.BankAccount.Location = new System.Drawing.Point(24, 385);
             this.BankAccount.Name = "BankAccount";
             this.BankAccount.Size = new System.Drawing.Size(53, 12);
             this.BankAccount.TabIndex = 19;
@@ -143,7 +142,7 @@
             // ClientName
             // 
             this.ClientName.AutoSize = true;
-            this.ClientName.Location = new System.Drawing.Point(24, 39);
+            this.ClientName.Location = new System.Drawing.Point(24, 31);
             this.ClientName.Name = "ClientName";
             this.ClientName.Size = new System.Drawing.Size(53, 12);
             this.ClientName.TabIndex = 2;
@@ -151,23 +150,23 @@
             // 
             // textBank
             // 
-            this.textBank.Location = new System.Drawing.Point(87, 316);
+            this.textBank.Location = new System.Drawing.Point(87, 338);
             this.textBank.Name = "textBank";
-            this.textBank.Size = new System.Drawing.Size(126, 21);
+            this.textBank.Size = new System.Drawing.Size(244, 21);
             this.textBank.TabIndex = 18;
             // 
             // textClientName
             // 
-            this.textClientName.Location = new System.Drawing.Point(87, 36);
+            this.textClientName.Location = new System.Drawing.Point(87, 27);
             this.textClientName.MaxLength = 32;
             this.textClientName.Name = "textClientName";
-            this.textClientName.Size = new System.Drawing.Size(126, 21);
+            this.textClientName.Size = new System.Drawing.Size(244, 21);
             this.textClientName.TabIndex = 3;
             // 
             // Bank
             // 
             this.Bank.AutoSize = true;
-            this.Bank.Location = new System.Drawing.Point(24, 319);
+            this.Bank.Location = new System.Drawing.Point(24, 342);
             this.Bank.Name = "Bank";
             this.Bank.Size = new System.Drawing.Size(53, 12);
             this.Bank.TabIndex = 17;
@@ -175,15 +174,15 @@
             // 
             // textAddress
             // 
-            this.textAddress.Location = new System.Drawing.Point(87, 156);
+            this.textAddress.Location = new System.Drawing.Point(87, 162);
             this.textAddress.Name = "textAddress";
-            this.textAddress.Size = new System.Drawing.Size(126, 21);
+            this.textAddress.Size = new System.Drawing.Size(244, 21);
             this.textAddress.TabIndex = 16;
             // 
             // Address
             // 
             this.Address.AutoSize = true;
-            this.Address.Location = new System.Drawing.Point(24, 159);
+            this.Address.Location = new System.Drawing.Point(24, 166);
             this.Address.Name = "Address";
             this.Address.Size = new System.Drawing.Size(53, 12);
             this.Address.TabIndex = 15;
@@ -191,15 +190,15 @@
             // 
             // textZipcode
             // 
-            this.textZipcode.Location = new System.Drawing.Point(87, 276);
+            this.textZipcode.Location = new System.Drawing.Point(87, 294);
             this.textZipcode.Name = "textZipcode";
-            this.textZipcode.Size = new System.Drawing.Size(126, 21);
+            this.textZipcode.Size = new System.Drawing.Size(244, 21);
             this.textZipcode.TabIndex = 14;
             // 
             // Zipcode
             // 
             this.Zipcode.AutoSize = true;
-            this.Zipcode.Location = new System.Drawing.Point(24, 279);
+            this.Zipcode.Location = new System.Drawing.Point(24, 298);
             this.Zipcode.Name = "Zipcode";
             this.Zipcode.Size = new System.Drawing.Size(53, 12);
             this.Zipcode.TabIndex = 13;
@@ -207,15 +206,15 @@
             // 
             // textEmail
             // 
-            this.textEmail.Location = new System.Drawing.Point(87, 236);
+            this.textEmail.Location = new System.Drawing.Point(87, 249);
             this.textEmail.Name = "textEmail";
-            this.textEmail.Size = new System.Drawing.Size(126, 21);
+            this.textEmail.Size = new System.Drawing.Size(244, 21);
             this.textEmail.TabIndex = 12;
             // 
             // EMail
             // 
             this.EMail.AutoSize = true;
-            this.EMail.Location = new System.Drawing.Point(24, 239);
+            this.EMail.Location = new System.Drawing.Point(24, 253);
             this.EMail.Name = "EMail";
             this.EMail.Size = new System.Drawing.Size(53, 12);
             this.EMail.TabIndex = 11;
@@ -223,15 +222,15 @@
             // 
             // textFaxNum
             // 
-            this.textFaxNum.Location = new System.Drawing.Point(87, 196);
+            this.textFaxNum.Location = new System.Drawing.Point(87, 206);
             this.textFaxNum.Name = "textFaxNum";
-            this.textFaxNum.Size = new System.Drawing.Size(126, 21);
+            this.textFaxNum.Size = new System.Drawing.Size(244, 21);
             this.textFaxNum.TabIndex = 10;
             // 
             // FaxNum
             // 
             this.FaxNum.AutoSize = true;
-            this.FaxNum.Location = new System.Drawing.Point(24, 199);
+            this.FaxNum.Location = new System.Drawing.Point(24, 210);
             this.FaxNum.Name = "FaxNum";
             this.FaxNum.Size = new System.Drawing.Size(53, 12);
             this.FaxNum.TabIndex = 9;
@@ -239,15 +238,15 @@
             // 
             // textTelephone
             // 
-            this.textTelephone.Location = new System.Drawing.Point(87, 116);
+            this.textTelephone.Location = new System.Drawing.Point(87, 118);
             this.textTelephone.Name = "textTelephone";
-            this.textTelephone.Size = new System.Drawing.Size(126, 21);
+            this.textTelephone.Size = new System.Drawing.Size(244, 21);
             this.textTelephone.TabIndex = 8;
             // 
             // Telephone
             // 
             this.Telephone.AutoSize = true;
-            this.Telephone.Location = new System.Drawing.Point(24, 119);
+            this.Telephone.Location = new System.Drawing.Point(24, 122);
             this.Telephone.Name = "Telephone";
             this.Telephone.Size = new System.Drawing.Size(53, 12);
             this.Telephone.TabIndex = 7;
@@ -255,15 +254,15 @@
             // 
             // textLinkMan
             // 
-            this.textLinkMan.Location = new System.Drawing.Point(87, 76);
+            this.textLinkMan.Location = new System.Drawing.Point(87, 73);
             this.textLinkMan.Name = "textLinkMan";
-            this.textLinkMan.Size = new System.Drawing.Size(126, 21);
+            this.textLinkMan.Size = new System.Drawing.Size(244, 21);
             this.textLinkMan.TabIndex = 6;
             // 
             // LinkMan
             // 
             this.LinkMan.AutoSize = true;
-            this.LinkMan.Location = new System.Drawing.Point(36, 79);
+            this.LinkMan.Location = new System.Drawing.Point(24, 77);
             this.LinkMan.Name = "LinkMan";
             this.LinkMan.Size = new System.Drawing.Size(41, 12);
             this.LinkMan.TabIndex = 5;
@@ -272,7 +271,7 @@
             // ClientId
             // 
             this.ClientId.AutoSize = true;
-            this.ClientId.Location = new System.Drawing.Point(341, 31);
+            this.ClientId.Location = new System.Drawing.Point(341, 30);
             this.ClientId.Name = "ClientId";
             this.ClientId.Size = new System.Drawing.Size(53, 12);
             this.ClientId.TabIndex = 0;
@@ -285,7 +284,7 @@
             this.textClientId.MaxLength = 16;
             this.textClientId.Name = "textClientId";
             this.textClientId.ReadOnly = true;
-            this.textClientId.Size = new System.Drawing.Size(126, 21);
+            this.textClientId.Size = new System.Drawing.Size(184, 21);
             this.textClientId.TabIndex = 1;
             // 
             // btnAdd
@@ -316,7 +315,7 @@
             this.treeClient.LabelEdit = true;
             this.treeClient.Location = new System.Drawing.Point(25, 31);
             this.treeClient.Name = "treeClient";
-            this.treeClient.Size = new System.Drawing.Size(237, 514);
+            this.treeClient.Size = new System.Drawing.Size(237, 494);
             this.treeClient.TabIndex = 0;
             this.treeClient.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeClient_AfterLabelEdit);
             this.treeClient.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeClient_AfterSelect);
@@ -327,7 +326,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(708, 557);
+            this.ClientSize = new System.Drawing.Size(708, 532);
+            this.Controls.Add(this.btnModify);
             this.Controls.Add(this.btnDel);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.DetailInfo);

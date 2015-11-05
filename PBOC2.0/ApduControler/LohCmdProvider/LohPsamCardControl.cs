@@ -1293,8 +1293,11 @@ namespace LohApduCtrl
             Buffer.BlockCopy(byteKey, 0, m_MPK, 0, 16);
 
             node = PsamKeyNode.SelectSingleNode("TacKey");
-            byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
-            Buffer.BlockCopy(byteKey, 0, m_DTK, 0, 16);   
+            if (node != null)
+            {
+                byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);
+                Buffer.BlockCopy(byteKey, 0, m_DTK, 0, 16);
+            }
 
             node = PsamKeyNode.SelectSingleNode("MacEncryptKey");
             byteKey = DesCryptography.TripleDecryptData(PublicFunc.StringToBCD(node.InnerText), EncryptKey);

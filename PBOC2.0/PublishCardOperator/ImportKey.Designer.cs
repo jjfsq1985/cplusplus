@@ -66,7 +66,7 @@
             // ReadXml
             // 
             this.ReadXml.AutoSize = true;
-            this.ReadXml.Location = new System.Drawing.Point(50, 64);
+            this.ReadXml.Location = new System.Drawing.Point(97, 60);
             this.ReadXml.Name = "ReadXml";
             this.ReadXml.Size = new System.Drawing.Size(126, 16);
             this.ReadXml.TabIndex = 12;
@@ -75,7 +75,7 @@
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(376, 60);
+            this.BtnSave.Location = new System.Drawing.Point(376, 56);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(75, 23);
             this.BtnSave.TabIndex = 11;

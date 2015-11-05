@@ -154,18 +154,18 @@
             // 
             // textRemark
             // 
-            this.textRemark.Location = new System.Drawing.Point(109, 539);
+            this.textRemark.Location = new System.Drawing.Point(101, 516);
             this.textRemark.MaxLength = 50;
             this.textRemark.Multiline = false;
             this.textRemark.Name = "textRemark";
-            this.textRemark.Size = new System.Drawing.Size(246, 21);
+            this.textRemark.Size = new System.Drawing.Size(338, 47);
             this.textRemark.TabIndex = 100;
             this.textRemark.Text = "";
             // 
             // Remark
             // 
             this.Remark.AutoSize = true;
-            this.Remark.Location = new System.Drawing.Point(27, 543);
+            this.Remark.Location = new System.Drawing.Point(15, 520);
             this.Remark.Name = "Remark";
             this.Remark.Size = new System.Drawing.Size(29, 12);
             this.Remark.TabIndex = 99;
@@ -173,18 +173,18 @@
             // 
             // textBusDistance
             // 
-            this.textBusDistance.Location = new System.Drawing.Point(109, 514);
+            this.textBusDistance.Location = new System.Drawing.Point(310, 489);
             this.textBusDistance.MaxLength = 10;
             this.textBusDistance.Multiline = false;
             this.textBusDistance.Name = "textBusDistance";
-            this.textBusDistance.Size = new System.Drawing.Size(100, 21);
+            this.textBusDistance.Size = new System.Drawing.Size(129, 21);
             this.textBusDistance.TabIndex = 98;
             this.textBusDistance.Text = "";
             // 
             // BusDistance
             // 
             this.BusDistance.AutoSize = true;
-            this.BusDistance.Location = new System.Drawing.Point(27, 518);
+            this.BusDistance.Location = new System.Drawing.Point(246, 492);
             this.BusDistance.Name = "BusDistance";
             this.BusDistance.Size = new System.Drawing.Size(53, 12);
             this.BusDistance.TabIndex = 97;
@@ -214,24 +214,24 @@
             this.textBoalVol.MaxLength = 4;
             this.textBoalVol.Multiline = false;
             this.textBoalVol.Name = "textBoalVol";
-            this.textBoalVol.Size = new System.Drawing.Size(100, 21);
+            this.textBoalVol.Size = new System.Drawing.Size(126, 21);
             this.textBoalVol.TabIndex = 92;
             this.textBoalVol.Text = "";
             // 
             // textBoalCount
             // 
-            this.textBoalCount.Location = new System.Drawing.Point(109, 439);
+            this.textBoalCount.Location = new System.Drawing.Point(101, 439);
             this.textBoalCount.MaxLength = 1;
             this.textBoalCount.Multiline = false;
             this.textBoalCount.Name = "textBoalCount";
-            this.textBoalCount.Size = new System.Drawing.Size(100, 21);
+            this.textBoalCount.Size = new System.Drawing.Size(129, 21);
             this.textBoalCount.TabIndex = 90;
             this.textBoalCount.Text = "";
             // 
             // BoalVol
             // 
             this.BoalVol.AutoSize = true;
-            this.BoalVol.Location = new System.Drawing.Point(237, 443);
+            this.BoalVol.Location = new System.Drawing.Point(242, 442);
             this.BoalVol.Name = "BoalVol";
             this.BoalVol.Size = new System.Drawing.Size(53, 12);
             this.BoalVol.TabIndex = 91;
@@ -240,7 +240,7 @@
             // BoalCount
             // 
             this.BoalCount.AutoSize = true;
-            this.BoalCount.Location = new System.Drawing.Point(27, 443);
+            this.BoalCount.Location = new System.Drawing.Point(15, 442);
             this.BoalCount.Name = "BoalCount";
             this.BoalCount.Size = new System.Drawing.Size(53, 12);
             this.BoalCount.TabIndex = 89;
@@ -252,17 +252,17 @@
             this.textTelephone.MaxLength = 15;
             this.textTelephone.Multiline = false;
             this.textTelephone.Name = "textTelephone";
-            this.textTelephone.Size = new System.Drawing.Size(123, 21);
+            this.textTelephone.Size = new System.Drawing.Size(129, 21);
             this.textTelephone.TabIndex = 83;
             this.textTelephone.Text = "";
             // 
             // textSelfId
             // 
-            this.textSelfId.Location = new System.Drawing.Point(310, 239);
+            this.textSelfId.Location = new System.Drawing.Point(310, 236);
             this.textSelfId.MaxLength = 20;
             this.textSelfId.Multiline = false;
             this.textSelfId.Name = "textSelfId";
-            this.textSelfId.Size = new System.Drawing.Size(112, 21);
+            this.textSelfId.Size = new System.Drawing.Size(126, 21);
             this.textSelfId.TabIndex = 85;
             this.textSelfId.Text = "";
             // 
@@ -278,13 +278,13 @@
             "公交车"});
             this.cmbCarCategory.Location = new System.Drawing.Point(101, 209);
             this.cmbCarCategory.Name = "cmbCarCategory";
-            this.cmbCarCategory.Size = new System.Drawing.Size(110, 20);
+            this.cmbCarCategory.Size = new System.Drawing.Size(129, 20);
             this.cmbCarCategory.TabIndex = 79;
             // 
             // SelfId
             // 
             this.SelfId.AutoSize = true;
-            this.SelfId.Location = new System.Drawing.Point(242, 242);
+            this.SelfId.Location = new System.Drawing.Point(242, 240);
             this.SelfId.Name = "SelfId";
             this.SelfId.Size = new System.Drawing.Size(41, 12);
             this.SelfId.TabIndex = 84;
@@ -320,7 +320,7 @@
             // RateFlag
             // 
             this.RateFlag.AutoSize = true;
-            this.RateFlag.Location = new System.Drawing.Point(155, 186);
+            this.RateFlag.Location = new System.Drawing.Point(211, 186);
             this.RateFlag.Name = "RateFlag";
             this.RateFlag.Size = new System.Drawing.Size(11, 12);
             this.RateFlag.TabIndex = 75;
@@ -332,14 +332,14 @@
             this.textDiscountRate.MaxLength = 2;
             this.textDiscountRate.Multiline = false;
             this.textDiscountRate.Name = "textDiscountRate";
-            this.textDiscountRate.Size = new System.Drawing.Size(52, 21);
+            this.textDiscountRate.Size = new System.Drawing.Size(129, 21);
             this.textDiscountRate.TabIndex = 74;
             this.textDiscountRate.Text = "";
             this.textDiscountRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textDiscountRate_KeyPress);
             // 
             // DiscountRateExprieValid
             // 
-            this.DiscountRateExprieValid.Location = new System.Drawing.Point(310, 180);
+            this.DiscountRateExprieValid.Location = new System.Drawing.Point(310, 182);
             this.DiscountRateExprieValid.Name = "DiscountRateExprieValid";
             this.DiscountRateExprieValid.Size = new System.Drawing.Size(126, 21);
             this.DiscountRateExprieValid.TabIndex = 77;
@@ -364,18 +364,18 @@
             // 
             // textBoalFactoryNo
             // 
-            this.textBoalFactoryNo.Location = new System.Drawing.Point(109, 489);
+            this.textBoalFactoryNo.Location = new System.Drawing.Point(101, 489);
             this.textBoalFactoryNo.MaxLength = 7;
             this.textBoalFactoryNo.Multiline = false;
             this.textBoalFactoryNo.Name = "textBoalFactoryNo";
-            this.textBoalFactoryNo.Size = new System.Drawing.Size(155, 21);
+            this.textBoalFactoryNo.Size = new System.Drawing.Size(129, 21);
             this.textBoalFactoryNo.TabIndex = 96;
             this.textBoalFactoryNo.Text = "";
             // 
             // BoalFactoryNo
             // 
             this.BoalFactoryNo.AutoSize = true;
-            this.BoalFactoryNo.Location = new System.Drawing.Point(27, 493);
+            this.BoalFactoryNo.Location = new System.Drawing.Point(15, 492);
             this.BoalFactoryNo.Name = "BoalFactoryNo";
             this.BoalFactoryNo.Size = new System.Drawing.Size(77, 12);
             this.BoalFactoryNo.TabIndex = 95;
@@ -387,24 +387,24 @@
             this.textCarNo.MaxLength = 10;
             this.textCarNo.Multiline = false;
             this.textCarNo.Name = "textCarNo";
-            this.textCarNo.Size = new System.Drawing.Size(112, 21);
+            this.textCarNo.Size = new System.Drawing.Size(129, 21);
             this.textCarNo.TabIndex = 81;
             this.textCarNo.Text = "";
             // 
             // textBoalNo
             // 
-            this.textBoalNo.Location = new System.Drawing.Point(109, 414);
+            this.textBoalNo.Location = new System.Drawing.Point(101, 414);
             this.textBoalNo.MaxLength = 16;
             this.textBoalNo.Multiline = false;
             this.textBoalNo.Name = "textBoalNo";
-            this.textBoalNo.Size = new System.Drawing.Size(218, 21);
+            this.textBoalNo.Size = new System.Drawing.Size(335, 21);
             this.textBoalNo.TabIndex = 88;
             this.textBoalNo.Text = "";
             // 
             // BoalNo
             // 
             this.BoalNo.AutoSize = true;
-            this.BoalNo.Location = new System.Drawing.Point(27, 418);
+            this.BoalNo.Location = new System.Drawing.Point(15, 417);
             this.BoalNo.Name = "BoalNo";
             this.BoalNo.Size = new System.Drawing.Size(53, 12);
             this.BoalNo.TabIndex = 87;
@@ -412,15 +412,15 @@
             // 
             // BoalExprieValid
             // 
-            this.BoalExprieValid.Location = new System.Drawing.Point(109, 464);
+            this.BoalExprieValid.Location = new System.Drawing.Point(101, 464);
             this.BoalExprieValid.Name = "BoalExprieValid";
-            this.BoalExprieValid.Size = new System.Drawing.Size(121, 21);
+            this.BoalExprieValid.Size = new System.Drawing.Size(129, 21);
             this.BoalExprieValid.TabIndex = 94;
             // 
             // BoalExprie
             // 
             this.BoalExprie.AutoSize = true;
-            this.BoalExprie.Location = new System.Drawing.Point(27, 468);
+            this.BoalExprie.Location = new System.Drawing.Point(15, 467);
             this.BoalExprie.Name = "BoalExprie";
             this.BoalExprie.Size = new System.Drawing.Size(65, 12);
             this.BoalExprie.TabIndex = 93;
@@ -428,11 +428,11 @@
             // 
             // textPriceLevel
             // 
-            this.textPriceLevel.Location = new System.Drawing.Point(310, 101);
+            this.textPriceLevel.Location = new System.Drawing.Point(310, 100);
             this.textPriceLevel.MaxLength = 2;
             this.textPriceLevel.Multiline = false;
             this.textPriceLevel.Name = "textPriceLevel";
-            this.textPriceLevel.Size = new System.Drawing.Size(43, 21);
+            this.textPriceLevel.Size = new System.Drawing.Size(126, 21);
             this.textPriceLevel.TabIndex = 68;
             this.textPriceLevel.Text = "";
             this.textPriceLevel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPriceLevel_KeyPress);
@@ -452,7 +452,7 @@
             this.textUserIdentity.MaxLength = 18;
             this.textUserIdentity.Multiline = false;
             this.textUserIdentity.Name = "textUserIdentity";
-            this.textUserIdentity.Size = new System.Drawing.Size(194, 21);
+            this.textUserIdentity.Size = new System.Drawing.Size(126, 21);
             this.textUserIdentity.TabIndex = 70;
             this.textUserIdentity.Text = "";
             this.textUserIdentity.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textUserIdentity_KeyPress);
@@ -472,7 +472,7 @@
             this.textUserName.MaxLength = 10;
             this.textUserName.Multiline = false;
             this.textUserName.Name = "textUserName";
-            this.textUserName.Size = new System.Drawing.Size(101, 21);
+            this.textUserName.Size = new System.Drawing.Size(129, 21);
             this.textUserName.TabIndex = 66;
             this.textUserName.Text = "";
             // 
@@ -493,7 +493,7 @@
             this.textUserCardId.Multiline = false;
             this.textUserCardId.Name = "textUserCardId";
             this.textUserCardId.ReadOnly = true;
-            this.textUserCardId.Size = new System.Drawing.Size(170, 21);
+            this.textUserCardId.Size = new System.Drawing.Size(194, 21);
             this.textUserCardId.TabIndex = 56;
             this.textUserCardId.Text = "";
             // 
@@ -508,15 +508,15 @@
             // 
             // DateTo
             // 
-            this.DateTo.Location = new System.Drawing.Point(253, 76);
+            this.DateTo.Location = new System.Drawing.Point(310, 76);
             this.DateTo.Name = "DateTo";
-            this.DateTo.Size = new System.Drawing.Size(121, 21);
+            this.DateTo.Size = new System.Drawing.Size(126, 21);
             this.DateTo.TabIndex = 60;
             // 
             // labelFlag
             // 
             this.labelFlag.AutoSize = true;
-            this.labelFlag.Location = new System.Drawing.Point(235, 80);
+            this.labelFlag.Location = new System.Drawing.Point(260, 80);
             this.labelFlag.Name = "labelFlag";
             this.labelFlag.Size = new System.Drawing.Size(11, 12);
             this.labelFlag.TabIndex = 59;
@@ -526,7 +526,7 @@
             // 
             this.DateFrom.Location = new System.Drawing.Point(101, 76);
             this.DateFrom.Name = "DateFrom";
-            this.DateFrom.Size = new System.Drawing.Size(123, 21);
+            this.DateFrom.Size = new System.Drawing.Size(129, 21);
             this.DateFrom.TabIndex = 58;
             // 
             // DateValid
@@ -553,7 +553,7 @@
             this.groupLimit.Controls.Add(this.LimitGas);
             this.groupLimit.Location = new System.Drawing.Point(8, 266);
             this.groupLimit.Name = "groupLimit";
-            this.groupLimit.Size = new System.Drawing.Size(496, 142);
+            this.groupLimit.Size = new System.Drawing.Size(576, 142);
             this.groupLimit.TabIndex = 86;
             this.groupLimit.TabStop = false;
             this.groupLimit.Text = "支付限制信息";
@@ -566,15 +566,15 @@
             "不限",
             "CNG",
             "LNG"});
-            this.cmbLimitGasType.Location = new System.Drawing.Point(111, 42);
+            this.cmbLimitGasType.Location = new System.Drawing.Point(93, 43);
             this.cmbLimitGasType.Name = "cmbLimitGasType";
-            this.cmbLimitGasType.Size = new System.Drawing.Size(64, 20);
+            this.cmbLimitGasType.Size = new System.Drawing.Size(129, 20);
             this.cmbLimitGasType.TabIndex = 11;
             // 
             // LimitCarNo
             // 
             this.LimitCarNo.AutoSize = true;
-            this.LimitCarNo.Location = new System.Drawing.Point(18, 22);
+            this.LimitCarNo.Location = new System.Drawing.Point(9, 22);
             this.LimitCarNo.Name = "LimitCarNo";
             this.LimitCarNo.Size = new System.Drawing.Size(84, 16);
             this.LimitCarNo.TabIndex = 0;
@@ -586,17 +586,17 @@
             this.listLimitArea.FormattingEnabled = true;
             this.listLimitArea.Location = new System.Drawing.Point(302, 46);
             this.listLimitArea.Name = "listLimitArea";
-            this.listLimitArea.Size = new System.Drawing.Size(147, 84);
+            this.listLimitArea.Size = new System.Drawing.Size(126, 84);
             this.listLimitArea.TabIndex = 6;
             this.listLimitArea.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.listLimitArea_ItemCheck);
             // 
             // textGasAmount
             // 
-            this.textGasAmount.Location = new System.Drawing.Point(111, 99);
+            this.textGasAmount.Location = new System.Drawing.Point(93, 102);
             this.textGasAmount.MaxLength = 32;
             this.textGasAmount.Multiline = false;
             this.textGasAmount.Name = "textGasAmount";
-            this.textGasAmount.Size = new System.Drawing.Size(64, 21);
+            this.textGasAmount.Size = new System.Drawing.Size(129, 21);
             this.textGasAmount.TabIndex = 10;
             this.textGasAmount.Text = "";
             this.textGasAmount.Validated += new System.EventHandler(this.textGasAmount_Validated);
@@ -605,7 +605,7 @@
             // GasAmount
             // 
             this.GasAmount.AutoSize = true;
-            this.GasAmount.Location = new System.Drawing.Point(13, 101);
+            this.GasAmount.Location = new System.Drawing.Point(3, 105);
             this.GasAmount.Name = "GasAmount";
             this.GasAmount.Size = new System.Drawing.Size(89, 12);
             this.GasAmount.TabIndex = 9;
@@ -613,11 +613,11 @@
             // 
             // textGasCount
             // 
-            this.textGasCount.Location = new System.Drawing.Point(111, 69);
+            this.textGasCount.Location = new System.Drawing.Point(93, 72);
             this.textGasCount.MaxLength = 2;
             this.textGasCount.Multiline = false;
             this.textGasCount.Name = "textGasCount";
-            this.textGasCount.Size = new System.Drawing.Size(64, 21);
+            this.textGasCount.Size = new System.Drawing.Size(129, 21);
             this.textGasCount.TabIndex = 8;
             this.textGasCount.Text = "";
             this.textGasCount.Validated += new System.EventHandler(this.textGasCount_Validated);
@@ -626,7 +626,7 @@
             // GasCount
             // 
             this.GasCount.AutoSize = true;
-            this.GasCount.Location = new System.Drawing.Point(16, 73);
+            this.GasCount.Location = new System.Drawing.Point(9, 75);
             this.GasCount.Name = "GasCount";
             this.GasCount.Size = new System.Drawing.Size(77, 12);
             this.GasCount.TabIndex = 7;
@@ -635,7 +635,7 @@
             // LimitAreaCode
             // 
             this.LimitAreaCode.AutoSize = true;
-            this.LimitAreaCode.Location = new System.Drawing.Point(219, 54);
+            this.LimitAreaCode.Location = new System.Drawing.Point(226, 50);
             this.LimitAreaCode.Name = "LimitAreaCode";
             this.LimitAreaCode.Size = new System.Drawing.Size(77, 12);
             this.LimitAreaCode.TabIndex = 5;
@@ -651,15 +651,15 @@
             "限地市",
             "限上级单位",
             "限站点"});
-            this.cmbAreaLimit.Location = new System.Drawing.Point(302, 20);
+            this.cmbAreaLimit.Location = new System.Drawing.Point(302, 17);
             this.cmbAreaLimit.Name = "cmbAreaLimit";
-            this.cmbAreaLimit.Size = new System.Drawing.Size(82, 20);
+            this.cmbAreaLimit.Size = new System.Drawing.Size(126, 20);
             this.cmbAreaLimit.TabIndex = 2;
             // 
             // LimitArea
             // 
             this.LimitArea.AutoSize = true;
-            this.LimitArea.Location = new System.Drawing.Point(233, 24);
+            this.LimitArea.Location = new System.Drawing.Point(234, 20);
             this.LimitArea.Name = "LimitArea";
             this.LimitArea.Size = new System.Drawing.Size(53, 12);
             this.LimitArea.TabIndex = 1;
@@ -668,7 +668,7 @@
             // LimitGas
             // 
             this.LimitGas.AutoSize = true;
-            this.LimitGas.Location = new System.Drawing.Point(22, 46);
+            this.LimitGas.Location = new System.Drawing.Point(9, 46);
             this.LimitGas.Name = "LimitGas";
             this.LimitGas.Size = new System.Drawing.Size(53, 12);
             this.LimitGas.TabIndex = 3;
@@ -686,7 +686,7 @@
             // 
             // btnModifyCard
             // 
-            this.btnModifyCard.Location = new System.Drawing.Point(492, 74);
+            this.btnModifyCard.Location = new System.Drawing.Point(492, 49);
             this.btnModifyCard.Name = "btnModifyCard";
             this.btnModifyCard.Size = new System.Drawing.Size(75, 23);
             this.btnModifyCard.TabIndex = 102;
@@ -796,7 +796,7 @@
             // 
             this.cmbMotherCard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMotherCard.FormattingEnabled = true;
-            this.cmbMotherCard.Location = new System.Drawing.Point(301, 50);
+            this.cmbMotherCard.Location = new System.Drawing.Point(323, 50);
             this.cmbMotherCard.Name = "cmbMotherCard";
             this.cmbMotherCard.Size = new System.Drawing.Size(156, 20);
             this.cmbMotherCard.TabIndex = 107;
@@ -826,7 +826,7 @@
             "单位母卡"});
             this.cmbCardType.Location = new System.Drawing.Point(310, 19);
             this.cmbCardType.Name = "cmbCardType";
-            this.cmbCardType.Size = new System.Drawing.Size(82, 20);
+            this.cmbCardType.Size = new System.Drawing.Size(169, 20);
             this.cmbCardType.TabIndex = 105;
             // 
             // cmbIdType
@@ -840,7 +840,7 @@
             "其他证"});
             this.cmbIdType.Location = new System.Drawing.Point(101, 129);
             this.cmbIdType.Name = "cmbIdType";
-            this.cmbIdType.Size = new System.Drawing.Size(89, 20);
+            this.cmbIdType.Size = new System.Drawing.Size(129, 20);
             this.cmbIdType.TabIndex = 104;
             // 
             // IdTypeLabel
@@ -898,11 +898,11 @@
             // 
             // textPIN
             // 
-            this.textPIN.Location = new System.Drawing.Point(106, 14);
+            this.textPIN.Location = new System.Drawing.Point(113, 14);
             this.textPIN.MaxLength = 6;
             this.textPIN.Multiline = false;
             this.textPIN.Name = "textPIN";
-            this.textPIN.Size = new System.Drawing.Size(96, 21);
+            this.textPIN.Size = new System.Drawing.Size(97, 21);
             this.textPIN.TabIndex = 46;
             this.textPIN.Text = "";
             this.textPIN.Validated += new System.EventHandler(this.textPIN_Validated);
@@ -917,18 +917,18 @@
             this.PINOperate.Controls.Add(this.OldPIN);
             this.PINOperate.Controls.Add(this.NewPIN);
             this.PINOperate.Controls.Add(this.btnPinUnlock);
-            this.PINOperate.Location = new System.Drawing.Point(21, 144);
+            this.PINOperate.Location = new System.Drawing.Point(3, 144);
             this.PINOperate.Name = "PINOperate";
-            this.PINOperate.Size = new System.Drawing.Size(320, 131);
+            this.PINOperate.Size = new System.Drawing.Size(338, 131);
             this.PINOperate.TabIndex = 53;
             this.PINOperate.TabStop = false;
             this.PINOperate.Text = "PIN码";
             // 
             // btnPinChange
             // 
-            this.btnPinChange.Location = new System.Drawing.Point(122, 98);
+            this.btnPinChange.Location = new System.Drawing.Point(110, 80);
             this.btnPinChange.Name = "btnPinChange";
-            this.btnPinChange.Size = new System.Drawing.Size(59, 23);
+            this.btnPinChange.Size = new System.Drawing.Size(64, 23);
             this.btnPinChange.TabIndex = 53;
             this.btnPinChange.Text = "修改PIN";
             this.btnPinChange.UseVisualStyleBackColor = true;
@@ -936,9 +936,9 @@
             // 
             // btnPinReset
             // 
-            this.btnPinReset.Location = new System.Drawing.Point(220, 65);
+            this.btnPinReset.Location = new System.Drawing.Point(238, 46);
             this.btnPinReset.Name = "btnPinReset";
-            this.btnPinReset.Size = new System.Drawing.Size(59, 23);
+            this.btnPinReset.Size = new System.Drawing.Size(64, 23);
             this.btnPinReset.TabIndex = 52;
             this.btnPinReset.Text = "PIN重装";
             this.btnPinReset.UseVisualStyleBackColor = true;
@@ -946,7 +946,7 @@
             // 
             // textNewPIN
             // 
-            this.textNewPIN.Location = new System.Drawing.Point(86, 66);
+            this.textNewPIN.Location = new System.Drawing.Point(110, 44);
             this.textNewPIN.MaxLength = 6;
             this.textNewPIN.Multiline = false;
             this.textNewPIN.Name = "textNewPIN";
@@ -957,7 +957,7 @@
             // 
             // textOldPIN
             // 
-            this.textOldPIN.Location = new System.Drawing.Point(86, 27);
+            this.textOldPIN.Location = new System.Drawing.Point(110, 18);
             this.textOldPIN.MaxLength = 6;
             this.textOldPIN.Multiline = false;
             this.textOldPIN.Name = "textOldPIN";
@@ -969,7 +969,7 @@
             // OldPIN
             // 
             this.OldPIN.AutoSize = true;
-            this.OldPIN.Location = new System.Drawing.Point(28, 31);
+            this.OldPIN.Location = new System.Drawing.Point(10, 23);
             this.OldPIN.Name = "OldPIN";
             this.OldPIN.Size = new System.Drawing.Size(47, 12);
             this.OldPIN.TabIndex = 49;
@@ -978,7 +978,7 @@
             // NewPIN
             // 
             this.NewPIN.AutoSize = true;
-            this.NewPIN.Location = new System.Drawing.Point(28, 70);
+            this.NewPIN.Location = new System.Drawing.Point(10, 49);
             this.NewPIN.Name = "NewPIN";
             this.NewPIN.Size = new System.Drawing.Size(47, 12);
             this.NewPIN.TabIndex = 48;
@@ -986,9 +986,9 @@
             // 
             // btnPinUnlock
             // 
-            this.btnPinUnlock.Location = new System.Drawing.Point(220, 26);
+            this.btnPinUnlock.Location = new System.Drawing.Point(238, 18);
             this.btnPinUnlock.Name = "btnPinUnlock";
-            this.btnPinUnlock.Size = new System.Drawing.Size(59, 23);
+            this.btnPinUnlock.Size = new System.Drawing.Size(64, 23);
             this.btnPinUnlock.TabIndex = 47;
             this.btnPinUnlock.Text = "PIN解锁";
             this.btnPinUnlock.UseVisualStyleBackColor = true;
@@ -996,7 +996,7 @@
             // 
             // btnCardLoad
             // 
-            this.btnCardLoad.Location = new System.Drawing.Point(241, 50);
+            this.btnCardLoad.Location = new System.Drawing.Point(241, 39);
             this.btnCardLoad.Name = "btnCardLoad";
             this.btnCardLoad.Size = new System.Drawing.Size(64, 23);
             this.btnCardLoad.TabIndex = 35;
@@ -1006,7 +1006,7 @@
             // 
             // textMoney
             // 
-            this.textMoney.Location = new System.Drawing.Point(105, 48);
+            this.textMoney.Location = new System.Drawing.Point(113, 39);
             this.textMoney.Multiline = false;
             this.textMoney.Name = "textMoney";
             this.textMoney.Size = new System.Drawing.Size(97, 21);
@@ -1018,32 +1018,32 @@
             this.LabelPIN.AutoSize = true;
             this.LabelPIN.Location = new System.Drawing.Point(10, 18);
             this.LabelPIN.Name = "LabelPIN";
-            this.LabelPIN.Size = new System.Drawing.Size(83, 12);
+            this.LabelPIN.Size = new System.Drawing.Size(71, 12);
             this.LabelPIN.TabIndex = 45;
-            this.LabelPIN.Text = "请输入PIN码：";
+            this.LabelPIN.Text = "请输入PIN码";
             // 
             // Money
             // 
             this.Money.AutoSize = true;
-            this.Money.Location = new System.Drawing.Point(46, 52);
+            this.Money.Location = new System.Drawing.Point(10, 45);
             this.Money.Name = "Money";
-            this.Money.Size = new System.Drawing.Size(41, 12);
+            this.Money.Size = new System.Drawing.Size(29, 12);
             this.Money.TabIndex = 37;
-            this.Money.Text = "金额：";
+            this.Money.Text = "金额";
             // 
             // Balance
             // 
             this.Balance.AutoSize = true;
-            this.Balance.Location = new System.Drawing.Point(46, 86);
+            this.Balance.Location = new System.Drawing.Point(10, 71);
             this.Balance.Name = "Balance";
-            this.Balance.Size = new System.Drawing.Size(41, 12);
+            this.Balance.Size = new System.Drawing.Size(29, 12);
             this.Balance.TabIndex = 44;
-            this.Balance.Text = "余额：";
+            this.Balance.Text = "余额";
             // 
             // Unit2
             // 
             this.Unit2.AutoSize = true;
-            this.Unit2.Location = new System.Drawing.Point(210, 55);
+            this.Unit2.Location = new System.Drawing.Point(211, 45);
             this.Unit2.Name = "Unit2";
             this.Unit2.Size = new System.Drawing.Size(17, 12);
             this.Unit2.TabIndex = 38;
@@ -1051,7 +1051,7 @@
             // 
             // btnUnlockGrayCard
             // 
-            this.btnUnlockGrayCard.Location = new System.Drawing.Point(241, 110);
+            this.btnUnlockGrayCard.Location = new System.Drawing.Point(241, 93);
             this.btnUnlockGrayCard.Name = "btnUnlockGrayCard";
             this.btnUnlockGrayCard.Size = new System.Drawing.Size(64, 23);
             this.btnUnlockGrayCard.TabIndex = 43;
@@ -1061,7 +1061,7 @@
             // 
             // btnBalance
             // 
-            this.btnBalance.Location = new System.Drawing.Point(241, 81);
+            this.btnBalance.Location = new System.Drawing.Point(241, 66);
             this.btnBalance.Name = "btnBalance";
             this.btnBalance.Size = new System.Drawing.Size(64, 23);
             this.btnBalance.TabIndex = 39;
@@ -1074,7 +1074,7 @@
             this.GrayFlag.AutoCheck = false;
             this.GrayFlag.AutoSize = true;
             this.GrayFlag.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GrayFlag.Location = new System.Drawing.Point(107, 116);
+            this.GrayFlag.Location = new System.Drawing.Point(113, 96);
             this.GrayFlag.Name = "GrayFlag";
             this.GrayFlag.Size = new System.Drawing.Size(45, 16);
             this.GrayFlag.TabIndex = 42;
@@ -1084,18 +1084,18 @@
             // textBalance
             // 
             this.textBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBalance.Location = new System.Drawing.Point(106, 82);
+            this.textBalance.Location = new System.Drawing.Point(113, 66);
             this.textBalance.Multiline = false;
             this.textBalance.Name = "textBalance";
             this.textBalance.ReadOnly = true;
-            this.textBalance.Size = new System.Drawing.Size(96, 21);
+            this.textBalance.Size = new System.Drawing.Size(97, 21);
             this.textBalance.TabIndex = 40;
             this.textBalance.Text = "";
             // 
             // Unit1
             // 
             this.Unit1.AutoSize = true;
-            this.Unit1.Location = new System.Drawing.Point(211, 87);
+            this.Unit1.Location = new System.Drawing.Point(211, 71);
             this.Unit1.Name = "Unit1";
             this.Unit1.Size = new System.Drawing.Size(17, 12);
             this.Unit1.TabIndex = 41;
@@ -1126,11 +1126,11 @@
             // 
             // textPIN_Ly
             // 
-            this.textPIN_Ly.Location = new System.Drawing.Point(114, 14);
+            this.textPIN_Ly.Location = new System.Drawing.Point(113, 14);
             this.textPIN_Ly.MaxLength = 6;
             this.textPIN_Ly.Multiline = false;
             this.textPIN_Ly.Name = "textPIN_Ly";
-            this.textPIN_Ly.Size = new System.Drawing.Size(96, 21);
+            this.textPIN_Ly.Size = new System.Drawing.Size(97, 21);
             this.textPIN_Ly.TabIndex = 117;
             this.textPIN_Ly.Text = "";
             this.textPIN_Ly.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textPIN_Ly_KeyPress);
@@ -1139,11 +1139,11 @@
             // textLyBalance
             // 
             this.textLyBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textLyBalance.Location = new System.Drawing.Point(114, 82);
+            this.textLyBalance.Location = new System.Drawing.Point(113, 72);
             this.textLyBalance.Multiline = false;
             this.textLyBalance.Name = "textLyBalance";
             this.textLyBalance.ReadOnly = true;
-            this.textLyBalance.Size = new System.Drawing.Size(96, 21);
+            this.textLyBalance.Size = new System.Drawing.Size(97, 21);
             this.textLyBalance.TabIndex = 111;
             this.textLyBalance.Text = "";
             // 
@@ -1156,18 +1156,18 @@
             this.PINOperate_Ly.Controls.Add(this.LyOldPin);
             this.PINOperate_Ly.Controls.Add(this.LyNewPin);
             this.PINOperate_Ly.Controls.Add(this.PinUnlock_Ly);
-            this.PINOperate_Ly.Location = new System.Drawing.Point(21, 144);
+            this.PINOperate_Ly.Location = new System.Drawing.Point(3, 144);
             this.PINOperate_Ly.Name = "PINOperate_Ly";
-            this.PINOperate_Ly.Size = new System.Drawing.Size(320, 131);
+            this.PINOperate_Ly.Size = new System.Drawing.Size(338, 131);
             this.PINOperate_Ly.TabIndex = 118;
             this.PINOperate_Ly.TabStop = false;
             this.PINOperate_Ly.Text = "积分PIN码";
             // 
             // ChangePin_Ly
             // 
-            this.ChangePin_Ly.Location = new System.Drawing.Point(130, 98);
+            this.ChangePin_Ly.Location = new System.Drawing.Point(110, 72);
             this.ChangePin_Ly.Name = "ChangePin_Ly";
-            this.ChangePin_Ly.Size = new System.Drawing.Size(59, 23);
+            this.ChangePin_Ly.Size = new System.Drawing.Size(64, 23);
             this.ChangePin_Ly.TabIndex = 53;
             this.ChangePin_Ly.Text = "修改PIN";
             this.ChangePin_Ly.UseVisualStyleBackColor = true;
@@ -1175,9 +1175,9 @@
             // 
             // PinReset_Ly
             // 
-            this.PinReset_Ly.Location = new System.Drawing.Point(228, 65);
+            this.PinReset_Ly.Location = new System.Drawing.Point(246, 48);
             this.PinReset_Ly.Name = "PinReset_Ly";
-            this.PinReset_Ly.Size = new System.Drawing.Size(59, 23);
+            this.PinReset_Ly.Size = new System.Drawing.Size(64, 23);
             this.PinReset_Ly.TabIndex = 52;
             this.PinReset_Ly.Text = "PIN重装";
             this.PinReset_Ly.UseVisualStyleBackColor = true;
@@ -1185,28 +1185,28 @@
             // 
             // textNewPin_Ly
             // 
-            this.textNewPin_Ly.Location = new System.Drawing.Point(94, 66);
+            this.textNewPin_Ly.Location = new System.Drawing.Point(110, 45);
             this.textNewPin_Ly.MaxLength = 6;
             this.textNewPin_Ly.Multiline = false;
             this.textNewPin_Ly.Name = "textNewPin_Ly";
-            this.textNewPin_Ly.Size = new System.Drawing.Size(95, 21);
+            this.textNewPin_Ly.Size = new System.Drawing.Size(97, 21);
             this.textNewPin_Ly.TabIndex = 51;
             this.textNewPin_Ly.Text = "";
             // 
             // textOldPin_Ly
             // 
-            this.textOldPin_Ly.Location = new System.Drawing.Point(94, 27);
+            this.textOldPin_Ly.Location = new System.Drawing.Point(110, 20);
             this.textOldPin_Ly.MaxLength = 6;
             this.textOldPin_Ly.Multiline = false;
             this.textOldPin_Ly.Name = "textOldPin_Ly";
-            this.textOldPin_Ly.Size = new System.Drawing.Size(95, 21);
+            this.textOldPin_Ly.Size = new System.Drawing.Size(97, 21);
             this.textOldPin_Ly.TabIndex = 50;
             this.textOldPin_Ly.Text = "";
             // 
             // LyOldPin
             // 
             this.LyOldPin.AutoSize = true;
-            this.LyOldPin.Location = new System.Drawing.Point(28, 31);
+            this.LyOldPin.Location = new System.Drawing.Point(7, 23);
             this.LyOldPin.Name = "LyOldPin";
             this.LyOldPin.Size = new System.Drawing.Size(47, 12);
             this.LyOldPin.TabIndex = 49;
@@ -1215,7 +1215,7 @@
             // LyNewPin
             // 
             this.LyNewPin.AutoSize = true;
-            this.LyNewPin.Location = new System.Drawing.Point(28, 70);
+            this.LyNewPin.Location = new System.Drawing.Point(7, 48);
             this.LyNewPin.Name = "LyNewPin";
             this.LyNewPin.Size = new System.Drawing.Size(47, 12);
             this.LyNewPin.TabIndex = 48;
@@ -1223,9 +1223,9 @@
             // 
             // PinUnlock_Ly
             // 
-            this.PinUnlock_Ly.Location = new System.Drawing.Point(228, 26);
+            this.PinUnlock_Ly.Location = new System.Drawing.Point(246, 21);
             this.PinUnlock_Ly.Name = "PinUnlock_Ly";
-            this.PinUnlock_Ly.Size = new System.Drawing.Size(59, 23);
+            this.PinUnlock_Ly.Size = new System.Drawing.Size(64, 23);
             this.PinUnlock_Ly.TabIndex = 47;
             this.PinUnlock_Ly.Text = "PIN解锁";
             this.PinUnlock_Ly.UseVisualStyleBackColor = true;
@@ -1234,7 +1234,7 @@
             // UnitLy2
             // 
             this.UnitLy2.AutoSize = true;
-            this.UnitLy2.Location = new System.Drawing.Point(219, 87);
+            this.UnitLy2.Location = new System.Drawing.Point(216, 75);
             this.UnitLy2.Name = "UnitLy2";
             this.UnitLy2.Size = new System.Drawing.Size(17, 12);
             this.UnitLy2.TabIndex = 112;
@@ -1242,7 +1242,7 @@
             // 
             // LoadLoyalty
             // 
-            this.LoadLoyalty.Location = new System.Drawing.Point(249, 50);
+            this.LoadLoyalty.Location = new System.Drawing.Point(249, 43);
             this.LoadLoyalty.Name = "LoadLoyalty";
             this.LoadLoyalty.Size = new System.Drawing.Size(64, 23);
             this.LoadLoyalty.TabIndex = 106;
@@ -1255,7 +1255,7 @@
             this.ChkGrayLy.AutoCheck = false;
             this.ChkGrayLy.AutoSize = true;
             this.ChkGrayLy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ChkGrayLy.Location = new System.Drawing.Point(115, 116);
+            this.ChkGrayLy.Location = new System.Drawing.Point(114, 103);
             this.ChkGrayLy.Name = "ChkGrayLy";
             this.ChkGrayLy.Size = new System.Drawing.Size(45, 16);
             this.ChkGrayLy.TabIndex = 113;
@@ -1264,7 +1264,7 @@
             // 
             // textLoadValue
             // 
-            this.textLoadValue.Location = new System.Drawing.Point(113, 48);
+            this.textLoadValue.Location = new System.Drawing.Point(113, 42);
             this.textLoadValue.Multiline = false;
             this.textLoadValue.Name = "textLoadValue";
             this.textLoadValue.Size = new System.Drawing.Size(97, 21);
@@ -1273,7 +1273,7 @@
             // 
             // ReadLoyalty
             // 
-            this.ReadLoyalty.Location = new System.Drawing.Point(249, 81);
+            this.ReadLoyalty.Location = new System.Drawing.Point(249, 70);
             this.ReadLoyalty.Name = "ReadLoyalty";
             this.ReadLoyalty.Size = new System.Drawing.Size(64, 23);
             this.ReadLoyalty.TabIndex = 110;
@@ -1286,13 +1286,13 @@
             this.LabelPIN_Ly.AutoSize = true;
             this.LabelPIN_Ly.Location = new System.Drawing.Point(10, 18);
             this.LabelPIN_Ly.Name = "LabelPIN_Ly";
-            this.LabelPIN_Ly.Size = new System.Drawing.Size(107, 12);
+            this.LabelPIN_Ly.Size = new System.Drawing.Size(95, 12);
             this.LabelPIN_Ly.TabIndex = 116;
-            this.LabelPIN_Ly.Text = "请输入积分PIN码：";
+            this.LabelPIN_Ly.Text = "请输入积分PIN码";
             // 
             // UnGrayLy
             // 
-            this.UnGrayLy.Location = new System.Drawing.Point(249, 110);
+            this.UnGrayLy.Location = new System.Drawing.Point(249, 97);
             this.UnGrayLy.Name = "UnGrayLy";
             this.UnGrayLy.Size = new System.Drawing.Size(64, 23);
             this.UnGrayLy.TabIndex = 114;
@@ -1303,16 +1303,16 @@
             // LoadValue
             // 
             this.LoadValue.AutoSize = true;
-            this.LoadValue.Location = new System.Drawing.Point(46, 52);
+            this.LoadValue.Location = new System.Drawing.Point(10, 47);
             this.LoadValue.Name = "LoadValue";
-            this.LoadValue.Size = new System.Drawing.Size(65, 12);
+            this.LoadValue.Size = new System.Drawing.Size(53, 12);
             this.LoadValue.TabIndex = 108;
-            this.LoadValue.Text = "圈存积分：";
+            this.LoadValue.Text = "圈存积分";
             // 
             // UnitLy1
             // 
             this.UnitLy1.AutoSize = true;
-            this.UnitLy1.Location = new System.Drawing.Point(218, 55);
+            this.UnitLy1.Location = new System.Drawing.Point(216, 47);
             this.UnitLy1.Name = "UnitLy1";
             this.UnitLy1.Size = new System.Drawing.Size(17, 12);
             this.UnitLy1.TabIndex = 109;
@@ -1321,11 +1321,11 @@
             // LyBalance
             // 
             this.LyBalance.AutoSize = true;
-            this.LyBalance.Location = new System.Drawing.Point(46, 86);
+            this.LyBalance.Location = new System.Drawing.Point(10, 78);
             this.LyBalance.Name = "LyBalance";
-            this.LyBalance.Size = new System.Drawing.Size(65, 12);
+            this.LyBalance.Size = new System.Drawing.Size(53, 12);
             this.LyBalance.TabIndex = 115;
-            this.LyBalance.Text = "积分余额：";
+            this.LyBalance.Text = "积分余额";
             // 
             // cmbDevType
             // 
@@ -1335,15 +1335,15 @@
             "达华-明泰 MT3",
             "龙寰-Duali DE-620",
             "龙寰-明泰 MT3"});
-            this.cmbDevType.Location = new System.Drawing.Point(132, 10);
+            this.cmbDevType.Location = new System.Drawing.Point(108, 5);
             this.cmbDevType.Name = "cmbDevType";
-            this.cmbDevType.Size = new System.Drawing.Size(145, 20);
+            this.cmbDevType.Size = new System.Drawing.Size(194, 20);
             this.cmbDevType.TabIndex = 104;
             // 
             // CardReader
             // 
             this.CardReader.AutoSize = true;
-            this.CardReader.Location = new System.Drawing.Point(67, 13);
+            this.CardReader.Location = new System.Drawing.Point(22, 8);
             this.CardReader.Name = "CardReader";
             this.CardReader.Size = new System.Drawing.Size(41, 12);
             this.CardReader.TabIndex = 105;
@@ -1353,7 +1353,7 @@
             // 
             this.ContactCard.AutoSize = true;
             this.ContactCard.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ContactCard.Location = new System.Drawing.Point(317, 12);
+            this.ContactCard.Location = new System.Drawing.Point(317, 7);
             this.ContactCard.Name = "ContactCard";
             this.ContactCard.Size = new System.Drawing.Size(60, 16);
             this.ContactCard.TabIndex = 105;

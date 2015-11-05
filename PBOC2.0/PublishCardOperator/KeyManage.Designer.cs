@@ -75,7 +75,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(749, 410);
+            this.btnClose.Location = new System.Drawing.Point(727, 410);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 8;
@@ -85,7 +85,7 @@
             // 
             // btnSaveEdit
             // 
-            this.btnSaveEdit.Location = new System.Drawing.Point(727, 202);
+            this.btnSaveEdit.Location = new System.Drawing.Point(727, 146);
             this.btnSaveEdit.Name = "btnSaveEdit";
             this.btnSaveEdit.Size = new System.Drawing.Size(75, 23);
             this.btnSaveEdit.TabIndex = 7;
@@ -95,7 +95,7 @@
             // 
             // btnEditKey
             // 
-            this.btnEditKey.Location = new System.Drawing.Point(727, 151);
+            this.btnEditKey.Location = new System.Drawing.Point(727, 106);
             this.btnEditKey.Name = "btnEditKey";
             this.btnEditKey.Size = new System.Drawing.Size(75, 23);
             this.btnEditKey.TabIndex = 6;
@@ -105,7 +105,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(727, 100);
+            this.btnDelete.Location = new System.Drawing.Point(727, 65);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 5;
@@ -115,7 +115,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(727, 49);
+            this.btnAdd.Location = new System.Drawing.Point(727, 26);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 4;
@@ -136,7 +136,7 @@
             this.AppKeyGridView.RowHeadersVisible = false;
             this.AppKeyGridView.RowTemplate.Height = 23;
             this.AppKeyGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.AppKeyGridView.Size = new System.Drawing.Size(811, 126);
+            this.AppKeyGridView.Size = new System.Drawing.Size(789, 126);
             this.AppKeyGridView.TabIndex = 3;
             this.AppKeyGridView.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.AppKeyGridView_CellLeave);
             this.AppKeyGridView.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.AppKeyGridView_EditingControlShowing);
@@ -154,7 +154,7 @@
             // 
             // btnPrevPage
             // 
-            this.btnPrevPage.Location = new System.Drawing.Point(180, 239);
+            this.btnPrevPage.Location = new System.Drawing.Point(551, 239);
             this.btnPrevPage.Name = "btnPrevPage";
             this.btnPrevPage.Size = new System.Drawing.Size(75, 23);
             this.btnPrevPage.TabIndex = 9;
@@ -164,7 +164,7 @@
             // 
             // btnNextPage
             // 
-            this.btnNextPage.Location = new System.Drawing.Point(454, 239);
+            this.btnNextPage.Location = new System.Drawing.Point(632, 239);
             this.btnNextPage.Name = "btnNextPage";
             this.btnNextPage.Size = new System.Drawing.Size(75, 23);
             this.btnNextPage.TabIndex = 10;
@@ -176,7 +176,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(832, 441);
+            this.ClientSize = new System.Drawing.Size(816, 441);
             this.Controls.Add(this.btnNextPage);
             this.Controls.Add(this.btnPrevPage);
             this.Controls.Add(this.AppKeyLabel);

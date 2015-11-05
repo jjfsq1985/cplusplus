@@ -47,7 +47,7 @@
             // 
             // btnGenerateEncryptKey
             // 
-            this.btnGenerateEncryptKey.Location = new System.Drawing.Point(78, 96);
+            this.btnGenerateEncryptKey.Location = new System.Drawing.Point(102, 96);
             this.btnGenerateEncryptKey.Name = "btnGenerateEncryptKey";
             this.btnGenerateEncryptKey.Size = new System.Drawing.Size(88, 23);
             this.btnGenerateEncryptKey.TabIndex = 1;
@@ -57,7 +57,7 @@
             // 
             // btnExportCardKey
             // 
-            this.btnExportCardKey.Location = new System.Drawing.Point(276, 96);
+            this.btnExportCardKey.Location = new System.Drawing.Point(196, 96);
             this.btnExportCardKey.Name = "btnExportCardKey";
             this.btnExportCardKey.Size = new System.Drawing.Size(92, 23);
             this.btnExportCardKey.TabIndex = 2;
@@ -79,7 +79,7 @@
             this.textData.Location = new System.Drawing.Point(102, 25);
             this.textData.MaxLength = 16;
             this.textData.Name = "textData";
-            this.textData.Size = new System.Drawing.Size(174, 21);
+            this.textData.Size = new System.Drawing.Size(340, 21);
             this.textData.TabIndex = 4;
             // 
             // textKey

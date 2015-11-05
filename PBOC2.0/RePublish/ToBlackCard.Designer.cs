@@ -45,7 +45,7 @@
             // LabelName
             // 
             this.LabelName.AutoSize = true;
-            this.LabelName.Location = new System.Drawing.Point(45, 69);
+            this.LabelName.Location = new System.Drawing.Point(15, 51);
             this.LabelName.Name = "LabelName";
             this.LabelName.Size = new System.Drawing.Size(65, 12);
             this.LabelName.TabIndex = 0;
@@ -53,15 +53,15 @@
             // 
             // textName
             // 
-            this.textName.Location = new System.Drawing.Point(151, 66);
+            this.textName.Location = new System.Drawing.Point(117, 48);
             this.textName.MaxLength = 10;
             this.textName.Name = "textName";
-            this.textName.Size = new System.Drawing.Size(159, 21);
+            this.textName.Size = new System.Drawing.Size(191, 21);
             this.textName.TabIndex = 1;
             // 
             // textPersonalID
             // 
-            this.textPersonalID.Location = new System.Drawing.Point(151, 102);
+            this.textPersonalID.Location = new System.Drawing.Point(117, 76);
             this.textPersonalID.MaxLength = 18;
             this.textPersonalID.Name = "textPersonalID";
             this.textPersonalID.Size = new System.Drawing.Size(191, 21);
@@ -71,7 +71,7 @@
             // LabelPersonalID
             // 
             this.LabelPersonalID.AutoSize = true;
-            this.LabelPersonalID.Location = new System.Drawing.Point(45, 105);
+            this.LabelPersonalID.Location = new System.Drawing.Point(15, 79);
             this.LabelPersonalID.Name = "LabelPersonalID";
             this.LabelPersonalID.Size = new System.Drawing.Size(77, 12);
             this.LabelPersonalID.TabIndex = 3;
@@ -80,7 +80,7 @@
             // LabelTel
             // 
             this.LabelTel.AutoSize = true;
-            this.LabelTel.Location = new System.Drawing.Point(45, 141);
+            this.LabelTel.Location = new System.Drawing.Point(15, 107);
             this.LabelTel.Name = "LabelTel";
             this.LabelTel.Size = new System.Drawing.Size(89, 12);
             this.LabelTel.TabIndex = 4;
@@ -89,7 +89,7 @@
             // LabelCardID
             // 
             this.LabelCardID.AutoSize = true;
-            this.LabelCardID.Location = new System.Drawing.Point(45, 31);
+            this.LabelCardID.Location = new System.Drawing.Point(15, 20);
             this.LabelCardID.Name = "LabelCardID";
             this.LabelCardID.Size = new System.Drawing.Size(53, 12);
             this.LabelCardID.TabIndex = 5;
@@ -97,7 +97,7 @@
             // 
             // textCardID
             // 
-            this.textCardID.Location = new System.Drawing.Point(151, 28);
+            this.textCardID.Location = new System.Drawing.Point(117, 17);
             this.textCardID.Name = "textCardID";
             this.textCardID.ReadOnly = true;
             this.textCardID.Size = new System.Drawing.Size(191, 21);
@@ -105,15 +105,15 @@
             // 
             // textTel
             // 
-            this.textTel.Location = new System.Drawing.Point(151, 138);
+            this.textTel.Location = new System.Drawing.Point(117, 104);
             this.textTel.MaxLength = 15;
             this.textTel.Name = "textTel";
-            this.textTel.Size = new System.Drawing.Size(159, 21);
+            this.textTel.Size = new System.Drawing.Size(191, 21);
             this.textTel.TabIndex = 7;
             // 
             // btnSetting
             // 
-            this.btnSetting.Location = new System.Drawing.Point(140, 205);
+            this.btnSetting.Location = new System.Drawing.Point(117, 163);
             this.btnSetting.Name = "btnSetting";
             this.btnSetting.Size = new System.Drawing.Size(75, 23);
             this.btnSetting.TabIndex = 8;
@@ -125,17 +125,17 @@
             // 
             this.ContactCard.AutoSize = true;
             this.ContactCard.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ContactCard.Location = new System.Drawing.Point(265, 177);
+            this.ContactCard.Location = new System.Drawing.Point(320, 133);
             this.ContactCard.Name = "ContactCard";
             this.ContactCard.Size = new System.Drawing.Size(60, 16);
             this.ContactCard.TabIndex = 107;
             this.ContactCard.Text = "接触式";
-            this.ContactCard.UseVisualStyleBackColor = true;            
+            this.ContactCard.UseVisualStyleBackColor = true;
             // 
             // LabelCardType
             // 
             this.LabelCardType.AutoSize = true;
-            this.LabelCardType.Location = new System.Drawing.Point(45, 177);
+            this.LabelCardType.Location = new System.Drawing.Point(15, 135);
             this.LabelCardType.Name = "LabelCardType";
             this.LabelCardType.Size = new System.Drawing.Size(53, 12);
             this.LabelCardType.TabIndex = 108;
@@ -149,9 +149,9 @@
             "达华-明泰 MT3",
             "龙寰-Duali DE-620",
             "龙寰-明泰 MT3"});
-            this.cmbDevType.Location = new System.Drawing.Point(107, 174);
+            this.cmbDevType.Location = new System.Drawing.Point(117, 131);
             this.cmbDevType.Name = "cmbDevType";
-            this.cmbDevType.Size = new System.Drawing.Size(139, 20);
+            this.cmbDevType.Size = new System.Drawing.Size(191, 20);
             this.cmbDevType.TabIndex = 106;
             this.cmbDevType.SelectedIndexChanged += new System.EventHandler(this.cmbDevType_SelectedIndexChanged);
             // 
@@ -159,7 +159,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(392, 240);
+            this.ClientSize = new System.Drawing.Size(392, 197);
             this.Controls.Add(this.ContactCard);
             this.Controls.Add(this.LabelCardType);
             this.Controls.Add(this.cmbDevType);
@@ -176,7 +176,7 @@
             this.MinimizeBox = false;
             this.Name = "ToBlackCard";
             this.Text = "卡状态设置";
-            this.Load += new System.EventHandler(this.ToBlackCard_Load);            
+            this.Load += new System.EventHandler(this.ToBlackCard_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

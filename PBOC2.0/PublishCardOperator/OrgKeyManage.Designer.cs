@@ -45,7 +45,7 @@
             this.OrgKeyGridView.BackgroundColor = System.Drawing.SystemColors.Window;
             this.OrgKeyGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.OrgKeyGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.OrgKeyGridView.Location = new System.Drawing.Point(21, 34);
+            this.OrgKeyGridView.Location = new System.Drawing.Point(8, 30);
             this.OrgKeyGridView.MultiSelect = false;
             this.OrgKeyGridView.Name = "OrgKeyGridView";
             this.OrgKeyGridView.RowHeadersVisible = false;
@@ -59,7 +59,7 @@
             // OrgKeyLabel
             // 
             this.OrgKeyLabel.AutoSize = true;
-            this.OrgKeyLabel.Location = new System.Drawing.Point(19, 15);
+            this.OrgKeyLabel.Location = new System.Drawing.Point(6, 11);
             this.OrgKeyLabel.Name = "OrgKeyLabel";
             this.OrgKeyLabel.Size = new System.Drawing.Size(77, 12);
             this.OrgKeyLabel.TabIndex = 1;
@@ -67,7 +67,7 @@
             // 
             // btnAddOrgKey
             // 
-            this.btnAddOrgKey.Location = new System.Drawing.Point(64, 266);
+            this.btnAddOrgKey.Location = new System.Drawing.Point(8, 262);
             this.btnAddOrgKey.Name = "btnAddOrgKey";
             this.btnAddOrgKey.Size = new System.Drawing.Size(75, 23);
             this.btnAddOrgKey.TabIndex = 3;
@@ -77,7 +77,7 @@
             // 
             // btnDelOrgKey
             // 
-            this.btnDelOrgKey.Location = new System.Drawing.Point(170, 266);
+            this.btnDelOrgKey.Location = new System.Drawing.Point(89, 262);
             this.btnDelOrgKey.Name = "btnDelOrgKey";
             this.btnDelOrgKey.Size = new System.Drawing.Size(75, 23);
             this.btnDelOrgKey.TabIndex = 4;
@@ -87,7 +87,7 @@
             // 
             // btnModifyOrgKey
             // 
-            this.btnModifyOrgKey.Location = new System.Drawing.Point(276, 266);
+            this.btnModifyOrgKey.Location = new System.Drawing.Point(170, 262);
             this.btnModifyOrgKey.Name = "btnModifyOrgKey";
             this.btnModifyOrgKey.Size = new System.Drawing.Size(75, 23);
             this.btnModifyOrgKey.TabIndex = 5;
@@ -97,7 +97,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(501, 286);
+            this.btnClose.Location = new System.Drawing.Point(488, 262);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 6;
@@ -107,7 +107,7 @@
             // 
             // btnSaveEdit
             // 
-            this.btnSaveEdit.Location = new System.Drawing.Point(382, 265);
+            this.btnSaveEdit.Location = new System.Drawing.Point(251, 262);
             this.btnSaveEdit.Name = "btnSaveEdit";
             this.btnSaveEdit.Size = new System.Drawing.Size(75, 23);
             this.btnSaveEdit.TabIndex = 7;
@@ -119,7 +119,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(602, 321);
+            this.ClientSize = new System.Drawing.Size(572, 298);
             this.Controls.Add(this.btnSaveEdit);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnModifyOrgKey);

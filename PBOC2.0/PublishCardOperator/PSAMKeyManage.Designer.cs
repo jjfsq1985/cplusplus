@@ -43,7 +43,7 @@
             // PsamKeyLabel
             // 
             this.PsamKeyLabel.AutoSize = true;
-            this.PsamKeyLabel.Location = new System.Drawing.Point(15, 9);
+            this.PsamKeyLabel.Location = new System.Drawing.Point(4, 9);
             this.PsamKeyLabel.Name = "PsamKeyLabel";
             this.PsamKeyLabel.Size = new System.Drawing.Size(83, 12);
             this.PsamKeyLabel.TabIndex = 1;
@@ -56,7 +56,7 @@
             this.PsamKeyView.BackgroundColor = System.Drawing.SystemColors.Window;
             this.PsamKeyView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PsamKeyView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.PsamKeyView.Location = new System.Drawing.Point(17, 24);
+            this.PsamKeyView.Location = new System.Drawing.Point(6, 24);
             this.PsamKeyView.MultiSelect = false;
             this.PsamKeyView.Name = "PsamKeyView";
             this.PsamKeyView.RowHeadersVisible = false;
@@ -69,7 +69,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(26, 287);
+            this.btnAdd.Location = new System.Drawing.Point(6, 287);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 2;
@@ -79,7 +79,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(124, 287);
+            this.btnDelete.Location = new System.Drawing.Point(87, 287);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 3;
@@ -89,7 +89,7 @@
             // 
             // btnEditKey
             // 
-            this.btnEditKey.Location = new System.Drawing.Point(222, 287);
+            this.btnEditKey.Location = new System.Drawing.Point(168, 287);
             this.btnEditKey.Name = "btnEditKey";
             this.btnEditKey.Size = new System.Drawing.Size(75, 23);
             this.btnEditKey.TabIndex = 4;
@@ -99,7 +99,7 @@
             // 
             // btnSaveEdit
             // 
-            this.btnSaveEdit.Location = new System.Drawing.Point(320, 287);
+            this.btnSaveEdit.Location = new System.Drawing.Point(249, 287);
             this.btnSaveEdit.Name = "btnSaveEdit";
             this.btnSaveEdit.Size = new System.Drawing.Size(75, 23);
             this.btnSaveEdit.TabIndex = 5;
@@ -109,7 +109,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(657, 316);
+            this.btnClose.Location = new System.Drawing.Point(646, 287);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 6;
@@ -119,7 +119,7 @@
             // 
             // btnNextPage
             // 
-            this.btnNextPage.Location = new System.Drawing.Point(636, 287);
+            this.btnNextPage.Location = new System.Drawing.Point(565, 287);
             this.btnNextPage.Name = "btnNextPage";
             this.btnNextPage.Size = new System.Drawing.Size(75, 23);
             this.btnNextPage.TabIndex = 12;
@@ -129,7 +129,7 @@
             // 
             // btnPrevPage
             // 
-            this.btnPrevPage.Location = new System.Drawing.Point(477, 287);
+            this.btnPrevPage.Location = new System.Drawing.Point(484, 287);
             this.btnPrevPage.Name = "btnPrevPage";
             this.btnPrevPage.Size = new System.Drawing.Size(75, 23);
             this.btnPrevPage.TabIndex = 11;
@@ -141,7 +141,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(744, 351);
+            this.ClientSize = new System.Drawing.Size(728, 326);
             this.Controls.Add(this.btnNextPage);
             this.Controls.Add(this.btnPrevPage);
             this.Controls.Add(this.btnClose);

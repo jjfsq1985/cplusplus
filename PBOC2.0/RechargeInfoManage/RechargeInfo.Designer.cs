@@ -72,7 +72,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(675, 436);
+            this.btnClose.Location = new System.Drawing.Point(708, 411);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -82,7 +82,7 @@
             // 
             // btnPrevPage
             // 
-            this.btnPrevPage.Location = new System.Drawing.Point(155, 411);
+            this.btnPrevPage.Location = new System.Drawing.Point(546, 411);
             this.btnPrevPage.Name = "btnPrevPage";
             this.btnPrevPage.Size = new System.Drawing.Size(75, 23);
             this.btnPrevPage.TabIndex = 2;
@@ -92,7 +92,7 @@
             // 
             // btnNextPage
             // 
-            this.btnNextPage.Location = new System.Drawing.Point(373, 411);
+            this.btnNextPage.Location = new System.Drawing.Point(627, 411);
             this.btnNextPage.Name = "btnNextPage";
             this.btnNextPage.Size = new System.Drawing.Size(75, 23);
             this.btnNextPage.TabIndex = 3;
@@ -103,7 +103,7 @@
             // RechargeRecord
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(783, 470);
+            this.ClientSize = new System.Drawing.Size(783, 438);
             this.Controls.Add(this.btnNextPage);
             this.Controls.Add(this.btnPrevPage);
             this.Controls.Add(this.btnClose);

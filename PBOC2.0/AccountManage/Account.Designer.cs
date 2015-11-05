@@ -42,9 +42,9 @@
             // 
             // AccountQuit
             // 
-            this.AccountQuit.Location = new System.Drawing.Point(549, 295);
+            this.AccountQuit.Location = new System.Drawing.Point(563, 264);
             this.AccountQuit.Name = "AccountQuit";
-            this.AccountQuit.Size = new System.Drawing.Size(73, 26);
+            this.AccountQuit.Size = new System.Drawing.Size(56, 26);
             this.AccountQuit.TabIndex = 0;
             this.AccountQuit.Text = "退出";
             this.AccountQuit.UseVisualStyleBackColor = true;
@@ -70,7 +70,7 @@
             // labelUser
             // 
             this.labelUser.AutoSize = true;
-            this.labelUser.Location = new System.Drawing.Point(12, 15);
+            this.labelUser.Location = new System.Drawing.Point(12, 10);
             this.labelUser.Name = "labelUser";
             this.labelUser.Size = new System.Drawing.Size(53, 12);
             this.labelUser.TabIndex = 2;
@@ -88,7 +88,7 @@
             // 
             // btnDel
             // 
-            this.btnDel.Location = new System.Drawing.Point(115, 266);
+            this.btnDel.Location = new System.Drawing.Point(79, 266);
             this.btnDel.Name = "btnDel";
             this.btnDel.Size = new System.Drawing.Size(53, 23);
             this.btnDel.TabIndex = 4;
@@ -98,7 +98,7 @@
             // 
             // btnEdit
             // 
-            this.btnEdit.Location = new System.Drawing.Point(218, 266);
+            this.btnEdit.Location = new System.Drawing.Point(147, 266);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(53, 23);
             this.btnEdit.TabIndex = 5;
@@ -108,7 +108,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(321, 266);
+            this.btnSave.Location = new System.Drawing.Point(215, 266);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(53, 23);
             this.btnSave.TabIndex = 6;
@@ -118,7 +118,7 @@
             // 
             // PrevPage
             // 
-            this.PrevPage.Location = new System.Drawing.Point(424, 266);
+            this.PrevPage.Location = new System.Drawing.Point(432, 266);
             this.PrevPage.Name = "PrevPage";
             this.PrevPage.Size = new System.Drawing.Size(53, 23);
             this.PrevPage.TabIndex = 7;
@@ -128,7 +128,7 @@
             // 
             // NextPage
             // 
-            this.NextPage.Location = new System.Drawing.Point(527, 266);
+            this.NextPage.Location = new System.Drawing.Point(497, 266);
             this.NextPage.Name = "NextPage";
             this.NextPage.Size = new System.Drawing.Size(53, 23);
             this.NextPage.TabIndex = 8;
@@ -139,7 +139,7 @@
             // Account
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(629, 326);
+            this.ClientSize = new System.Drawing.Size(629, 298);
             this.Controls.Add(this.NextPage);
             this.Controls.Add(this.PrevPage);
             this.Controls.Add(this.btnSave);

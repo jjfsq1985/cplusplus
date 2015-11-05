@@ -74,32 +74,32 @@
             this.HelpMenuItem});
             this.MainMenu.Location = new System.Drawing.Point(0, 0);
             this.MainMenu.Name = "MainMenu";
-            this.MainMenu.Size = new System.Drawing.Size(1072, 25);
+            this.MainMenu.Size = new System.Drawing.Size(1072, 24);
             this.MainMenu.TabIndex = 0;
             this.MainMenu.Text = "MainMenu";
             // 
             // SystemMenuItem
             // 
             this.SystemMenuItem.Name = "SystemMenuItem";
-            this.SystemMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.SystemMenuItem.Size = new System.Drawing.Size(65, 20);
             this.SystemMenuItem.Text = "系统管理";
             // 
             // RechargeMenuItem
             // 
             this.RechargeMenuItem.Name = "RechargeMenuItem";
-            this.RechargeMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.RechargeMenuItem.Size = new System.Drawing.Size(65, 20);
             this.RechargeMenuItem.Text = "记录管理";
             // 
             // CardOperatingMenuItem
             // 
             this.CardOperatingMenuItem.Name = "CardOperatingMenuItem";
-            this.CardOperatingMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.CardOperatingMenuItem.Size = new System.Drawing.Size(65, 20);
             this.CardOperatingMenuItem.Text = "IC卡操作";
             // 
             // OptionMenuItem
             // 
             this.OptionMenuItem.Name = "OptionMenuItem";
-            this.OptionMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.OptionMenuItem.Size = new System.Drawing.Size(41, 20);
             this.OptionMenuItem.Text = "选项";
             // 
             // HelpMenuItem
@@ -107,13 +107,13 @@
             this.HelpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AboutMenuItem});
             this.HelpMenuItem.Name = "HelpMenuItem";
-            this.HelpMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.HelpMenuItem.Size = new System.Drawing.Size(41, 20);
             this.HelpMenuItem.Text = "帮助";
             // 
             // AboutMenuItem
             // 
             this.AboutMenuItem.Name = "AboutMenuItem";
-            this.AboutMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.AboutMenuItem.Size = new System.Drawing.Size(94, 22);
             this.AboutMenuItem.Text = "关于";
             this.AboutMenuItem.Click += new System.EventHandler(this.AboutMenuItem_Click);
             // 
@@ -133,31 +133,31 @@
             // CompanyNameLabel
             // 
             this.CompanyNameLabel.Name = "CompanyNameLabel";
-            this.CompanyNameLabel.Size = new System.Drawing.Size(212, 17);
+            this.CompanyNameLabel.Size = new System.Drawing.Size(209, 17);
             this.CompanyNameLabel.Text = "张家港富耐特新能源智能系统有限公司";
             // 
             // Split1
             // 
             this.Split1.Name = "Split1";
-            this.Split1.Size = new System.Drawing.Size(24, 17);
+            this.Split1.Size = new System.Drawing.Size(29, 17);
             this.Split1.Text = "    ";
             // 
             // UserName
             // 
             this.UserName.Name = "UserName";
-            this.UserName.Size = new System.Drawing.Size(44, 17);
+            this.UserName.Size = new System.Drawing.Size(41, 17);
             this.UserName.Text = "登录名";
             // 
             // Split2
             // 
             this.Split2.Name = "Split2";
-            this.Split2.Size = new System.Drawing.Size(24, 17);
+            this.Split2.Size = new System.Drawing.Size(29, 17);
             this.Split2.Text = "    ";
             // 
             // DbName
             // 
             this.DbName.Name = "DbName";
-            this.DbName.Size = new System.Drawing.Size(68, 17);
+            this.DbName.Size = new System.Drawing.Size(65, 17);
             this.DbName.Text = "数据库信息";
             // 
             // FuzzySearch
@@ -172,14 +172,14 @@
             this.FuzzySearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FuzzySearch.Location = new System.Drawing.Point(0, 0);
             this.FuzzySearch.Name = "FuzzySearch";
-            this.FuzzySearch.Size = new System.Drawing.Size(1072, 656);
+            this.FuzzySearch.Size = new System.Drawing.Size(1072, 657);
             this.FuzzySearch.TabIndex = 6;
             this.FuzzySearch.TabStop = false;
             // 
             // ChkSearchPsam
             // 
             this.ChkSearchPsam.AutoSize = true;
-            this.ChkSearchPsam.Location = new System.Drawing.Point(456, 68);
+            this.ChkSearchPsam.Location = new System.Drawing.Point(498, 27);
             this.ChkSearchPsam.Name = "ChkSearchPsam";
             this.ChkSearchPsam.Size = new System.Drawing.Size(66, 16);
             this.ChkSearchPsam.TabIndex = 6;
@@ -189,13 +189,16 @@
             // 
             // listSearchResult
             // 
+            this.listSearchResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.listSearchResult.FullRowSelect = true;
             this.listSearchResult.GridLines = true;
             this.listSearchResult.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listSearchResult.Location = new System.Drawing.Point(20, 99);
+            this.listSearchResult.Location = new System.Drawing.Point(19, 58);
             this.listSearchResult.MultiSelect = false;
             this.listSearchResult.Name = "listSearchResult";
-            this.listSearchResult.Size = new System.Drawing.Size(1041, 546);
+            this.listSearchResult.Size = new System.Drawing.Size(1041, 589);
             this.listSearchResult.TabIndex = 5;
             this.listSearchResult.UseCompatibleStateImageBehavior = false;
             this.listSearchResult.View = System.Windows.Forms.View.Details;
@@ -203,9 +206,9 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(575, 24);
+            this.btnSearch.Location = new System.Drawing.Point(570, 22);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 32);
+            this.btnSearch.Size = new System.Drawing.Size(75, 25);
             this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "查询卡信息";
             this.btnSearch.UseVisualStyleBackColor = true;
@@ -213,7 +216,7 @@
             // 
             // textSearchContent
             // 
-            this.textSearchContent.Location = new System.Drawing.Point(319, 31);
+            this.textSearchContent.Location = new System.Drawing.Point(259, 25);
             this.textSearchContent.Name = "textSearchContent";
             this.textSearchContent.Size = new System.Drawing.Size(209, 21);
             this.textSearchContent.TabIndex = 2;
@@ -221,7 +224,7 @@
             // LabelTextLike
             // 
             this.LabelTextLike.AutoSize = true;
-            this.LabelTextLike.Location = new System.Drawing.Point(260, 34);
+            this.LabelTextLike.Location = new System.Drawing.Point(203, 28);
             this.LabelTextLike.Name = "LabelTextLike";
             this.LabelTextLike.Size = new System.Drawing.Size(53, 12);
             this.LabelTextLike.TabIndex = 3;
@@ -230,7 +233,7 @@
             // LabelText
             // 
             this.LabelText.AutoSize = true;
-            this.LabelText.Location = new System.Drawing.Point(49, 34);
+            this.LabelText.Location = new System.Drawing.Point(17, 28);
             this.LabelText.Name = "LabelText";
             this.LabelText.Size = new System.Drawing.Size(53, 12);
             this.LabelText.TabIndex = 0;
@@ -240,7 +243,7 @@
             // 
             this.cmbCondition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCondition.FormattingEnabled = true;
-            this.cmbCondition.Location = new System.Drawing.Point(108, 31);
+            this.cmbCondition.Location = new System.Drawing.Point(76, 25);
             this.cmbCondition.Name = "cmbCondition";
             this.cmbCondition.Size = new System.Drawing.Size(121, 20);
             this.cmbCondition.TabIndex = 1;
@@ -250,9 +253,9 @@
             // 
             this.MainPanel.Controls.Add(this.FuzzySearch);
             this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainPanel.Location = new System.Drawing.Point(0, 25);
+            this.MainPanel.Location = new System.Drawing.Point(0, 24);
             this.MainPanel.Name = "MainPanel";
-            this.MainPanel.Size = new System.Drawing.Size(1072, 656);
+            this.MainPanel.Size = new System.Drawing.Size(1072, 657);
             this.MainPanel.TabIndex = 3;
             // 
             // ListCtrlMenu
@@ -263,34 +266,34 @@
             this.RePublishMenuItem,
             this.SignOffMenuItem});
             this.ListCtrlMenu.Name = "ListCtrlMenu";
-            this.ListCtrlMenu.Size = new System.Drawing.Size(101, 92);
+            this.ListCtrlMenu.Size = new System.Drawing.Size(95, 92);
             this.ListCtrlMenu.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.ListCtrlMenu_Closed);
             // 
             // LostCardMenuItem
             // 
             this.LostCardMenuItem.Name = "LostCardMenuItem";
-            this.LostCardMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.LostCardMenuItem.Size = new System.Drawing.Size(94, 22);
             this.LostCardMenuItem.Text = "挂失";
             this.LostCardMenuItem.Click += new System.EventHandler(this.LostCardMenuItem_Click);
             // 
             // RefindMenuItem
             // 
             this.RefindMenuItem.Name = "RefindMenuItem";
-            this.RefindMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.RefindMenuItem.Size = new System.Drawing.Size(94, 22);
             this.RefindMenuItem.Text = "解挂";
             this.RefindMenuItem.Click += new System.EventHandler(this.RefindMenuItem_Click);
             // 
             // RePublishMenuItem
             // 
             this.RePublishMenuItem.Name = "RePublishMenuItem";
-            this.RePublishMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.RePublishMenuItem.Size = new System.Drawing.Size(94, 22);
             this.RePublishMenuItem.Text = "补卡";
             this.RePublishMenuItem.Click += new System.EventHandler(this.RePublishMenuItem_Click);
             // 
             // SignOffMenuItem
             // 
             this.SignOffMenuItem.Name = "SignOffMenuItem";
-            this.SignOffMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.SignOffMenuItem.Size = new System.Drawing.Size(94, 22);
             this.SignOffMenuItem.Text = "销卡";
             this.SignOffMenuItem.Click += new System.EventHandler(this.SignOffMenuItem_Click);
             // 

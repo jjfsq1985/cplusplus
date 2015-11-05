@@ -45,7 +45,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(234, 282);
+            this.btnCancel.Location = new System.Drawing.Point(203, 224);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 19;
@@ -55,7 +55,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(63, 282);
+            this.btnOK.Location = new System.Drawing.Point(111, 224);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 18;
@@ -66,7 +66,7 @@
             // labelAuthority
             // 
             this.labelAuthority.AutoSize = true;
-            this.labelAuthority.Location = new System.Drawing.Point(73, 164);
+            this.labelAuthority.Location = new System.Drawing.Point(21, 121);
             this.labelAuthority.Name = "labelAuthority";
             this.labelAuthority.Size = new System.Drawing.Size(29, 12);
             this.labelAuthority.TabIndex = 17;
@@ -75,15 +75,15 @@
             // ChkLBAuthority
             // 
             this.ChkLBAuthority.FormattingEnabled = true;
-            this.ChkLBAuthority.Location = new System.Drawing.Point(114, 164);
+            this.ChkLBAuthority.Location = new System.Drawing.Point(114, 121);
             this.ChkLBAuthority.Name = "ChkLBAuthority";
-            this.ChkLBAuthority.Size = new System.Drawing.Size(136, 68);
+            this.ChkLBAuthority.Size = new System.Drawing.Size(164, 68);
             this.ChkLBAuthority.TabIndex = 16;
             // 
             // labelRePwd
             // 
             this.labelRePwd.AutoSize = true;
-            this.labelRePwd.Location = new System.Drawing.Point(25, 128);
+            this.labelRePwd.Location = new System.Drawing.Point(21, 99);
             this.labelRePwd.Name = "labelRePwd";
             this.labelRePwd.Size = new System.Drawing.Size(89, 12);
             this.labelRePwd.TabIndex = 15;
@@ -91,7 +91,7 @@
             // 
             // textPwdAgain
             // 
-            this.textPwdAgain.Location = new System.Drawing.Point(118, 125);
+            this.textPwdAgain.Location = new System.Drawing.Point(114, 96);
             this.textPwdAgain.MaxLength = 32;
             this.textPwdAgain.Name = "textPwdAgain";
             this.textPwdAgain.PasswordChar = '#';
@@ -100,7 +100,7 @@
             // 
             // textPwd
             // 
-            this.textPwd.Location = new System.Drawing.Point(118, 89);
+            this.textPwd.Location = new System.Drawing.Point(114, 70);
             this.textPwd.MaxLength = 32;
             this.textPwd.Name = "textPwd";
             this.textPwd.PasswordChar = '#';
@@ -110,7 +110,7 @@
             // textName
             // 
             this.textName.Enabled = false;
-            this.textName.Location = new System.Drawing.Point(118, 17);
+            this.textName.Location = new System.Drawing.Point(114, 17);
             this.textName.MaxLength = 32;
             this.textName.Name = "textName";
             this.textName.ReadOnly = true;
@@ -120,7 +120,7 @@
             // labelPwd
             // 
             this.labelPwd.AutoSize = true;
-            this.labelPwd.Location = new System.Drawing.Point(49, 92);
+            this.labelPwd.Location = new System.Drawing.Point(21, 73);
             this.labelPwd.Name = "labelPwd";
             this.labelPwd.Size = new System.Drawing.Size(65, 12);
             this.labelPwd.TabIndex = 11;
@@ -129,7 +129,7 @@
             // labelName
             // 
             this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(61, 20);
+            this.labelName.Location = new System.Drawing.Point(21, 20);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(41, 12);
             this.labelName.TabIndex = 10;
@@ -138,7 +138,7 @@
             // labelOldPwd
             // 
             this.labelOldPwd.AutoSize = true;
-            this.labelOldPwd.Location = new System.Drawing.Point(61, 56);
+            this.labelOldPwd.Location = new System.Drawing.Point(21, 47);
             this.labelOldPwd.Name = "labelOldPwd";
             this.labelOldPwd.Size = new System.Drawing.Size(41, 12);
             this.labelOldPwd.TabIndex = 20;
@@ -146,7 +146,7 @@
             // 
             // textPwdOld
             // 
-            this.textPwdOld.Location = new System.Drawing.Point(118, 53);
+            this.textPwdOld.Location = new System.Drawing.Point(114, 44);
             this.textPwdOld.MaxLength = 32;
             this.textPwdOld.Name = "textPwdOld";
             this.textPwdOld.PasswordChar = '#';
@@ -156,7 +156,7 @@
             // AccountStop
             // 
             this.AccountStop.AutoSize = true;
-            this.AccountStop.Location = new System.Drawing.Point(75, 250);
+            this.AccountStop.Location = new System.Drawing.Point(114, 195);
             this.AccountStop.Name = "AccountStop";
             this.AccountStop.Size = new System.Drawing.Size(72, 16);
             this.AccountStop.TabIndex = 22;
@@ -167,7 +167,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 316);
+            this.ClientSize = new System.Drawing.Size(304, 255);
             this.Controls.Add(this.AccountStop);
             this.Controls.Add(this.textPwdOld);
             this.Controls.Add(this.labelOldPwd);

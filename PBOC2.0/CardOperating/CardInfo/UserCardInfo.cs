@@ -397,7 +397,7 @@ namespace CardOperating
             }
             m_CardInfoPar.DefaultPwdFlag = CustomPassword.Checked ? false : true;
 
-            if (!m_CardInfoPar.DefaultPwdFlag && string.IsNullOrEmpty(textPassword.Text))
+            if (!m_CardInfoPar.DefaultPwdFlag && !string.IsNullOrEmpty(textPassword.Text))
             {
                 m_CardInfoPar.CustomPassword = textPassword.Text;
             }
@@ -417,7 +417,7 @@ namespace CardOperating
                 m_CardInfoPar.setDiscountRate(dbRate, DiscountRateExprieValid.Value);
             }
 
-            if (string.IsNullOrEmpty(textPriceLevel.Text))
+            if (!string.IsNullOrEmpty(textPriceLevel.Text))
             {
                 m_CardInfoPar.PriceLevel = Convert.ToByte(textPriceLevel.Text, 10);
             }
