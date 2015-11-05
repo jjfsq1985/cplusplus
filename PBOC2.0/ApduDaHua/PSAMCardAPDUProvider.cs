@@ -48,7 +48,6 @@ namespace ApduDaHua
             return false;
         }
 
-        //prefix == A0 00 00 00 03 时， byteName长度必须为9
         public bool createStorageFCICmd(byte[] byteName, byte[] prefix)
         {
             if (byteName == null || byteName.Length < 5 || byteName.Length > 16)
@@ -65,8 +64,14 @@ namespace ApduDaHua
             m_Data = new byte[nLen];
             m_Data[0] = 0x1E;
             m_Data[1] = 0x01;
+            ///////////////////////////////////////
+            //tag
             m_Data[2] = 0x21;
-            m_Data[3] = 0x20;
+            //Len
+            int nLen21 = nNameLen + 18; //后面所有长度
+            if (prefix != null)
+                nLen21 += prefix.Length;
+            m_Data[3] = (byte)nLen21;
             //Tag
             m_Data[4] = 0x6F;
             //Len
@@ -80,7 +85,7 @@ namespace ApduDaHua
             int nLen84 = nNameLen;
             if (prefix != null)
                 nLen84 += prefix.Length;
-            m_Data[7] = (byte)nLen84; //Name长度（包含A0 00 00 00 03）
+            m_Data[7] = (byte)nLen84; //AID Name长度（包含A0 00 00 00 03）
             int nOffset = 8;
             if (prefix != null)
             {
@@ -252,8 +257,8 @@ namespace ApduDaHua
             //外部认证
             m_Data[6] = 0x00;
             //前3bit: SM+后5bit:Length
-            int nDFData = nNameLen + 5;
-            m_Data[7] = (byte)((1 << 5) | nDFData);  //SM：密文+MAC
+            int nADFLen = nNameLen + 5;
+            m_Data[7] = (byte)((1<<5) | nADFLen);  //SM：密文+MAC
             m_Data[8] = 0xA0;
             m_Data[9] = 0x00;
             m_Data[10] = 0x00;
