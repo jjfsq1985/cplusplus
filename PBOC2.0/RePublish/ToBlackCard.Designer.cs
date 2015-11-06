@@ -110,6 +110,7 @@
             this.textTel.Name = "textTel";
             this.textTel.Size = new System.Drawing.Size(191, 21);
             this.textTel.TabIndex = 7;
+            this.textTel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textTel_KeyPress);
             // 
             // btnSetting
             // 

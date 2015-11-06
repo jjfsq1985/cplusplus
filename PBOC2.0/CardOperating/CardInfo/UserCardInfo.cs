@@ -1011,5 +1011,11 @@ namespace CardOperating
             }
         }
 
+        private void textTelephone_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
+                e.Handled = true;//不接受非数字值
+        }
+
     }
 }

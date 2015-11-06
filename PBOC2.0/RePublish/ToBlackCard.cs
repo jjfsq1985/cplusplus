@@ -57,21 +57,21 @@ namespace RePublish
                     textCardID.Text = m_CardId;
                     LabelName.Text = "解挂人姓名";
                     LabelPersonalID.Text = "解挂人证件号";
-                    LabelName.Text = "解挂人联系电话";
+                    LabelTel.Text = "解挂人联系电话";
                     break;
                 case CardStateSetting.CardToLost: //挂失
                     LabelCardID.Text = "挂失卡号";
                     textCardID.Text = m_CardId;
                     LabelName.Text  = "挂失人姓名";
                     LabelPersonalID.Text = "挂失人证件号";
-                    LabelName.Text = "挂失人联系电话";
+                    LabelTel.Text = "挂失人联系电话";
                     break;
                 case CardStateSetting.CardToRePublish: //补卡
                     LabelCardID.Text = "失效卡号";
                     textCardID.Text = m_CardId;
                     LabelName.Text = "补卡人姓名";
                     LabelPersonalID.Text = "补卡人证件号";
-                    LabelName.Text = "补卡人联系电话";
+                    LabelTel.Text = "补卡人联系电话";
                     LabelCardType.Visible = true;
                     cmbDevType.Visible = true;
                     ContactCard.Visible = true;
@@ -83,7 +83,7 @@ namespace RePublish
                     textCardID.Text  = m_CardId;
                     LabelName.Text   = "退卡人姓名";
                     LabelPersonalID.Text = "退卡人证件号";
-                    LabelName.Text = "退卡人联系电话";
+                    LabelTel.Text = "退卡人联系电话";
                     break;
 
             }
@@ -124,16 +124,20 @@ namespace RePublish
             DialogResult = DialogResult.OK;
         }
 
-        private void SettingDataBase(SqlHelper ObjSql, CardStateSetting eSettingState)
+        private void UpdateCardState(SqlHelper ObjSql, CardStateSetting eSettingState, bool bBlackCard)
         {
-            bool bBlackCard = true; //挂失、补卡、退卡都为true
-            if (eSettingState == CardStateSetting.CardToNormal)//解挂为false
-                bBlackCard = false;
             SqlParameter[] sqlparams = new SqlParameter[3];
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, m_CardId);
             sqlparams[1] = ObjSql.MakeParam("CardState", SqlDbType.Int, 4, ParameterDirection.Input, (int)eSettingState);
             sqlparams[2] = ObjSql.MakeParam("BlackCard", SqlDbType.Bit, 1, ParameterDirection.Input, bBlackCard);
             ObjSql.ExecuteProc("PROC_UpdateCardState", sqlparams);
+        }
+
+        private void SettingDataBase(SqlHelper ObjSql, CardStateSetting eSettingState)
+        {
+            bool bBlackCard = true; //挂失、补卡、退卡都为true
+            if (eSettingState == CardStateSetting.CardToNormal)//解挂为false
+                bBlackCard = false;
 
             if (eSettingState == CardStateSetting.CardToRePublish)
             {
@@ -142,12 +146,16 @@ namespace RePublish
                 string strRePublishId = m_CardControl.RePublishCard(m_CardId);
                 m_CardControl.ReleaseController();
                 if (!string.IsNullOrEmpty(strRePublishId))
-                    RePublishCardRecord(ObjSql,strRePublishId);
+                {
+                    RePublishCardRecord(ObjSql, strRePublishId);
+                    UpdateCardState(ObjSql,eSettingState, bBlackCard);
+                 }
             }
             else
             {
                 //写挂失等的记录表
                 InvalidCardRecord(ObjSql);
+                UpdateCardState(ObjSql, eSettingState, bBlackCard);
             }
         }
 
@@ -223,6 +231,12 @@ namespace RePublish
             sqlparams[4] = ObjSql.MakeParam("RelatedTel", SqlDbType.VarChar, 32, ParameterDirection.Input, m_SettingTel);
             sqlparams[5] = ObjSql.MakeParam("RePublishCardId", SqlDbType.Char, 16, ParameterDirection.Input, "");
             ObjSql.ExecuteProc("PROC_OperateCard", sqlparams);        
+        }
+
+        private void textTel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
+                e.Handled = true;//不接受非数字值
         }
     }
 }

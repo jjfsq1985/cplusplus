@@ -120,6 +120,8 @@ namespace RePublish
             if (!m_UserCardCtrl.UpdateCardInfo(m_CardInfoPar))
             {
                 MessageBox.Show("补卡失败");
+                CloseUserCard();
+                return "";
             }
             else
             {
@@ -127,7 +129,6 @@ namespace RePublish
                 //圈存
                 if (CpuCardType != CardType.ManagerCard && CpuCardType != CardType.ServiceCard && CardBalance > 0)
                 {
-
                     if (CpuCardType == CardType.CompanyMotherCard)
                     {
                         RechargeMotherCard(byteRePublishCardId, CardBalance);
@@ -313,11 +314,11 @@ namespace RePublish
                         }
                         if (!dataReader.IsDBNull(dataReader.GetOrdinal("R_OilTimesADay")))
                         {
-                            CardInfoPar.LimitGasFillCount = (byte)dataReader["R_OilTimesADay"];
+                            CardInfoPar.LimitGasFillCount = Convert.ToByte((int)dataReader["R_OilTimesADay"]);
                         }
                         if (!dataReader.IsDBNull(dataReader.GetOrdinal("R_OilVolTotal")))
                         {
-                            CardInfoPar.LimitGasFillAmount = (uint)dataReader["R_OilVolTotal"];
+                            CardInfoPar.LimitGasFillAmount = Convert.ToUInt32((decimal)dataReader["R_OilVolTotal"]);
                         }
                         if (!dataReader.IsDBNull(dataReader.GetOrdinal("R_OilEndDate")))
                         {
@@ -342,7 +343,7 @@ namespace RePublish
                         }
                         if (!dataReader.IsDBNull(dataReader.GetOrdinal("CylinderVolume")))
                         {
-                            CardInfoPar.CylinderVolume = (ushort)dataReader["CylinderVolume"];
+                            CardInfoPar.CylinderVolume = Convert.ToUInt16((int)dataReader["CylinderVolume"]);
                         }
                         if (!dataReader.IsDBNull(dataReader.GetOrdinal("BusDistance")))
                         {

@@ -255,6 +255,7 @@
             this.textTelephone.Size = new System.Drawing.Size(129, 21);
             this.textTelephone.TabIndex = 83;
             this.textTelephone.Text = "";
+            this.textTelephone.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textTelephone_KeyPress);
             // 
             // textSelfId
             // 

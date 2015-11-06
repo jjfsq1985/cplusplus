@@ -322,6 +322,7 @@
             this.textTelephone.Size = new System.Drawing.Size(123, 21);
             this.textTelephone.TabIndex = 24;
             this.textTelephone.Text = "";
+            this.textTelephone.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textTelephone_KeyPress);
             // 
             // textSelfId
             // 
