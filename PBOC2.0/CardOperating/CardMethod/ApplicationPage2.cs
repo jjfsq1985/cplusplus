@@ -146,7 +146,7 @@ namespace CardOperating
 
         private void FillLyListView(List<CardRecord> lstRecord)
         {
-            RecordInCard.Items.Clear();
+            LyRecordInCard.Items.Clear();
             foreach (CardRecord record in lstRecord)
             {
                 ListViewItem item = new ListViewItem();

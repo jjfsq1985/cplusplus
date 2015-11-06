@@ -1802,7 +1802,7 @@ namespace CardOperating
         private void LoadLoyalty_Click(object sender, EventArgs e)
         {
             int LoadLoyalty = 0;
-            int.TryParse(textLoadValue.Text, out LoadLoyalty);
+            int.TryParse(textLoadValue.Text, System.Globalization.NumberStyles.AllowThousands, null, out LoadLoyalty);
             if (LoadLoyalty < 1)
                 return;
 
@@ -1858,7 +1858,7 @@ namespace CardOperating
                 int nRet = m_UserCardCtrl.VerifyUserPin(m_strPin_Ly);
                 if (nRet == 1)
                 {
-                    LoadUserCardLy(m_FixedTermialId, ASN, LoadLoyalty);
+                    LoadUserCardLy(TermialId, ASN, LoadLoyalty);
                 }
                 else if (nRet == 2)
                 {

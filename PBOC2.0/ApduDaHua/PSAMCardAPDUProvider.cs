@@ -62,16 +62,15 @@ namespace ApduDaHua
                 nLen += prefix.Length;
             m_Lc = (byte)nLen;
             m_Data = new byte[nLen];
-            m_Data[0] = 0x1E;
-            m_Data[1] = 0x01;
-            ///////////////////////////////////////
-            //tag
-            m_Data[2] = 0x21;
-            //Len
-            int nLen21 = nNameLen + 18; //后面所有长度
+            m_Data[0] = 0x1E;   //FileId
+            m_Data[1] = 0x01;   //安装文件的记录号
+            int nTotalLen = nNameLen + 18;
             if (prefix != null)
-                nLen21 += prefix.Length;
-            m_Data[3] = (byte)nLen21;
+                nTotalLen += prefix.Length;
+            //安装数据的长度（2个字节，含义一致）
+            m_Data[2] = (byte)(nTotalLen + 1);
+            m_Data[3] = (byte)nTotalLen;
+            ///////////////////////////////////////
             //Tag
             m_Data[4] = 0x6F;
             //Len
