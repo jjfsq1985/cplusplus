@@ -326,6 +326,7 @@ namespace CardOperating
                 }
             }
             textEMNumber.Text = m_CardInfoPar.EM_NU.ToString();
+            textEMpwd.Text = m_CardInfoPar.EM_PWD;
             DateFrom.Value = m_CardInfoPar.ValidCardBegin;
             DateTo.Value = m_CardInfoPar.ValidCardEnd;
             textUserName.Text = m_CardInfoPar.UserName;
@@ -383,6 +384,8 @@ namespace CardOperating
             cmbMotherCard.Enabled = false;
             LabelEM.Visible = false;
             textEMNumber.Visible = false;
+            LabelEMpwd.Visible = false;
+            textEMpwd.Visible = false;
             if (eType == CardType.PersonalCard)
             {
                 LimitCarNo.Enabled = true;
@@ -408,6 +411,8 @@ namespace CardOperating
                 textSelfId.Visible = false;
                 LabelEM.Visible = true;
                 textEMNumber.Visible = true;
+                LabelEMpwd.Visible = true;
+                textEMpwd.Visible = true;
             }
             else if (eType == CardType.CompanySubCard)
             {
@@ -770,7 +775,15 @@ namespace CardOperating
                 m_CardInfoPar.ValidCardEnd = DateTo.Value;
             }
 
-            m_CardInfoPar.EM_NU = Convert.ToInt32(textEMNumber.Text, 10);                
+            m_CardInfoPar.EM_NU = Convert.ToInt32(textEMNumber.Text, 10);
+            if (textEMpwd.Text.Length == 4)
+                m_CardInfoPar.EM_PWD = textEMpwd.Text;
+            else
+            {
+                m_CardInfoPar.EM_PWD = "1234";
+                MessageBox.Show("自设员工密码应为4位数字", "提示");
+            }
+
             m_CardInfoPar.UserName = textUserName.Text;
 
             double dbRate = 0;
@@ -1384,8 +1397,11 @@ namespace CardOperating
         //修改ＰＩＮ码
         private void btnPinChange_Click(object sender, EventArgs e)
         {
-            if(textOldPIN.Text.Length != 6 || textNewPIN.Text.Length != 6)
+            if (textOldPIN.Text.Length != 6 || textNewPIN.Text.Length != 6)
+            {
+                MessageBox.Show("PIN码应为6位数字", "提示");
                 return;
+            }
             if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp(1))
                 return;
             if (m_UserCardCtrl.ChangePIN(textOldPIN.Text, textNewPIN.Text))
@@ -2055,7 +2071,10 @@ namespace CardOperating
         private void ChangePin_Ly_Click(object sender, EventArgs e)
         {
             if (textOldPin_Ly.Text.Length != 6 || textNewPin_Ly.Text.Length != 6)
+            {
+                MessageBox.Show("PIN码应为6位数字", "提示");
                 return;
+            }
             if (!OpenUserCard() || !m_UserCardCtrl.SelectCardApp(2))
                 return;
             if (m_UserCardCtrl.ChangePIN(textOldPin_Ly.Text, textNewPin_Ly.Text))

@@ -725,9 +725,9 @@ namespace LohApduCtrl
             return 1;
         }
 
-        private bool UpdateEF0BFile(bool bDefaultPwd, int EM_NU)
+        private bool UpdateEF0BFile(bool bDefaultPwd, int EM_NU, string strEM_PWD)
         {
-            m_CmdProvider.createUpdateEF0BFileCmd(bDefaultPwd, EM_NU);
+            m_CmdProvider.createUpdateEF0BFileCmd(bDefaultPwd, EM_NU, strEM_PWD);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -824,7 +824,7 @@ namespace LohApduCtrl
             if (!UpdateEF16File(keyUpdate, UserCardInfoPar))
                 return false;
             //更新普通信息数据文件EF0B
-            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.EM_NU))
+            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.EM_NU, UserCardInfoPar.EM_PWD))
                 return false;
             //敏感信息文件EF1C
             if (!UpdateEF1CFile(keyUpdate, UserCardInfoPar))
@@ -1728,6 +1728,7 @@ namespace LohApduCtrl
                 CardInfo.EM_NU = RecvData[1];
             else
                 CardInfo.EM_NU = 1;
+            CardInfo.EM_PWD = BitConverter.ToString(RecvData, 2, 2).Replace("-", "");
         }
 
         private void GetBaseInfo(UserCardInfoParam CardInfo)
@@ -2319,12 +2320,6 @@ namespace LohApduCtrl
             }
             //更新公共应用基本数据文件EF15
             if (!UpdateEF15File(keyUpdate, byteCardId, UserCardInfoPar.ValidCardBegin, UserCardInfoPar.ValidCardEnd))
-                return false;
-            //更新持卡人基本数据文件EF16
-            if (!UpdateEF16File(keyUpdate, UserCardInfoPar))
-                return false;
-            //更新普通信息数据文件EF0B
-            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.EM_NU))
                 return false;
             return true;
         }

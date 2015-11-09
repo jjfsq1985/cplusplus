@@ -100,6 +100,7 @@ namespace CardOperating
             textPassword.Enabled = m_CardInfoPar.DefaultPwdFlag ? false : true;
             textPassword.Text = m_CardInfoPar.CustomPassword;
             textEMNumber.Text = m_CardInfoPar.EM_NU.ToString();
+            textEMpwd.Text = m_CardInfoPar.EM_PWD;
             textUserName.Text = m_CardInfoPar.UserName;
             textPriceLevel.Text = m_CardInfoPar.PriceLevel.ToString();
             cmbIdType.SelectedIndex = GetIDTypeIndex(m_CardInfoPar.IdType);
@@ -399,7 +400,15 @@ namespace CardOperating
 
             if (!m_CardInfoPar.DefaultPwdFlag && !string.IsNullOrEmpty(textPassword.Text))
             {
-                m_CardInfoPar.CustomPassword = textPassword.Text;
+                if (textPassword.Text.Length != 6)
+                {
+                    m_CardInfoPar.CustomPassword = "999999";
+                    MessageBox.Show("自设密码应为6位数字", "提示");
+                }
+                else
+                {
+                    m_CardInfoPar.CustomPassword = textPassword.Text;
+                }
             }
             else
             {
@@ -407,6 +416,14 @@ namespace CardOperating
             }
 
             m_CardInfoPar.EM_NU = Convert.ToInt32(textEMNumber.Text, 10);
+            if (textEMpwd.Text.Length == 4)
+                m_CardInfoPar.EM_PWD = textEMpwd.Text;
+            else
+            {
+                m_CardInfoPar.EM_PWD = "1234";
+                MessageBox.Show("自设员工密码应为4位数字", "提示");
+            }
+            
 
             m_CardInfoPar.UserName = textUserName.Text;
 
@@ -893,8 +910,13 @@ namespace CardOperating
             byte nCardType = (byte)m_CardInfoPar.UserCardType;
             m_CardInfoPar.CardOrderNo = GetCardOrderNoFromDb(m_CardInfoPar.CompanyID, nCardType);//从数据库读出
             if (m_CardInfoPar.UserCardType != CardType.EmployeeCard)
+            {
                 m_CardInfoPar.EM_NU = 1;
+                m_CardInfoPar.EM_PWD = "1234";
+            }
+                
             textEMNumber.Text = m_CardInfoPar.EM_NU.ToString();
+            textEMpwd.Text = m_CardInfoPar.EM_PWD;
 
             SetControlState(m_CardInfoPar.UserCardType);
 
@@ -910,7 +932,9 @@ namespace CardOperating
             LabelMotherCard.Visible = false;
             cmbMotherCard.Enabled = false;
             LabelEM.Visible = false;
-            textEMNumber.Visible = false;            
+            textEMNumber.Visible = false;
+            LabelEMpwd.Visible = false;
+            textEMpwd.Visible = false;            
             if (eType == CardType.PersonalCard)
             {
                 LimitCarNo.Enabled = true;
@@ -936,6 +960,8 @@ namespace CardOperating
                 textSelfId.Visible = false;
                 LabelEM.Visible = true;
                 textEMNumber.Visible = true;
+                LabelEMpwd.Visible = true;
+                textEMpwd.Visible = true;          
             }
             else if(eType == CardType.CompanySubCard)
             {

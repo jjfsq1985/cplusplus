@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ApduParam;
 using ApduInterface;
+using IFuncPlugin;
 
 namespace ApduDaHua
 {
@@ -636,8 +637,10 @@ namespace ApduDaHua
             return true;
         }
 
-        public bool createUpdateEF0BFileCmd(bool bDefaultPwd, int EM_NU)
+        public bool createUpdateEF0BFileCmd(bool bDefaultPwd, int EM_NU, string strEM_PWD)
         {
+            if (strEM_PWD.Length != 4)
+                return false;
             m_CLA = 0x04;
             m_INS = 0xD6;
             m_P1 = 0x8B;
@@ -648,8 +651,9 @@ namespace ApduDaHua
             int nVal = (EM_NU > 1 && EM_NU <= 9) ? EM_NU : 0x01;
             m_Data[1] = (byte)nVal;//内部卡：员工号，其他：备用
             //内部卡：员工密码，其他：备用
-            m_Data[2] = 0x12;
-            m_Data[3] = 0x34;
+            byte[] pwd = PublicFunc.StringToBCD(strEM_PWD);
+            m_Data[2] = pwd[0];
+            m_Data[3] = pwd[1];
             //4~31备用
             m_le = 0;
             m_nTotalLen = 37;

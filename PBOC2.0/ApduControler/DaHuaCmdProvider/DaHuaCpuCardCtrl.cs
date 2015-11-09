@@ -930,9 +930,9 @@ namespace DaHuaApduCtrl
             return 1;
         }
 
-        private bool UpdateEF0BFile(bool bDefaultPwd, int EM_NU)
-        {
-            m_CmdProvider.createUpdateEF0BFileCmd(bDefaultPwd, EM_NU);
+        private bool UpdateEF0BFile(bool bDefaultPwd, int EM_NU, string strEM_PWD)
+        {            
+            m_CmdProvider.createUpdateEF0BFileCmd(bDefaultPwd, EM_NU, strEM_PWD);
             byte[] data = m_CmdProvider.GetOutputCmd();
             int datalen = data.Length;
             byte[] RecvData = new byte[128];
@@ -1052,7 +1052,7 @@ namespace DaHuaApduCtrl
             if (!UpdateEF16File(keyUpdate, UserCardInfoPar))
                 return false;
             //更新普通信息数据文件EF0B
-            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag,UserCardInfoPar.EM_NU))
+            if (!UpdateEF0BFile(UserCardInfoPar.DefaultPwdFlag, UserCardInfoPar.EM_NU, UserCardInfoPar.EM_PWD))
                 return false;
             //敏感信息文件
             if (!UpdateEF1CFile(keyUpdate, UserCardInfoPar))
@@ -1961,6 +1961,7 @@ namespace DaHuaApduCtrl
                 CardInfo.EM_NU = RecvData[1];
             else
                 CardInfo.EM_NU = 1;
+            CardInfo.EM_PWD = BitConverter.ToString(RecvData, 2, 2).Replace("-", "");
         }
 
         private void GetBaseInfo(UserCardInfoParam CardInfo)

@@ -285,6 +285,13 @@ namespace ApduParam
             set { m_EmNumber = value; }
         }
 
+        private string m_EmPassword;
+        public string EM_PWD
+        {
+            get { return m_EmPassword; }
+            set { m_EmPassword = value; }
+        }
+
         private string m_strRemark;
         public string Remark
         {
@@ -306,6 +313,7 @@ namespace ApduParam
             m_bDefaultPwd = true;
             m_strCustomPassword = "999999";
             m_EmNumber = 1;
+            m_EmPassword = "1234";
             m_UserName = "";
             m_strTelephone = "";
             m_IdentityType = IdentityType.IdentityCard;

@@ -37,7 +37,7 @@ namespace ApduInterface
 
         bool createVerifyPINCmd(bool bDefaultPwd, byte[] customPwd);
 
-        bool createUpdateEF0BFileCmd(bool bDefaultPwd, int EM_NU);
+        bool createUpdateEF0BFileCmd(bool bDefaultPwd, int EM_NU, string strEM_PWD);
 
         bool createUpdateEF1CFileCmd(byte[] key, byte[] RandomVal, UserCardInfoParam cardInfo);
 
