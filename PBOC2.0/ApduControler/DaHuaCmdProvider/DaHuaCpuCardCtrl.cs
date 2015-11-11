@@ -1697,7 +1697,7 @@ namespace DaHuaApduCtrl
             if (GetDbUserKeyValue(ObjSql, 2))
                 bCompare = true;
 
-            byte[] ConsumerKey = GlobalControl.GetDbConsumerKey(ObjSql, "PROC_GetPsamKey", "ConsumerMasterKey", 0);
+            byte[] ConsumerKey = GlobalControl.GetPrivateKeyFromDb(ObjSql, "PROC_GetPsamKey", "ConsumerMasterKey", 0);
             if (ConsumerKey == null || !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK) || (bCompare && !PublicFunc.ByteDataEquals(ConsumerKey, m_MPK_Ly)) )
             {
                 OnTextOutput(new MsgOutEvent(0, "卡片消费密钥不一致"));
@@ -1863,10 +1863,12 @@ namespace DaHuaApduCtrl
 
             if (!bUpdate)
             {
-                if (ObjSql.ExecuteProc("PROC_PublishCpuCard", sqlparams) == 0)
+                if (SaveCpuCardKey(ObjSql, CardGuid, UserCardInfoPar.GetUserCardID()))
                 {
-                    SaveCpuCardKey(ObjSql, CardGuid, UserCardInfoPar.GetUserCardID());
-                    bSuccess = true;
+                    if (ObjSql.ExecuteProc("PROC_PublishCpuCard", sqlparams) == 0)
+                    {
+                        bSuccess = true;
+                    }
                 }
             }
             else
@@ -2595,20 +2597,21 @@ namespace DaHuaApduCtrl
             return true;
         }
 
-        private void SaveCpuCardKey(SqlHelper ObjSql, Guid keyGuid, byte[] ASN)
+        private bool SaveCpuCardKey(SqlHelper ObjSql, Guid keyGuid, byte[] ASN)
         {
+            bool bRet = false;
             //将密钥存储到Base_Card_Key表
             if (m_ctrlApdu.m_CardKeyFrom == CardKeySource.CardKeyFromXml)
             {
-                GlobalControl.InsertCardKeyFromXml(ObjSql, keyGuid, ASN, m_ctrlApdu.m_strCardKeyPath, 1);
+                bRet = GlobalControl.InsertCardKeyFromXml(ObjSql, keyGuid, ASN, m_ctrlApdu.m_strCardKeyPath, 1);
                 GlobalControl.InsertCardKeyFromXml(ObjSql, keyGuid, ASN, m_ctrlApdu.m_strCardKeyPath, 2);
             }
             else
             {
-                GlobalControl.InsertCardKeyFromDb(ObjSql, keyGuid, ASN, 1);
+                bRet = GlobalControl.InsertCardKeyFromDb(ObjSql, keyGuid, ASN, 1);
                 GlobalControl.InsertCardKeyFromDb(ObjSql, keyGuid, ASN, 2);
             }
-
+            return bRet;
         }
 
     }

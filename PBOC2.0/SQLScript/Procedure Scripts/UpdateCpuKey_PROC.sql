@@ -1,12 +1,14 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'PROC_UpdateCpuKey') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+if exists (select * from sysobjects where id = object_id(N'PROC_UpdateCpuKey') and type in (N'P', N'PC'))
 drop procedure PROC_UpdateCpuKey
+GO
 
 
-if exists (select * from sysobjects where id = object_id(N'PROC_UpdateCpuAppKey') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+if exists (select * from sysobjects where id = object_id(N'PROC_UpdateCpuAppKey') and type in (N'P', N'PC'))
 drop procedure PROC_UpdateCpuAppKey
+GO
 
 /****** CPU¿¨ÃÜÔ¿¼ÇÂ¼ ******/
 SET ANSI_NULLS ON

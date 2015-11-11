@@ -20,7 +20,7 @@ CREATE TABLE [dbo].[Data_RechargeCardRecord](
 	[PreferentialVal] [decimal](18, 2) NULL,
 	[ReceivedVal] [decimal](18, 2) NULL,
 	[CurrentBalance] [decimal](18, 2) NULL,
-	[RechargeDateTime] [datetime] NULL,      
+	[RechargeDateTime] [datetime] NULL,
 	[TerminalID]  [varchar](12) NOT NULL,
 	[OperatorId] [int] NULL,
 	[PaymentMethod] [nvarchar](50) NULL,
@@ -43,26 +43,26 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'卡号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'CardNum'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作类型：充值、转账' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'OperateType'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作类型：充值、圈存' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'OperateType'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'充值前余额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'ForwardBalance'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作前余额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'ForwardBalance'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'充值金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'RechargeValue'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'交易金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'RechargeValue'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'优惠金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'PreferentialVal'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'实充金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'ReceivedVal'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'实际金额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'ReceivedVal'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'充值后余额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'CurrentBalance'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作后余额' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'CurrentBalance'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'充值时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'RechargeDateTime'
-GO                              
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'RechargeDateTime'
+GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'终端机编号' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Data_RechargeCardRecord', @level2type=N'COLUMN',@level2name=N'TerminalID'
 GO

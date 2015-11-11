@@ -1,8 +1,10 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'Pro_checkData') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+if exists (select * from sysobjects where id = object_id(N'Pro_checkData') and type in (N'P', N'PC'))
 drop procedure Pro_checkData
+GO
+
 
 SET ANSI_NULLS ON
 GO

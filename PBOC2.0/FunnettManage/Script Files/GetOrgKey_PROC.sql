@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'PROC_GetOrgKey') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
-drop procedure PROC_GetOrgKey
+if exists (select * from sysobjects where id = object_id(N'PROC_GetOrgKey') and type in (N'P', N'PC'))
+drop procedure PROC_GetOrgKey                                                                        
+GO
 
 SET ANSI_NULLS ON
 GO

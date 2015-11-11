@@ -84,6 +84,10 @@
             this.btnModifyCard = new System.Windows.Forms.Button();
             this.CardInfoPanel = new System.Windows.Forms.SplitContainer();
             this.CardInfo = new System.Windows.Forms.GroupBox();
+            this.LableType = new System.Windows.Forms.Label();
+            this.tabCardInfo = new System.Windows.Forms.TabControl();
+            this.tabLimit = new System.Windows.Forms.TabPage();
+            this.tabCylinder = new System.Windows.Forms.TabPage();
             this.textEMpwd = new System.Windows.Forms.RichTextBox();
             this.LabelEMpwd = new System.Windows.Forms.Label();
             this.textEMNumber = new System.Windows.Forms.RichTextBox();
@@ -140,23 +144,19 @@
             this.cmbDevType = new System.Windows.Forms.ComboBox();
             this.CardReader = new System.Windows.Forms.Label();
             this.ContactCard = new System.Windows.Forms.CheckBox();
-            this.tabCardInfo = new System.Windows.Forms.TabControl();
-            this.tabLimit = new System.Windows.Forms.TabPage();
-            this.tabCylinder = new System.Windows.Forms.TabPage();
-            this.LableType = new System.Windows.Forms.Label();
             this.CardInfoPanel.Panel1.SuspendLayout();
             this.CardInfoPanel.Panel2.SuspendLayout();
             this.CardInfoPanel.SuspendLayout();
             this.CardInfo.SuspendLayout();
+            this.tabCardInfo.SuspendLayout();
+            this.tabLimit.SuspendLayout();
+            this.tabCylinder.SuspendLayout();
             this.CardApp.SuspendLayout();
             this.tabApp.SuspendLayout();
             this.tabSINOPEC.SuspendLayout();
             this.PINOperate.SuspendLayout();
             this.tabLOYALTY.SuspendLayout();
             this.PINOperate_Ly.SuspendLayout();
-            this.tabCardInfo.SuspendLayout();
-            this.tabLimit.SuspendLayout();
-            this.tabCylinder.SuspendLayout();
             this.SuspendLayout();
             // 
             // textRemark
@@ -750,6 +750,68 @@
             this.CardInfo.TabStop = false;
             this.CardInfo.Text = "卡信息";
             // 
+            // LableType
+            // 
+            this.LableType.AutoSize = true;
+            this.LableType.Location = new System.Drawing.Point(267, 23);
+            this.LableType.Name = "LableType";
+            this.LableType.Size = new System.Drawing.Size(41, 12);
+            this.LableType.TabIndex = 113;
+            this.LableType.Text = "卡类型";
+            // 
+            // tabCardInfo
+            // 
+            this.tabCardInfo.Controls.Add(this.tabLimit);
+            this.tabCardInfo.Controls.Add(this.tabCylinder);
+            this.tabCardInfo.Location = new System.Drawing.Point(10, 373);
+            this.tabCardInfo.Name = "tabCardInfo";
+            this.tabCardInfo.SelectedIndex = 0;
+            this.tabCardInfo.Size = new System.Drawing.Size(524, 182);
+            this.tabCardInfo.TabIndex = 112;
+            // 
+            // tabLimit
+            // 
+            this.tabLimit.BackColor = System.Drawing.SystemColors.Control;
+            this.tabLimit.Controls.Add(this.cmbLimitGasType);
+            this.tabLimit.Controls.Add(this.LimitCarNo);
+            this.tabLimit.Controls.Add(this.LimitArea);
+            this.tabLimit.Controls.Add(this.listLimitArea);
+            this.tabLimit.Controls.Add(this.LimitGas);
+            this.tabLimit.Controls.Add(this.textGasAmount);
+            this.tabLimit.Controls.Add(this.cmbAreaLimit);
+            this.tabLimit.Controls.Add(this.GasAmount);
+            this.tabLimit.Controls.Add(this.LimitAreaCode);
+            this.tabLimit.Controls.Add(this.textGasCount);
+            this.tabLimit.Controls.Add(this.GasCount);
+            this.tabLimit.Location = new System.Drawing.Point(4, 22);
+            this.tabLimit.Name = "tabLimit";
+            this.tabLimit.Padding = new System.Windows.Forms.Padding(3);
+            this.tabLimit.Size = new System.Drawing.Size(516, 156);
+            this.tabLimit.TabIndex = 0;
+            this.tabLimit.Text = "限制信息";
+            // 
+            // tabCylinder
+            // 
+            this.tabCylinder.BackColor = System.Drawing.SystemColors.Control;
+            this.tabCylinder.Controls.Add(this.textBoalCount);
+            this.tabCylinder.Controls.Add(this.textBoalFactoryNo);
+            this.tabCylinder.Controls.Add(this.BoalFactoryNo);
+            this.tabCylinder.Controls.Add(this.textBoalNo);
+            this.tabCylinder.Controls.Add(this.BoalNo);
+            this.tabCylinder.Controls.Add(this.BoalExprieValid);
+            this.tabCylinder.Controls.Add(this.BoalExprie);
+            this.tabCylinder.Controls.Add(this.BoalCount);
+            this.tabCylinder.Controls.Add(this.BoalVol);
+            this.tabCylinder.Controls.Add(this.textBoalVol);
+            this.tabCylinder.Controls.Add(this.BusDistance);
+            this.tabCylinder.Controls.Add(this.textBusDistance);
+            this.tabCylinder.Location = new System.Drawing.Point(4, 22);
+            this.tabCylinder.Name = "tabCylinder";
+            this.tabCylinder.Padding = new System.Windows.Forms.Padding(3);
+            this.tabCylinder.Size = new System.Drawing.Size(516, 156);
+            this.tabCylinder.TabIndex = 1;
+            this.tabCylinder.Text = "钢瓶信息";
+            // 
             // textEMpwd
             // 
             this.textEMpwd.Location = new System.Drawing.Point(322, 135);
@@ -917,7 +979,7 @@
             this.PINOperate.Controls.Add(this.OldPIN);
             this.PINOperate.Controls.Add(this.NewPIN);
             this.PINOperate.Controls.Add(this.btnPinUnlock);
-            this.PINOperate.Location = new System.Drawing.Point(3, 144);
+            this.PINOperate.Location = new System.Drawing.Point(6, 129);
             this.PINOperate.Name = "PINOperate";
             this.PINOperate.Size = new System.Drawing.Size(338, 131);
             this.PINOperate.TabIndex = 53;
@@ -969,7 +1031,7 @@
             // OldPIN
             // 
             this.OldPIN.AutoSize = true;
-            this.OldPIN.Location = new System.Drawing.Point(10, 23);
+            this.OldPIN.Location = new System.Drawing.Point(53, 23);
             this.OldPIN.Name = "OldPIN";
             this.OldPIN.Size = new System.Drawing.Size(47, 12);
             this.OldPIN.TabIndex = 49;
@@ -978,7 +1040,7 @@
             // NewPIN
             // 
             this.NewPIN.AutoSize = true;
-            this.NewPIN.Location = new System.Drawing.Point(10, 49);
+            this.NewPIN.Location = new System.Drawing.Point(53, 49);
             this.NewPIN.Name = "NewPIN";
             this.NewPIN.Size = new System.Drawing.Size(47, 12);
             this.NewPIN.TabIndex = 48;
@@ -996,7 +1058,7 @@
             // 
             // btnCardLoad
             // 
-            this.btnCardLoad.Location = new System.Drawing.Point(241, 39);
+            this.btnCardLoad.Location = new System.Drawing.Point(253, 93);
             this.btnCardLoad.Name = "btnCardLoad";
             this.btnCardLoad.Size = new System.Drawing.Size(64, 23);
             this.btnCardLoad.TabIndex = 35;
@@ -1006,7 +1068,7 @@
             // 
             // textMoney
             // 
-            this.textMoney.Location = new System.Drawing.Point(113, 39);
+            this.textMoney.Location = new System.Drawing.Point(113, 95);
             this.textMoney.Multiline = false;
             this.textMoney.Name = "textMoney";
             this.textMoney.Size = new System.Drawing.Size(97, 21);
@@ -1016,7 +1078,7 @@
             // LabelPIN
             // 
             this.LabelPIN.AutoSize = true;
-            this.LabelPIN.Location = new System.Drawing.Point(10, 18);
+            this.LabelPIN.Location = new System.Drawing.Point(29, 18);
             this.LabelPIN.Name = "LabelPIN";
             this.LabelPIN.Size = new System.Drawing.Size(71, 12);
             this.LabelPIN.TabIndex = 45;
@@ -1025,7 +1087,7 @@
             // Money
             // 
             this.Money.AutoSize = true;
-            this.Money.Location = new System.Drawing.Point(10, 45);
+            this.Money.Location = new System.Drawing.Point(71, 95);
             this.Money.Name = "Money";
             this.Money.Size = new System.Drawing.Size(29, 12);
             this.Money.TabIndex = 37;
@@ -1034,7 +1096,7 @@
             // Balance
             // 
             this.Balance.AutoSize = true;
-            this.Balance.Location = new System.Drawing.Point(10, 71);
+            this.Balance.Location = new System.Drawing.Point(71, 44);
             this.Balance.Name = "Balance";
             this.Balance.Size = new System.Drawing.Size(29, 12);
             this.Balance.TabIndex = 44;
@@ -1043,7 +1105,7 @@
             // Unit2
             // 
             this.Unit2.AutoSize = true;
-            this.Unit2.Location = new System.Drawing.Point(211, 45);
+            this.Unit2.Location = new System.Drawing.Point(216, 99);
             this.Unit2.Name = "Unit2";
             this.Unit2.Size = new System.Drawing.Size(17, 12);
             this.Unit2.TabIndex = 38;
@@ -1051,7 +1113,7 @@
             // 
             // btnUnlockGrayCard
             // 
-            this.btnUnlockGrayCard.Location = new System.Drawing.Point(241, 93);
+            this.btnUnlockGrayCard.Location = new System.Drawing.Point(253, 57);
             this.btnUnlockGrayCard.Name = "btnUnlockGrayCard";
             this.btnUnlockGrayCard.Size = new System.Drawing.Size(64, 23);
             this.btnUnlockGrayCard.TabIndex = 43;
@@ -1061,7 +1123,7 @@
             // 
             // btnBalance
             // 
-            this.btnBalance.Location = new System.Drawing.Point(241, 66);
+            this.btnBalance.Location = new System.Drawing.Point(253, 12);
             this.btnBalance.Name = "btnBalance";
             this.btnBalance.Size = new System.Drawing.Size(64, 23);
             this.btnBalance.TabIndex = 39;
@@ -1074,7 +1136,7 @@
             this.GrayFlag.AutoCheck = false;
             this.GrayFlag.AutoSize = true;
             this.GrayFlag.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GrayFlag.Location = new System.Drawing.Point(113, 96);
+            this.GrayFlag.Location = new System.Drawing.Point(163, 66);
             this.GrayFlag.Name = "GrayFlag";
             this.GrayFlag.Size = new System.Drawing.Size(45, 16);
             this.GrayFlag.TabIndex = 42;
@@ -1084,7 +1146,7 @@
             // textBalance
             // 
             this.textBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBalance.Location = new System.Drawing.Point(113, 66);
+            this.textBalance.Location = new System.Drawing.Point(113, 39);
             this.textBalance.Multiline = false;
             this.textBalance.Name = "textBalance";
             this.textBalance.ReadOnly = true;
@@ -1095,7 +1157,7 @@
             // Unit1
             // 
             this.Unit1.AutoSize = true;
-            this.Unit1.Location = new System.Drawing.Point(211, 71);
+            this.Unit1.Location = new System.Drawing.Point(211, 44);
             this.Unit1.Name = "Unit1";
             this.Unit1.Size = new System.Drawing.Size(17, 12);
             this.Unit1.TabIndex = 41;
@@ -1139,7 +1201,7 @@
             // textLyBalance
             // 
             this.textLyBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textLyBalance.Location = new System.Drawing.Point(113, 72);
+            this.textLyBalance.Location = new System.Drawing.Point(113, 42);
             this.textLyBalance.Multiline = false;
             this.textLyBalance.Name = "textLyBalance";
             this.textLyBalance.ReadOnly = true;
@@ -1206,7 +1268,7 @@
             // LyOldPin
             // 
             this.LyOldPin.AutoSize = true;
-            this.LyOldPin.Location = new System.Drawing.Point(7, 23);
+            this.LyOldPin.Location = new System.Drawing.Point(54, 23);
             this.LyOldPin.Name = "LyOldPin";
             this.LyOldPin.Size = new System.Drawing.Size(47, 12);
             this.LyOldPin.TabIndex = 49;
@@ -1215,7 +1277,7 @@
             // LyNewPin
             // 
             this.LyNewPin.AutoSize = true;
-            this.LyNewPin.Location = new System.Drawing.Point(7, 48);
+            this.LyNewPin.Location = new System.Drawing.Point(54, 48);
             this.LyNewPin.Name = "LyNewPin";
             this.LyNewPin.Size = new System.Drawing.Size(47, 12);
             this.LyNewPin.TabIndex = 48;
@@ -1234,7 +1296,7 @@
             // UnitLy2
             // 
             this.UnitLy2.AutoSize = true;
-            this.UnitLy2.Location = new System.Drawing.Point(216, 75);
+            this.UnitLy2.Location = new System.Drawing.Point(216, 44);
             this.UnitLy2.Name = "UnitLy2";
             this.UnitLy2.Size = new System.Drawing.Size(17, 12);
             this.UnitLy2.TabIndex = 112;
@@ -1242,7 +1304,7 @@
             // 
             // LoadLoyalty
             // 
-            this.LoadLoyalty.Location = new System.Drawing.Point(249, 43);
+            this.LoadLoyalty.Location = new System.Drawing.Point(249, 101);
             this.LoadLoyalty.Name = "LoadLoyalty";
             this.LoadLoyalty.Size = new System.Drawing.Size(64, 23);
             this.LoadLoyalty.TabIndex = 106;
@@ -1255,7 +1317,7 @@
             this.ChkGrayLy.AutoCheck = false;
             this.ChkGrayLy.AutoSize = true;
             this.ChkGrayLy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ChkGrayLy.Location = new System.Drawing.Point(114, 103);
+            this.ChkGrayLy.Location = new System.Drawing.Point(165, 69);
             this.ChkGrayLy.Name = "ChkGrayLy";
             this.ChkGrayLy.Size = new System.Drawing.Size(45, 16);
             this.ChkGrayLy.TabIndex = 113;
@@ -1264,7 +1326,7 @@
             // 
             // textLoadValue
             // 
-            this.textLoadValue.Location = new System.Drawing.Point(113, 42);
+            this.textLoadValue.Location = new System.Drawing.Point(113, 100);
             this.textLoadValue.Multiline = false;
             this.textLoadValue.Name = "textLoadValue";
             this.textLoadValue.Size = new System.Drawing.Size(97, 21);
@@ -1273,18 +1335,18 @@
             // 
             // ReadLoyalty
             // 
-            this.ReadLoyalty.Location = new System.Drawing.Point(249, 70);
+            this.ReadLoyalty.Location = new System.Drawing.Point(249, 13);
             this.ReadLoyalty.Name = "ReadLoyalty";
             this.ReadLoyalty.Size = new System.Drawing.Size(64, 23);
             this.ReadLoyalty.TabIndex = 110;
-            this.ReadLoyalty.Text = "读取余额";
+            this.ReadLoyalty.Text = "读取积分";
             this.ReadLoyalty.UseVisualStyleBackColor = true;
             this.ReadLoyalty.Click += new System.EventHandler(this.ReadLoyalty_Click);
             // 
             // LabelPIN_Ly
             // 
             this.LabelPIN_Ly.AutoSize = true;
-            this.LabelPIN_Ly.Location = new System.Drawing.Point(10, 18);
+            this.LabelPIN_Ly.Location = new System.Drawing.Point(6, 18);
             this.LabelPIN_Ly.Name = "LabelPIN_Ly";
             this.LabelPIN_Ly.Size = new System.Drawing.Size(95, 12);
             this.LabelPIN_Ly.TabIndex = 116;
@@ -1292,7 +1354,7 @@
             // 
             // UnGrayLy
             // 
-            this.UnGrayLy.Location = new System.Drawing.Point(249, 97);
+            this.UnGrayLy.Location = new System.Drawing.Point(249, 57);
             this.UnGrayLy.Name = "UnGrayLy";
             this.UnGrayLy.Size = new System.Drawing.Size(64, 23);
             this.UnGrayLy.TabIndex = 114;
@@ -1303,7 +1365,7 @@
             // LoadValue
             // 
             this.LoadValue.AutoSize = true;
-            this.LoadValue.Location = new System.Drawing.Point(10, 47);
+            this.LoadValue.Location = new System.Drawing.Point(48, 105);
             this.LoadValue.Name = "LoadValue";
             this.LoadValue.Size = new System.Drawing.Size(53, 12);
             this.LoadValue.TabIndex = 108;
@@ -1312,7 +1374,7 @@
             // UnitLy1
             // 
             this.UnitLy1.AutoSize = true;
-            this.UnitLy1.Location = new System.Drawing.Point(216, 47);
+            this.UnitLy1.Location = new System.Drawing.Point(216, 105);
             this.UnitLy1.Name = "UnitLy1";
             this.UnitLy1.Size = new System.Drawing.Size(17, 12);
             this.UnitLy1.TabIndex = 109;
@@ -1321,7 +1383,7 @@
             // LyBalance
             // 
             this.LyBalance.AutoSize = true;
-            this.LyBalance.Location = new System.Drawing.Point(10, 78);
+            this.LyBalance.Location = new System.Drawing.Point(48, 44);
             this.LyBalance.Name = "LyBalance";
             this.LyBalance.Size = new System.Drawing.Size(53, 12);
             this.LyBalance.TabIndex = 115;
@@ -1360,68 +1422,6 @@
             this.ContactCard.Text = "接触式";
             this.ContactCard.UseVisualStyleBackColor = true;
             // 
-            // tabCardInfo
-            // 
-            this.tabCardInfo.Controls.Add(this.tabLimit);
-            this.tabCardInfo.Controls.Add(this.tabCylinder);
-            this.tabCardInfo.Location = new System.Drawing.Point(10, 373);
-            this.tabCardInfo.Name = "tabCardInfo";
-            this.tabCardInfo.SelectedIndex = 0;
-            this.tabCardInfo.Size = new System.Drawing.Size(524, 182);
-            this.tabCardInfo.TabIndex = 112;
-            // 
-            // tabLimit
-            // 
-            this.tabLimit.BackColor = System.Drawing.SystemColors.Control;
-            this.tabLimit.Controls.Add(this.cmbLimitGasType);
-            this.tabLimit.Controls.Add(this.LimitCarNo);
-            this.tabLimit.Controls.Add(this.LimitArea);
-            this.tabLimit.Controls.Add(this.listLimitArea);
-            this.tabLimit.Controls.Add(this.LimitGas);
-            this.tabLimit.Controls.Add(this.textGasAmount);
-            this.tabLimit.Controls.Add(this.cmbAreaLimit);
-            this.tabLimit.Controls.Add(this.GasAmount);
-            this.tabLimit.Controls.Add(this.LimitAreaCode);
-            this.tabLimit.Controls.Add(this.textGasCount);
-            this.tabLimit.Controls.Add(this.GasCount);
-            this.tabLimit.Location = new System.Drawing.Point(4, 22);
-            this.tabLimit.Name = "tabLimit";
-            this.tabLimit.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLimit.Size = new System.Drawing.Size(516, 156);
-            this.tabLimit.TabIndex = 0;
-            this.tabLimit.Text = "限制信息";
-            // 
-            // tabCylinder
-            // 
-            this.tabCylinder.BackColor = System.Drawing.SystemColors.Control;
-            this.tabCylinder.Controls.Add(this.textBoalCount);
-            this.tabCylinder.Controls.Add(this.textBoalFactoryNo);
-            this.tabCylinder.Controls.Add(this.BoalFactoryNo);
-            this.tabCylinder.Controls.Add(this.textBoalNo);
-            this.tabCylinder.Controls.Add(this.BoalNo);
-            this.tabCylinder.Controls.Add(this.BoalExprieValid);
-            this.tabCylinder.Controls.Add(this.BoalExprie);
-            this.tabCylinder.Controls.Add(this.BoalCount);
-            this.tabCylinder.Controls.Add(this.BoalVol);
-            this.tabCylinder.Controls.Add(this.textBoalVol);
-            this.tabCylinder.Controls.Add(this.BusDistance);
-            this.tabCylinder.Controls.Add(this.textBusDistance);
-            this.tabCylinder.Location = new System.Drawing.Point(4, 22);
-            this.tabCylinder.Name = "tabCylinder";
-            this.tabCylinder.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCylinder.Size = new System.Drawing.Size(516, 156);
-            this.tabCylinder.TabIndex = 1;
-            this.tabCylinder.Text = "钢瓶信息";
-            // 
-            // LableType
-            // 
-            this.LableType.AutoSize = true;
-            this.LableType.Location = new System.Drawing.Point(267, 23);
-            this.LableType.Name = "LableType";
-            this.LableType.Size = new System.Drawing.Size(41, 12);
-            this.LableType.TabIndex = 113;
-            this.LableType.Text = "卡类型";
-            // 
             // AppUserOperator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1443,6 +1443,11 @@
             this.CardInfoPanel.ResumeLayout(false);
             this.CardInfo.ResumeLayout(false);
             this.CardInfo.PerformLayout();
+            this.tabCardInfo.ResumeLayout(false);
+            this.tabLimit.ResumeLayout(false);
+            this.tabLimit.PerformLayout();
+            this.tabCylinder.ResumeLayout(false);
+            this.tabCylinder.PerformLayout();
             this.CardApp.ResumeLayout(false);
             this.tabApp.ResumeLayout(false);
             this.tabSINOPEC.ResumeLayout(false);
@@ -1453,11 +1458,6 @@
             this.tabLOYALTY.PerformLayout();
             this.PINOperate_Ly.ResumeLayout(false);
             this.PINOperate_Ly.PerformLayout();
-            this.tabCardInfo.ResumeLayout(false);
-            this.tabLimit.ResumeLayout(false);
-            this.tabLimit.PerformLayout();
-            this.tabCylinder.ResumeLayout(false);
-            this.tabCylinder.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

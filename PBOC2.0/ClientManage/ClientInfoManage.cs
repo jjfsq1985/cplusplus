@@ -313,10 +313,10 @@ namespace ClientManage
             if (m_SelectedClient == null)
                 return;
             SaveToDb(m_SelectedClient, DbStateFlag.eDbDel);
+            m_lstClientInfo.Remove(m_SelectedClient);
             TreeNode parentNode = treeClient.SelectedNode.Parent;
             treeClient.SelectedNode.Remove();
             //更新选中项
-            m_lstClientInfo.Remove(m_SelectedClient);
             if (parentNode != null)
             {
                 treeClient.SelectedNode = parentNode;
@@ -352,10 +352,16 @@ namespace ClientManage
 
         private void AddNextClientNode()
         {
+            int nClientId = 1;
+            for (int i = 0; i < m_lstClientInfo.Count; i++)
+            {
+                if (m_lstClientInfo[i].ClientId >= nClientId)
+                    nClientId = m_lstClientInfo[i].ClientId + 1;
+            }
             ClientInfo NodeClient = new ClientInfo();
             NodeClient.ParentId = 0;
             NodeClient.ParentName = "";
-            NodeClient.ClientId = m_lstClientInfo.Count+1;
+            NodeClient.ClientId = nClientId;
             NodeClient.ClientName = "新单位";
             m_lstClientInfo.Add(NodeClient);
             m_SelectedClient = NodeClient;

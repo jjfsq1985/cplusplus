@@ -2,8 +2,9 @@ USE [FunnettStation]
 GO
 
 
-if exists (select * from sysobjects where id = object_id(N'Pro_SC_Shift') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+if exists (select * from sysobjects where id = object_id(N'Pro_SC_Shift') and type in (N'P', N'PC'))
 drop procedure Pro_SC_Shift
+GO
 
 
 SET ANSI_NULLS ON

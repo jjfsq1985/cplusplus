@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'PROC_UpdateOrgKeyRoot') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
-drop procedure PROC_UpdateOrgKeyRoot
+if exists (select * from sysobjects where id = object_id(N'PROC_UpdateOrgKeyRoot') and type in (N'P', N'PC'))
+drop procedure PROC_UpdateOrgKeyRoot                                                                        
+GO
 
 /****** 厂商初始卡密钥记录 ******/
 SET ANSI_NULLS ON

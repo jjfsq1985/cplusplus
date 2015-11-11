@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'PROC_UpdateClientInfo') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+if exists (select * from sysobjects where id = object_id(N'PROC_UpdateClientInfo') and type in (N'P', N'PC'))
 drop procedure PROC_UpdateClientInfo
+GO
 
 /****** 单位信息记录 ******/
 SET ANSI_NULLS ON

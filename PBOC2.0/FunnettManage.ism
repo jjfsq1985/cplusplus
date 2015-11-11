@@ -247,7 +247,6 @@
 		<col key="yes" def="s72">Name</col>
 		<col def="V0">Data</col>
 		<col def="S255">ISBuildSourcePath</col>
-		<row><td>ISSELFREG.DLL</td><td/><td>&lt;ISProductFolder&gt;\redist\language independent\i386\isregsvr.dll</td></row>
 		<row><td>ISSQLSRV.DLL</td><td/><td>&lt;ISProductFolder&gt;\redist\language independent\i386\issqlsrv.dll</td></row>
 		<row><td>ISSetup.dll</td><td/><td>&lt;ISProductFolder&gt;\redist\language independent\i386\ISSetup.dll</td></row>
 		<row><td>ISSetupFilesHelper</td><td/><td>&lt;ISProductFolder&gt;\redist\language independent\i386\SFHelper.dll</td></row>
@@ -393,9 +392,8 @@
 		<row><td>sc_shift_proc.sql_SQLComponent</td><td>{C0610280-474A-43C3-B4E9-C73AC369F83F}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>sc_stationinfo.sql_SQLComponent</td><td>{824E87FC-4156-45EA-927D-28515862E145}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>sc_whitecard.sql_SQLComponent</td><td>{9B7DAFA9-EE3F-4337-B14C-0E2B9D68A099}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>sqlscript.sql_SQLComponent</td><td>{772867FA-FF1E-49B4-A662-423177FC5F1A}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>update_config_proc.sql_SQLComponent</td><td>{F2DB35E3-FB17-4279-9C06-FF7D4DEF7C22}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>updateaccount_proc_.sql_SQLComponent</td><td>{F8359EBB-1BA9-4860-A86B-33EAEE1E0B26}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>updateaccount_proc.sql_SQLComponent</td><td>{F8359EBB-1BA9-4860-A86B-33EAEE1E0B26}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>updatecardstate_proc.sql_SQLComponent</td><td>{FE239791-A1CD-4BB5-A9D4-4831C93EFEBD}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>updateclientinfo_proc.sql_SQLComponent</td><td>{001BD9C5-95CD-4748-BE3A-CF1E3C975143}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>updatecpukey_proc.sql_SQLComponent</td><td>{9C4A6EDA-0CF1-4109-8DB7-CDCDD0179198}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -504,9 +502,8 @@
 		<row><td>INSTALLDIR</td><td>sc_shift_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>sc_stationinfo.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>sc_whitecard.sql_SQLComponent</td></row>
-		<row><td>INSTALLDIR</td><td>sqlscript.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>update_config_proc.sql_SQLComponent</td></row>
-		<row><td>INSTALLDIR</td><td>updateaccount_proc_.sql_SQLComponent</td></row>
+		<row><td>INSTALLDIR</td><td>updateaccount_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>updatecardstate_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>updateclientinfo_proc.sql_SQLComponent</td></row>
 		<row><td>INSTALLDIR</td><td>updatecpukey_proc.sql_SQLComponent</td></row>
@@ -536,12 +533,8 @@
 		<row><td>ISSQLServerUninstall</td><td>1025</td><td>ISSQLSRV.DLL</td><td>ISSQLServerUninstall</td><td/><td/></row>
 		<row><td>ISSQLServerValidate</td><td>1</td><td>ISSQLSRV.DLL</td><td>ISSQLServerValidate</td><td/><td/></row>
 		<row><td>ISSQLServerWriteLoginInfo</td><td>3073</td><td>ISSQLSRV.DLL</td><td>ISSQLServerWriteLoginInfo</td><td/><td/></row>
-		<row><td>ISSelfRegisterCosting</td><td>1</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterCosting</td><td/><td/></row>
-		<row><td>ISSelfRegisterFiles</td><td>3073</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterFiles</td><td/><td/></row>
-		<row><td>ISSelfRegisterFinalize</td><td>1</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterFinalize</td><td/><td/></row>
 		<row><td>ISSetupFilesCleanup</td><td>257</td><td>ISSetupFilesHelper</td><td>SFCleanupEx</td><td/><td/></row>
 		<row><td>ISSetupFilesExtract</td><td>257</td><td>ISSetupFilesHelper</td><td>SFStartupEx</td><td/><td/></row>
-		<row><td>ISUnSelfRegisterFiles</td><td>3073</td><td>ISSELFREG.DLL</td><td>ISUnSelfRegisterFiles</td><td/><td/></row>
 		<row><td>ISVerifyScriptingRuntime</td><td>19</td><td/><td>[STANDARD_USE_SETUPEXE]</td><td/><td>Required for installations using InstallScript.</td></row>
 		<row><td>SetARPINSTALLLOCATION</td><td>51</td><td>ARPINSTALLLOCATION</td><td>[INSTALLDIR]</td><td/><td/></row>
 		<row><td>SetAllUsersProfileNT</td><td>51</td><td>ALLUSERSPROFILE</td><td>[%SystemRoot]\Profiles\All Users</td><td/><td/></row>
@@ -1287,7 +1280,8 @@
 	<table name="FeatureComponents">
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
-		<row><td>CheckFeatures</td><td>sqlscript.sql_SQLComponent</td></row>
+		<row><td>CheckFeatures</td><td>dbinit.sql_SQLComponent</td></row>
+		<row><td>CheckFeatures</td><td>funnett_version.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>base_card.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>base_client.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>base_station.sql_SQLComponent</td></row>
@@ -1299,8 +1293,6 @@
 		<row><td>DBFeatures</td><td>data_greycardrecord.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>data_province.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>data_superior.sql_SQLComponent</td></row>
-		<row><td>DBFeatures</td><td>dbinit.sql_SQLComponent</td></row>
-		<row><td>DBFeatures</td><td>funnett_version.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>getcpukey_proc.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>getgrayrecord_proc.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>getorgkey_proc.sql_SQLComponent</td></row>
@@ -1341,7 +1333,7 @@
 		<row><td>DBFeatures</td><td>sc_stationinfo.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>sc_whitecard.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>update_config_proc.sql_SQLComponent</td></row>
-		<row><td>DBFeatures</td><td>updateaccount_proc_.sql_SQLComponent</td></row>
+		<row><td>DBFeatures</td><td>updateaccount_proc.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>updatecardstate_proc.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>updateclientinfo_proc.sql_SQLComponent</td></row>
 		<row><td>DBFeatures</td><td>updatecpukey_proc.sql_SQLComponent</td></row>
@@ -1741,9 +1733,8 @@
 		<row><td>sc_shift_proc.sql_SQLComponent</td><td/><td/><td>_9DD3B28C_F011_453F_B253_31C43730A359_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>sc_stationinfo.sql_SQLComponent</td><td/><td/><td>_1DEE3CD9_5F26_4867_84B6_FC8A3576B1C8_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>sc_whitecard.sql_SQLComponent</td><td/><td/><td>_6AD17824_3FFF_4550_B294_E046CBE4EB18_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>sqlscript.sql_SQLComponent</td><td/><td/><td>_7CA1E625_0816_491F_B804_C7954F47CA33_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>update_config_proc.sql_SQLComponent</td><td/><td/><td>_49CAE2EE_73C6_4304_80A1_10572C5A2202_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>updateaccount_proc_.sql_SQLComponent</td><td/><td/><td>_011B3533_B12C_4AE1_932C_34BA07514659_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>updateaccount_proc.sql_SQLComponent</td><td/><td/><td>_011B3533_B12C_4AE1_932C_34BA07514659_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>updatecardstate_proc.sql_SQLComponent</td><td/><td/><td>_FB620A5B_93F8_4C61_9C43_5451734F6AA9_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>updateclientinfo_proc.sql_SQLComponent</td><td/><td/><td>_86C3387F_FDDD_4968_98CF_F25467F7134B_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>updatecpukey_proc.sql_SQLComponent</td><td/><td/><td>_10885EE9_6A32_49F6_992A_AA6879D17BE4_FILTER</td><td/><td/><td/><td/></row>
@@ -1824,7 +1815,7 @@
 		<col def="S50">CDRomFolder</col>
 		<col def="S50">Moniker</col>
 		<row><td>CheckFeatures</td><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>DBFeatures</td><td>DBFeatures_Installing</td><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>DBFeatures</td><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ICFeatures</td><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>LNGFeatures</td><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
@@ -2084,7 +2075,7 @@
 		<row><td>Product Configuration</td><td>PackageCode</td><td>{A83224EE-4570-4ED4-B556-968B82FCC97A}</td></row>
 		<row><td>Product Configuration</td><td>ProductCode</td><td>{4A2F2847-4017-4F48-9F40-F996576C4B85}</td></row>
 		<row><td>Product Configuration</td><td>ProductName</td><td>富耐特管理系统</td></row>
-		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.07.1104</td></row>
+		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.07.1110</td></row>
 		<row><td>Product Configuration</td><td>SetupFileName</td><td>加气站管理系统</td></row>
 		<row><td>Product Configuration</td><td>UpgradeCode</td><td>{EDB97A3B-852B-4956-B4EE-D47459DFF2A3}</td></row>
 	</table>
@@ -2208,43 +2199,43 @@
 		<col key="yes" def="s72">ISSQLConnection_</col>
 		<col key="yes" def="s72">ISSQLScriptFile_</col>
 		<col def="i2">Order</col>
-		<row><td>FunnettStation</td><td>base_card.sql</td><td>10</td></row>
-		<row><td>FunnettStation</td><td>base_client.sql</td><td>11</td></row>
-		<row><td>FunnettStation</td><td>base_station.sql</td><td>12</td></row>
+		<row><td>FunnettStation</td><td>base_card.sql</td><td>9</td></row>
+		<row><td>FunnettStation</td><td>base_client.sql</td><td>10</td></row>
+		<row><td>FunnettStation</td><td>base_station.sql</td><td>11</td></row>
 		<row><td>FunnettStation</td><td>checkdata_proc.sql</td><td>45</td></row>
-		<row><td>FunnettStation</td><td>config_sysparams.sql</td><td>5</td></row>
+		<row><td>FunnettStation</td><td>config_sysparams.sql</td><td>4</td></row>
 		<row><td>FunnettStation</td><td>cs_setgun.sql</td><td>22</td></row>
 		<row><td>FunnettStation</td><td>customreport_proc.sql</td><td>41</td></row>
-		<row><td>FunnettStation</td><td>data_city.sql</td><td>14</td></row>
-		<row><td>FunnettStation</td><td>data_greycardrecord.sql</td><td>16</td></row>
-		<row><td>FunnettStation</td><td>data_province.sql</td><td>13</td></row>
-		<row><td>FunnettStation</td><td>data_superior.sql</td><td>15</td></row>
-		<row><td>FunnettStation</td><td>dbinit.sql</td><td>2</td></row>
-		<row><td>FunnettStation</td><td>funnett_version.sql</td><td>3</td></row>
+		<row><td>FunnettStation</td><td>data_city.sql</td><td>13</td></row>
+		<row><td>FunnettStation</td><td>data_greycardrecord.sql</td><td>15</td></row>
+		<row><td>FunnettStation</td><td>data_province.sql</td><td>12</td></row>
+		<row><td>FunnettStation</td><td>data_superior.sql</td><td>14</td></row>
+		<row><td>FunnettStation</td><td>dbinit.sql</td><td>1</td></row>
+		<row><td>FunnettStation</td><td>funnett_version.sql</td><td>2</td></row>
 		<row><td>FunnettStation</td><td>getcpukey_proc.sql</td><td>40</td></row>
 		<row><td>FunnettStation</td><td>getgrayrecord_proc.sql</td><td>42</td></row>
 		<row><td>FunnettStation</td><td>getorgkey_proc.sql</td><td>43</td></row>
 		<row><td>FunnettStation</td><td>getpsamkey_proc.sql</td><td>44</td></row>
 		<row><td>FunnettStation</td><td>getpublishedcard_proc.sql</td><td>46</td></row>
-		<row><td>FunnettStation</td><td>key_cpucard.sql</td><td>8</td></row>
-		<row><td>FunnettStation</td><td>key_orgroot.sql</td><td>6</td></row>
-		<row><td>FunnettStation</td><td>key_psamcard.sql</td><td>7</td></row>
-		<row><td>FunnettStation</td><td>log_publishcard.sql</td><td>18</td></row>
+		<row><td>FunnettStation</td><td>key_cpucard.sql</td><td>7</td></row>
+		<row><td>FunnettStation</td><td>key_orgroot.sql</td><td>5</td></row>
+		<row><td>FunnettStation</td><td>key_psamcard.sql</td><td>6</td></row>
+		<row><td>FunnettStation</td><td>log_publishcard.sql</td><td>17</td></row>
 		<row><td>FunnettStation</td><td>operatecard_proc.sql</td><td>47</td></row>
-		<row><td>FunnettStation</td><td>operatecard_record.sql</td><td>48</td></row>
-		<row><td>FunnettStation</td><td>psam_card.sql</td><td>9</td></row>
-		<row><td>FunnettStation</td><td>publishcardkey_proc.sql</td><td>49</td></row>
-		<row><td>FunnettStation</td><td>publishcpucard_proc.sql</td><td>50</td></row>
-		<row><td>FunnettStation</td><td>publishpsamcard_proc.sql</td><td>51</td></row>
-		<row><td>FunnettStation</td><td>rechargecardrecord.sql</td><td>17</td></row>
-		<row><td>FunnettStation</td><td>rewritecpucard_proc.sql</td><td>52</td></row>
+		<row><td>FunnettStation</td><td>operatecard_record.sql</td><td>18</td></row>
+		<row><td>FunnettStation</td><td>psam_card.sql</td><td>8</td></row>
+		<row><td>FunnettStation</td><td>publishcardkey_proc.sql</td><td>48</td></row>
+		<row><td>FunnettStation</td><td>publishcpucard_proc.sql</td><td>49</td></row>
+		<row><td>FunnettStation</td><td>publishpsamcard_proc.sql</td><td>50</td></row>
+		<row><td>FunnettStation</td><td>rechargecardrecord.sql</td><td>16</td></row>
+		<row><td>FunnettStation</td><td>rewritecpucard_proc.sql</td><td>51</td></row>
 		<row><td>FunnettStation</td><td>sc_blackaddcard.sql</td><td>35</td></row>
 		<row><td>FunnettStation</td><td>sc_blackcard.sql</td><td>33</td></row>
 		<row><td>FunnettStation</td><td>sc_blackdelcard.sql</td><td>34</td></row>
 		<row><td>FunnettStation</td><td>sc_config.sql</td><td>25</td></row>
 		<row><td>FunnettStation</td><td>sc_config_data.sql</td><td>26</td></row>
 		<row><td>FunnettStation</td><td>sc_consumerdetail.sql</td><td>29</td></row>
-		<row><td>FunnettStation</td><td>sc_consumerdetail_proc.sql</td><td>53</td></row>
+		<row><td>FunnettStation</td><td>sc_consumerdetail_proc.sql</td><td>52</td></row>
 		<row><td>FunnettStation</td><td>sc_consumerdetailhistroy.sql</td><td>30</td></row>
 		<row><td>FunnettStation</td><td>sc_customreportinfo.sql</td><td>36</td></row>
 		<row><td>FunnettStation</td><td>sc_customreportinfo_data.sql</td><td>37</td></row>
@@ -2257,18 +2248,17 @@
 		<row><td>FunnettStation</td><td>sc_secrettb.sql</td><td>23</td></row>
 		<row><td>FunnettStation</td><td>sc_senddetail.sql</td><td>20</td></row>
 		<row><td>FunnettStation</td><td>sc_shift.sql</td><td>24</td></row>
-		<row><td>FunnettStation</td><td>sc_shift_proc.sql</td><td>54</td></row>
+		<row><td>FunnettStation</td><td>sc_shift_proc.sql</td><td>53</td></row>
 		<row><td>FunnettStation</td><td>sc_stationinfo.sql</td><td>21</td></row>
 		<row><td>FunnettStation</td><td>sc_whitecard.sql</td><td>31</td></row>
-		<row><td>FunnettStation</td><td>sqlscript.sql</td><td>1</td></row>
-		<row><td>FunnettStation</td><td>update_config_proc.sql</td><td>55</td></row>
-		<row><td>FunnettStation</td><td>updateaccount_proc_.sql</td><td>56</td></row>
-		<row><td>FunnettStation</td><td>updatecardstate_proc.sql</td><td>57</td></row>
-		<row><td>FunnettStation</td><td>updateclientinfo_proc.sql</td><td>58</td></row>
-		<row><td>FunnettStation</td><td>updatecpukey_proc.sql</td><td>59</td></row>
-		<row><td>FunnettStation</td><td>updateorgkeyroot_proc.sql</td><td>60</td></row>
-		<row><td>FunnettStation</td><td>updatepsamkey_proc.sql</td><td>61</td></row>
-		<row><td>FunnettStation</td><td>userdb.sql</td><td>4</td></row>
+		<row><td>FunnettStation</td><td>update_config_proc.sql</td><td>54</td></row>
+		<row><td>FunnettStation</td><td>updateaccount_proc.sql</td><td>55</td></row>
+		<row><td>FunnettStation</td><td>updatecardstate_proc.sql</td><td>56</td></row>
+		<row><td>FunnettStation</td><td>updateclientinfo_proc.sql</td><td>57</td></row>
+		<row><td>FunnettStation</td><td>updatecpukey_proc.sql</td><td>58</td></row>
+		<row><td>FunnettStation</td><td>updateorgkeyroot_proc.sql</td><td>59</td></row>
+		<row><td>FunnettStation</td><td>updatepsamkey_proc.sql</td><td>60</td></row>
+		<row><td>FunnettStation</td><td>userdb.sql</td><td>3</td></row>
 	</table>
 
 	<table name="ISSQLDBMetaData">
@@ -2347,8 +2337,8 @@
 		<row><td>data_greycardrecord.sql</td><td>data_greycardrecord.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\data_greycardrecord.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
 		<row><td>data_province.sql</td><td>data_province.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\data_province.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
 		<row><td>data_superior.sql</td><td>data_superior.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\data_superior.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
-		<row><td>dbinit.sql</td><td>dbinit.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\dbinit.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
-		<row><td>funnett_version.sql</td><td>funnett_version.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\funnett_version.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
+		<row><td>dbinit.sql</td><td>dbinit.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\dbinit.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
+		<row><td>funnett_version.sql</td><td>funnett_version.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\funnett_version.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>getcpukey_proc.sql</td><td>getcpukey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\getcpukey_proc.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
 		<row><td>getgrayrecord_proc.sql</td><td>getgrayrecord_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\getgrayrecord_proc.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
 		<row><td>getorgkey_proc.sql</td><td>getorgkey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\getorgkey_proc.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
@@ -2388,9 +2378,8 @@
 		<row><td>sc_shift_proc.sql</td><td>sc_shift_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_shift_proc.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
 		<row><td>sc_stationinfo.sql</td><td>sc_stationinfo.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_stationinfo.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
 		<row><td>sc_whitecard.sql</td><td>sc_whitecard.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sc_whitecard.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
-		<row><td>sqlscript.sql</td><td>sqlscript.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\sqlscript.sql</td><td/><td>2</td><td>0</td><td/><td/></row>
 		<row><td>update_config_proc.sql</td><td>update_config_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\update_config_proc.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
-		<row><td>updateaccount_proc_.sql</td><td>updateaccount_proc_.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updateaccount_proc .sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
+		<row><td>updateaccount_proc.sql</td><td>updateaccount_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updateaccount_proc.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
 		<row><td>updatecardstate_proc.sql</td><td>updatecardstate_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updatecardstate_proc.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
 		<row><td>updateclientinfo_proc.sql</td><td>updateclientinfo_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updateclientinfo_proc.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
 		<row><td>updatecpukey_proc.sql</td><td>updatecpukey_proc.sql_SQLComponent</td><td>1</td><td>##IDS_SQLSCRIPT_INSTALLING##</td><td>##IDS_SQLSCRIPT_UNINSTALLING##</td><td>&lt;ISPROJECTDIR&gt;\script files\updatecpukey_proc.sql</td><td/><td>2</td><td>0</td><td/><td>SQL_SKIP &lt;&gt; 1</td></row>
@@ -2461,9 +2450,8 @@
 		<row><td>sc_shift_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>sc_stationinfo.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>sc_whitecard.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
-		<row><td>sqlscript.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>update_config_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
-		<row><td>updateaccount_proc_.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
+		<row><td>updateaccount_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>updatecardstate_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>updateclientinfo_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
 		<row><td>updatecpukey_proc.sql</td><td/><td/><td/><td/><td>0</td><td/><td/><td>508</td></row>
@@ -2478,8 +2466,8 @@
 		<col def="S0">Search</col>
 		<col def="S0">Replace</col>
 		<col def="i4">Attributes</col>
-		<row><td>Replacement1</td><td>sqlscript.sql</td><td>C:/</td><td>[INSTALLDIR]</td><td>2</td></row>
-		<row><td>Replacement2</td><td>sqlscript.sql</td><td>SoftwareVersion</td><td>[ProductVersion]</td><td>2</td></row>
+		<row><td>Replacement1</td><td>dbinit.sql</td><td>C:/</td><td>[INSTALLDIR]</td><td>2</td></row>
+		<row><td>Replacement2</td><td>funnett_version.sql</td><td>SoftwareVersion</td><td>[ProductVersion]</td><td>2</td></row>
 	</table>
 
 	<table name="ISScriptFile">
@@ -3825,12 +3813,8 @@
 		<row><td>ISSQLServerRollbackLoginInfo</td><td/><td>1502</td><td/><td/></row>
 		<row><td>ISSQLServerUninstall</td><td/><td>2398</td><td/><td/></row>
 		<row><td>ISSQLServerWriteLoginInfo</td><td>REMOVE&lt;&gt;"ALL"</td><td>5902</td><td/><td/></row>
-		<row><td>ISSelfRegisterCosting</td><td/><td>2201</td><td/><td/></row>
-		<row><td>ISSelfRegisterFiles</td><td/><td>5601</td><td/><td/></row>
-		<row><td>ISSelfRegisterFinalize</td><td/><td>6601</td><td/><td/></row>
 		<row><td>ISSetupFilesCleanup</td><td/><td>6603</td><td/><td/></row>
 		<row><td>ISSetupFilesExtract</td><td/><td>3</td><td/><td/></row>
-		<row><td>ISUnSelfRegisterFiles</td><td/><td>2202</td><td/><td/></row>
 		<row><td>InstallFiles</td><td/><td>4000</td><td>InstallFiles</td><td/></row>
 		<row><td>InstallFinalize</td><td/><td>6600</td><td>InstallFinalize</td><td/></row>
 		<row><td>InstallInitialize</td><td/><td>1501</td><td>InstallInitialize</td><td/></row>
@@ -4266,7 +4250,7 @@ UgBlAGwAZQBhAHMAZQABAFAAcgBvAGQAdQBjAHQAIABDAG8AbgBmAGkAZwB1AHIAYQB0AGkAbwBuAA==
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{DED54AFF-D433-418D-AAEF-78A5BEE462A8}</td><td/></row>
 		<row><td>ProductName</td><td>FunnettManage</td><td/></row>
-		<row><td>ProductVersion</td><td>1.07.1104</td><td/></row>
+		<row><td>ProductVersion</td><td>1.07.1110</td><td/></row>
 		<row><td>REBOOT</td><td>Suppress</td><td/></row>
 		<row><td>SQL_SKIP</td><td>0</td><td/></row>
 		<row><td>STANDARD_USE_SETUPEXE</td><td>##IDS_STANDARD_USE_SETUPEXE##</td><td/></row>

@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'PROC_GetCpuKey') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
-drop procedure PROC_GetCpuKey
+if exists (select * from sysobjects where id = object_id(N'PROC_GetCpuKey') and type in (N'P', N'PC'))
+drop procedure PROC_GetCpuKey                                                                        
+GO
 
 SET ANSI_NULLS ON
 GO

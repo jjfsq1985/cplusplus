@@ -100,13 +100,14 @@ namespace RechargeManage
 
             RechargeView.Columns.Clear();
             RechargeView.Columns.Add("Index", "序号");
-            RechargeView.Columns.Add("CardId", "充值卡号");
-            RechargeView.Columns.Add("ForwardBalance", "充值前余额");
-            RechargeView.Columns.Add("RechargeVal", "充值金额");
-            RechargeView.Columns.Add("CurrentBalance", "充值后金额");
-            RechargeView.Columns.Add("Time", "充值时间");
+            RechargeView.Columns.Add("CardId", "卡号");
+            RechargeView.Columns.Add("Type", "类型");
+            RechargeView.Columns.Add("ForwardBalance", "操作前余额");
+            RechargeView.Columns.Add("RechargeVal", "金额");
+            RechargeView.Columns.Add("CurrentBalance", "操作后金额");
+            RechargeView.Columns.Add("Time", "操作时间");
             RechargeView.Columns.Add("Operator", "操作员");
-            int[] ColumnWidth = new int[]{50,150,100,100,100,150,100};
+            int[] ColumnWidth = new int[]{50,150,80,100,100,100,150,100};
             for (int i = 0; i < RechargeView.Columns.Count; i++)
             {
                 RechargeView.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -185,16 +186,18 @@ namespace RechargeManage
                         RechargeView.Rows[index].Cells[0].Value = m_nCurPage * m_nRowsPerPage + nCount + 1;
                         strValue = (string)dataReader["CardNum"];
                         RechargeView.Rows[index].Cells[1].Value = strValue;
+                        strValue = (string)dataReader["OperateType"];
+                        RechargeView.Rows[index].Cells[2].Value = strValue;
                         decimal ForwardBal = (decimal)dataReader["ForwardBalance"];
-                        RechargeView.Rows[index].Cells[2].Value = ForwardBal.ToString();
+                        RechargeView.Rows[index].Cells[3].Value = ForwardBal.ToString();
                         decimal RechargeVal = (decimal)dataReader["RechargeValue"];
-                        RechargeView.Rows[index].Cells[3].Value = RechargeVal.ToString();
+                        RechargeView.Rows[index].Cells[4].Value = RechargeVal.ToString();
                         decimal CurrentBal = (decimal)dataReader["CurrentBalance"];
-                        RechargeView.Rows[index].Cells[4].Value = CurrentBal.ToString();
+                        RechargeView.Rows[index].Cells[5].Value = CurrentBal.ToString();
                         DateTime RechargeTime = (DateTime)dataReader["RechargeDateTime"];
-                        RechargeView.Rows[index].Cells[5].Value = RechargeTime.ToString("yyyy-MM-dd HH:mm:ss");
+                        RechargeView.Rows[index].Cells[6].Value = RechargeTime.ToString("yyyy-MM-dd HH:mm:ss");
                         int OperatorId = (int)dataReader["OperatorId"];
-                        RechargeView.Rows[index].Cells[6].Value = GetOperatorName(OperatorId);
+                        RechargeView.Rows[index].Cells[7].Value = GetOperatorName(OperatorId);
                         nCount++;
                     }
                 }

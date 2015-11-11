@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'Pro_Upate_Config') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+if exists (select * from sysobjects where id = object_id(N'Pro_Upate_Config') and type in (N'P', N'PC'))
 drop procedure Pro_Upate_Config
+GO
 
 
 SET ANSI_NULLS ON

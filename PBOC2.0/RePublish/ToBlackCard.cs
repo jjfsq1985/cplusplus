@@ -186,7 +186,7 @@ namespace RePublish
         private void RePublishCardRecord(SqlHelper ObjSql,string strNewCardId)
         {
             string strOpName = GetOperatorName(m_SettingState);
-            //写卡记录表OperateCard_Record，并删除Base_Card中的卡记录
+            //写卡记录表OperateCard_Record
             SqlParameter[] sqlparams = new SqlParameter[6];
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, m_CardId);
             sqlparams[1] = ObjSql.MakeParam("OperateName", SqlDbType.NVarChar, 16, ParameterDirection.Input, strOpName);
@@ -222,7 +222,7 @@ namespace RePublish
         {
             //写卡记录表
             string strOpName = GetOperatorName(m_SettingState);
-            //写卡记录表OperateCard_Record，并删除Base_Card中的卡记录
+            //写卡记录表OperateCard_Record
             SqlParameter[] sqlparams = new SqlParameter[6];
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, m_CardId);
             sqlparams[1] = ObjSql.MakeParam("OperateName", SqlDbType.NVarChar, 16, ParameterDirection.Input, strOpName);

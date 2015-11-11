@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'PROC_UpdateCardState') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
-drop procedure PROC_UpdateCardState
+if exists (select * from sysobjects where id = object_id(N'PROC_UpdateCardState') and type in (N'P', N'PC'))
+drop procedure PROC_UpdateCardState                                                                        
+GO
 
 /****** ø®π“ ß∫ÕΩ‚π“ ******/
 SET ANSI_NULLS ON

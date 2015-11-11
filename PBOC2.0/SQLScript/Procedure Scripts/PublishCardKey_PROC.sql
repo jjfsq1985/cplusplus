@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'PROC_PublishCardKey') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+if exists (select * from sysobjects where id = object_id(N'PROC_PublishCardKey') and type in (N'P', N'PC'))
 drop procedure PROC_PublishCardKey
+GO
 
 /****** 用户卡制卡，发卡 ******/
 SET ANSI_NULLS ON
@@ -43,8 +44,11 @@ CREATE PROCEDURE PROC_PublishCardKey(
 	if(len(@CardId)<>16)
 		return 2                                        
 	--判断卡号在吗
-	if not exists(select * from Base_Card where CardNum=@CardId)
-		return 3;
+	if exists(select * from Base_Card where CardNum=@CardId)
+	begin
+		if not exists( select * from Base_Card where KeyGuid = @UserKeyGuid)
+			return 3;
+	end
 begin
 		--开始事务
 		begin tran maintran

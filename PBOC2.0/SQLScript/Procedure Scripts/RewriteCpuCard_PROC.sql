@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'PROC_RewriteCpuCard') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+if exists (select * from sysobjects where id = object_id(N'PROC_RewriteCpuCard') and type in (N'P', N'PC'))
 drop procedure PROC_RewriteCpuCard
+GO
 
 /****** 用户卡制卡，发卡 ******/
 SET ANSI_NULLS ON

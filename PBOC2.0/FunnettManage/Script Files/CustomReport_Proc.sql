@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'CustomReport') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
-drop procedure CustomReport
+if exists (select * from sysobjects where id = object_id(N'CustomReport') and type in (N'P', N'PC'))
+drop procedure CustomReport                                                                        
+GO
  
 /****** Object:  StoredProcedure [dbo].[CustomReport]    Script Date: 08/18/2015 16:28:39 ******/
 SET ANSI_NULLS ON

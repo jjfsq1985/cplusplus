@@ -50,6 +50,14 @@ namespace CardOperating
 
         private ApduController m_DevControl = null;
 
+        private enum ExchangeType
+        {
+            Unknown = 0,  //未知
+            Load,  //圈存
+            Recharge,  //母卡充值
+            SlaveLoad //子卡圈存
+        }
+
         public AppUserOperator()
         {
             InitializeComponent();
@@ -315,7 +323,8 @@ namespace CardOperating
             {
                 byte[] MotherCard = m_CardInfoPar.GetRelatedMotherCardID();
                 if (MotherCard != null)
-                {                    
+                {
+                    ReadMotherCardList(m_CardInfoPar.CompanyID, m_CardInfoPar.UserCardType);
                     cmbMotherCard.Text = BitConverter.ToString(MotherCard).Replace("-", "");
                     cmbMotherCard.Enabled = false;
                 }
@@ -623,6 +632,7 @@ namespace CardOperating
                 MessageBox.Show("打开卡片失败");
                 return;
             }
+            m_CardInfoPar = new UserCardInfoParam();//初始化卡信息，清除之前读到的信息
             if (ReadCardInfo(m_CardInfoPar))
             {
                 ReadCardInfoFormDb(m_CardInfoPar.GetUserCardID(), m_CardInfoPar);
@@ -639,7 +649,7 @@ namespace CardOperating
                 MessageBox.Show("读取卡信息失败");
                 return false;
             }
-            m_UserCardCtrl.GetUserCardInfo(CardInfo);
+            m_UserCardCtrl.GetUserCardInfo(CardInfo);            
             return true;
         }
 
@@ -666,6 +676,7 @@ namespace CardOperating
                 if (dataReader.HasRows && dataReader.Read())
                 {
                     bHaveRecordInDb = true;
+                    
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("ClientId")))
                         CardInfo.ClientID = (int)dataReader["ClientId"];
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("RelatedMotherCard")))
@@ -673,6 +684,8 @@ namespace CardOperating
                         string strMotherCard = (string)dataReader["RelatedMotherCard"];
                         if(strMotherCard != new string(' ',16))//母卡为空时，读取到的卡号为16个空格
                             CardInfo.SetMotherCard(strMotherCard);
+                        else
+                            CardInfo.SetMotherCard("");
                     }
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("DriverTel")))
                         CardInfo.TelePhone = (string)dataReader["DriverTel"];
@@ -687,9 +700,12 @@ namespace CardOperating
             ObjSql = null;
             if (!bHaveRecordInDb)
             {
-                if (MessageBox.Show("无此卡号的发卡记录，是否增加？", "发卡", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("无此卡号的发卡记录，是否增加？\n增加发卡记录前请确认使用了正确的卡片密钥", "发卡", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    m_UserCardCtrl.SaveCpuCardInfoToDb(CardInfo, false);
+                    if (m_UserCardCtrl.SaveCpuCardInfoToDb(CardInfo, false))
+                        MessageBox.Show("增加发卡记录成功");
+                    else
+                        MessageBox.Show("增加发卡记录失败，请检查卡密钥是否存在。");
                 }
             }
         }
@@ -1070,17 +1086,20 @@ namespace CardOperating
             decimal MoneyLoad = 0;
             decimal.TryParse(textMoney.Text, out MoneyLoad);
             double dbMoneyLoad = decimal.ToDouble(MoneyLoad);
-            if (dbMoneyLoad < 1)
+            if (dbMoneyLoad < 1 || dbMoneyLoad > 5000000)
+            {
+                MessageBox.Show("圈存金额错误", "卡充值");
                 return;
+            }
             if (!OpenSAMCard(false))
             {
                 MessageBox.Show("插入PSAM卡后才能圈存", "卡充值");
                 return;
             }
-            if (!OpenUserCard())
-                return;
             try
             {
+                if (!OpenUserCard())
+                    return;
                 if (!m_UserCardCtrl.SelectCardApp(1))
                     return;
                 byte[] TermialId = m_SamCardCtrl.GetTerminalId(false);
@@ -1123,7 +1142,7 @@ namespace CardOperating
                         strTemp = "充值";
                     }
 
-                    string strMsg = "确实要对" + strCardType + BitConverter.ToString(ASN).Replace("-", "") + strTemp + dbMoneyLoad.ToString("F2") + "元吗？";
+                    string strMsg = "确实要对" + strCardType + BitConverter.ToString(ASN).Replace("-", "") + "\n" + strTemp + dbMoneyLoad.ToString("F2") + "元吗？";
                     if (MessageBox.Show(strMsg, "卡充值", MessageBoxButtons.YesNo) == DialogResult.No)
                     {
                         return;
@@ -1140,7 +1159,7 @@ namespace CardOperating
                     int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
                     if (nRet == 1)
                     {
-                        LoadUserCard(TermialId, ASN, dbMoneyLoad);
+                        LoadUserCard(TermialId, ASN, dbMoneyLoad,ExchangeType.Load);
                     }
                     else if (nRet == 2)
                     {
@@ -1169,7 +1188,8 @@ namespace CardOperating
         /// <param name="TerminalId">固定终端机 size 6</param>
         /// <param name="ASN">用户卡号 size 8</param>
         /// <param name="dbMoneyLoad">圈存金额 单位 元</param>
-        private void LoadUserCard(byte[] TerminalId, byte[]  ASN, double dbMoneyLoad)
+        /// <param name="bCompany">是否单位卡</param>
+        private void LoadUserCard(byte[] TerminalId, byte[]  ASN, double dbMoneyLoad, ExchangeType eType)
         {
             int nBalance = 0;
             if (m_UserCardCtrl.UserCardBalance(ref nBalance, BalanceType.Balance_ED))//圈存前读余额
@@ -1178,7 +1198,7 @@ namespace CardOperating
                 if (m_UserCardCtrl.UserCardLoad(ASN, TerminalId, (int)(dbMoneyLoad * 100.0), true))
                 {
                     //写圈存数据库记录
-                    SaveLoadRecord(ASN, dbMoneyLoad, dbBalance,TerminalId, "CardBalance");
+                    SaveLoadRecord(ASN, dbMoneyLoad, dbBalance, TerminalId, "CardBalance", eType);
                     string strInfo = string.Format("成功对卡号{0}圈存{1}元.", BitConverter.ToString(ASN).Replace("-", ""), dbMoneyLoad.ToString("F2"));
                     MessageBox.Show(strInfo);
                 }
@@ -1453,13 +1473,14 @@ namespace CardOperating
         }
 
         /// <summary>
-        /// 圈存记录
+        /// 圈存圈提记录
         /// </summary>
         /// <param name="ASN">卡号</param>
-        /// <param name="dbLoadMoney">圈存金额</param>
+        /// <param name="dbMoney">圈存或圈提金额</param>
         /// <param name="dbBalance">之前的余额</param>
-        /// <param name="strCardBalanceField">更新字段名称</param>
-        private void SaveLoadRecord(byte[]  ASN, double dbLoadMoney,double dbBalance,byte[] TerminalId, string strUpdateField)
+        /// <param name="TerminalId">终端机编号</param>
+        /// <param name="strUpdateField">更新字段名称</param>
+        private void SaveLoadRecord(byte[] ASN, double dbMoney, double dbBalance, byte[] TerminalId, string strUpdateField, ExchangeType eType)
         {
             string strCardId = BitConverter.ToString(ASN).Replace("-", "");
 
@@ -1469,25 +1490,28 @@ namespace CardOperating
                 ObjSql = null;
                 return;
             }
-
-            double dblTotal = dbBalance + dbLoadMoney;
+            double dblTotal = dbBalance + dbMoney;             
             string strTermId = BitConverter.ToString(TerminalId).Replace("-", "");
 
             SqlParameter[] sqlparams = new SqlParameter[8];
             sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
             sqlparams[1] = ObjSql.MakeParam("Balance", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbBalance));
-            sqlparams[2] = ObjSql.MakeParam("Recharge", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbLoadMoney));
+            sqlparams[2] = ObjSql.MakeParam("Money", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbMoney));
             sqlparams[3] = ObjSql.MakeParam("Total", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dblTotal));
             sqlparams[4] = ObjSql.MakeParam("Time", SqlDbType.DateTime, 8, ParameterDirection.Input, DateTime.Now);
             sqlparams[5] = ObjSql.MakeParam("TermId", SqlDbType.VarChar, 12, ParameterDirection.Input, strTermId);            
             sqlparams[6] = ObjSql.MakeParam("OperatorId", SqlDbType.Int, 4, ParameterDirection.Input, m_nLoginUserId);            
             sqlparams[7] = ObjSql.MakeParam("TimeStr", SqlDbType.VarChar, 10, ParameterDirection.Input, DateTime.Now.ToString("yyyyMMdd") + "01");
 
-
-            ObjSql.ExecuteCommand("insert into Data_RechargeCardRecord values(@CardId,N'充值',@Balance,@Recharge,0,@Recharge,@Total,@Time,@TermId,@OperatorId,N'现金支付',@TimeStr,0)", sqlparams);
+            if (eType == ExchangeType.Recharge)
+                ObjSql.ExecuteCommand("insert into Data_RechargeCardRecord values(@CardId,N'充值',@Balance,@Money,0,@Money,@Total,@Time,@TermId,@OperatorId,N'现金支付',@TimeStr,0)", sqlparams);
+            else if (eType == ExchangeType.SlaveLoad)
+                ObjSql.ExecuteCommand("insert into Data_ExtractCardRecord values(@CardId,N'圈存',@Balance,@Money,0,@Money,@Total,@Time,@TermId,@OperatorId,N'母卡转账',@TimeStr,0)", sqlparams);
+            else if(eType == ExchangeType.Load)
+                ObjSql.ExecuteCommand("insert into Data_ExtractCardRecord values(@CardId,N'圈存',@Balance,@Money,0,@Money,@Total,@Time,@TermId,@OperatorId,N'现金支付',@TimeStr,0)", sqlparams);
 
             //更新Base_Card充值总额和当前卡余额
-            double dbRechargeTotal = GetBaseCardMoneyValue(ObjSql, strCardId, "RechargeTotal") + dbLoadMoney;
+            double dbRechargeTotal = GetBaseCardMoneyValue(ObjSql, strCardId, "RechargeTotal") + dbMoney;
             UpdateBaseCardValue(ObjSql, strCardId, "RechargeTotal", dbRechargeTotal);
             UpdateBaseCardValue(ObjSql, strCardId, strUpdateField, dblTotal);
 
@@ -1797,7 +1821,7 @@ namespace CardOperating
                     MessageBox.Show(strMsg,"子卡充值",MessageBoxButtons.OK);
                     return;
                 }
-                LoadUserCard(TerminalId, ASN, dbMoneyLoad);
+                LoadUserCard(TerminalId, ASN, dbMoneyLoad,ExchangeType.SlaveLoad);
                 //单位母卡金额减掉
                 SaveCardValueToDb(MotherAsn, dbBalance - dbMoneyLoad, "AccountBalance");
             }
@@ -1809,7 +1833,7 @@ namespace CardOperating
                 decimal.TryParse(strBalance, out Balance);
                 double dbBalance = decimal.ToDouble(Balance);
 
-                SaveLoadRecord(ASN, dbMoneyLoad, dbBalance, TerminalId,"AccountBalance");//单位母卡充值后更新字段不一样
+                SaveLoadRecord(ASN, dbMoneyLoad, dbBalance, TerminalId, "AccountBalance", ExchangeType.Recharge);//单位母卡充值后更新字段不一样
                 string strInfo = string.Format("成功对单位母卡{0}充值{1}元.", BitConverter.ToString(ASN).Replace("-", ""), dbMoneyLoad.ToString("F2"));
                 MessageBox.Show(strInfo);                
             }
@@ -1827,11 +1851,10 @@ namespace CardOperating
                 MessageBox.Show("插入PSAM卡后才能圈存", "积分充值");
                 return;
             }
-            if (!OpenUserCard())
-                return;
-
             try
             {
+                if (!OpenUserCard())
+                    return;
                 if (!m_UserCardCtrl.SelectCardApp(2))
                     return;
                 byte[] TermialId = m_SamCardCtrl.GetTerminalId(false);
@@ -2152,7 +2175,5 @@ namespace CardOperating
             if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Backspace)
                 e.Handled = true;//不接受非数字值
         }
-
-
     }
 }

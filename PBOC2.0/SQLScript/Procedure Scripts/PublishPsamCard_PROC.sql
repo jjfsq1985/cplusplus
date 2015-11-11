@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'PROC_PublishPsamCard') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+if exists (select * from sysobjects where id = object_id(N'PROC_PublishPsamCard') and type in (N'P', N'PC'))
 drop procedure PROC_PublishPsamCard
+GO
 
 /****** PSAM¿¨ÖÆ¿¨£¬·¢¿¨ ******/
 SET ANSI_NULLS ON

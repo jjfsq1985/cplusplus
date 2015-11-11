@@ -253,7 +253,7 @@ namespace CardControl
         /// <param name="strKeyName">列名称</param>
         /// <param name="AppIndex">为0时读取PSAM卡消费密钥</param>
         /// <returns></returns>
-        public static byte[] GetDbConsumerKey(SqlHelper sqlHelp, string strProcName, string strKeyName, int AppIndex)
+        public static byte[] GetPrivateKeyFromDb(SqlHelper sqlHelp, string strProcName, string strKeyName, int AppIndex)
         {
             SqlDataReader dataReader = null;
             if (AppIndex == 0)
@@ -553,14 +553,14 @@ namespace CardControl
         }
 
         //从XML获取密钥写入数据库Base_Card_Key表
-        public static void InsertCardKeyFromXml(SqlHelper ObjSql, Guid KeyGuid, byte[] ASN, string strXmlFile, int nAppIndex)
+        public static bool InsertCardKeyFromXml(SqlHelper ObjSql, Guid KeyGuid, byte[] ASN, string strXmlFile, int nAppIndex)
         {
             try
             {
                 CpuKeyData KeyData = new CpuKeyData();
                 KeyData.nAppIndex = nAppIndex;
                 if (!GetXmlCpuKeyVal(strXmlFile, KeyData))
-                    return;
+                    return false;
                 string strCardId = BitConverter.ToString(ASN).Replace("-", "");
                 SqlParameter[] sqlparams = new SqlParameter[12];
                 sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
@@ -606,19 +606,20 @@ namespace CardControl
             }
             catch
             {
-
+                return false;
             }
+            return true;
         }
 
         //从Key_CARD_ADF表获取密钥写入数据库Base_Card_Key表
-        public static void InsertCardKeyFromDb(SqlHelper ObjSql, Guid KeyGuid, byte[] ASN, int nAppIndex)
+        public static bool InsertCardKeyFromDb(SqlHelper ObjSql, Guid KeyGuid, byte[] ASN, int nAppIndex)
         {
             try
             {
                 CpuKeyData KeyData = new CpuKeyData();
                 KeyData.nAppIndex = nAppIndex;
                 if (!GetDbCpuKeyVal(ObjSql, KeyData))
-                    return;
+                    return false;
                 string strCardId = BitConverter.ToString(ASN).Replace("-", "");
                 SqlParameter[] sqlparams = new SqlParameter[12];
                 sqlparams[0] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
@@ -664,8 +665,9 @@ namespace CardControl
             }
             catch
             {
-
+                return false;
             }
+            return true;
         }
     }
 }

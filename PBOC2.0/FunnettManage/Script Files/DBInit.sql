@@ -1,3 +1,11 @@
+IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'FunnettStation')
+	BACKUP DATABASE [FunnettStation] TO DISK = 'C:/\FunnettStation.bak' With NOINIT, NAME = 'FunnettStation-安装包备份', SKIP
+GO
+
+IF NOT EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'FunnettStation')	
+	create database [FunnettStation]
+GO
+
 exec sp_dboption N'FunnettStation', N'autoclose', N'false'
 GO
 

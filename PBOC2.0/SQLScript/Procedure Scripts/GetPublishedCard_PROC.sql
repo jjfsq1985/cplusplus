@@ -1,8 +1,9 @@
 USE [FunnettStation]
 GO
 
-if exists (select * from sysobjects where id = object_id(N'PROC_GetPublishedCard') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+if exists (select * from sysobjects where id = object_id(N'PROC_GetPublishedCard') and type in (N'P', N'PC'))
 drop procedure PROC_GetPublishedCard
+GO
 
 SET ANSI_NULLS ON
 GO
