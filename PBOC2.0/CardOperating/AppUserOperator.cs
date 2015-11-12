@@ -772,15 +772,18 @@ namespace CardOperating
 
         private void SaveCardInfoParam()
         {
-            if (m_CardInfoPar.UserCardType == CardType.CompanySubCard && cmbMotherCard.SelectedIndex >= 0)
-            {                
-                string strCardId = BitConverter.ToString(m_CardInfoPar.GetUserCardID()).Replace("-", "");
-                string strMotherCardId = (string)cmbMotherCard.Items[cmbMotherCard.SelectedIndex];
-                string strPrompt = string.Format("单位子卡关联单位母卡只能进行一次\n是否将子卡{0}的母卡设为{1}？", strCardId, strMotherCardId);
-                if (MessageBox.Show(strPrompt, "提醒", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    m_CardInfoPar.SetMotherCard(strMotherCardId);
-                else
-                    cmbMotherCard.SelectedIndex = -1;
+            if (m_CardInfoPar.UserCardType == CardType.CompanySubCard)
+            {
+                if (cmbMotherCard.SelectedIndex >= 0 && m_CardInfoPar.GetRelatedMotherCardID() == null)
+                {
+                    string strCardId = BitConverter.ToString(m_CardInfoPar.GetUserCardID()).Replace("-", "");
+                    string strMotherCardId = (string)cmbMotherCard.Items[cmbMotherCard.SelectedIndex];
+                    string strPrompt = string.Format("单位子卡关联单位母卡只能进行一次\n是否将子卡{0}的母卡设为{1}？", strCardId, strMotherCardId);
+                    if (MessageBox.Show(strPrompt, "提醒", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        m_CardInfoPar.SetMotherCard(strMotherCardId);
+                    else
+                        cmbMotherCard.SelectedIndex = -1;
+                }
             }
                         //保存数据
             if (cmbClientName.SelectedIndex >= 0 && cmbClientName.SelectedIndex < m_ListClientInfo.Count)
@@ -1159,7 +1162,7 @@ namespace CardOperating
                     int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
                     if (nRet == 1)
                     {
-                        LoadUserCard(TermialId, ASN, dbMoneyLoad,ExchangeType.Load);
+                        LoadUserCard(TermialId, ASN, dbMoneyLoad, ExchangeType.Load);
                     }
                     else if (nRet == 2)
                     {
@@ -1506,9 +1509,9 @@ namespace CardOperating
             if (eType == ExchangeType.Recharge)
                 ObjSql.ExecuteCommand("insert into Data_RechargeCardRecord values(@CardId,N'充值',@Balance,@Money,0,@Money,@Total,@Time,@TermId,@OperatorId,N'现金支付',@TimeStr,0)", sqlparams);
             else if (eType == ExchangeType.SlaveLoad)
-                ObjSql.ExecuteCommand("insert into Data_ExtractCardRecord values(@CardId,N'圈存',@Balance,@Money,0,@Money,@Total,@Time,@TermId,@OperatorId,N'母卡转账',@TimeStr,0)", sqlparams);
+                ObjSql.ExecuteCommand("insert into Data_RechargeCardRecord values(@CardId,N'圈存',@Balance,@Money,0,@Money,@Total,@Time,@TermId,@OperatorId,N'母卡转账',@TimeStr,0)", sqlparams);
             else if(eType == ExchangeType.Load)
-                ObjSql.ExecuteCommand("insert into Data_ExtractCardRecord values(@CardId,N'圈存',@Balance,@Money,0,@Money,@Total,@Time,@TermId,@OperatorId,N'现金支付',@TimeStr,0)", sqlparams);
+                ObjSql.ExecuteCommand("insert into Data_RechargeCardRecord values(@CardId,N'圈存',@Balance,@Money,0,@Money,@Total,@Time,@TermId,@OperatorId,N'现金支付',@TimeStr,0)", sqlparams);
 
             //更新Base_Card充值总额和当前卡余额
             double dbRechargeTotal = GetBaseCardMoneyValue(ObjSql, strCardId, "RechargeTotal") + dbMoney;
@@ -1863,7 +1866,6 @@ namespace CardOperating
                     MessageBox.Show("读取终端机编号失败,请检查PSAM卡是否正常。", "积分充值");
                     return;
                 }
-
 
                 DateTime cardStart = DateTime.MinValue;
                 DateTime cardEnd = DateTime.MinValue;

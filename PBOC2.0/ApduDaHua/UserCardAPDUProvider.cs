@@ -561,7 +561,7 @@ namespace ApduDaHua
             int nOffset = 2;
             if (!string.IsNullOrEmpty(cardInfo.UserName))
             {
-                byte[] byteName = Encoding.Unicode.GetBytes(cardInfo.UserName);
+                byte[] byteName = Encoding.GetEncoding("GB2312").GetBytes(cardInfo.UserName);
                 for (int i = 0; i < byteName.Length; i++)
                 {
                     m_Data[nOffset + i] = byteName[i];
@@ -686,7 +686,7 @@ namespace ApduDaHua
             }
             if (cardInfo.LimitCarNo && !string.IsNullOrEmpty(cardInfo.CarNo))
             {
-                byte[] carNo = Encoding.Unicode.GetBytes(cardInfo.CarNo);
+                byte[] carNo = Encoding.GetEncoding("GB2312").GetBytes(cardInfo.CarNo);
                 for (int i = 0; i < 16; i++)
                 {
                     if (i < carNo.Length)
@@ -740,7 +740,7 @@ namespace ApduDaHua
             Buffer.BlockCopy(BoalExprie, 0, m_Data, 0, 4);
             if (!string.IsNullOrEmpty(cardInfo.CarNo))
             {
-                byte[] CarNo = Encoding.Unicode.GetBytes(cardInfo.CarNo);
+                byte[] CarNo = Encoding.GetEncoding("GB2312").GetBytes(cardInfo.CarNo);
                 if (CarNo.Length <= 16)
                     Buffer.BlockCopy(CarNo, 0, m_Data, 4, CarNo.Length);
             }

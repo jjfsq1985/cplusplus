@@ -120,6 +120,46 @@ namespace IFuncPlugin
             }
         }
 
+        //返回汉字的GB2312编码长度，其他字符忽略
+        private static int DataEncodingGB2312(byte[] Data, int nIndex, int nCount)
+        {
+            if (Data == null)
+                return 0;
+            byte byteHead = 0x80;
+            int nRetCount = 0;
+            byte firstChar = 0;
+            byte secondChar = 0;
+
+            for (int i = nIndex; i < nCount - 1; i++)
+            {
+                firstChar = Data[i];
+                if ((firstChar & byteHead) == 0)
+                    continue;
+                secondChar = Data[i + 1];
+                if (firstChar >= 161 && firstChar <= 247 && secondChar >= 161 && secondChar <= 254)
+                {
+                    nRetCount += 2;
+                    i++;
+                }
+            }
+
+            return nRetCount;
+        }
+
+        public static string GetStringFromEncoding(byte[] SrcData, int nIndex, int nCount)
+        {
+            string strUnicode = Encoding.Unicode.GetString(SrcData, nIndex, nCount);
+            string strGb2312 = Encoding.GetEncoding("GB2312").GetString(SrcData, nIndex, nCount);
+            int nGB2312Len = DataEncodingGB2312(SrcData, nIndex, nCount);
+
+            byte[] DecodeBytes = Encoding.GetEncoding("GB2312").GetBytes(strUnicode);
+            string strDecodeGB2312 = Encoding.GetEncoding("GB2312").GetString(DecodeBytes, 0, DecodeBytes.Length);
+            if (strUnicode == strDecodeGB2312 && nGB2312Len == 0)
+                return strUnicode;
+            else
+                return strGb2312;
+        }
+
     }
 
     public class GrobalVariable

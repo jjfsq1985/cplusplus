@@ -1990,7 +1990,7 @@ namespace DaHuaApduCtrl
                         break;
                 }
                 if (nCount > 0)
-                    CardInfo.UserName = Encoding.Unicode.GetString(RecvData, 2, nCount);
+                    CardInfo.UserName = PublicFunc.GetStringFromEncoding(RecvData, 2, nCount);
                 else
                     CardInfo.UserName = "";
                 CardInfo.UserIdentity = Encoding.ASCII.GetString(RecvData, 22, 18);
@@ -2034,7 +2034,7 @@ namespace DaHuaApduCtrl
                 if (nCount > 0)
                 {
                     CardInfo.LimitCarNo = true;
-                    CardInfo.CarNo = Encoding.Unicode.GetString(RecvData, 43, nCount);
+                    CardInfo.CarNo = PublicFunc.GetStringFromEncoding(RecvData, 43, nCount);
                 }
                 else
                 {
@@ -2075,7 +2075,7 @@ namespace DaHuaApduCtrl
                 }
                 if (nCarNoCount > 0)
                 {
-                    CardInfo.CarNo = Encoding.Unicode.GetString(RecvData, 4, nCarNoCount); //装配气瓶的车牌号
+                    CardInfo.CarNo = PublicFunc.GetStringFromEncoding(RecvData, 4, nCarNoCount); //装配气瓶的车牌号
                 }
                 int nCount = 0;
                 for (int i = 0; i < 16; i++)

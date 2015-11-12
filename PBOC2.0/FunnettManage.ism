@@ -2075,7 +2075,7 @@
 		<row><td>Product Configuration</td><td>PackageCode</td><td>{A83224EE-4570-4ED4-B556-968B82FCC97A}</td></row>
 		<row><td>Product Configuration</td><td>ProductCode</td><td>{4A2F2847-4017-4F48-9F40-F996576C4B85}</td></row>
 		<row><td>Product Configuration</td><td>ProductName</td><td>富耐特管理系统</td></row>
-		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.07.1110</td></row>
+		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.08.1112</td></row>
 		<row><td>Product Configuration</td><td>SetupFileName</td><td>加气站管理系统</td></row>
 		<row><td>Product Configuration</td><td>UpgradeCode</td><td>{EDB97A3B-852B-4956-B4EE-D47459DFF2A3}</td></row>
 	</table>
@@ -4250,7 +4250,7 @@ UgBlAGwAZQBhAHMAZQABAFAAcgBvAGQAdQBjAHQAIABDAG8AbgBmAGkAZwB1AHIAYQB0AGkAbwBuAA==
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{DED54AFF-D433-418D-AAEF-78A5BEE462A8}</td><td/></row>
 		<row><td>ProductName</td><td>FunnettManage</td><td/></row>
-		<row><td>ProductVersion</td><td>1.07.1110</td><td/></row>
+		<row><td>ProductVersion</td><td>1.08.1112</td><td/></row>
 		<row><td>REBOOT</td><td>Suppress</td><td/></row>
 		<row><td>SQL_SKIP</td><td>0</td><td/></row>
 		<row><td>STANDARD_USE_SETUPEXE</td><td>##IDS_STANDARD_USE_SETUPEXE##</td><td/></row>

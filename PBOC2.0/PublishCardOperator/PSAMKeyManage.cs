@@ -601,7 +601,7 @@ namespace PublishCardOperator
 
         private void PsamKeyView_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (!m_bEditData || e.ColumnIndex < 1 || e.ColumnIndex > 8)
+            if (!m_bEditData || e.ColumnIndex < 1 || e.ColumnIndex > 9)
                 return;
             //PsamKeyView 行列相同时修改Cell（DataGridViewTextBoxCell-〉DataGridViewComboBoxCell）会引起SetCurrentCellAddressCore可重入调用
             if (m_nEntered == e.ColumnIndex && e.ColumnIndex == e.RowIndex)
@@ -615,7 +615,7 @@ namespace PublishCardOperator
 
         private void PsamKeyView_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            if (!m_bEditData || e.ColumnIndex < 1 || e.ColumnIndex > 8)
+            if (!m_bEditData || e.ColumnIndex < 1 || e.ColumnIndex > 9)
                 return;
             SetModifyView(e.RowIndex, e.ColumnIndex, m_lstPsamKey[e.RowIndex]);
             PsamKeyView.EndEdit();

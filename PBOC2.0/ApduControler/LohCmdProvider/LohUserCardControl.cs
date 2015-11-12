@@ -1758,7 +1758,7 @@ namespace LohApduCtrl
                         break;
                 }
                 if (nCount > 0)
-                    CardInfo.UserName = Encoding.Unicode.GetString(RecvData, 2, nCount);
+                    CardInfo.UserName = PublicFunc.GetStringFromEncoding(RecvData, 2, nCount);
                 string strIdentity = BitConverter.ToString(RecvData, 22, 9).Replace("-", "");
                 CardInfo.UserIdentity = strIdentity.Replace('F', 'X');
                 CardInfo.IdType = (UserCardInfoParam.IdentityType)(RecvData[31]);//证件类型
@@ -1802,7 +1802,7 @@ namespace LohApduCtrl
                 if (nCount > 0)
                 {
                     CardInfo.LimitCarNo = true;
-                    CardInfo.CarNo = Encoding.Unicode.GetString(RecvData, 43, nCount);
+                    CardInfo.CarNo = PublicFunc.GetStringFromEncoding(RecvData, 43, nCount);
                 }
                 else
                 {
@@ -1843,7 +1843,7 @@ namespace LohApduCtrl
                 }
                 if (nCarNoCount > 0)
                 {
-                    CardInfo.CarNo = Encoding.Unicode.GetString(RecvData, 4, nCarNoCount); //装配气瓶的车牌号
+                    CardInfo.CarNo = PublicFunc.GetStringFromEncoding(RecvData, 4, nCarNoCount); //装配气瓶的车牌号
                 }
                 int nCount = 0;
                 for (int i = 0; i < 16; i++)

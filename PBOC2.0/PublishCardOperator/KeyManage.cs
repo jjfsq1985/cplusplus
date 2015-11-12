@@ -476,7 +476,7 @@ namespace PublishCardOperator
                 return;
             AppKeyGridView.ReadOnly = true;
             //PsamKeyView 行列相同时修改Cell（DataGridViewTextBoxCell-〉DataGridViewComboBoxCell）会引起SetCurrentCellAddressCore可重入调用
-            if (m_nEnteredAppGrid == e.ColumnIndex && e.ColumnIndex == e.RowIndex)
+            if (m_nEnteredCpuGrid == e.ColumnIndex && e.ColumnIndex == e.RowIndex)
             {
                 CpuKeyGridView.BeginEdit(true);
                 return;
