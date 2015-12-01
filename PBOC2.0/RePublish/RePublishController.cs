@@ -157,7 +157,7 @@ namespace RePublish
                 {
                     string strNewCardId = "<font size =\"18\" color = \"blue\">" + BitConverter.ToString(byteRePublishCardId).Replace("-", "") + "</font>";
                     string strMsg = string.Format("确实要对卡号{0}进行补卡吗？\n新补卡号{1}", m_strInvalidCardId, strNewCardId);
-                    if (MyMessageBox.Show(strMsg, "补卡", MyMessageBox.MyMsgButtons.OKCancel) == DialogResult.Cancel)
+                    if (MyMessageBox.Show(strMsg, "补卡", MyMessageBox.MyMsgButtons.OKCancel, MyMessageBox.MyMsgIcon.Information) == DialogResult.Cancel)
                         return "";
                 }
 
