@@ -41,6 +41,8 @@ namespace FNTMain
         private ToolStripMenuItem KeyManageMenuItem = new ToolStripMenuItem(); //动态添加密钥管理菜单
 
         private const int CardState_Item_Index = 8;   //查询结果卡状态栏索引
+        private int KeyManageMenuCount = 0;   //密钥管理菜单数
+        private string[] KeyManageMenu = new string[4];
 
         public Main(int nLoginId,SqlConnectInfo DbInfo)
         {
@@ -140,7 +142,7 @@ namespace FNTMain
                     OptionMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnDbManage_Click));
                     break;
                 case MenuType.eImportKeyXml:
-                    OptionMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnImportKey_Click));
+                    OptionMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnImportKey_Click));//密钥导入
                     break;
                 default:
                     break;
@@ -151,37 +153,42 @@ namespace FNTMain
                  if(!MainMenu.Items.Contains(KeyManageMenuItem))
                  {
                      int nIndex = MainMenu.Items.IndexOf(OptionMenuItem);
-                     MainMenu.Items.Insert(nIndex, KeyManageMenuItem); //密钥管理模块插在选项菜单前面                     
+                     MainMenu.Items.Insert(nIndex, KeyManageMenuItem); //密钥管理模块插在选项菜单前面
+                     KeyManageMenuCount = 0;
                  }
                  else
                  {
                      switch(eMenu)
                      {
-                         case MenuType.eExportKeyXml:
-                             KeyManageMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnExportKey_Click));
+                         case MenuType.eUserKeysManage:
+                             KeyManageMenu[0] = strMenu;
+                             KeyManageMenuCount++;
                              break;
-                          case MenuType.eUserKeysManage:
-                             {
-                                 ToolStripMenuItem item = new ToolStripMenuItem(strMenu, null, new EventHandler(OnCpuKeyManage_Click));
-                                 KeyManageMenuItem.DropDownItems.Insert(0, item);     ////index 0
-                             }
+                         case MenuType.ePsamKeyManage:
+                             KeyManageMenu[1] = strMenu;
+                             KeyManageMenuCount++;
                              break;
                          case MenuType.eOrgKeyManage:
-                             {
-                                 ToolStripMenuItem item = new ToolStripMenuItem(strMenu, null, new EventHandler(OnOrgKeyManage_Click));
-                                 KeyManageMenuItem.DropDownItems.Insert(1, item); ////index 2
-                             }
+                             KeyManageMenu[2] = strMenu;
+                             KeyManageMenuCount++;
                              break;
-                        case MenuType.ePsamKeyManage:
-                            {
-                                ToolStripMenuItem item = new ToolStripMenuItem(strMenu, null, new EventHandler(OnPsamKeyManage_Click));
-                                KeyManageMenuItem.DropDownItems.Insert(1, item);  ////index 1
-                            }
-                            break;
+                         case MenuType.eExportKeyXml:
+                             KeyManageMenu[3] = strMenu;
+                             KeyManageMenuCount++;
+                             break;
                         default:
                              break;
                      }
 
+                 }
+
+                 if (KeyManageMenuCount == 4)
+                 {
+                     KeyManageMenuItem.DropDownItems.Add(KeyManageMenu[0], null, new EventHandler(OnCpuKeyManage_Click));
+                     KeyManageMenuItem.DropDownItems.Add(KeyManageMenu[1], null, new EventHandler(OnPsamKeyManage_Click));
+                     KeyManageMenuItem.DropDownItems.Add(KeyManageMenu[2], null, new EventHandler(OnOrgKeyManage_Click));
+                     KeyManageMenuItem.DropDownItems.Add(KeyManageMenu[3], null, new EventHandler(OnExportKey_Click));
+                     KeyManageMenuCount = 0;
                  }
             }
 

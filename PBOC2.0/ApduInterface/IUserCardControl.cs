@@ -17,6 +17,8 @@ namespace ApduInterface
 
         void CreateKey();
 
+        bool HasLyKey();
+
         bool CreateADFApp(int nAppIndex);
 
         bool CreateApplication(byte[] byteASN, bool bDefaultPwd, string strCustomPwd);

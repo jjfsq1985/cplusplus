@@ -12,6 +12,7 @@ using ApduParam;
 using ApduCtrl;
 using ApduInterface;
 using CardControl;
+using CustomMessageBox;
 
 namespace CardOperating
 {
@@ -28,12 +29,12 @@ namespace CardOperating
         private UserCardInfoParam m_CardInfoPar = new UserCardInfoParam();
         private IUserCardControl m_UserCardCtrl = null;
         private ISamCardControl m_SamCardCtrl = null;
-        private readonly byte[] m_FixedTermialId = new byte[] { 0x14, 0x32, 0x00, 0x00, 0x00, 0x01 };  //固定的终端机设备编号
+        private static readonly byte[] m_FixedTermialId = new byte[] { 0x14, 0x32, 0x00, 0x00, 0x00, 0x01 };  //固定的终端机设备编号
 
-        private static byte[] m_TermialId = new byte[6];            //终端机设备编号
-        private static byte[] m_TermialId_Ly = new byte[6];            //终端机设备编号
-        private static byte[] m_GTAC = new byte[4];    //灰锁时的GTAC
-        private static byte[] m_GTAC_Ly = new byte[4];    //灰锁时的GTAC
+        private byte[] m_TermialId = new byte[6];            //终端机设备编号
+        private byte[] m_TermialId_Ly = new byte[6];            //终端机设备编号
+        private byte[] m_GTAC = new byte[4];    //灰锁时的GTAC
+        private byte[] m_GTAC_Ly = new byte[4];    //灰锁时的GTAC
 
         private static string m_strPIN = "999999";//由用户输入
         private static string m_strPin_Ly = "999999";
@@ -1145,8 +1146,9 @@ namespace CardOperating
                         strTemp = "充值";
                     }
 
-                    string strMsg = "确实要对" + strCardType + BitConverter.ToString(ASN).Replace("-", "") + "\n" + strTemp + dbMoneyLoad.ToString("F2") + "元吗？";
-                    if (MessageBox.Show(strMsg, "卡充值", MessageBoxButtons.YesNo) == DialogResult.No)
+                    string strMoneyMessage = "<font size =\"18\" color = \"red\">" + dbMoneyLoad.ToString("F2") + "</font>";
+                    string strMsg = "确实要对" + strCardType + BitConverter.ToString(ASN).Replace("-", "") + strTemp + strMoneyMessage + "元吗？";
+                    if (MyMessageBox.Show(strMsg, "卡充值", MyMessageBox.MyMsgButtons.YesNo) == DialogResult.No)
                     {
                         return;
                     }
@@ -1888,8 +1890,9 @@ namespace CardOperating
                         MessageBox.Show("PSAM卡验证失败，不能圈存", "积分充值", MessageBoxButtons.OK);
                         return;
                     }
-                    string strMsg = "确实要对用户卡" + BitConverter.ToString(ASN).Replace("-", "") + "充值" + LoadLoyalty.ToString() + "积分吗？";
-                    if (MessageBox.Show(strMsg, "积分充值", MessageBoxButtons.YesNo) == DialogResult.No)
+                    string strLoyaltyMessage = "<font size =\"18\" color = \"red\">" + LoadLoyalty.ToString() + "</font>";
+                    string strMsg = "确实要对用户卡" + BitConverter.ToString(ASN).Replace("-", "") + "充值" + strLoyaltyMessage + "积分吗？";
+                    if (MyMessageBox.Show(strMsg, "积分充值", MyMessageBox.MyMsgButtons.YesNo) == DialogResult.No)
                     {
                         return;
                     }

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的常规信息通过下列属性集
 // 控制。更改这些属性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("IC卡和卡密钥管理系统")]
-[assembly: AssemblyDescription("由张家港富耐特新能源智能系统有限公司开发，用于智能IC卡的制卡、发卡、卡信息维护和制卡所用密钥的管理")]
+[assembly: AssemblyTitle("MyMessageBox")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("张家港富耐特新能源智能系统有限公司")]
-[assembly: AssemblyProduct("IC卡和卡密钥管理系统")]
-[assembly: AssemblyCopyright("版权所有 (C) Funnett 2015")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("MyMessageBox")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("db2f7230-160e-493d-bdb6-92de712f2fec")]
+[assembly: Guid("ef11181e-b687-4814-8c23-0a5f6637aa06")]
 
 // 程序集的版本信息由下面四个值组成:
 //
@@ -29,5 +29,8 @@ using System.Runtime.InteropServices;
 //      内部版本号
 //      修订号
 //
-[assembly: AssemblyVersion("1.08.12.01")]
-[assembly: AssemblyFileVersion("1.08.12.01")]
+// 可以指定所有这些值，也可以使用“内部版本号”和“修订号”的默认值，
+// 方法是按如下所示使用“*”:
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

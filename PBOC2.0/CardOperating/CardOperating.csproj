@@ -101,6 +101,10 @@
       <Project>{4EE6DABB-484E-4984-8CC4-B84CEC45A161}</Project>
       <Name>IFuncPlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MyMessageBox\MyMessageBox.csproj">
+      <Project>{E5526F08-9097-41CA-A5BE-89935D215C42}</Project>
+      <Name>MyMessageBox</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SqlServerHelper\SqlServerHelper.csproj">
       <Project>{F7EC1DE4-C880-4045-97E5-B811F198638D}</Project>
       <Name>SqlServerHelper</Name>

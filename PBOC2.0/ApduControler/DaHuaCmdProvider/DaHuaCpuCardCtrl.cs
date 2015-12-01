@@ -29,48 +29,49 @@ namespace DaHuaApduCtrl
         private const string m_strDIR3 = "ENN SV";    //监管应用
 
         //加气应用主控密钥MAMK
-        private static byte[] m_MAMK = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
+        private byte[] m_MAMK = new byte[16];
         //加气消费密钥MPK
-        private static byte[] m_MPK = new byte[] { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11 };
+        private byte[] m_MPK = new byte[16];
         //圈存主密钥MLK
-        private static byte[] m_MLK = new byte[] { 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66 };
+        private byte[] m_MLK = new byte[16];
         //TAC主密钥MTK
-        private static byte[] m_MTK = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
+        private byte[] m_MTK = new byte[16];
         //圈提主密钥MULK
-        private static byte[] m_MULK = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
+        private byte[] m_MULK = new byte[16];
         //联机解扣主密钥
-        private static byte[] m_MUGK = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
+        private byte[] m_MUGK = new byte[16];
         //透支限额主密钥MUK
-        private static byte[] m_MUK = new byte[] { 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC };
+        private byte[] m_MUK = new byte[16];
         //PIN解锁主密钥MPUK
-        private static byte[] m_MPUK = new byte[] { 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88 };
+        private byte[] m_MPUK = new byte[16];
         //密码重装主密钥MRPK
-        private static byte[] m_MRPK = new byte[] { 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99 };
+        private byte[] m_MRPK = new byte[16];
         //应用维护主密钥MAMTK
-        private static byte[] m_MAMTK = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
+        private byte[] m_MAMTK = new byte[16];
         //内部认证主密钥MIAK
-        private static byte[] m_MIAK = new byte[] { 0xF2, 0x11, 0x20, 0x6C, 0x05, 0x68, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xBB };
+        private byte[] m_MIAK = new byte[16];
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        private bool m_bLyKey = false;//是否存在积分密钥
         //积分应用主控密钥MAMK
-        private static byte[] m_MAMK_Ly = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xCC };
+        private byte[] m_MAMK_Ly = new byte[16];
         //积分消费密钥MPK
-        private static byte[] m_MPK_Ly = new byte[] { 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22 };
+        private byte[] m_MPK_Ly = new byte[16];
         //积分圈存密钥MLK
-        private static byte[] m_MLK_Ly = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
+        private byte[] m_MLK_Ly = new byte[16];
         //TAC主密钥MTK
-        private static byte[] m_MTK_Ly = new byte[] { 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77 };
+        private byte[] m_MTK_Ly = new byte[16];
         //联机解扣主密钥
-        private static byte[] m_MUGK_Ly = new byte[] { 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB, 0xBB };
+        private byte[] m_MUGK_Ly = new byte[16];
         //PIN解锁主密钥MPUK
-        private static byte[] m_MPUK_Ly = new byte[] { 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88 };
+        private byte[] m_MPUK_Ly = new byte[16];
         //密码重装主密钥MRPK
-        private static byte[] m_MRPK_Ly = new byte[] { 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99 };
+        private byte[] m_MRPK_Ly = new byte[16];
         //积分维护主密钥MAMTK
-        private static byte[] m_MAMTK_Ly = new byte[] { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
+        private byte[] m_MAMTK_Ly = new byte[16];
         //内部认证主密钥MIAK
-        private static byte[] m_MIAK_Ly = new byte[] { 0xF2, 0x11, 0x20, 0x6C, 0x05, 0x68, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0xBB };
+        private byte[] m_MIAK_Ly = new byte[16];
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public DaHuaCpuCardCtrl(ApduController ApduCtrlObj, bool bContactCard, SqlConnectInfo DbInfo)
@@ -1680,6 +1681,7 @@ namespace DaHuaApduCtrl
 
         private bool ReadKeyFromDb()
         {
+            m_bLyKey = false;
             SqlHelper ObjSql = new SqlHelper();
             if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
             {
@@ -1762,6 +1764,7 @@ namespace DaHuaApduCtrl
                 Buffer.BlockCopy(KeyVal.AppLoadKey, 0, m_MLK_Ly, 0, 16);
                 Buffer.BlockCopy(KeyVal.AppTacKey, 0, m_MTK_Ly, 0, 16);
                 Buffer.BlockCopy(KeyVal.AppUnGrayKey, 0, m_MUGK_Ly, 0, 16);
+                m_bLyKey = true;
             }
             return true;
         }        
@@ -2536,6 +2539,7 @@ namespace DaHuaApduCtrl
 
         private bool ReadKeyFromXml()
         {
+            m_bLyKey = false;
             CpuKeyData CpuKey = new CpuKeyData();
             CpuKey.nAppIndex = 1;
             if (!GlobalControl.GetXmlCpuKeyVal(m_ctrlApdu.m_strCardKeyPath, CpuKey))
@@ -2571,6 +2575,7 @@ namespace DaHuaApduCtrl
                 Buffer.BlockCopy(CpuKey_Ly.AppLoadKey, 0, m_MLK_Ly, 0, 16);
                 Buffer.BlockCopy(CpuKey_Ly.AppTacKey, 0, m_MTK_Ly, 0, 16);
                 Buffer.BlockCopy(CpuKey_Ly.AppUnGrayKey, 0, m_MUGK_Ly, 0, 16);
+                m_bLyKey = true;
             }
 
             byte[] ConsumerKey = GlobalControl.GetPrivateKeyFromXml(m_ctrlApdu.m_strCardKeyPath, "PsamKeyValue", "ConsumerMasterKey");
@@ -2612,6 +2617,11 @@ namespace DaHuaApduCtrl
                 GlobalControl.InsertCardKeyFromDb(ObjSql, keyGuid, ASN, 2);
             }
             return bRet;
+        }
+
+        public bool HasLyKey()
+        {
+            return m_bLyKey;
         }
 
     }

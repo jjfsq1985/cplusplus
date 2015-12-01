@@ -20,11 +20,11 @@ namespace CardOperating
         private ISamCardControl m_SamCardCtrl = null;
         private IUserCardControl m_UserCardCtrl = null;
 
-        private readonly byte[] m_FixedTermialId = new byte[] { 0x14, 0x32, 0x00, 0x00, 0x00, 0x01 };  //固定的终端机设备编号
-        private static byte[] m_TermialId = new byte[6];      //终端机设备编号
-        private static byte[] m_GTAC = new byte[4];
+        private static readonly byte[] m_FixedTermialId = new byte[] { 0x14, 0x32, 0x00, 0x00, 0x00, 0x01 };  //固定的终端机设备编号
+        private byte[] m_TermialId = new byte[6];      //终端机设备编号
+        private byte[] m_GTAC = new byte[4];
 
-        private static byte[] m_ASN = new byte[] { 0x06, 0x71, 0x02, 0x01, 0x00, 0x00, 0x00, 0x01 };//用户卡卡号
+        private byte[] m_ASN = new byte[8];//用户卡卡号
 
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
 

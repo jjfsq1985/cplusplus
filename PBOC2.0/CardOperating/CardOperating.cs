@@ -133,9 +133,9 @@ namespace CardOperating
         {
             string strTextOut = "";
             if (nErr < 0)
-                strTextOut = strMsg + " 错误码：" + nErr.ToString("X4") + "\r\n";
+                strTextOut = strMsg + " 错误码：" + nErr.ToString("X4") + "\n";
             else
-                strTextOut = strMsg + "\r\n";
+                strTextOut = strMsg + "\n";
 
             OutputText.AppendText(strTextOut);
             OutputText.Refresh();
@@ -436,7 +436,7 @@ namespace CardOperating
                 return;
             //动作            
             if (m_IccCardCtrl.InitIccCard(false) != 0)
-                MessageBox.Show("当前SAM卡内主控密钥不匹配，初始化失败。\r\n请确认卡商然后重置。", "警告", MessageBoxButtons.OK);
+                MessageBox.Show("当前SAM卡内主控密钥不匹配，初始化失败。\n请确认卡商然后重置。", "警告", MessageBoxButtons.OK);
         }
 
         private void btnIccCardReset_Click(object sender, EventArgs e)
@@ -447,7 +447,7 @@ namespace CardOperating
                 return;
             //动作            
             if (m_IccCardCtrl.InitIccCard(true) != 0)
-                MessageBox.Show("当前SAM卡内主控密钥不匹配，重置失败。\r\n请确认卡商然后初始化。", "警告", MessageBoxButtons.OK);
+                MessageBox.Show("当前SAM卡内主控密钥不匹配，重置失败。\n请确认卡商然后初始化。", "警告", MessageBoxButtons.OK);
         }
 
         private void IccCardSetting_Click(object sender, EventArgs e)
@@ -578,6 +578,11 @@ namespace CardOperating
         {
             if (!m_DevControl.IsDeviceOpen() || m_UserCardCtrl == null)
                 return;
+            if (!m_UserCardCtrl.HasLyKey())
+            {
+                WriteMsg(0, "没有积分密钥不能建立积分应用。");
+                return;
+            }
             UserCardInfoParam cardInfo = m_CardUser.GetUserCardParam();
             if (cardInfo.UserCardType != CardType.PersonalCard
                 && cardInfo.UserCardType != CardType.CompanySubCard

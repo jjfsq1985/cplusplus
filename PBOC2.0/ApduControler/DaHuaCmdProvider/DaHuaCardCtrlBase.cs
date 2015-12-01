@@ -13,20 +13,21 @@ namespace DaHuaApduCtrl
 {
     public class DaHuaCardCtrlBase
     {
+        //¥Ôª™ø®…Ã≥ı º√‹‘ø  -------{0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f}
         //MFœ¬ø®∆¨÷˜øÿ√‹‘ø
-        protected static byte[] m_KeyMain = new byte[16];
+        protected byte[] m_KeyMain = new byte[16];
         //MFœ¬ø®∆¨Œ¨ª§√‹‘ø
-        protected static byte[] m_KeyMaintain = new byte[] { 0xF2, 0x1B, 0x12, 0x34, 0x04, 0x38, 0x30, 0xD4, 0x48, 0x29, 0x3E, 0x66, 0x36, 0x88, 0x33, 0x78 };
+        protected byte[] m_KeyMaintain = new byte[16];
         //ø®∆¨÷–≥ı º√‹‘ø
-        protected static byte[] m_KeyOrg = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
+        protected byte[] m_KeyOrg = new byte[16];
 
         //////////////////////////////////////////////////////////////////////////
         //PSAMø®µƒMFœ¬ø®∆¨÷˜øÿ√‹‘ø
-        protected static byte[] m_KeyPsamMain = new byte[16];
+        protected byte[] m_KeyPsamMain = new byte[16];
         //PSAMø®µƒMFœ¬ø®∆¨Œ¨ª§√‹‘ø
-        protected static byte[] m_KeyPsamMaintain = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        protected byte[] m_KeyPsamMaintain = new byte[16];
         //PSAMø® ≥ı º√‹‘ø
-        protected static byte[] m_PsamKeyOrg = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f };
+        protected byte[] m_PsamKeyOrg = new byte[16];
 
         protected SqlConnectInfo m_DBInfo = new SqlConnectInfo();
 
