@@ -247,6 +247,7 @@
 		<col key="yes" def="s72">Name</col>
 		<col def="V0">Data</col>
 		<col def="S255">ISBuildSourcePath</col>
+		<row><td>ISSELFREG.DLL</td><td/><td>&lt;ISProductFolder&gt;\redist\language independent\i386\isregsvr.dll</td></row>
 		<row><td>ISSQLSRV.DLL</td><td/><td>&lt;ISProductFolder&gt;\redist\language independent\i386\issqlsrv.dll</td></row>
 		<row><td>ISSetup.dll</td><td/><td>&lt;ISProductFolder&gt;\redist\language independent\i386\ISSetup.dll</td></row>
 		<row><td>ISSetupFilesHelper</td><td/><td>&lt;ISProductFolder&gt;\redist\language independent\i386\SFHelper.dll</td></row>
@@ -333,6 +334,7 @@
 		<row><td>GasInfoManage.dll</td><td>{4085F228-E169-49FD-A6E6-02468437B847}</td><td>ICMANAGE</td><td>8</td><td/><td>gasinfomanage.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>IFuncPlugin.dll</td><td>{B4218243-4FA9-4F53-909E-66D4F837EA21}</td><td>ICMANAGE</td><td>8</td><td/><td>ifuncplugin.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>LogonForm.dll</td><td>{467D47BB-A73E-4060-A2A8-1D949203CC63}</td><td>ICMANAGE</td><td>8</td><td/><td>logonform.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>MyMessageBox.dll</td><td>{9A660948-E7F4-4AC9-B849-3057A0438C1B}</td><td>ICMANAGE</td><td>8</td><td/><td>mymessagebox.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>PublishCardOperator.dll</td><td>{32BD8529-E970-4337-BA3F-274D130C7A77}</td><td>ICMANAGE</td><td>8</td><td/><td>publishcardoperator.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>RePublish.dll</td><td>{E1CDC9A9-17D4-4C6D-8F14-2B8132F0C419}</td><td>ICMANAGE</td><td>8</td><td/><td>republish.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>SqlServerHelper.dll</td><td>{594EB52A-5E5C-4787-AF54-221CDC968021}</td><td>ICMANAGE</td><td>8</td><td/><td>sqlserverhelper.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -533,8 +535,12 @@
 		<row><td>ISSQLServerUninstall</td><td>1025</td><td>ISSQLSRV.DLL</td><td>ISSQLServerUninstall</td><td/><td/></row>
 		<row><td>ISSQLServerValidate</td><td>1</td><td>ISSQLSRV.DLL</td><td>ISSQLServerValidate</td><td/><td/></row>
 		<row><td>ISSQLServerWriteLoginInfo</td><td>3073</td><td>ISSQLSRV.DLL</td><td>ISSQLServerWriteLoginInfo</td><td/><td/></row>
+		<row><td>ISSelfRegisterCosting</td><td>1</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterCosting</td><td/><td/></row>
+		<row><td>ISSelfRegisterFiles</td><td>3073</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterFiles</td><td/><td/></row>
+		<row><td>ISSelfRegisterFinalize</td><td>1</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterFinalize</td><td/><td/></row>
 		<row><td>ISSetupFilesCleanup</td><td>257</td><td>ISSetupFilesHelper</td><td>SFCleanupEx</td><td/><td/></row>
 		<row><td>ISSetupFilesExtract</td><td>257</td><td>ISSetupFilesHelper</td><td>SFStartupEx</td><td/><td/></row>
+		<row><td>ISUnSelfRegisterFiles</td><td>3073</td><td>ISSELFREG.DLL</td><td>ISUnSelfRegisterFiles</td><td/><td/></row>
 		<row><td>ISVerifyScriptingRuntime</td><td>19</td><td/><td>[STANDARD_USE_SETUPEXE]</td><td/><td>Required for installations using InstallScript.</td></row>
 		<row><td>SetARPINSTALLLOCATION</td><td>51</td><td>ARPINSTALLLOCATION</td><td>[INSTALLDIR]</td><td/><td/></row>
 		<row><td>SetAllUsersProfileNT</td><td>51</td><td>ALLUSERSPROFILE</td><td>[%SystemRoot]\Profiles\All Users</td><td/><td/></row>
@@ -1356,6 +1362,7 @@
 		<row><td>ICFeatures</td><td>GasInfoManage.dll</td></row>
 		<row><td>ICFeatures</td><td>IFuncPlugin.dll</td></row>
 		<row><td>ICFeatures</td><td>LogonForm.dll</td></row>
+		<row><td>ICFeatures</td><td>MyMessageBox.dll</td></row>
 		<row><td>ICFeatures</td><td>PublishCardOperator.dll</td></row>
 		<row><td>ICFeatures</td><td>RePublish.dll</td></row>
 		<row><td>ICFeatures</td><td>SqlServerHelper.dll</td></row>
@@ -1402,6 +1409,7 @@
 		<row><td>keyvaluecfg.xml</td><td>AllOtherFiles1</td><td>KEYVAL~1.XML|KeyValueCfg.xml</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\KeyValueCfg.xml</td><td>17</td><td/></row>
 		<row><td>logonform.dll</td><td>LogonForm.dll</td><td>LOGONF~1.DLL|LogonForm.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\LogonForm.dll</td><td>17</td><td/></row>
 		<row><td>mt_32.dll</td><td>mt_32.dll</td><td>mt_32.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\mt_32.dll</td><td>17</td><td/></row>
+		<row><td>mymessagebox.dll</td><td>MyMessageBox.dll</td><td>MYMESS~1.DLL|MyMessageBox.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\MyMessageBox.dll</td><td>17</td><td/></row>
 		<row><td>publishcardoperator.dll</td><td>PublishCardOperator.dll</td><td>PUBLIS~1.DLL|PublishCardOperator.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\PublishCardOperator.dll</td><td>17</td><td/></row>
 		<row><td>republish.dll</td><td>RePublish.dll</td><td>REPUBL~1.DLL|RePublish.dll</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;ISProjectFolder&gt;\bin\release\RePublish.dll</td><td>17</td><td/></row>
 		<row><td>splash.jpg</td><td>AllOtherFiles</td><td>splash.jpg</td><td>0</td><td>65535.0.0.0</td><td/><td>0</td><td>1</td><td>&lt;PATH_TO_V1.3_FILES&gt;\splash.jpg</td><td>17</td><td/></row>
@@ -1674,6 +1682,7 @@
 		<row><td>GasInfoManage.dll</td><td/><td/><td>_9BF31DE2_952A_4819_8555_6EDD902E2F04_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>IFuncPlugin.dll</td><td/><td/><td>_FC886918_5CEB_4AB0_A114_194DF98F2F47_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>LogonForm.dll</td><td/><td/><td>_545E5DB9_4ABE_4A6F_B7A5_64C4150E2CC2_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>MyMessageBox.dll</td><td/><td/><td>_CDF11A0D_4950_46AD_B40B_45D6E564F51D_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>PublishCardOperator.dll</td><td/><td/><td>_B176E8DF_8C5C_4F44_A9F7_D18856EC4642_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>RePublish.dll</td><td/><td/><td>_FBC0892B_831B_49F5_A257_C265A19AD080_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>SqlServerHelper.dll</td><td/><td/><td>_99ABA98D_97B5_44BD_A524_9784EDD1C5C8_FILTER</td><td/><td/><td/><td/></row>
@@ -2075,7 +2084,7 @@
 		<row><td>Product Configuration</td><td>PackageCode</td><td>{A83224EE-4570-4ED4-B556-968B82FCC97A}</td></row>
 		<row><td>Product Configuration</td><td>ProductCode</td><td>{4A2F2847-4017-4F48-9F40-F996576C4B85}</td></row>
 		<row><td>Product Configuration</td><td>ProductName</td><td>富耐特管理系统</td></row>
-		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.08.1112</td></row>
+		<row><td>Product Configuration</td><td>ProductVersion</td><td>1.08.1201</td></row>
 		<row><td>Product Configuration</td><td>SetupFileName</td><td>加气站管理系统</td></row>
 		<row><td>Product Configuration</td><td>UpgradeCode</td><td>{EDB97A3B-852B-4956-B4EE-D47459DFF2A3}</td></row>
 	</table>
@@ -3813,8 +3822,12 @@
 		<row><td>ISSQLServerRollbackLoginInfo</td><td/><td>1502</td><td/><td/></row>
 		<row><td>ISSQLServerUninstall</td><td/><td>2398</td><td/><td/></row>
 		<row><td>ISSQLServerWriteLoginInfo</td><td>REMOVE&lt;&gt;"ALL"</td><td>5902</td><td/><td/></row>
+		<row><td>ISSelfRegisterCosting</td><td/><td>2201</td><td/><td/></row>
+		<row><td>ISSelfRegisterFiles</td><td/><td>5601</td><td/><td/></row>
+		<row><td>ISSelfRegisterFinalize</td><td/><td>6601</td><td/><td/></row>
 		<row><td>ISSetupFilesCleanup</td><td/><td>6603</td><td/><td/></row>
 		<row><td>ISSetupFilesExtract</td><td/><td>3</td><td/><td/></row>
+		<row><td>ISUnSelfRegisterFiles</td><td/><td>2202</td><td/><td/></row>
 		<row><td>InstallFiles</td><td/><td>4000</td><td>InstallFiles</td><td/></row>
 		<row><td>InstallFinalize</td><td/><td>6600</td><td>InstallFinalize</td><td/></row>
 		<row><td>InstallInitialize</td><td/><td>1501</td><td>InstallInitialize</td><td/></row>
@@ -4250,7 +4263,7 @@ UgBlAGwAZQBhAHMAZQABAFAAcgBvAGQAdQBjAHQAIABDAG8AbgBmAGkAZwB1AHIAYQB0AGkAbwBuAA==
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{DED54AFF-D433-418D-AAEF-78A5BEE462A8}</td><td/></row>
 		<row><td>ProductName</td><td>FunnettManage</td><td/></row>
-		<row><td>ProductVersion</td><td>1.08.1112</td><td/></row>
+		<row><td>ProductVersion</td><td>1.08.1201</td><td/></row>
 		<row><td>REBOOT</td><td>Suppress</td><td/></row>
 		<row><td>SQL_SKIP</td><td>0</td><td/></row>
 		<row><td>STANDARD_USE_SETUPEXE</td><td>##IDS_STANDARD_USE_SETUPEXE##</td><td/></row>
