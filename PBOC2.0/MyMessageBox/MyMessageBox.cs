@@ -238,7 +238,37 @@ namespace CustomMessageBox
         {
             BuildMessageBox(Title);
             frmTitle.Text = Title;
-            frmMessage.Text = Message;
+
+            int nBeginXml = Message.IndexOf("<");
+            int nEndXml = Message.LastIndexOf(">");
+            if (nBeginXml != -1 && nEndXml != -1)
+            {
+                string strXml = Message.Substring(nBeginXml, nEndXml - nBeginXml + 1);
+                try
+                {
+                    XmlDocument xml = new XmlDocument();
+                    xml.LoadXml(strXml);
+                    XmlNode node = xml.SelectSingleNode("font");
+                    frmMessage.Text = Message.Substring(0, nBeginXml);
+                    frmFontStr.Text = node.InnerText;
+                    frmFontStr.Font = new Font("宋体", Convert.ToSingle(node.Attributes["size"].Value), FontStyle.Regular);
+                    frmFontStr.ForeColor = GetColor(node.Attributes["color"].Value);
+                    frmNextMessage.Text = Message.Substring(nEndXml + 1, Message.Length - nEndXml - 1);
+                }
+                catch
+                {
+                    frmMessage.Text = Message;
+                    frmFontStr.Text = "";
+                    frmNextMessage.Text = "";
+                }
+            }
+            else
+            {
+                frmMessage.Text = Message;
+                frmFontStr.Text = "";
+                frmNextMessage.Text = "";
+            }
+
             ShowOKButton();
             MyMsgBox.ShowDialog();
             return MsgReturn;
@@ -285,8 +315,8 @@ namespace CustomMessageBox
                 frmMessage.Text = Message;
                 frmFontStr.Text = "";
                 frmNextMessage.Text = "";
-            } 
-            
+            }
+
             ButtonStatements(MButtons); // ButtonStatements method is responsible for showing the appropreiate buttons
             MyMsgBox.ShowDialog(); // Show the MessageBox as a Dialog.
             return MsgReturn; // Return the button click as an Enumerator
@@ -315,6 +345,64 @@ namespace CustomMessageBox
                     frmFontStr.Font = new Font("宋体", Convert.ToSingle(node.Attributes["size"].Value), FontStyle.Regular);
                     frmFontStr.ForeColor = GetColor(node.Attributes["color"].Value);
                     frmNextMessage.Text = Message.Substring(nEndXml + 1, Message.Length - nEndXml - 1);
+                }
+                catch
+                {
+                    frmMessage.Text = Message;
+                    frmFontStr.Text = "";
+                    frmNextMessage.Text = "";
+                }
+            }
+            else
+            {
+                frmMessage.Text = Message;
+                frmFontStr.Text = "";
+                frmNextMessage.Text = "";
+            }
+
+            ButtonStatements(MButtons);
+            IconStatements(MIcon);
+            Image imageIcon = new Bitmap(frmIcon.ToBitmap(), 38, 38);
+            pIcon.Image = imageIcon;
+            MyMsgBox.ShowDialog();
+            return MsgReturn;
+        }
+
+        static public DialogResult ShowEx(string Message, string Title, MyMsgButtons MButtons, MyMsgIcon MIcon)
+        {
+            BuildMessageBox(Title);
+            frmTitle.Text = Title;
+
+            int nBeginXml = Message.IndexOf("<");
+            int nEndXml = Message.LastIndexOf(">");
+            if (nBeginXml != -1 && nEndXml != -1)
+            {
+                string strXml = Message.Substring(nBeginXml, nEndXml - nBeginXml + 1);
+                try
+                {
+                    XmlDocument xml = new XmlDocument();
+                    xml.LoadXml(strXml);
+                    XmlNode node = xml.SelectSingleNode("font");
+                    frmMessage.Text = Message.Substring(0, nBeginXml);
+                    int nSplit = node.InnerText.IndexOf("(P)");
+                    if(nSplit != -1)
+                    {
+                        string strLeft = node.InnerText.Substring(0, nSplit);
+                        string strRight = node.InnerText.Substring(nSplit + 3, node.InnerText.Length - nSplit - 3);
+                        frmFontStr.Text = strLeft;
+                        frmFontStr.Font = new Font("宋体", Convert.ToSingle(node.Attributes["size"].Value), FontStyle.Bold);
+                        frmFontStr.ForeColor = GetColor(node.Attributes["color"].Value);
+                        frmNextMessage.Text = strRight;
+                        frmNextMessage.Font = new Font("宋体", Convert.ToSingle(node.Attributes["size"].Value), FontStyle.Bold);
+                        frmNextMessage.ForeColor = GetColor(node.Attributes["color"].Value);
+                    }
+                    else
+                    {
+                        frmFontStr.Text = node.InnerText;
+                        frmFontStr.Font = new Font("宋体", Convert.ToSingle(node.Attributes["size"].Value), FontStyle.Regular);
+                        frmFontStr.ForeColor = GetColor(node.Attributes["color"].Value);
+                        frmNextMessage.Text = Message.Substring(nEndXml + 1, Message.Length - nEndXml - 1);
+                    }
                 }
                 catch
                 {
@@ -383,7 +471,7 @@ namespace CustomMessageBox
         static private void ShowOKButton()
         {
             btnOK = new Button();
-            btnOK.Text = "OK";
+            btnOK.Text = "确定";
             btnOK.Size = new System.Drawing.Size(80, 25);
             btnOK.BackColor = System.Drawing.Color.FromArgb(255, 255, 255);
             btnOK.Font = new Font("宋体", 9, FontStyle.Regular);
@@ -394,7 +482,7 @@ namespace CustomMessageBox
         static private void ShowAbortButton()
         {
             btnAbort = new Button();
-            btnAbort.Text = "Abort";
+            btnAbort.Text = "中止";
             btnAbort.Size = new System.Drawing.Size(80, 25);
             btnAbort.BackColor = System.Drawing.Color.FromArgb(255, 255, 255);
             btnAbort.Font = new Font("宋体", 9, FontStyle.Regular);
@@ -405,7 +493,7 @@ namespace CustomMessageBox
         static private void ShowRetryButton()
         {
             btnRetry = new Button();
-            btnRetry.Text = "Retry";
+            btnRetry.Text = "重试";
             btnRetry.Size = new System.Drawing.Size(80, 25);
             btnRetry.BackColor = System.Drawing.Color.FromArgb(255, 255, 255);
             btnRetry.Font = new Font("宋体", 9, FontStyle.Regular);
@@ -416,7 +504,7 @@ namespace CustomMessageBox
         static private void ShowIgnoreButton()
         {
             btnIgnore = new Button();
-            btnIgnore.Text = "Ignore";
+            btnIgnore.Text = "忽略";
             btnIgnore.Size = new System.Drawing.Size(80, 25);
             btnIgnore.BackColor = System.Drawing.Color.FromArgb(255, 255, 255);
             btnIgnore.Font = new Font("宋体", 9, FontStyle.Regular);
@@ -427,7 +515,7 @@ namespace CustomMessageBox
         static private void ShowCancelButton()
         {
             btnCancel = new Button();
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "取消";
             btnCancel.Size = new System.Drawing.Size(80, 25);
             btnCancel.BackColor = System.Drawing.Color.FromArgb(255, 255, 255);
             btnCancel.Font = new Font("宋体", 9, FontStyle.Regular);
@@ -438,7 +526,7 @@ namespace CustomMessageBox
         static private void ShowYesButton()
         {
             btnYes = new Button();
-            btnYes.Text = "Yes";
+            btnYes.Text = "是";
             btnYes.Size = new System.Drawing.Size(80, 25);
             btnYes.BackColor = System.Drawing.Color.FromArgb(255, 255, 255);
             btnYes.Font = new Font("宋体", 9, FontStyle.Regular);
@@ -449,7 +537,7 @@ namespace CustomMessageBox
         static private void ShowNoButton()
         {
             btnNo = new Button();
-            btnNo.Text = "No";
+            btnNo.Text = "否";
             btnNo.Size = new System.Drawing.Size(80, 25);
             btnNo.BackColor = System.Drawing.Color.FromArgb(255, 255, 255);
             btnNo.Font = new Font("宋体", 9, FontStyle.Regular);

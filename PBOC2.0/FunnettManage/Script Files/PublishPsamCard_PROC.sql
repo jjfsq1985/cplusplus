@@ -56,7 +56,7 @@ CREATE PROCEDURE PROC_PublishPsamCard(
 			--开始事务
 			begin tran maintran
 			update  Psam_Card set TerminalId = @TerminalId,ClientId=@ClientId,CardState = 1,UseValidateDate = @UseValidateDate, UseInvalidateDate = @UseInvalidateDate,
-							IssueCode = @CompanyFrom,RecvCode = @CompanyTo,Remark=@Remark,OperateDateTime=@curTime,OrgKey=@OrgKey,PsamMasterKey=@PsamMasterKey,MacEncryptKey=@AppMADKey;
+							IssueCode = @CompanyFrom,RecvCode = @CompanyTo,Remark=@Remark,OperateDateTime=@curTime,OrgKey=@OrgKey,PsamMasterKey=@PsamMasterKey,MacEncryptKey=@AppMADKey where PsamId=@PsamCardId;
 			if(@@ERROR <> 0)
 			begin
 		    rollback tran maintran
