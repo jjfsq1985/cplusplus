@@ -701,8 +701,8 @@ namespace CardOperating
             ObjSql = null;
             if (!bHaveRecordInDb)
             {
-                string strRedString = "<font size =\"18\" color = \"red\">增加发卡记录前请确认使用了正确的卡片密钥</font>";
-                if (MyMessageBox.Show("无此卡号的发卡记录，是否增加？" + strRedString, "发卡", MyMessageBox.MyMsgButtons.YesNo, MyMessageBox.MyMsgIcon.Question) == DialogResult.Yes)
+                string strRedString = "<font size =\"16\" color = \"red\">增加发卡记录前请确认(P)使用了正确的卡片密钥</font>";
+                if (MyMessageBox.ShowEx("无此卡号的发卡记录，是否增加？" + strRedString, "发卡", MyMessageBox.MyMsgButtons.YesNo, MyMessageBox.MyMsgIcon.Question) == DialogResult.Yes)
                 {
                     if (m_UserCardCtrl.SaveCpuCardInfoToDb(CardInfo, false))
                         MessageBox.Show("增加发卡记录成功");
