@@ -1,0 +1,149 @@
+版本字符串"K.ZHY.1.23.48\0"
+
+
+/****************************************************************************************************************************
+//函数名称： void GetCRC(BYTE *pbyOutCRC, BYTE *pbyInBuff, int Len)
+//函数功能： CRC计算函数
+//输入参数： pbyInBuff：数据
+						 Len：数据长度
+//输出参数： 
+						 pbyOutCRC： 输出CRC
+//返回值：	 无
+//全局变量： 无
+//相关提示：        
+//创建者：	 陈柏军
+//创建日期： 2015-12-01
+//修改者：
+//修改日期：
+//修改描述
+****************************************************************************************************************************/
+void GetCRC(BYTE *pbyOutCRC, BYTE *pbyInBuff, int Len)
+{
+	int i,j;
+	BYTE lsb0,lsb1;
+
+	pbyOutCRC[0] = 0;
+	pbyOutCRC[1] = 0;
+
+	for (i = 0; i < Len; i++)
+	{
+		pbyOutCRC[1] ^= pbyInBuff[i];
+		for (j = 0; j < 8; j++)
+		{
+			lsb0	    		=	pbyOutCRC[0]	&	1;
+			pbyOutCRC[0]	=	pbyOutCRC[0]	>>	1;
+			lsb1	    		=	pbyOutCRC[1]	&	1;
+			pbyOutCRC[1]	=	pbyOutCRC[1]	>>	1;
+			if (lsb0)
+			{
+				pbyOutCRC[1] |= 0x80;
+			}
+
+			if (lsb1)
+			{
+				pbyOutCRC[0] ^= 0x50;	//A0 01
+				pbyOutCRC[1] ^= 0x10;
+			}
+		}
+	}
+}
+
+
+
+
+
+/****************************************************************************************************************************
+//函数名称： int CheckAsciiNum(const char*strInData, int nLength)
+//函数功能： 判断某一字符串是否为‘0’~‘9’之间
+//输入参数： strInData：数据
+						 Len：数据长度
+//输出参数： 无
+//返回值：	 0成功， 其他失败
+//全局变量： 无
+//相关提示：        
+//创建者：	 陈柏军
+//创建日期： 2015-12-01
+//修改者：
+//修改日期：
+//修改描述
+****************************************************************************************************************************/
+int CheckAsciiNum(const char*strInData, int nLength)
+{
+	int i;
+
+	for (i = 0; i < nLength; i++)
+	{ 
+		if (strInData[i] < '0' || strInData[i] > '9')
+		{
+			return (1);
+		}
+	}
+
+	return (0);
+}
+
+/****************************************************************************************************************************
+//函数名称： int GetVersion(char *strOutVersion, const char *pchInData, const int nInDataLength)
+//函数功能： 获取CRC
+//输入参数： pchInData: 输入数据
+						 nInDataLength：数据长度
+//输出参数：
+						 strOutVersion:版本号
+//返回值：	 0成功， 其他失败
+//全局变量： 无
+//相关提示：        
+//创建者：	 陈柏军
+//创建日期： 2015-12-01
+//修改者：
+//修改日期：
+//修改描述
+****************************************************************************************************************************/
+int GetVersion(char *strOutVersion, const char *pchInData, const int nInDataLength)
+{
+	int i;
+	const char *p = pchInData;
+	CString csVersion = NULL;
+
+	for (i = 0; i < nInDataLength; i++)
+	{
+		if ('.' == *p)	
+		{
+			if ('.' == *(p + 4) && '.' == *(p + 6) && '.' == *(p + 9))
+			{
+				if (0 == CheckAsciiNum(p + 5, 1) && 0 == CheckAsciiNum(p + 7, 2) && 0 == CheckAsciiNum(p + 10, 2))
+				{
+					do
+					{
+						csVersion = (p - 1);
+						csVersion = "该导入HEX文件的软件版本号是否为：" + csVersion;
+
+						HWND hWnd = GetActiveWindow();
+						if (IDCANCEL == MessageBox(hWnd, csVersion, "提示信息", MB_ICONQUESTION|MB_OKCANCEL))
+						{	//取消
+							break;
+						}
+						else
+						{	
+						}
+
+
+						if (strlen(p - 1) < 17)
+						{
+							strcpy (strOutVersion, p - 1);
+							
+						}
+						else
+						{
+							memcpy (strOutVersion, p - 1, 16);
+							strOutVersion[16] = 0;
+						}
+						return (0);
+					}while(0);
+				}
+			}
+		}
+		p++;
+	}
+
+	return (1);
+}
