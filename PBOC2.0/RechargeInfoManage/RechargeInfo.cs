@@ -16,6 +16,10 @@ namespace RechargeManage
         private SqlHelper m_ObjSql = new SqlHelper();
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
 
+        private bool m_bFilterByDate = false;
+        private DateTime m_FilterBegin;
+        private DateTime m_FilterEnd;
+
         private int m_nCurPage = 0; //当前显示页
         private int m_nRowsPerPage = 50;  //每页显示记录数
         private int m_nTotalPage = 1;  //总页数
@@ -25,6 +29,8 @@ namespace RechargeManage
         {
             InitializeComponent();
             //RechargeInfoPos();
+            dtStart.Enabled = false;
+            dtEnd.Enabled = false;
         }
 
         public MenuType GetMenuType()
@@ -171,9 +177,21 @@ namespace RechargeManage
             RechargeView.Rows.Clear();
             SqlDataReader dataReader = null;
             SqlParameter[] sqlparams = new SqlParameter[2];
-            sqlparams[0] = ObjSql.MakeParam("Start", SqlDbType.Int, 4, ParameterDirection.Input, m_nCurPage * m_nRowsPerPage);
-            sqlparams[1] = ObjSql.MakeParam("End", SqlDbType.Int, 4, ParameterDirection.Input, (m_nCurPage + 1) * m_nRowsPerPage);
-            ObjSql.ExecuteCommand("select * from Data_RechargeCardRecord where RunningNum > @Start and RunningNum <= @End", sqlparams, out dataReader);
+            int nRowTotalIndex = 0;
+            if (m_bFilterByDate)
+            {
+                sqlparams[0] = ObjSql.MakeParam("Start", SqlDbType.DateTime, 8, ParameterDirection.Input, m_FilterBegin);
+                sqlparams[1] = ObjSql.MakeParam("End", SqlDbType.DateTime, 8, ParameterDirection.Input, m_FilterEnd);
+                ObjSql.ExecuteCommand("select top 500 * from Data_RechargeCardRecord where RechargeDateTime > @Start and RechargeDateTime < @End", sqlparams, out dataReader);
+                nRowTotalIndex = 0;
+            }
+            else
+            {
+                sqlparams[0] = ObjSql.MakeParam("Start", SqlDbType.Int, 4, ParameterDirection.Input, m_nCurPage * m_nRowsPerPage);
+                sqlparams[1] = ObjSql.MakeParam("End", SqlDbType.Int, 4, ParameterDirection.Input, (m_nCurPage + 1) * m_nRowsPerPage);
+                ObjSql.ExecuteCommand("select * from Data_RechargeCardRecord where RunningNum > @Start and RunningNum <= @End", sqlparams, out dataReader);
+                nRowTotalIndex = m_nCurPage * m_nRowsPerPage;
+            }
             if (dataReader != null)
             {
                 if (dataReader.HasRows)
@@ -183,7 +201,7 @@ namespace RechargeManage
                     while (dataReader.Read())
                     {
                         int index = RechargeView.Rows.Add();
-                        RechargeView.Rows[index].Cells[0].Value = m_nCurPage * m_nRowsPerPage + nCount + 1;
+                        RechargeView.Rows[index].Cells[0].Value = nRowTotalIndex + nCount + 1;
                         strValue = (string)dataReader["CardNum"];
                         RechargeView.Rows[index].Cells[1].Value = strValue;
                         strValue = (string)dataReader["OperateType"];
@@ -250,6 +268,36 @@ namespace RechargeManage
                 dataReader.Close();
             }
             return strOperator;
+        }
+
+        private void chkFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            m_bFilterByDate = chkFilter.Checked;
+            if (m_bFilterByDate)
+            {
+                dtStart.Enabled = true;
+                dtEnd.Enabled = true;
+                dtStart.Value = DateTime.Now.Date.AddDays(-30);
+                dtEnd.Value = DateTime.Now;
+            }
+            else
+            {
+                dtStart.Enabled = false;
+                dtEnd.Enabled = false;
+            }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            m_FilterBegin = dtStart.Value.Date;
+            m_FilterEnd = dtEnd.Value.Date.AddDays(1);
+            if (m_FilterBegin > m_FilterEnd)
+            {
+                MessageBox.Show("时间范围无效");
+                return;
+            }
+            m_nCurPage = 0;
+            ReadRechargeData();
         }
 
     }

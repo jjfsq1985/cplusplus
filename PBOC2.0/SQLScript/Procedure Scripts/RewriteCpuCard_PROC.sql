@@ -87,13 +87,35 @@ begin
 		    return 4
 		    end		
 		--插入修改卡信息的记录
-		set @LogContent = '修改卡信息：' + '所属单位' + convert(varchar(10),@SrcClientId) + '->' + convert(varchar(10),@ClientId) + ';';
-		set @LogContent	= 	@LogContent + '关联母卡' + @SrcRelatedMotherCard + '->' + @RelatedMotherCard + ';';
-		set @LogContent	= 	@LogContent + '证件号' + @SrcPersonalId + '->' + @PersonalId + ';';
-		set @LogContent	= 	@LogContent + '持卡人姓名' + @SrcDriverName + '->' + @DriverName + ';';
-		set @LogContent	= 	@LogContent + '持卡人电话' + @SrcDriverTel + '->' + @DriverTel + ';';
-		set @LogContent	= 	@LogContent + '气瓶编号' + @SrcSteelCylinderId + '->' + @SteelCylinderId + ';';
-		set @LogContent	= 	@LogContent + '钢瓶生产厂家编号' + @SrcFactoryNum + '->' + @FactoryNum + ';';				             
+		set @LogContent = '修改卡信息：';
+		if(@SrcClientId <> @ClientId)
+			set @LogContent = @LogContent + '所属单位' + convert(varchar(10),@SrcClientId) + '->' + convert(varchar(10),@ClientId) + ';';
+		else
+			set @LogContent = @LogContent + '所属单位' + convert(varchar(10),@ClientId) + ';';
+		if(@SrcRelatedMotherCard <> @RelatedMotherCard)
+			set @LogContent	= 	@LogContent + '关联母卡' + @SrcRelatedMotherCard + '->' + @RelatedMotherCard + ';';
+		else
+			set @LogContent	= 	@LogContent + '关联母卡' + @RelatedMotherCard + ';';
+		if(@SrcPersonalId <> @PersonalId)
+			set @LogContent	= 	@LogContent + '证件号' + @SrcPersonalId + '->' + @PersonalId + ';';
+		else
+			set @LogContent	= 	@LogContent + '证件号' + @PersonalId + ';';
+		if(@SrcDriverName <> @DriverName)
+			set @LogContent	= 	@LogContent + '持卡人姓名' + @SrcDriverName + '->' + @DriverName + ';';
+		else
+			set @LogContent	= 	@LogContent + '持卡人姓名' + @DriverName + ';';		
+		if(@SrcDriverTel <> @DriverTel)
+			set @LogContent	= 	@LogContent + '持卡人电话' + @SrcDriverTel + '->' + @DriverTel + ';';
+		else
+			set @LogContent	= 	@LogContent + '持卡人电话' + @DriverTel + ';';
+		if(@SrcSteelCylinderId <> @SteelCylinderId)
+			set @LogContent	= 	@LogContent + '气瓶编号' + @SrcSteelCylinderId + '->' + @SteelCylinderId + ';';
+		else
+			set @LogContent	= 	@LogContent + '气瓶编号' + @SteelCylinderId + ';';
+		if(@SrcFactoryNum <> @FactoryNum)
+			set @LogContent	= 	@LogContent + '钢瓶生产厂家编号' + @SrcFactoryNum + '->' + @FactoryNum + ';';		
+		else		             
+			set @LogContent	= 	@LogContent + '钢瓶生产厂家编号' + @FactoryNum + ';';		
 		insert into Log_PublishCard values(@curTime,@LogContent,@ClientId,@CardId);
 	commit tran miantran
 	return 0

@@ -15,14 +15,15 @@ namespace CodeTable
     public class ProvinceCodeTable
     {
         public int nDataGridViewRowIndex = 0;
+        public Guid guidCode = Guid.Empty;
         public string strProvinceName = "";
         public byte ProvinceCode = 0;
         public DbStateFlag eDbState = DbStateFlag.eDbOK;
     }
-
     public class CityCodeTable
     {
         public int nDataGridViewRowIndex = 0;
+        public Guid guidCode = Guid.Empty;
         public string strCityName = "";
         public byte[] CityCode = new byte[2];
         public DbStateFlag eDbState = DbStateFlag.eDbOK;
@@ -31,6 +32,7 @@ namespace CodeTable
     public class SuperiorCodeTable
     {
         public int nDataGridViewRowIndex = 0;
+        public Guid guidCode = Guid.Empty;
         public string strSuperiorName = ""; //公司代码（Client的上级)
         public byte[] SuperiorCode = new byte[2];
         public DbStateFlag eDbState = DbStateFlag.eDbOK;

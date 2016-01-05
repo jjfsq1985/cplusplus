@@ -18,6 +18,7 @@ namespace CodeTable
         private List<ProvinceCodeTable> m_lstProvCode = new List<ProvinceCodeTable>();
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
         private int m_nAuthority = 0;
+        private Dictionary<Guid, string> m_DirtyData = new Dictionary<Guid, string>();
 
 
         public ProvinceCode()
@@ -89,6 +90,7 @@ namespace CodeTable
                     {
                         int index = ProvinceView.Rows.Add();
                         ProvinceCodeTable ProvVal = new ProvinceCodeTable();
+                        ProvVal.guidCode = Guid.NewGuid();
                         ProvVal.eDbState = DbStateFlag.eDbOK;
                         ProvVal.nDataGridViewRowIndex = index;
                         ProvVal.strProvinceName = (string)dataReader["ProvinceName"];
@@ -122,6 +124,7 @@ namespace CodeTable
                     SaveProvCodeDataToDb();
                 }
             }
+            m_DirtyData.Clear();
             ProvinceView.Dispose();
             m_lstProvCode.Clear();
             if (m_ObjSql != null)
@@ -183,6 +186,7 @@ namespace CodeTable
                     if (bAdd)
                     {
                         ProvinceCodeTable newVal = new ProvinceCodeTable();
+                        newVal.guidCode = Guid.NewGuid();
                         newVal.eDbState = DbStateFlag.eDbAdd;
                         newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strProvinceName = strInput;
@@ -192,9 +196,18 @@ namespace CodeTable
                 }
                 else if (strInput != m_lstProvCode[nListIndex].strProvinceName)
                 {
+                    string strProvName = m_lstProvCode[nListIndex].strProvinceName;
                     m_lstProvCode[nListIndex].strProvinceName = strInput;
                     if (m_lstProvCode[nListIndex].eDbState == DbStateFlag.eDbOK)
+                    {
                         m_lstProvCode[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                        string strDirtyData = strProvName + "|" + m_lstProvCode[nListIndex].ProvinceCode.ToString("X2");
+                        if (m_DirtyData.ContainsKey(m_lstProvCode[nListIndex].guidCode))
+                            m_DirtyData[m_lstProvCode[nListIndex].guidCode] = strDirtyData;
+                        else
+                            m_DirtyData.Add(m_lstProvCode[nListIndex].guidCode, strDirtyData);
+
+                    }
                 }
             }
             else if (nItem == 1)
@@ -233,6 +246,7 @@ namespace CodeTable
                     if (bAdd)
                     {
                         ProvinceCodeTable newVal = new ProvinceCodeTable();
+                        newVal.guidCode = Guid.NewGuid();
                         newVal.eDbState = DbStateFlag.eDbAdd;
                         newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strProvinceName = "";
@@ -242,9 +256,17 @@ namespace CodeTable
                 }
                 else if (codebyte != m_lstProvCode[nListIndex].ProvinceCode)
                 {
+                    string strProvCode = m_lstProvCode[nListIndex].ProvinceCode.ToString("X2");
                     m_lstProvCode[nListIndex].ProvinceCode = codebyte;
                     if (m_lstProvCode[nListIndex].eDbState == DbStateFlag.eDbOK)
+                    {
                         m_lstProvCode[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                        string strDirtyData = m_lstProvCode[nListIndex].strProvinceName + "|" + strProvCode;
+                        if (m_DirtyData.ContainsKey(m_lstProvCode[nListIndex].guidCode))
+                            m_DirtyData[m_lstProvCode[nListIndex].guidCode] = strDirtyData;
+                        else
+                            m_DirtyData.Add(m_lstProvCode[nListIndex].guidCode, strDirtyData);
+                    }
                 }
             }                
         }
@@ -301,7 +323,12 @@ namespace CodeTable
                 }
                 else if (value.eDbState == DbStateFlag.eDbDirty)
                 {
-                    m_ObjSql.ExecuteCommand("update Data_Province set ProvinceCode = @Code, ProvinceName = @Name", sqlparams);
+                    SqlParameter[] sqlDirtyParams = new SqlParameter[2];
+                    string strDirty = m_DirtyData[value.guidCode];
+                    sqlDirtyParams[0] = m_ObjSql.MakeParam("DirtyCode", SqlDbType.VarChar, 4, ParameterDirection.Input, strDirty.Substring(strDirty.IndexOf("|") + 1));
+                    sqlDirtyParams[1] = m_ObjSql.MakeParam("DirtyName", SqlDbType.NVarChar, 50, ParameterDirection.Input, strDirty.Substring(0, strDirty.IndexOf("|")));
+                    m_ObjSql.ExecuteCommand("delete from Data_Province where ProvinceCode = @DirtyCode and ProvinceName = @DirtyName", sqlDirtyParams);
+                    m_ObjSql.ExecuteCommand("insert into Data_Province values(@Code,@Name)", sqlparams);
                     value.eDbState = DbStateFlag.eDbOK;
                 }
                 m_lstProvCode[i] = value;

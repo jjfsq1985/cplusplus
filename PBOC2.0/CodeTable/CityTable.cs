@@ -19,6 +19,7 @@ namespace CodeTable
         private List<CityCodeTable> m_lstCityCode = new List<CityCodeTable>();
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
         private int m_nAuthority = 0;
+        private Dictionary<Guid, string> m_DirtyData = new Dictionary<Guid, string>();
 
 
         public CityCode()
@@ -86,6 +87,7 @@ namespace CodeTable
                     SaveCityCodeDataToDb();
                 }
             }
+            m_DirtyData.Clear();
             CityView.Dispose();
             m_lstCityCode.Clear();
             if (m_ObjSql != null)
@@ -119,6 +121,7 @@ namespace CodeTable
                     {
                         int index = CityView.Rows.Add();
                         CityCodeTable CityVal = new CityCodeTable();
+                        CityVal.guidCode = Guid.NewGuid();
                         CityVal.eDbState = DbStateFlag.eDbOK;
                         CityVal.nDataGridViewRowIndex = index;
                         CityVal.strCityName = (string)dataReader["CityName"];
@@ -187,6 +190,7 @@ namespace CodeTable
                     if (bAdd)
                     {
                         CityCodeTable newVal = new CityCodeTable();
+                        newVal.guidCode = Guid.NewGuid();
                         newVal.eDbState = DbStateFlag.eDbAdd;
                         newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strCityName = strInput;
@@ -197,9 +201,18 @@ namespace CodeTable
                 }
                 else if (strInput != m_lstCityCode[nListIndex].strCityName)
                 {
+                    string strCityName = m_lstCityCode[nListIndex].strCityName;
                     m_lstCityCode[nListIndex].strCityName = strInput;
                     if (m_lstCityCode[nListIndex].eDbState == DbStateFlag.eDbOK)
+                    {
                         m_lstCityCode[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                        string strDirtyData = strCityName + "|" + BitConverter.ToString(m_lstCityCode[nListIndex].CityCode).Replace("-", "");
+                        if (m_DirtyData.ContainsKey(m_lstCityCode[nListIndex].guidCode))
+                            m_DirtyData[m_lstCityCode[nListIndex].guidCode] = strDirtyData;
+                        else
+                            m_DirtyData.Add(m_lstCityCode[nListIndex].guidCode, strDirtyData);
+
+                    }
                 }
             }
             else if (nItem == 1)
@@ -236,6 +249,7 @@ namespace CodeTable
                     if (bAdd)
                     {
                         CityCodeTable newVal = new CityCodeTable();
+                        newVal.guidCode = Guid.NewGuid();
                         newVal.eDbState = DbStateFlag.eDbAdd;
                         newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strCityName = "";
@@ -246,10 +260,19 @@ namespace CodeTable
                 }
                 else if( (codebyte[0] != m_lstCityCode[nListIndex].CityCode[0]) || (codebyte[1] != m_lstCityCode[nListIndex].CityCode[1]) )
                 {
+                    string strCityCode = BitConverter.ToString(m_lstCityCode[nListIndex].CityCode).Replace("-", "");
                     m_lstCityCode[nListIndex].CityCode[0] = codebyte[0];
                     m_lstCityCode[nListIndex].CityCode[1] = codebyte[1];
                     if (m_lstCityCode[nListIndex].eDbState == DbStateFlag.eDbOK)
+                    {
                         m_lstCityCode[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                        string strDirtyData = m_lstCityCode[nListIndex].strCityName + "|" + strCityCode;
+                        if (m_DirtyData.ContainsKey(m_lstCityCode[nListIndex].guidCode))
+                            m_DirtyData[m_lstCityCode[nListIndex].guidCode] = strDirtyData;
+                        else
+                            m_DirtyData.Add(m_lstCityCode[nListIndex].guidCode, strDirtyData);
+ 
+                    }
                 }
             }
         }
@@ -306,7 +329,12 @@ namespace CodeTable
                 }
                 else if (value.eDbState == DbStateFlag.eDbDirty)
                 {
-                    m_ObjSql.ExecuteCommand("update Data_City set CityCode = @Code, CityName = @Name", sqlparams);
+                    SqlParameter[] sqlDirtyParams = new SqlParameter[2];
+                    string strDirty = m_DirtyData[value.guidCode];
+                    sqlDirtyParams[0] = m_ObjSql.MakeParam("DirtyCode", SqlDbType.VarChar, 4, ParameterDirection.Input, strDirty.Substring(strDirty.IndexOf("|") + 1));
+                    sqlDirtyParams[1] = m_ObjSql.MakeParam("DirtyName", SqlDbType.NVarChar, 50, ParameterDirection.Input, strDirty.Substring(0, strDirty.IndexOf("|")));
+                    m_ObjSql.ExecuteCommand("delete from Data_City where CityCode = @DirtyCode and CityName = @DirtyName", sqlDirtyParams);
+                    m_ObjSql.ExecuteCommand("insert into Data_City values(@Code,@Name)", sqlparams);
                     value.eDbState = DbStateFlag.eDbOK;
                 }
                 m_lstCityCode[i] = value;

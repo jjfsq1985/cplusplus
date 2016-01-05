@@ -12,10 +12,10 @@ namespace ApduParam
 
     public class MsgOutEvent : EventArgs
     {
-        private int m_nErrorCode = 0;
-        public int ErrCode
+        private int m_nErrorColor = 0;
+        public int ErrColor
         {
-            get { return m_nErrorCode; }            
+            get { return m_nErrorColor; }            
         }
 
         private string m_strMessage = "";
@@ -24,9 +24,9 @@ namespace ApduParam
             get { return m_strMessage; }            
         }
 
-        public MsgOutEvent(int nErr, string strMsg)
+        public MsgOutEvent(int nErrClr, string strMsg)
         {
-            m_nErrorCode = nErr;
+            m_nErrorColor = nErrClr;
             m_strMessage = strMsg;
         }
     }

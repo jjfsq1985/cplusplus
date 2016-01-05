@@ -2,7 +2,7 @@ USE [FunnettStation]
 GO
 
 if exists (select * from sysobjects where id = object_id(N'PROC_GetGrayRecord') and type in (N'P', N'PC'))
-drop procedure PROC_GetGrayRecord                                                                        
+drop procedure PROC_GetGrayRecord
 GO
 
 SET ANSI_NULLS ON
@@ -42,7 +42,8 @@ CREATE PROCEDURE PROC_GetGrayRecord(
 	--开始事务
 	begin tran maintran	
 	select @RecordCardId=FUserCardNo,@StationNo=FStationNO,@GunNo=FGunNo,@ConsumerTime=FTradeDateTime,
-			@Price=FPrice,@Gas=FGas,@Money=FMoney,@ResidualAmount=FResidualAmount from SC_ConsumerDetail where FUserCardNo = @CardId and FPSAM_TID = @PSAM_TID and FTAC=@GTAC and FRecordType = '1';
+			@Price=FPrice,@Gas=FGas,@Money=FMoney,@ResidualAmount=FResidualAmount 
+			from SC_ConsumerDetail where FUserCardNo = @CardId and FPSAM_TID = @PSAM_TID and FTAC=@GTAC and FRecordType = '01';
 	if(@@ERROR <> 0)
 		begin
 		rollback tran maintran

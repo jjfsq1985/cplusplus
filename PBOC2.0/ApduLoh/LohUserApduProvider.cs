@@ -499,6 +499,15 @@ namespace ApduLoh
             m_Data[65] = byteAmount[2];
             m_Data[66] = byteAmount[1];
             m_Data[67] = byteAmount[0];
+
+            //保留字段 占用8字节作为子卡的关联母卡 卡号
+            if (cardInfo.UserCardType == CardType.CompanySubCard)
+            {
+                byte[] motherCard = cardInfo.GetRelatedMotherCardID();
+                if (motherCard != null)
+                    Buffer.BlockCopy(motherCard, 0, m_Data, 75, 8);
+            }
+
             m_le = 0;
 
             m_nTotalLen = 101;

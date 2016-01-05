@@ -709,6 +709,14 @@ namespace ApduDaHua
             m_Data[66] = byteAmount[1];
             m_Data[67] = byteAmount[0];
 
+            //保留字段 占用8字节作为子卡的关联母卡 卡号
+            if (cardInfo.UserCardType == CardType.CompanySubCard)
+            {
+                byte[] motherCard = cardInfo.GetRelatedMotherCardID();
+                if (motherCard != null)
+                    Buffer.BlockCopy(motherCard, 0, m_Data, 75, 8);
+            }
+
             byte[] srcMacData = new byte[101]; //头5 +Data96
             srcMacData[0] = m_CLA;//不需要后半字节为4
             srcMacData[1] = m_INS;

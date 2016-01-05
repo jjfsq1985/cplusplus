@@ -223,6 +223,10 @@ namespace FNTMain
                 {
                     node.InnerText = Convert.ToBase64String(Encoding.ASCII.GetBytes(m_DbInfo.strUserPwd));
                 }
+                else
+                {
+                    node.InnerText = "";
+                }
                 dbRoot.AppendChild(node);
 
                 Root.AppendChild(dbRoot);
@@ -240,6 +244,10 @@ namespace FNTMain
                 if (!string.IsNullOrEmpty(m_DbInfo.strUserPwd))
                 {
                     node.InnerText = Convert.ToBase64String(Encoding.ASCII.GetBytes(m_DbInfo.strUserPwd));
+                }
+                else
+                {
+                    node.InnerText = "";
                 }
             }
             
@@ -268,6 +276,10 @@ namespace FNTMain
                 if (!string.IsNullOrEmpty(node.InnerText))
                 {
                     m_DbInfo.strUserPwd = Encoding.ASCII.GetString(Convert.FromBase64String(node.InnerText));
+                }
+                else 
+                {
+                    m_DbInfo.strUserPwd = "";
                 }
             }
             catch

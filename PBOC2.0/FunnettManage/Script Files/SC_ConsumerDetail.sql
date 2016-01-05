@@ -19,7 +19,7 @@ CREATE TABLE [dbo].[SC_ConsumerDetail](
 	[FStopDateTime] [datetime] NOT NULL,
 	[FSaveDateTime] [datetime] NULL,
 	[FTagNo] [varchar](36) NULL,
-	[FGunNo] [int] NULL,
+	[FGunNo] [int] NOT NULL,
 	[FSerialNo] [int] NULL,
 	[FStoredNo] [int] NULL,
 	[FGas] [decimal](15, 2) NULL,
@@ -97,10 +97,10 @@ CREATE TABLE [dbo].[SC_ConsumerDetail](
 	[FT_MAC] [varchar](10) NULL,
 	[FPriceVer] [varchar](3) NULL,
 	[FReGas] [decimal](18, 2) NULL,
- CONSTRAINT [PK_TFuelGas] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_SC_ConsumerDetail] PRIMARY KEY CLUSTERED 
 (
-	[FGUID] ASC,
-	[FUserCardNo] ASC
+	[FTradeDateTime] ASC,
+	[FGunNo] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
@@ -277,15 +277,6 @@ GO
 ALTER TABLE [dbo].[SC_ConsumerDetail] CHECK CONSTRAINT [CKC_FUPFLAG_SC_CONSU]
 GO
 
-ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FTrad__25918339]  DEFAULT ('0') FOR [FTradeDateTime]
-GO
-
-ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FStop__2685A772]  DEFAULT ('0') FOR [FStopDateTime]
-GO
-
-ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FSave__2779CBAB]  DEFAULT ('0') FOR [FSaveDateTime]
-GO
-
 ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FTagN__286DEFE4]  DEFAULT ('0') FOR [FTagNo]
 GO
 
@@ -334,7 +325,7 @@ GO
 ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FOper__36BC0F3B]  DEFAULT ('0') FOR [FOperatorCardNo]
 GO
 
-ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FReco__37B03374]  DEFAULT ('0') FOR [FRecordType]
+ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FReco__37B03374]  DEFAULT ('00') FOR [FRecordType]
 GO
 
 ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FStar__38A457AD]  DEFAULT ('0') FOR [FStartWay]
@@ -394,7 +385,7 @@ GO
 ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FComI__49CEE3AF]  DEFAULT ('0') FOR [FComID]
 GO
 
-ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FRFID__4AC307E8]  DEFAULT ('00000') FOR [FRFID]
+ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FRFID__4AC307E8]  DEFAULT ('0000000000000000') FOR [FRFID]
 GO
 
 ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FRFID__4CAB505A]  DEFAULT ('³µÅÆºÅ') FOR [FRFIDCarNo]
@@ -429,5 +420,6 @@ GO
 
 ALTER TABLE [dbo].[SC_ConsumerDetail] ADD  CONSTRAINT [DF__SC_Consum__FOper__5728DECD]  DEFAULT ('tester') FOR [FOperatorName]
 GO
+
 
 

@@ -63,10 +63,23 @@ CREATE PROCEDURE PROC_PublishPsamCard(
 		    return 4
 		    end		
 			--插入修改卡信息的记录
-			set @LogContent = '修改卡信息：' + '所属单位' + convert(varchar(10),@SrcClientId) + '->' + convert(varchar(10),@ClientId) + ';';
-			set @LogContent	= 	@LogContent + '原始密钥' + @SrcOrgKey + '->' + @OrgKey + ';';
-			set @LogContent	= 	@LogContent + '主控密钥' + @SrcPsamMasterKey + '->' + @PsamMasterKey + ';';
-			set @LogContent	= 	@LogContent + 'MAC或加密密钥' + @SrcAppMADKey + '->' + @AppMADKey + ';';
+			set @LogContent = '修改PSAM卡的卡信息：';
+			if(@SrcClientId <> @ClientId)
+				set @LogContent = @LogContent + '所属单位' + convert(varchar(10),@SrcClientId) + '->' + convert(varchar(10),@ClientId) + ';';
+			else
+				set @LogContent = @LogContent + '所属单位' + convert(varchar(10),@ClientId) + ';';
+			if(@SrcOrgKey <> @OrgKey)
+				set @LogContent	= 	@LogContent + '原始密钥' + @SrcOrgKey + '->' + @OrgKey + ';';
+			else
+				set @LogContent	= 	@LogContent + '原始密钥' + @OrgKey + ';';
+			if(@SrcPsamMasterKey <> @PsamMasterKey)
+				set @LogContent	= 	@LogContent + '主控密钥' + @SrcPsamMasterKey + '->' + @PsamMasterKey + ';';
+			else
+				set @LogContent	= 	@LogContent + '主控密钥' + @PsamMasterKey + ';';
+				if(@SrcAppMADKey <> @SrcAppMADKey)
+			set @LogContent	= 	@LogContent + 'MAC或加密密钥' + @SrcAppMADKey + '->' + @SrcAppMADKey + ';';
+						else
+				set @LogContent	= 	@LogContent + 'MAC或加密密钥' + @SrcAppMADKey + ';';
 			set @LogContent	= 	@LogContent + '终端机编号' + @TerminalId + ';';
 			set @LogContent	= 	@LogContent + '发行方' + @CompanyFrom + ';';
 			set @LogContent	= 	@LogContent + '接收方' + @CompanyTo + ';';				             

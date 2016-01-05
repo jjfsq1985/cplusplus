@@ -4,6 +4,7 @@ using System.Text;
 using System.Data.SqlClient;
 using SqlServerHelper;
 using System.Data;
+using System.Drawing;
 using IFuncPlugin;
 using ApduParam;
 using ApduInterface;
@@ -74,7 +75,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "SAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "SAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
                 return false;
             }
             else
@@ -97,7 +98,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "SAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "SAM卡选择" + GetFileDescribe(byteArray) + "文件失败"));
                 return false;
             }
             else
@@ -120,7 +121,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "获取随机值失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "获取随机值失败"));
                 return null;
             }
             else
@@ -165,7 +166,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "外部认证失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "外部认证失败"));
                 return false;
             }
             else
@@ -210,7 +211,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "初始化失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "初始化失败"));
                 return false;
             }
             else
@@ -313,7 +314,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "创建Key文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "创建Key文件失败"));
                 return false;
             }
             else
@@ -337,7 +338,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "创建FCI文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "创建FCI文件失败"));
                 return false;
             }
             else
@@ -360,7 +361,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "安装FCI文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "安装FCI文件失败"));
                 return false;
             }
             else
@@ -384,7 +385,7 @@ namespace DaHuaApduCtrl
             if (nRet < 0)
             {
                 string strMsg = string.Format("创建文件{0}失败", FileId.ToString("X"));
-                OnTextOutput(new MsgOutEvent(nRet, strMsg));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), strMsg));
                 return false;
             }
             else
@@ -445,7 +446,7 @@ namespace DaHuaApduCtrl
             if (nRet < 0)
             {
                 string strMessage = string.Format("SAM卡选择{0}失败", GetFileName(FileId, bMainKey));
-                OnTextOutput(new MsgOutEvent(nRet, strMessage));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), strMessage));
                 return false;
             }
             else
@@ -469,7 +470,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "写入卡片公共信息失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "写入卡片公共信息失败"));
                 return false;
             }
             else
@@ -492,7 +493,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "写入终端信息失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "写入终端信息失败"));
                 return false;
             }
             else
@@ -570,7 +571,7 @@ namespace DaHuaApduCtrl
             if (nRet < 0)
             {
                 string strMessage = string.Format("创建{0}文件失败", GetFileDescribe(byteName));
-                OnTextOutput(new MsgOutEvent(nRet, strMessage));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), strMessage));
                 return false;
             }
             else
@@ -614,7 +615,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "写入应用公共信息失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "写入应用公共信息失败"));
                 return false;
             }
             else
@@ -637,7 +638,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "写MAC2文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "写MAC2文件失败"));
                 return false;
             }
             else
@@ -663,7 +664,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen,RecvData,ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "生命周期转换失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "生命周期转换失败"));
                 return false;
             }
             else
@@ -774,7 +775,7 @@ namespace DaHuaApduCtrl
             if (nRet < 0)
             {
                 string strMessage = string.Format("写入{0}失败", GetKeyName(Usage, Ver, bMainKey));
-                OnTextOutput(new MsgOutEvent(nRet, strMessage));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), strMessage));
                 return false;
             }
             else
@@ -874,7 +875,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "SAM卡MAC1计算失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "SAM卡MAC1计算失败"));
                 return false;
             }
             else
@@ -981,7 +982,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "SAM卡普通消费MAC1计算失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "SAM卡普通消费MAC1计算失败"));
                 return false;
             }
             else
@@ -1071,7 +1072,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "SAM卡验证MAC2失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "SAM卡验证MAC2失败"));
                 return false;
             }
             else
@@ -1094,7 +1095,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "SAM卡计算GMAC失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "SAM卡计算GMAC失败"));
                 return false;
             }
             else
@@ -1285,7 +1286,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.SAMCmdExchange(bSamSlot, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "SAM卡读取终端机编号失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "SAM卡读取终端机编号失败"));
                 return null;
             }
             else
@@ -1315,7 +1316,7 @@ namespace DaHuaApduCtrl
             if (nRet < 0)
             {
                 if (bMessage)
-                    OnTextOutput(new MsgOutEvent(nRet, "读取卡号失败"));
+                    OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "读取卡号失败"));
                 return null;
             }
             else
@@ -1436,7 +1437,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "通用DES计算初始化失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "通用DES计算初始化失败"));
                 return false;
             }
             else
@@ -1459,7 +1460,7 @@ namespace DaHuaApduCtrl
             int nRet = m_ctrlApdu.IccCmdExchange(data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "通用DES计算失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "通用DES计算失败"));
                 return null;
             }
             else

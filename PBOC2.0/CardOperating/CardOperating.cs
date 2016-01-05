@@ -129,15 +129,28 @@ namespace CardOperating
         }
         */
 
-        private void WriteMsg(int nErr, string strMsg)
+        private void WriteMsg(int nErrColor, string strMsg)
         {
             string strTextOut = "";
-            if (nErr < 0)
-                strTextOut = strMsg + " 错误码：" + nErr.ToString("X4") + "\n";
-            else
+            if (nErrColor != 0)
+            {
+                int nTextLen = OutputText.TextLength;
                 strTextOut = strMsg + "\n";
-
-            OutputText.AppendText(strTextOut);
+                OutputText.AppendText(strTextOut);
+                OutputText.Select(nTextLen, strMsg.Length + 1);
+                OutputText.SelectionColor = System.Drawing.Color.FromArgb(nErrColor);
+            }
+            else
+            {
+                int nTextLen = OutputText.TextLength;
+                strTextOut = strMsg + "\n";
+                OutputText.AppendText(strTextOut);
+                OutputText.Select(nTextLen, strMsg.Length + 1);
+                if (strMsg.Contains("应答") && !strMsg.EndsWith("9000"))
+                    OutputText.SelectionColor = Color.RoyalBlue;
+                else
+                    OutputText.SelectionColor = Color.Black;
+            }
             OutputText.Refresh();
             OutputText.ScrollToCaret();
         }
@@ -177,12 +190,15 @@ namespace CardOperating
             }
             if(!m_DevControl.Open_Device())
             {
-                WriteMsg(0, "建立连接失败");
+                WriteMsg(Color.Red.ToArgb(), "建立连接失败");
                 btnDisconnect.Enabled = false;
             }
             else
-            {
-                WriteMsg(0, "建立连接成功");
+            {                
+                if(cmbDevType.SelectedIndex != 0)
+                    WriteMsg(0, "建立连接成功，当前连接龙寰卡");
+                else
+                    WriteMsg(0, "建立连接成功，当前连接达华卡");
                 cmbDevType.Enabled = false;
                 btnDisconnect.Enabled = true;
             }
@@ -210,7 +226,7 @@ namespace CardOperating
                 bool bRet = m_DevControl.OpenContactCard(ref cardInfo);                
                 if(!bRet)
                 {
-                    WriteMsg(0, "接触式用户卡打开失败");
+                    WriteMsg(Color.Red.ToArgb(), "接触式用户卡打开失败");
                     return;
                 }
             }
@@ -219,13 +235,20 @@ namespace CardOperating
                 bool bRet = m_DevControl.OpenCard(ref cardInfo);
                 if (!bRet)
                 {
-                    WriteMsg(0, "非接触式用户卡打开失败");
+                    WriteMsg(Color.Red.ToArgb(), "非接触式用户卡打开失败");
                     return;
                 }
-
             }
-            WriteMsg(0, "用户卡打开成功");
-            WriteMsg(0, "卡信息：" + cardInfo);           
+
+            int nCardType = 0;
+            if(ContactCard.Checked)
+                nCardType = 1;
+            string strCardDescribe = GetCardDescrib(cardInfo, cmbDevType.SelectedIndex, nCardType);
+            WriteMsg(0, "用户卡打开成功" );
+            if (string.IsNullOrEmpty(strCardDescribe))
+                WriteMsg(0, "卡信息：" + cardInfo);
+            else
+                WriteMsg(0, strCardDescribe);           
 
             m_UserCardCtrl = m_DevControl.UserCardConstructor(ContactCard.Checked,m_DBInfo);
             m_UserCardCtrl.TextOutput += new MessageOutput(OnMessageOutput);
@@ -249,7 +272,7 @@ namespace CardOperating
 
         private void OnMessageOutput(MsgOutEvent args)
         {
-            WriteMsg(args.ErrCode, args.Message);
+            WriteMsg(args.ErrColor, args.Message);
         }
 
         //删除白卡MF中的文件，只保留MF
@@ -361,6 +384,82 @@ namespace CardOperating
             WriteMsg(0, "卡信息写入数据库，结果：" + strSuccess);
         }
 
+        /// <summary>
+        /// 获取卡片厂商
+        /// </summary>
+        /// <param name="strHexInfo">Atr</param>
+        /// <param name="nDevType">设备类型 0 达华+ 明泰; 1 龙寰+DE620; 2 龙寰+明泰</param>
+        /// <param name="nCardType">0 非接cpu; 1 接触cpu; 2 psam卡</param>
+        /// <returns></returns>
+        private string GetCardDescrib(string strHexInfo, int nDevType, int nCardType)
+        {
+            string strInfo = "";
+            if (nDevType != 0)
+            {
+                //龙寰
+                switch(nCardType)
+                {
+                    case 0:
+                        {
+                            if(strHexInfo.Contains("4C4F48434F53"))//非接cpu卡"LOHCOS"
+                                strInfo = "龙寰-非接触CPU卡:" + strHexInfo;
+                            else
+                                strInfo = "未找到卡片信息:" + strHexInfo;
+                        }
+                        break;
+                    case 1:
+                        {
+                            if(strHexInfo.Contains("574454434844415441"))//接触cpu卡"WDTCHDATA"
+                               strInfo = "龙寰-接触式CPU卡:" + strHexInfo;
+                            else
+                                strInfo = "未找到卡片信息:" + strHexInfo;
+                        }
+                        break;
+                    case 2:
+                        {
+                            if(strHexInfo.Contains("53554E434F53"))//psam卡"SUNCOS"
+                                strInfo = "龙寰-PSAM卡:" + strHexInfo;
+                            else
+                                strInfo = "未找到卡片信息:" + strHexInfo;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                //达华
+                switch(nCardType)
+                {
+                    case 0:
+                        {
+                            if (strHexInfo.Contains("7A6A"))//非接cpu卡"zj"
+                                strInfo = "达华-非接触CPU卡:" + strHexInfo;
+                            else
+                                strInfo = "未找到卡片信息:" + strHexInfo;
+                        }
+                        break;
+                    case 1:
+                        {
+                            strInfo = "未找到卡片信息:" + strHexInfo;
+                        }
+                        break;
+                    case 2:
+                        {
+                            if(strHexInfo.Contains("52434F53"))//psam卡"RCOS"
+                                strInfo = "达华-PSAM卡:" + strHexInfo;
+                            else
+                                strInfo = "未找到卡片信息:" + strHexInfo;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return strInfo;
+        }
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////PSAM卡制卡///////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -373,13 +472,17 @@ namespace CardOperating
             bool bRet = m_DevControl.IccPowerOn(ref strCardInfo);
             if (!bRet)
             {
-                WriteMsg(0, "SAM卡复位失败");                
+                WriteMsg(Color.Red.ToArgb(), "SAM卡复位失败");                
                 return;
             }
             else
             {
                 WriteMsg(0, "SAM卡复位成功");
-                WriteMsg(0, "复位信息：" + strCardInfo);
+                string strCardDescribe = GetCardDescrib(strCardInfo, cmbDevType.SelectedIndex, 2);
+                if (string.IsNullOrEmpty(strCardDescribe))
+                    WriteMsg(0, "复位信息：" + strCardInfo);
+                else
+                    WriteMsg(0, strCardDescribe);
             }
 
             m_IccCardCtrl = m_DevControl.SamCardConstructor(m_DBInfo);
@@ -580,7 +683,7 @@ namespace CardOperating
                 return;
             if (!m_UserCardCtrl.HasLyKey())
             {
-                WriteMsg(0, "没有积分密钥不能建立积分应用。");
+                WriteMsg(Color.Red.ToArgb(), "没有积分密钥不能建立积分应用。");
                 return;
             }
             UserCardInfoParam cardInfo = m_CardUser.GetUserCardParam();

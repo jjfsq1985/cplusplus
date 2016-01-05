@@ -599,6 +599,61 @@ namespace CardOperating
             return nRet;
         }
 
+        /// <summary>
+        /// 获取卡片厂商
+        /// </summary>
+        /// <param name="strHexInfo">Atr</param>
+        /// <param name="nDevType">设备类型 0 达华+ 明泰; 1 龙寰+DE620; 2 龙寰+明泰</param>
+        /// <param name="nCardType">0 非接cpu; 1 接触cpu; 2 psam卡</param>
+        /// <returns></returns>
+        private string GetCardDescrib(string strHexInfo, int nDevType, int nCardType)
+        {
+            string strInfo = "";
+            if (nDevType != 0)
+            {
+                //龙寰
+                switch (nCardType)
+                {
+                    case 0:
+                        {
+                            if (strHexInfo.Contains("4C4F48434F53"))//非接cpu卡"LOHCOS"
+                                strInfo = "龙寰-非接触CPU卡:" + strHexInfo;
+                        }
+                        break;
+                    case 1:
+                        {
+                            if (strHexInfo.Contains("574454434844415441"))//接触cpu卡"WDTCHDATA"
+                                strInfo = "龙寰-接触式CPU卡:" + strHexInfo;
+                        }
+                        break;
+                    //PSAM卡不需要
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                //达华
+                switch (nCardType)
+                {
+                    case 0:
+                        {
+                            if (strHexInfo.Contains("7A6A"))//非接cpu卡"zj"
+                                strInfo = "达华-非接触CPU卡:" + strHexInfo;
+                        }
+                        break;
+                    case 1:
+                        {
+                        }
+                        break;
+                    //PSAM卡不需要
+                    default:
+                        break;
+                }
+            }
+            return strInfo;
+        }
+
         private bool OpenUserCard()
         {
             if (m_DevControl == null || !m_DevControl.IsDeviceOpen())
@@ -607,11 +662,26 @@ namespace CardOperating
                 return true;
             m_UserCardCtrl = m_DevControl.UserCardConstructor(ContactCard.Checked, m_DBInfo);
 
+            bool bRet = false;
             string cardInfo = "";
+            int nCardType = 0;
             if (ContactCard.Checked)
-                return m_DevControl.OpenContactCard(ref cardInfo);                
+            {
+                nCardType = 1;
+                bRet = m_DevControl.OpenContactCard(ref cardInfo);
+            }
             else
-                return m_DevControl.OpenCard(ref cardInfo);
+            {
+                nCardType = 0;
+                bRet = m_DevControl.OpenCard(ref cardInfo);
+            }
+            string strDescribe = GetCardDescrib(cardInfo, cmbDevType.SelectedIndex, nCardType);
+            if (string.IsNullOrEmpty(strDescribe))
+            {
+                MessageBox.Show("卡片标识未找到，请检查卡片与读卡器配置是否正确", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return bRet;
+            }
+            return bRet;
         }
 
         private bool CloseUserCard()
@@ -654,6 +724,15 @@ namespace CardOperating
             return true;
         }
 
+        private void CompareMotherCardId(string strMotherIdInCard, string strMotherIdInDb)
+        {
+            if (strMotherIdInCard != "FFFFFFFFFFFFFFFF" && strMotherIdInCard != strMotherIdInDb)
+            {
+                string strMsg = string.Format("关联的母卡卡号<font size =\"16\" color = \"red\">{0}</font>与数据库中的不一致，请检查。", strMotherIdInCard);
+                MyMessageBox.Show(strMsg, "提示", MyMessageBox.MyMsgButtons.OK, MyMessageBox.MyMsgIcon.Error);
+            }
+        }
+
         private void ReadCardInfoFormDb(byte[] CardId, UserCardInfoParam CardInfo)
         {
             if (CardId == null)
@@ -683,10 +762,28 @@ namespace CardOperating
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("RelatedMotherCard")))
                     {
                         string strMotherCard = (string)dataReader["RelatedMotherCard"];
-                        if(strMotherCard != new string(' ',16))//母卡为空时，读取到的卡号为16个空格
-                            CardInfo.SetMotherCard(strMotherCard);
+                        if (strMotherCard != new string(' ', 16))//母卡为空时，读取到的卡号为16个空格\
+                        {                            
+                            if (CardInfo.UserCardType == CardType.CompanySubCard)
+                            {                                
+                                string strMotherIdInCard = BitConverter.ToString(CardInfo.GetRelatedMotherCardID()).Replace("-", "");
+                                CompareMotherCardId(strMotherIdInCard,strMotherCard);
+                                CardInfo.SetMotherCard(strMotherCard);
+                            }
+                            else
+                            {
+                                CardInfo.SetMotherCard("");//非子卡设置母卡为空
+                            }
+                        }
                         else
-                            CardInfo.SetMotherCard("");
+                        {
+                            if (CardInfo.UserCardType == CardType.CompanySubCard)
+                            {
+                                string strMotherIdInCard = BitConverter.ToString(CardInfo.GetRelatedMotherCardID()).Replace("-", "");
+                                CompareMotherCardId(strMotherIdInCard, strMotherCard);
+                            }
+                            CardInfo.SetMotherCard("");//都设置母卡为空
+                        }
                     }
                     if (!dataReader.IsDBNull(dataReader.GetOrdinal("DriverTel")))
                         CardInfo.TelePhone = (string)dataReader["DriverTel"];
@@ -1051,6 +1148,9 @@ namespace CardOperating
 
         private void btnModifyCard_Click(object sender, EventArgs e)
         {
+            byte[] UserCardId = m_CardInfoPar.GetUserCardID();
+            if (UserCardId == null)
+                return;
             //获取卡信息修改，更新卡片文件，成功后写入数据库
             SaveCardInfoParam();
             if (MessageBox.Show("是否更新卡片？", "确认", MessageBoxButtons.YesNo) == DialogResult.No)
@@ -1147,8 +1247,8 @@ namespace CardOperating
                         strTemp = "充值";
                     }
 
-                    string strMoneyMessage = "<font size =\"18\" color = \"red\">" + dbMoneyLoad.ToString("F2") + "</font>";
-                    string strMsg = "确实要对" + strCardType + BitConverter.ToString(ASN).Replace("-", "") + strTemp + strMoneyMessage + "元吗？";
+                    string strMoneyMessage = "<font size =\"18\" color = \"red\">" + dbMoneyLoad.ToString("F2") + "元</font>";
+                    string strMsg = "确实要对" + strCardType + BitConverter.ToString(ASN).Replace("-", "") + strTemp + strMoneyMessage + "吗？";
                     if (MyMessageBox.Show(strMsg, "卡充值", MyMessageBox.MyMsgButtons.YesNo) == DialogResult.No)
                     {
                         return;
@@ -1828,8 +1928,8 @@ namespace CardOperating
                     return;
                 }
                 LoadUserCard(TerminalId, ASN, dbMoneyLoad,ExchangeType.SlaveLoad);
-                //单位母卡金额减掉
-                SaveCardValueToDb(MotherAsn, dbBalance - dbMoneyLoad, "AccountBalance");
+                //单位母卡金额减掉(2015-12-18 接收到交易记录后由站控减掉，防止圈到子卡的资金不能得到有效利用)
+                //SaveCardValueToDb(MotherAsn, dbBalance - dbMoneyLoad, "AccountBalance");
             }
             else if(ASN[3] == 0x21)
             {
@@ -1891,8 +1991,8 @@ namespace CardOperating
                         MessageBox.Show("PSAM卡验证失败，不能圈存", "积分充值", MessageBoxButtons.OK);
                         return;
                     }
-                    string strLoyaltyMessage = "<font size =\"18\" color = \"red\">" + LoadLoyalty.ToString() + "</font>";
-                    string strMsg = "确实要对用户卡" + BitConverter.ToString(ASN).Replace("-", "") + "充值" + strLoyaltyMessage + "积分吗？";
+                    string strLoyaltyMessage = "<font size =\"18\" color = \"red\">" + LoadLoyalty.ToString() + "积分</font>";
+                    string strMsg = "确实要对用户卡" + BitConverter.ToString(ASN).Replace("-", "") + "充值" + strLoyaltyMessage + "吗？";
                     if (MyMessageBox.Show(strMsg, "积分充值", MyMessageBox.MyMsgButtons.YesNo) == DialogResult.No)
                     {
                         return;

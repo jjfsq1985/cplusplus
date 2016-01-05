@@ -70,6 +70,12 @@
     <Compile Include="CardInfo\IccCardInfo.Designer.cs">
       <DependentUpon>IccCardInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="OneKeyMadeCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OneKeyMadeCard.Designer.cs">
+      <DependentUpon>OneKeyMadeCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CardInfo\UserCardInfo.cs">
       <SubType>Form</SubType>
@@ -129,6 +135,9 @@
     <EmbeddedResource Include="CardInfo\UserCardInfo.resx">
       <SubType>Designer</SubType>
       <DependentUpon>UserCardInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OneKeyMadeCard.resx">
+      <DependentUpon>OneKeyMadeCard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

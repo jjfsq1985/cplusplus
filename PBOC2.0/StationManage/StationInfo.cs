@@ -24,6 +24,7 @@ namespace StationManage
         private List<ClientParam> m_lstClient = new List<ClientParam>();
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
         private int m_nStationAuthority = 0;
+        private Dictionary<string, string> m_DirtyData = new Dictionary<string, string>();//Key为编辑后的StationId, Value为原始StationId
 
         private void DealErr(object sender, DataGridViewDataErrorEventArgs e)
         {
@@ -240,6 +241,7 @@ namespace StationManage
                     SaveStationInfoDataToDb();
                 }
             }
+            m_DirtyData.Clear();
             StationView.Dispose();
             m_lstStationParam.Clear();
             if (m_ObjSql != null)
@@ -520,6 +522,13 @@ namespace StationManage
                 StationView.Rows[nRowIndex - 1].Cells[0].Selected = true;
         }
 
+        private void StationIdToDictionary(int nIndex)
+        {
+            string strStationId = BitConverter.ToString(m_lstStationParam[nIndex].StationId).Replace("-", "");
+            if (!m_DirtyData.ContainsKey(strStationId))
+                m_DirtyData.Add(strStationId, strStationId);
+        }
+
         private void StationView_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
             if (StationView.CurrentCell == null)
@@ -565,6 +574,7 @@ namespace StationManage
                             if (bAdd)
                             {
                                 StationParam newVal = new StationParam();
+                                newVal.nDataGridViewRowIndex = nRowIndex; 
                                 newVal.eDbState = DbStateFlag.eDbAdd;
                                 newVal.strStationName = "";
                                 Buffer.BlockCopy(codebyte, 0, newVal.StationId,0,4);                                
@@ -573,9 +583,30 @@ namespace StationManage
                         }
                         else if (!PublicFunc.ByteDataEquals(m_lstStationParam[nListIndex].StationId, codebyte))
                         {
-                            Buffer.BlockCopy(codebyte, 0, m_lstStationParam[nListIndex].StationId, 0, 4);                            
+                            string strStationId = BitConverter.ToString(m_lstStationParam[nListIndex].StationId).Replace("-", "");
+                            Buffer.BlockCopy(codebyte, 0, m_lstStationParam[nListIndex].StationId, 0, 4);
                             if (m_lstStationParam[nListIndex].eDbState == DbStateFlag.eDbOK)
+                            {
                                 m_lstStationParam[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                                string strNewStationID = BitConverter.ToString(m_lstStationParam[nListIndex].StationId).Replace("-", "");
+                                //使用NewStationID为Key,方便存储到数据库时对应到原来的StaionId
+                                if (m_DirtyData.ContainsValue(strStationId))
+                                {
+                                    foreach(KeyValuePair<string,string> kv in m_DirtyData)
+                                    {
+                                        if(kv.Value == strStationId)
+                                        {
+                                            m_DirtyData.Remove(kv.Key);
+                                            break;
+                                        }
+                                    }                                    
+                                    m_DirtyData.Add(strNewStationID,strStationId);
+                                }
+                                else
+                                {
+                                    m_DirtyData.Add(strNewStationID,strStationId);
+                                }
+                            }
                         }
                     }
                     break;
@@ -605,6 +636,7 @@ namespace StationManage
                             if (bAdd)
                             {
                                 StationParam newVal = new StationParam();
+                                newVal.nDataGridViewRowIndex = nRowIndex; 
                                 newVal.eDbState = DbStateFlag.eDbAdd;
                                 newVal.strStationName = strInput;
                                 newVal.CityCode[0] = 0;
@@ -616,7 +648,10 @@ namespace StationManage
                         {
                             m_lstStationParam[nListIndex].strStationName = strInput;
                             if (m_lstStationParam[nListIndex].eDbState == DbStateFlag.eDbOK)
+                            {
                                 m_lstStationParam[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                                StationIdToDictionary(nListIndex);
+                            }
                         }
                     }
                     break;
@@ -625,7 +660,10 @@ namespace StationManage
                     {
                         m_lstStationParam[nListIndex].ProvCode = GetProvCode(strInput);
                         if (m_lstStationParam[nListIndex].eDbState == DbStateFlag.eDbOK)
+                        {
                             m_lstStationParam[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                            StationIdToDictionary(nListIndex);                             
+                        }
                     }
                     break;
                 case 3:
@@ -636,7 +674,10 @@ namespace StationManage
                         m_lstStationParam[nListIndex].CityCode[0] = codeByte[0];
                         m_lstStationParam[nListIndex].CityCode[1] = codeByte[1];
                         if (m_lstStationParam[nListIndex].eDbState == DbStateFlag.eDbOK)
+                        {
                             m_lstStationParam[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                            StationIdToDictionary(nListIndex);
+                        }
                     }
                     break;
                 case 4:
@@ -647,7 +688,10 @@ namespace StationManage
                         m_lstStationParam[nListIndex].SuperiorCode[0] = codeByte[0];
                         m_lstStationParam[nListIndex].SuperiorCode[1] = codeByte[1];
                         if (m_lstStationParam[nListIndex].eDbState == DbStateFlag.eDbOK)
+                        {
                             m_lstStationParam[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                            StationIdToDictionary(nListIndex);
+                        }
                     }
                     break;
                 case 5:
@@ -655,7 +699,10 @@ namespace StationManage
                     {
                         m_lstStationParam[nListIndex].ClientID = GetClientID(strInput);
                         if (m_lstStationParam[nListIndex].eDbState == DbStateFlag.eDbOK)
+                        {
                             m_lstStationParam[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                            StationIdToDictionary(nListIndex);
+                        }
                     }
                     break;
             }
@@ -685,31 +732,46 @@ namespace StationManage
 
         private void SaveStationInfoDataToDb()
         {
-            SqlParameter[] sqlparams = new SqlParameter[6];
             List<StationParam> deleteLst = new List<StationParam>();
             int nCount = m_lstStationParam.Count;
             for (int i = 0; i < nCount; i++)
             {
                 StationParam value = m_lstStationParam[i];
-                sqlparams[0] = m_ObjSql.MakeParam("StationId", SqlDbType.Char, 8, ParameterDirection.Input, BitConverter.ToString(value.StationId).Replace("-", ""));
-                sqlparams[1] = m_ObjSql.MakeParam("StationName", SqlDbType.NVarChar, 50, ParameterDirection.Input, value.strStationName);
-                sqlparams[2] = m_ObjSql.MakeParam("ProvCode", SqlDbType.Char, 2, ParameterDirection.Input, value.ProvCode.ToString("X2"));
-                sqlparams[3] = m_ObjSql.MakeParam("CityCode", SqlDbType.Char, 4, ParameterDirection.Input, BitConverter.ToString(value.CityCode).Replace("-", ""));
-                sqlparams[4] = m_ObjSql.MakeParam("SuperiorCode", SqlDbType.Char, 4, ParameterDirection.Input, BitConverter.ToString(value.SuperiorCode).Replace("-", ""));
-                sqlparams[5] = m_ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, value.ClientID);
+                string strStationId = BitConverter.ToString(value.StationId).Replace("-", "");
                 if (value.eDbState == DbStateFlag.eDbAdd)
                 {
+                    SqlParameter[] sqlparams = new SqlParameter[6];
+                    sqlparams[0] = m_ObjSql.MakeParam("StationId", SqlDbType.Char, 8, ParameterDirection.Input, strStationId);
+                    sqlparams[1] = m_ObjSql.MakeParam("StationName", SqlDbType.NVarChar, 50, ParameterDirection.Input, value.strStationName);
+                    sqlparams[2] = m_ObjSql.MakeParam("ProvCode", SqlDbType.Char, 2, ParameterDirection.Input, value.ProvCode.ToString("X2"));
+                    sqlparams[3] = m_ObjSql.MakeParam("CityCode", SqlDbType.Char, 4, ParameterDirection.Input, BitConverter.ToString(value.CityCode).Replace("-", ""));
+                    sqlparams[4] = m_ObjSql.MakeParam("SuperiorCode", SqlDbType.Char, 4, ParameterDirection.Input, BitConverter.ToString(value.SuperiorCode).Replace("-", ""));
+                    sqlparams[5] = m_ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, value.ClientID);
                     m_ObjSql.ExecuteCommand("insert into Base_Station values(@StationId,@StationName,@ProvCode,@CityCode,@SuperiorCode,@ClientId,0)", sqlparams);
                     value.eDbState = DbStateFlag.eDbOK;
                 }
                 else if (value.eDbState == DbStateFlag.eDbDelete)
                 {
+                    SqlParameter[] sqlparams = new SqlParameter[2];
+                    if (m_DirtyData.ContainsKey(strStationId))
+                        sqlparams[0] = m_ObjSql.MakeParam("StationId", SqlDbType.Char, 8, ParameterDirection.Input, m_DirtyData[strStationId]);//使用原始StationID
+                    else
+                        sqlparams[0] = m_ObjSql.MakeParam("StationId", SqlDbType.Char, 8, ParameterDirection.Input, strStationId);
+                    sqlparams[1] = m_ObjSql.MakeParam("StationName", SqlDbType.NVarChar, 50, ParameterDirection.Input, value.strStationName);
                     m_ObjSql.ExecuteCommand("delete from Base_Station where StationId = @StationId and StationName = @StationName", sqlparams);
                     deleteLst.Add(value);
                 }
                 else if (value.eDbState == DbStateFlag.eDbDirty)
                 {
-                    m_ObjSql.ExecuteCommand("update Base_Station set StationId = @StationId, StationName = @StationName, Prov = @ProvCode, City=@CityCode, SuperiorId=@SuperiorCode, ClientId=@ClientId", sqlparams);
+                    SqlParameter[] sqlparams = new SqlParameter[7];
+                    sqlparams[0] = m_ObjSql.MakeParam("StationId", SqlDbType.Char, 8, ParameterDirection.Input, strStationId);
+                    sqlparams[1] = m_ObjSql.MakeParam("StationName", SqlDbType.NVarChar, 50, ParameterDirection.Input, value.strStationName);
+                    sqlparams[2] = m_ObjSql.MakeParam("ProvCode", SqlDbType.Char, 2, ParameterDirection.Input, value.ProvCode.ToString("X2"));
+                    sqlparams[3] = m_ObjSql.MakeParam("CityCode", SqlDbType.Char, 4, ParameterDirection.Input, BitConverter.ToString(value.CityCode).Replace("-", ""));
+                    sqlparams[4] = m_ObjSql.MakeParam("SuperiorCode", SqlDbType.Char, 4, ParameterDirection.Input, BitConverter.ToString(value.SuperiorCode).Replace("-", ""));
+                    sqlparams[5] = m_ObjSql.MakeParam("ClientId", SqlDbType.Int, 4, ParameterDirection.Input, value.ClientID);
+                    sqlparams[6] = m_ObjSql.MakeParam("KeyStationId", SqlDbType.Char, 8, ParameterDirection.Input, m_DirtyData[strStationId]);
+                    m_ObjSql.ExecuteCommand("update Base_Station set StationId = @StationId, StationName = @StationName, Prov = @ProvCode, City=@CityCode, SuperiorId=@SuperiorCode, ClientId=@ClientId where StationId = @KeyStationId", sqlparams);
                     value.eDbState = DbStateFlag.eDbOK;
                 }
                 m_lstStationParam[i] = value;

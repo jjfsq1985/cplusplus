@@ -159,11 +159,13 @@ namespace IFuncPlugin
 
     public enum MenuType
     {
+        eUnknown = 0,
         eSystemAccount, //账户管理
         eClientInfo,       //单位信息
         eStationInfo,       //站点信息
         eRechargeList,   //充值记录        
         eCardOperating,      //制卡操作
+        eOneKeyMadeCard,  //一键制卡
         eCardPublish,      //卡信息读写
         eOrgKeyManage, //初始卡密钥
         ePsamKeyManage,  //PSAM卡密钥

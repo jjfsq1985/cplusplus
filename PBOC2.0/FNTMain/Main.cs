@@ -126,6 +126,12 @@ namespace FNTMain
                         CardOperatingMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnCardOperating_Click));
                     }                    
                     break;
+                case MenuType.eOneKeyMadeCard:
+                    if (HaveManagementCardAuthority())
+                    {
+                        CardOperatingMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnOneKeyCard_Click));
+                    }  
+                    break;
                 case MenuType.eCardPublish:
                     CardOperatingMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnCardPublish_Click));
                     break;
@@ -144,8 +150,13 @@ namespace FNTMain
                 case MenuType.eImportKeyXml:
                     OptionMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnImportKey_Click));//密钥导入
                     break;
-                default:
+                case MenuType.eUserKeysManage:
+                case MenuType.ePsamKeyManage:
+                case MenuType.eOrgKeyManage:
+                case MenuType.eExportKeyXml:
                     break;
+                default:
+                    return;
             }
 
             if (HaveManagementCardAuthority())
@@ -179,7 +190,6 @@ namespace FNTMain
                         default:
                              break;
                      }
-
                  }
 
                  if (KeyManageMenuCount == 4)
@@ -194,7 +204,7 @@ namespace FNTMain
 
             MethodInfo PluginGuid = t.GetMethod("PluginGuid");
             Guid plugGuid = (Guid)PluginGuid.Invoke(pluginObj, null);
-            m_Plugins.Add(plugGuid, new PluginInfo(t.Assembly.Location, strPluginName));         
+            m_Plugins.Add(plugGuid, new PluginInfo(t.Assembly.Location, strPluginName));
         }
 
         private object GetObject(Guid guidVal,string strPathName)
@@ -301,13 +311,48 @@ namespace FNTMain
             ShowPluginForm.Invoke(RechargeInfoObj, new object[] { MainPanel, m_dbConnectInfo });    
         }
 
+        private void OnOneKeyCard_Click(object sender, EventArgs e)
+        {
+            if (!HaveManagementCardAuthority())
+                return;
+
+            Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");//逐步制卡
+            Guid OneKeyCard = new Guid("467991AA-6FD8-4bcb-93F5-3931434469B6");//一键制卡
+            Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");
+            if (!m_Plugins.ContainsKey(OneKeyCard))
+                return;
+            if (FindChildForm(m_Plugins[OneKeyCard].strPluginName))
+                return;
+
+            if (m_Plugins.ContainsKey(CardPublish) && FindChildForm(m_Plugins[CardPublish].strPluginName))
+            {
+                MessageBox.Show("请先关闭卡信息维护界面，然后才能打开一键制卡界面", "注意");
+                return;
+            }
+            else if (m_Plugins.ContainsKey(CardOperating) && FindChildForm(m_Plugins[CardOperating].strPluginName))
+            {
+                MessageBox.Show("请先关闭逐步制卡界面，然后才能打开一键制卡界面", "注意");
+                return;
+            }
+
+            object OneKeyObj = GetObject(OneKeyCard, m_Plugins[OneKeyCard].strPluginPath);
+            if (OneKeyObj == null)
+                return;
+            Type t = OneKeyObj.GetType();
+            MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
+            MethodInfo SetAuthority = t.GetMethod("SetAuthority");
+            SetAuthority.Invoke(OneKeyObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
+            ShowPluginForm.Invoke(OneKeyObj, new object[] { MainPanel, m_dbConnectInfo });    
+        }
+
         //制卡操作，内部使用
         private void OnCardOperating_Click(object sender, EventArgs e)
         {
             if (!HaveManagementCardAuthority())
                 return;
 
-            Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");
+            Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");//逐步制卡
+            Guid OneKeyCard = new Guid("467991AA-6FD8-4bcb-93F5-3931434469B6");//一键制卡
             Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");
             if (!m_Plugins.ContainsKey(CardOperating))
                 return;
@@ -316,7 +361,12 @@ namespace FNTMain
 
             if (m_Plugins.ContainsKey(CardPublish) && FindChildForm(m_Plugins[CardPublish].strPluginName))
             {
-                MessageBox.Show("请先关闭卡信息维护界面，然后才能打开制发卡界面","注意");
+                MessageBox.Show("请先关闭卡信息维护界面，然后才能打开逐步制卡界面", "注意");
+                return;
+            }
+            else if (m_Plugins.ContainsKey(OneKeyCard) && FindChildForm(m_Plugins[OneKeyCard].strPluginName))
+            {
+                MessageBox.Show("请先关闭一键制卡界面，然后才能打开逐步制卡界面", "注意");
                 return;
             }
 
@@ -332,7 +382,8 @@ namespace FNTMain
 
         private void OnCardPublish_Click(object sender, EventArgs e)
         {
-            Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");
+            Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");//逐步制卡
+            Guid OneKeyCard = new Guid("467991AA-6FD8-4bcb-93F5-3931434469B6");//一键制卡
             Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");
             if (!m_Plugins.ContainsKey(CardPublish))
                 return;
@@ -341,7 +392,12 @@ namespace FNTMain
 
             if (m_Plugins.ContainsKey(CardOperating) && FindChildForm(m_Plugins[CardOperating].strPluginName))
             {
-                MessageBox.Show("请先关闭制发卡界面，然后才能打开卡信息维护界面", "注意");
+                MessageBox.Show("请先关闭逐步制卡界面，然后才能打开卡信息维护界面", "注意");
+                return;
+            }
+            else if(m_Plugins.ContainsKey(OneKeyCard) && FindChildForm(m_Plugins[OneKeyCard].strPluginName))
+            {
+                MessageBox.Show("请先关闭一键制卡界面，然后才能打开卡信息维护界面", "注意");
                 return;
             }
 
@@ -653,6 +709,8 @@ namespace FNTMain
 
         private void Main_Load(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
+            
             GetUserAndAuthority(m_nLoginID);
             UserName.Text = "用户：" + m_strLoginName;
 
@@ -678,17 +736,28 @@ namespace FNTMain
             listSearchResult.Columns.Add("卡状态", 60);
 
             //搜索所有插件并显示菜单
+            Stopwatch wt = new Stopwatch();
+            wt.Start();
             LoadPlugin();
+            wt.Stop();
+
+            this.Cursor = Cursors.Default;
+
+            Trace.WriteLine("加载Plugin用时：" + wt.ElapsedMilliseconds + "毫秒");
         }
 
         private void cmbCondition_SelectedIndexChanged(object sender, EventArgs e)
         {
-            listSearchResult.Items.Clear();
-            listSearchResult.Columns.Clear();
             //清空textSearchContent内容，并限制输入
             textSearchContent.Text = "";
-
             int nSel = cmbCondition.SelectedIndex;
+            ResetListView(nSel);
+        }
+
+        private void ResetListView(int nSel)
+        {
+            listSearchResult.Items.Clear();
+            listSearchResult.Columns.Clear();
             switch (nSel)
             {
                 case 0:
@@ -717,7 +786,7 @@ namespace FNTMain
                         listSearchResult.Columns.Add("卡状态", 60);
                     }
                     break;
-                case 1: 
+                case 1:
                     textSearchContent.MaxLength = 16;
                     ChkSearchPsam.Visible = false;
                     ChkSearchPsam.Enabled = false;
@@ -875,18 +944,21 @@ namespace FNTMain
         }
 
         //模糊查询
-        private void SearchCommon(string strParamName, string strParamVal)
+        private void SearchCommon(string strParamName, string strParamVal, int nSel)
         {
+            ResetListView(nSel);
             SqlHelper ObjSql = new SqlHelper();
             if (!ObjSql.OpenSqlServerConnection(m_dbConnectInfo.strServerName, m_dbConnectInfo.strDbName, m_dbConnectInfo.strUser, m_dbConnectInfo.strUserPwd))
             {
                 ObjSql = null;
                 return;
             }
+            bool bAdd = false;
             SqlParameter[] sqlparams = new SqlParameter[1];
             sqlparams[0] = ObjSql.MakeParam("Search", SqlDbType.VarChar, 32, ParameterDirection.Input, "%" + strParamVal + "%");
             SqlDataReader dataReader = null;
-            ObjSql.ExecuteCommand("select * from Base_Card where " + strParamName + " like @Search", sqlparams, out dataReader);
+            //只取前1000行
+            ObjSql.ExecuteCommand("select top 1000 * from Base_Card where " + strParamName + " like @Search", sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows)
@@ -898,6 +970,16 @@ namespace FNTMain
                         ItemCard.SubItems.Add(strCardType);
                         string strClientName = GetClientName((int)dataReader["ClientId"]);
                         ItemCard.SubItems.Add(strClientName);
+
+                        if (strCardType == "单位子卡")
+                        {
+                            if (!bAdd)
+                            {
+                                listSearchResult.Columns.Add("关联母卡", 120);
+                                bAdd = true;
+                            }
+                        }
+
                         DateTime DateStart = (DateTime)dataReader["UseValidateDate"];
                         DateTime DateEnd = (DateTime)dataReader["UseInvalidateDate"];
                         ItemCard.SubItems.Add(DateStart.ToString("yyyyMMdd") + "-" + DateEnd.ToString("yyyyMMdd"));
@@ -943,6 +1025,12 @@ namespace FNTMain
 
                         string strCardState = GetCardState((int)dataReader["CardState"]);
                         ItemCard.SubItems.Add(strCardState);
+
+                        if (strCardType == "单位子卡")
+                        {                            
+                            string strMotherId = (string)dataReader["RelatedMotherCard"];
+                            ItemCard.SubItems.Add(strMotherId);
+                        }
 
                         string strCardId = (string)dataReader["CardNum"];
                         ItemCard.Text = strCardId;
@@ -1101,7 +1189,7 @@ namespace FNTMain
             if (ChkSearchPsam.Checked)
                 SearchPsam("ClientId", nClientId.ToString());
             else
-                SearchCommon("ClientId", nClientId.ToString());
+                SearchCommon("ClientId", nClientId.ToString(),3);
         }
 
         private void SearchByClientName(string strClientName, bool bSearchPsam)
@@ -1138,13 +1226,13 @@ namespace FNTMain
         private void SearchByPersionID(string strPersionID)
         {
             listSearchResult.Items.Clear();
-            SearchCommon("PersonalId", strPersionID);
+            SearchCommon("PersonalId", strPersionID,2);
         }
 
         private void SearchByName(string strDriverName)
         {
             listSearchResult.Items.Clear();
-            SearchCommon("DriverName", strDriverName);
+            SearchCommon("DriverName", strDriverName,1);
         }
 
         private void SearchByCardNum(string strCardId)
@@ -1153,7 +1241,7 @@ namespace FNTMain
             if (ChkSearchPsam.Checked)
                 SearchPsam("PsamId", strCardId);
             else
-                SearchCommon("CardNum", strCardId);
+                SearchCommon("CardNum", strCardId,0);
         }   
 
         private void ChkSearchPsam_CheckedChanged(object sender, EventArgs e)

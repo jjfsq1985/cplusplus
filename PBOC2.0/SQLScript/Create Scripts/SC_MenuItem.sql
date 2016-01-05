@@ -20,7 +20,8 @@ CREATE TABLE [dbo].[SC_MenuItem](
 	[FGunno] [int] NULL,
 	[FOperatorCard] [int] NULL,
 	[FCompanyid] [int] NULL,
-	[FDatetime] [int] NULL
+	[FDatetime] [int] NULL,
+	[FPlate] [int] NULL
 ) ON [PRIMARY]
 
 GO

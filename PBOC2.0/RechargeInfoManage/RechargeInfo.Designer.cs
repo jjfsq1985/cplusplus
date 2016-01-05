@@ -34,6 +34,11 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.btnPrevPage = new System.Windows.Forms.Button();
             this.btnNextPage = new System.Windows.Forms.Button();
+            this.chkFilter = new System.Windows.Forms.CheckBox();
+            this.dtStart = new System.Windows.Forms.DateTimePicker();
+            this.dtEnd = new System.Windows.Forms.DateTimePicker();
+            this.labelFlag = new System.Windows.Forms.Label();
+            this.btnSearch = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.RechargeView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -72,7 +77,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(708, 411);
+            this.btnClose.Location = new System.Drawing.Point(694, 414);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
@@ -82,7 +87,7 @@
             // 
             // btnPrevPage
             // 
-            this.btnPrevPage.Location = new System.Drawing.Point(546, 411);
+            this.btnPrevPage.Location = new System.Drawing.Point(532, 414);
             this.btnPrevPage.Name = "btnPrevPage";
             this.btnPrevPage.Size = new System.Drawing.Size(75, 23);
             this.btnPrevPage.TabIndex = 2;
@@ -92,7 +97,7 @@
             // 
             // btnNextPage
             // 
-            this.btnNextPage.Location = new System.Drawing.Point(627, 411);
+            this.btnNextPage.Location = new System.Drawing.Point(613, 414);
             this.btnNextPage.Name = "btnNextPage";
             this.btnNextPage.Size = new System.Drawing.Size(75, 23);
             this.btnNextPage.TabIndex = 3;
@@ -100,10 +105,59 @@
             this.btnNextPage.UseVisualStyleBackColor = true;
             this.btnNextPage.Click += new System.EventHandler(this.btnNextPage_Click);
             // 
+            // chkFilter
+            // 
+            this.chkFilter.AutoSize = true;
+            this.chkFilter.Location = new System.Drawing.Point(19, 418);
+            this.chkFilter.Name = "chkFilter";
+            this.chkFilter.Size = new System.Drawing.Size(84, 16);
+            this.chkFilter.TabIndex = 4;
+            this.chkFilter.Text = "按日期查询";
+            this.chkFilter.UseVisualStyleBackColor = true;
+            this.chkFilter.CheckedChanged += new System.EventHandler(this.chkFilter_CheckedChanged);
+            // 
+            // dtStart
+            // 
+            this.dtStart.Location = new System.Drawing.Point(108, 416);
+            this.dtStart.Name = "dtStart";
+            this.dtStart.Size = new System.Drawing.Size(122, 21);
+            this.dtStart.TabIndex = 5;
+            // 
+            // dtEnd
+            // 
+            this.dtEnd.Location = new System.Drawing.Point(259, 416);
+            this.dtEnd.Name = "dtEnd";
+            this.dtEnd.Size = new System.Drawing.Size(122, 21);
+            this.dtEnd.TabIndex = 6;
+            // 
+            // labelFlag
+            // 
+            this.labelFlag.AutoSize = true;
+            this.labelFlag.Location = new System.Drawing.Point(237, 421);
+            this.labelFlag.Name = "labelFlag";
+            this.labelFlag.Size = new System.Drawing.Size(17, 12);
+            this.labelFlag.TabIndex = 60;
+            this.labelFlag.Text = "—";
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(387, 416);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.TabIndex = 61;
+            this.btnSearch.Text = "查询";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
             // RechargeRecord
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(783, 438);
+            this.ClientSize = new System.Drawing.Size(783, 443);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.labelFlag);
+            this.Controls.Add(this.dtEnd);
+            this.Controls.Add(this.dtStart);
+            this.Controls.Add(this.chkFilter);
             this.Controls.Add(this.btnNextPage);
             this.Controls.Add(this.btnPrevPage);
             this.Controls.Add(this.btnClose);
@@ -117,6 +171,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.RechargeRecord_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.RechargeView)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -128,5 +183,10 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnPrevPage;
         private System.Windows.Forms.Button btnNextPage;
+        private System.Windows.Forms.CheckBox chkFilter;
+        private System.Windows.Forms.DateTimePicker dtStart;
+        private System.Windows.Forms.DateTimePicker dtEnd;
+        private System.Windows.Forms.Label labelFlag;
+        private System.Windows.Forms.Button btnSearch;
     }
 }

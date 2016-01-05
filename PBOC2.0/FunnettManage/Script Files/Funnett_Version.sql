@@ -58,5 +58,7 @@ insert into Funnett_Version values('1.07.10.30','2015-11-03 15:00:00', '1.0.0.4'
 insert into Funnett_Version values('1.07.10.30','2015-11-04 11:05:10', '1.0.0.5','2015-11-04 11:05:10', '表Data_RechargeCardRecord增加TerminalID,存储过程PROC_UpdatePsamKey修改,表Key_PsamCard结构修改');
 insert into Funnett_Version values('1.07.11.10','2015-11-10 16:26:50', '1.0.0.6','2015-11-11 10:26:50', '存储过程PROC_PublishCardKey修改');
 insert into Funnett_Version values('1.08.12.02','2015-12-02 10:06:50', '1.0.0.7','2015-12-02 10:06:50', '存储过程PROC_PublishPsamCard修改,否则重制PSAM卡会覆盖所有PSAM卡的参数');
-insert into Funnett_Version values('SoftwareVersion',@curTime, '1.0.0.7',@curTime, '软件安装');
+insert into Funnett_Version values('1.08.12.02','2015-12-02 10:06:50', '1.0.0.8','2015-12-03 13:53:50', '站控SC_ConsumerDetail表,主键修改为FTradeDateTime和FGunNo');
+insert into Funnett_Version values('1.08.12.18','2015-12-18 09:15:00', '1.0.0.9','2015-12-18 09:16:50', '站控增加SC_SalesMainCard表和T_INSERT_Sale触发器');
+insert into Funnett_Version values('SoftVersion',@curTime, '1.0.0.9',@curTime, '软件安装');
 GO

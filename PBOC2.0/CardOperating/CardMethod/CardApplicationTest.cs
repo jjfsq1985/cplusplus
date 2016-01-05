@@ -96,7 +96,7 @@ namespace CardOperating
             bool bRet = m_DevControl.SAMPowerOn(bSamSlot, ref strCardInfo);
             if (!bRet)
             {
-                OnMessageOutput(new MsgOutEvent(0, "SAM卡复位失败"));                
+                OnMessageOutput(new MsgOutEvent(Color.Red.ToArgb(), "SAM卡复位失败"));                
                 return false;
             }
             else
@@ -145,7 +145,7 @@ namespace CardOperating
                 bool bRet = m_DevControl.OpenContactCard(ref cardInfo);
                 if (!bRet)
                 {
-                    OnMessageOutput(new MsgOutEvent(0, "接触式用户卡打开失败"));                    
+                    OnMessageOutput(new MsgOutEvent(Color.Red.ToArgb(), "接触式用户卡打开失败"));                    
                     return false;
                 }
             }
@@ -154,7 +154,7 @@ namespace CardOperating
                 bool bRet = m_DevControl.OpenCard(ref cardInfo);
                 if (!bRet)
                 {
-                    OnMessageOutput(new MsgOutEvent(0, "非接触式卡打开失败"));
+                    OnMessageOutput(new MsgOutEvent(Color.Red.ToArgb(), "非接触式卡打开失败"));
                     return false;
                 }
             }

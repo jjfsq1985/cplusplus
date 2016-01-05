@@ -2,7 +2,7 @@ USE [FunnettStation]
 GO
 
 if exists (select * from sysobjects where id = object_id(N'PROC_UpdateCardState') and type in (N'P', N'PC'))
-drop procedure PROC_UpdateCardState                                                                        
+drop procedure PROC_UpdateCardState
 GO
 
 /****** 卡挂失和解挂 ******/
@@ -28,7 +28,7 @@ CREATE PROCEDURE PROC_UpdateCardState(
 	@CardState int,--状态 0-正常，1-挂失，2-已补卡，3-已退卡
 	@BlackCard bit--true新增黑名单，false 新删黑名单
 	) With Encryption
- AS    
+ AS
 	--如果外部存在事务则不执行存储过程
 	if(@@trancount<>0)
 		return 1
@@ -38,7 +38,7 @@ CREATE PROCEDURE PROC_UpdateCardState(
 		return 2
 begin
 	declare @Today varchar(32)
-	set @Today = Convert(varchar(32),GetDate(),120)	
+	set @Today = Convert(varchar(32),GetDate(),120)
 		--开始事务
 		begin tran maintran			
 			update Base_Card set CardState = @CardState, OperateDateTime = GetDate() where CardNum=@CardId;
@@ -47,15 +47,19 @@ begin
 				if not exists(select * from SC_BlackCard where FUserCardNo=@CardId)
 					begin
 					insert into SC_BlackAddCard values(@CardId,Left(@Today,10));
+					update SC_Config set FValueI = FValueI + 1 where FCode = 'S001116104';
 					insert into SC_BlackCard values(@CardId,Left(@Today,10));
+					update SC_Config set FValueI = FValueI + 1 where FCode = 'S001116101';
 					end				
 				end
 			else
 				begin --新删黑名单
 				if exists(select * from SC_BlackCard where FUserCardNo=@CardId)
 					begin
-					insert into SC_BlackDelCard values(@CardId,Left(@Today,10));				
+					insert into SC_BlackDelCard values(@CardId,Left(@Today,10));
+					update SC_Config set FValueI = FValueI + 1 where FCode = 'S001116103';				
 					delete from SC_BlackCard where FUserCardNo = @CardId;
+					update SC_Config set FValueI = FValueI + 1 where FCode = 'S001116101';
 					end
 				end
 		if(@@ERROR <> 0)

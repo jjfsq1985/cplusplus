@@ -4,6 +4,7 @@ using System.Text;
 using SqlServerHelper;
 using System.Data.SqlClient;
 using System.Data;
+using System.Drawing;
 using System.Diagnostics;
 using IFuncPlugin;
 using ApduParam;
@@ -97,7 +98,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "选择" + GetFileDescribe(AIDName) + "文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "选择" + GetFileDescribe(AIDName) + "文件失败"));
                 return false;
             }
             else
@@ -125,7 +126,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "获取返回数据失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "获取返回数据失败"));
                 return false;
             }
             else
@@ -148,7 +149,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "获取随机值失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "获取随机值失败"));
                 return null;
             }
             else
@@ -171,7 +172,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "外部认证失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "外部认证失败"));
                 return false;
             }
             else
@@ -180,12 +181,12 @@ namespace LohApduCtrl
                 if (nRecvLen >= 2 && (RecvData[nRecvLen - 2] == 0x6A && RecvData[nRecvLen - 1] == 0x82) || (RecvData[nRecvLen - 2] == 0x94 && RecvData[nRecvLen - 1] == 0x03))
                 {
                     //文件未找到/密钥索引不支持
-                    OnTextOutput(new MsgOutEvent(0, "外部认证不适用"));
+                    OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "外部认证不适用"));
                 }
                 else if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                 {
                     string strErr = GlobalControl.GetErrString(RecvData[nRecvLen - 2], RecvData[nRecvLen - 1], strData);
-                    OnTextOutput(new MsgOutEvent(0, " 外部认证错误：" + strErr));
+                    OnTextOutput(new MsgOutEvent(Color.DarkRed.ToArgb(), " 外部认证错误：" + strErr));
                     return false;
                 }
                 else
@@ -228,7 +229,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "初始化失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "初始化失败"));
                 return false;
             }
             else
@@ -262,7 +263,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "清空卡片失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "清空卡片失败"));
                 return false;
             }
             else
@@ -309,7 +310,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "创建DF文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "创建DF文件失败"));
                 return false;
             }
             else
@@ -340,7 +341,7 @@ namespace LohApduCtrl
             if (nRet < 0)
             {
                 string strErr = string.Format("创建{0}文件失败", GetFileDescribe(AidName));
-                OnTextOutput(new MsgOutEvent(nRet, strErr));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), strErr));
                 return false;
             }
             else
@@ -365,7 +366,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "创建Key文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "创建Key文件失败"));
                 return false;
             }
             else
@@ -389,7 +390,7 @@ namespace LohApduCtrl
             if (nRet < 0)
             {
                 string strMessage = string.Format("创建{0}记录文件失败", fileID.ToString("X4"));
-                OnTextOutput(new MsgOutEvent(nRet, strMessage));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), strMessage));
                 return false;
             }
             else
@@ -414,7 +415,7 @@ namespace LohApduCtrl
             if (nRet < 0)
             {
                 string strMessage = string.Format("创建{0}文件失败", fileID.ToString("X4"));
-                OnTextOutput(new MsgOutEvent(nRet, strMessage));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), strMessage));
                 return false;
             }
             else
@@ -497,7 +498,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "创建交易密钥失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "创建交易密钥失败"));
                 return false;
             }
             else
@@ -600,7 +601,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "安装PIN文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "安装PIN文件失败"));
                 return false;
             }
             else
@@ -623,7 +624,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, Param.PromptInfo + "失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), Param.PromptInfo + "失败"));
                 return false;
             }
             else
@@ -649,7 +650,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "更新公共应用基本数据文件EF15失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "更新公共应用基本数据文件EF15失败"));
                 return false;
             }
             else
@@ -675,7 +676,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "更新持卡人基本数据文件EF16失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "更新持卡人基本数据文件EF16失败"));
                 return false;
             }
             else
@@ -709,7 +710,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "验证PIN失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "验证PIN失败"));
                 return 0;
             }
             else
@@ -737,7 +738,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "更新普通信息数据文件EF1B失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "更新普通信息数据文件EF1B失败"));
                 return false;
             }
             else
@@ -763,7 +764,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "更新敏感信息数据文件EF1C失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "更新敏感信息数据文件EF1C失败"));
                 return false;
             }
             else
@@ -789,7 +790,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "更新气票专用数据文件EF0D失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "更新气票专用数据文件EF0D失败"));
                 return false;
             }
             else
@@ -847,7 +848,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "圈存初始化失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "圈存初始化失败"));
                 return false;
             }
             else
@@ -871,7 +872,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "圈提初始化失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "圈提初始化失败"));
                 return false;
             }
             else
@@ -911,7 +912,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "圈存交易失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "圈存交易失败"));
                 return false;
             }
             else
@@ -935,7 +936,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "圈提交易失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "圈提交易失败"));
                 return false;
             }
             else
@@ -1141,7 +1142,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "读取余额失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "读取余额失败"));
                 return false;
             }
             else
@@ -1170,7 +1171,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "读取灰锁状态失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "读取灰锁状态失败"));
                 return false;
             }
             else
@@ -1205,7 +1206,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "灰锁初始化失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "灰锁初始化失败"));
                 return false;
             }
             else
@@ -1230,7 +1231,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "积分消费初始化失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "积分消费初始化失败"));
                 return false;
             }
             else
@@ -1255,7 +1256,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "灰锁失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "灰锁失败"));
                 return false;
             }
             else
@@ -1281,7 +1282,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "积分消费失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "积分消费失败"));
                 return false;
             }
             else
@@ -1307,7 +1308,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "联机解扣初始化失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "联机解扣初始化失败"));
                 return false;
             }
             else
@@ -1390,7 +1391,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "联机解扣失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "联机解扣失败"));
                 return false;
             }
             else
@@ -1414,7 +1415,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "卡解扣失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "卡解扣失败"));
                 return false;
             }
             else
@@ -1438,7 +1439,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "清除TACUF失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "清除TACUF失败"));
                 return false;
             }
             else
@@ -1595,57 +1596,52 @@ namespace LohApduCtrl
                 ObjSql = null;
                 return false;
             }
-            SqlParameter[] sqlparams = new SqlParameter[28];
-            GetSqlParam(ObjSql, sqlparams, UserCardInfoPar);
+            int nParamCount = 0;
+            if (!bUpdate)
+                nParamCount = 28;
+            else
+                nParamCount = 27;
 
             Guid CardGuid = Guid.NewGuid();
-            sqlparams[26] = ObjSql.MakeParam("UserKeyGuid", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, CardGuid);//
+            SqlParameter RelatedMotherCardPar = null;
             byte[] MotherCard = UserCardInfoPar.GetRelatedMotherCardID();
             if (UserCardInfoPar.UserCardType == CardType.CompanySubCard && MotherCard != null)
             {
                 string strVal = BitConverter.ToString(MotherCard).Replace("-", "");
-                sqlparams[27] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
+                RelatedMotherCardPar = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
             }
             else
             {
-                sqlparams[27] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, "");//
+                RelatedMotherCardPar = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, "");//
             }
-            if (SaveCpuCardKey(ObjSql, CardGuid, UserCardInfoPar.GetUserCardID()))
+
+            SqlParameter[] sqlparams = new SqlParameter[nParamCount];
+            GetSqlParam(ObjSql, sqlparams, UserCardInfoPar);
+            if (!bUpdate)
             {
-                if (ObjSql.ExecuteProc("PROC_PublishCpuCard", sqlparams) == 0)
+                sqlparams[26] = ObjSql.MakeParam("UserKeyGuid", SqlDbType.UniqueIdentifier, 16, ParameterDirection.Input, CardGuid);//
+                sqlparams[27] = RelatedMotherCardPar;
+            }
+            else
+            {
+                sqlparams[26] = RelatedMotherCardPar;
+            }
+
+            if (!bUpdate)
+            {
+                if (SaveCpuCardKey(ObjSql, CardGuid, UserCardInfoPar.GetUserCardID()))
                 {
-                    bSuccess = true;
+                    if (ObjSql.ExecuteProc("PROC_PublishCpuCard", sqlparams) == 0)
+                    {
+                        bSuccess = true;
+                    }
                 }
             }
-            ObjSql.CloseConnection();
-            ObjSql = null;
-            return bSuccess;
-        }
-
-        public bool UpdateCardInfoToDb(UserCardInfoParam UserCardInfoPar)
-        {
-            bool bSuccess = false;
-            SqlHelper ObjSql = new SqlHelper();
-            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
-            {
-                ObjSql = null;
-                return false;
-            }
-            SqlParameter[] sqlparams = new SqlParameter[27];
-            GetSqlParam(ObjSql, sqlparams, UserCardInfoPar);
-
-            byte[] MotherCard = UserCardInfoPar.GetRelatedMotherCardID();
-            if (UserCardInfoPar.UserCardType == CardType.CompanySubCard && MotherCard != null)
-            {
-                string strVal = BitConverter.ToString(MotherCard).Replace("-", "");
-                sqlparams[26] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strVal);//
-            }
             else
             {
-                sqlparams[26] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, "");//
+                if (ObjSql.ExecuteProc("PROC_RewriteCpuCard", sqlparams) == 0)
+                    bSuccess = true;
             }
-            if (ObjSql.ExecuteProc("PROC_RewriteCpuCard", sqlparams) == 0)
-                bSuccess = true;
             ObjSql.CloseConnection();
             ObjSql = null;
             return bSuccess;
@@ -1686,7 +1682,7 @@ namespace LohApduCtrl
             if (nRet < 0)
             {
                 if (bMessage)
-                    OnTextOutput(new MsgOutEvent(nRet, "读取卡号失败"));
+                    OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "读取卡号失败"));
                 return null;
             }
             else
@@ -1815,6 +1811,11 @@ namespace LohApduCtrl
                 }
                 CardInfo.LimitGasFillCount = RecvData[63];
                 CardInfo.LimitGasFillAmount = (uint)((RecvData[64] << 24) + (RecvData[65] << 16) + (RecvData[66] << 8) + RecvData[67]);
+                if (CardInfo.UserCardType == CardType.CompanySubCard)
+                {
+                    string strMotherCard = BitConverter.ToString(RecvData, 75, 8).Replace("-", "");
+                    CardInfo.SetMotherCard(strMotherCard);
+                }
             }
             catch
             {
@@ -1924,7 +1925,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "读取加气记录失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "读取加气记录失败"));
                 return false;
             }
             string strData = m_ctrlApdu.hex2asc(RecvData, nRecvLen);
@@ -1939,7 +1940,7 @@ namespace LohApduCtrl
                 record = new CardRecord();
                 record.BusinessSn = (RecvData[0] << 8) + RecvData[1];
                 record.OverdraftMoney = ((RecvData[2] << 16) + (RecvData[3] << 8) + RecvData[4]) / 100.0f;
-                record.Amount = ((RecvData[5] << 24) + (RecvData[6] << 16) + (RecvData[7] << 8) + RecvData[8]) / 100.0f;
+                record.Amount = ((RecvData[5] << 24) + (RecvData[6] << 16) + (RecvData[7] << 8) + RecvData[8]) * 1.0f;
                 record.BusinessType = RecvData[9];
                 record.TerminalID = BitConverter.ToString(RecvData, 10, 6).Replace("-", "");
                 record.BusinessTime = BitConverter.ToString(RecvData, 16, 7).Replace("-", "");
@@ -2066,7 +2067,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "修改PIN码失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "修改PIN码失败"));
                 return false;
             }
             else
@@ -2113,7 +2114,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "重装PIN码失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "重装PIN码失败"));
                 return false;
             }
             else
@@ -2166,7 +2167,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "解锁PIN码失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "解锁PIN码失败"));
                 return false;
             }
             else
@@ -2190,7 +2191,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "建立" + GetFileDescribe(m_PSE) + "文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "建立" + GetFileDescribe(m_PSE) + "文件失败"));
                 return false;
             }
             else
@@ -2213,7 +2214,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "擦除DF下的文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "擦除DF下的文件失败"));
                 return false;
             }
             else
@@ -2238,7 +2239,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "安装Key文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "安装Key文件失败"));
                 return false;
             }
             else
@@ -2263,7 +2264,7 @@ namespace LohApduCtrl
             int nRet = m_ctrlApdu.CmdExchange(m_bContactCard, data, datalen, RecvData, ref nRecvLen);
             if (nRet < 0)
             {
-                OnTextOutput(new MsgOutEvent(nRet, "安装Key文件失败"));
+                OnTextOutput(new MsgOutEvent(Color.Red.ToArgb(), "安装Key文件失败"));
                 return false;
             }
             else

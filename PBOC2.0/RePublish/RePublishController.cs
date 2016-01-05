@@ -59,11 +59,81 @@ namespace RePublish
                 return false;
             m_UserCardCtrl = m_DevControl.UserCardConstructor(m_bContact, m_DBInfo);
 
+            bool bRet = false;
             string cardInfo = "";
+            int nCardType = 0;
             if (m_bContact)
-                return m_DevControl.OpenContactCard(ref cardInfo);
+            {
+                nCardType = 1;
+                bRet = m_DevControl.OpenContactCard(ref cardInfo);
+            }
             else
-                return m_DevControl.OpenCard(ref cardInfo);
+            {
+                nCardType = 0;
+                bRet = m_DevControl.OpenCard(ref cardInfo);
+            }
+            string strDescribe = GetCardDescrib(cardInfo, m_DevType, nCardType);
+            if (string.IsNullOrEmpty(strDescribe))
+            {
+                MessageBox.Show("卡片标识未找到，请检查卡片与读卡器配置是否正确", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return bRet;
+            }
+            return bRet;
+        }
+
+        /// <summary>
+        /// 获取卡片厂商
+        /// </summary>
+        /// <param name="strHexInfo">Atr</param>
+        /// <param name="nDevType">设备类型 0 达华+ 明泰; 1 龙寰+DE620; 2 龙寰+明泰</param>
+        /// <param name="nCardType">0 非接cpu; 1 接触cpu; 2 psam卡</param>
+        /// <returns></returns>
+        private string GetCardDescrib(string strHexInfo, ApduDomain eDevType, int nCardType)
+        {
+            string strInfo = "";
+            if (eDevType != ApduDomain.DaHua)
+            {
+                //龙寰
+                switch (nCardType)
+                {
+                    case 0:
+                        {
+                            if (strHexInfo.Contains("4C4F48434F53"))//非接cpu卡"LOHCOS"
+                                strInfo = "龙寰-非接触CPU卡:" + strHexInfo;
+                        }
+                        break;
+                    case 1:
+                        {
+                            if (strHexInfo.Contains("574454434844415441"))//接触cpu卡"WDTCHDATA"
+                                strInfo = "龙寰-接触式CPU卡:" + strHexInfo;
+                        }
+                        break;
+                    //PSAM卡不需要
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                //达华
+                switch (nCardType)
+                {
+                    case 0:
+                        {
+                            if (strHexInfo.Contains("7A6A"))//非接cpu卡"zj"
+                                strInfo = "达华-非接触CPU卡:" + strHexInfo;
+                        }
+                        break;
+                    case 1:
+                        {
+                        }
+                        break;
+                    //PSAM卡不需要
+                    default:
+                        break;
+                }
+            }
+            return strInfo;
         }
 
         private bool CloseUserCard()
@@ -170,13 +240,16 @@ namespace RePublish
                 {
                     m_UserCardCtrl.SaveCpuCardInfoToDb(m_CardInfoPar, true);
                     //圈存
-                    if (CpuCardType != CardType.ManagerCard && CpuCardType != CardType.ServiceCard && CardBalance > 0)
+                    if (CpuCardType != CardType.ManagerCard && CpuCardType != CardType.ServiceCard)
                     {
                         if (CpuCardType == CardType.CompanyMotherCard)
                         {
-                            RechargeMotherCard(TermialId, byteRePublishCardId, CardBalance);
+                            //更新子卡关联的母卡
+                            UpdateSubCardRelated(m_strInvalidCardId, BitConverter.ToString(byteRePublishCardId).Replace("-", ""));
+                            if (CardBalance > 0)
+                                RechargeMotherCard(TermialId, byteRePublishCardId, CardBalance);
                         }
-                        else
+                        else if (CardBalance > 0)
                         {
                             int nRet = m_UserCardCtrl.VerifyUserPin(m_strPIN);
                             if (nRet == 1)
@@ -188,11 +261,13 @@ namespace RePublish
                             }
                             else if (nRet == 2)
                             {
-                                MessageBox.Show("PIN码已锁,补卡成功但卡内余额未转入!");
+                                string strMsg = string.Format("PIN码已锁,补卡成功但卡内余额<font size =\"16\" color = \"red\">{0}元</font>未转入!", CardBalance.ToString("F2"));
+                                MyMessageBox.Show(strMsg, "提示");
                             }
                             else
                             {
-                                MessageBox.Show("PIN码验证失败,补卡成功但卡内余额未转入!");
+                                string strMsg = string.Format("PIN码验证失败,补卡成功但卡内余额<font size =\"16\" color = \"red\">{0}元</font>未转入!", CardBalance.ToString("F2"));
+                                MyMessageBox.Show(strMsg, "提示");
                             }
                         }
                     }
@@ -240,6 +315,31 @@ namespace RePublish
             }
         }
 
+        private void UpdateSubCardRelated(string strOldMotherCardId, string strNewMotherCardId)
+        {
+            SqlHelper ObjSql = new SqlHelper();
+            if (!ObjSql.OpenSqlServerConnection(m_DBInfo.strServerName, m_DBInfo.strDbName, m_DBInfo.strUser, m_DBInfo.strUserPwd))
+            {
+                ObjSql = null;
+                return;
+            }
+            SqlParameter[] sqlparams = new SqlParameter[3];
+            sqlparams[0] = ObjSql.MakeParam("RelatedMotherCard", SqlDbType.Char, 16, ParameterDirection.Input, strNewMotherCardId);
+            sqlparams[1] = ObjSql.MakeParam("CardType", SqlDbType.VarChar, 2, ParameterDirection.Input, CardType.CompanySubCard.ToString("X2"));
+            sqlparams[2] = ObjSql.MakeParam("OldRelated", SqlDbType.Char, 16, ParameterDirection.Input, strOldMotherCardId);
+            ObjSql.ExecuteCommand("update Base_Card set RelatedMotherCard=@RelatedMotherCard where  CardType =@CardType and RelatedMotherCard=@OldRelated", sqlparams);
+
+            string strLog = "因补卡导致修改相关子卡的关联母卡：" + strOldMotherCardId + "->" + strNewMotherCardId + ";";
+            SqlParameter[] sqllogpar = new SqlParameter[3];
+            sqlparams[0] = ObjSql.MakeParam("curTime", SqlDbType.DateTime, 8, ParameterDirection.Input, DateTime.Now);
+            sqlparams[1] = ObjSql.MakeParam("LogContent", SqlDbType.NVarChar, 1024, ParameterDirection.Input, strLog);
+            sqlparams[2] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strNewMotherCardId);
+            ObjSql.ExecuteCommand("insert into Log_PublishCard values(@curTime,@LogContent,0,@CardId)", sqlparams);
+
+            ObjSql.CloseConnection();
+            ObjSql = null;
+        }
+
         private void RechargeMotherCard(byte[] TermId, byte[] ASN, double dbMoney)
         {
             SaveLoadRecord(ASN, dbMoney, "AccountBalance");//单位母卡充值后更新字段不一样
@@ -258,20 +358,14 @@ namespace RePublish
                 return;
             }
 
-            UpdateBaseCardMoneyValue(ObjSql, strCardId, strUpdateField, dbMoney);
+            SqlParameter[] sqlparams = new SqlParameter[3];
+            sqlparams[0] = ObjSql.MakeParam("RechargeTotal", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbMoney));
+            sqlparams[1] = ObjSql.MakeParam(strUpdateField, SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbMoney));
+            sqlparams[2] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
+            ObjSql.ExecuteCommand("update Base_Card set RechargeTotal=@RechargeTotal," + strUpdateField + "=@" + strUpdateField + " where CardNum=@CardId", sqlparams);
 
             ObjSql.CloseConnection();
             ObjSql = null;
-        }
-
-
-        private void UpdateBaseCardMoneyValue(SqlHelper ObjSql, string strCardId, string strFieldName, double dbValue)
-        {
-            SqlParameter[] sqlparams = new SqlParameter[3];
-            sqlparams[0] = ObjSql.MakeParam("RechargeTotal", SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbValue));
-            sqlparams[1] = ObjSql.MakeParam(strFieldName, SqlDbType.Decimal, 16, ParameterDirection.Input, Convert.ToDecimal(dbValue));
-            sqlparams[2] = ObjSql.MakeParam("CardId", SqlDbType.Char, 16, ParameterDirection.Input, strCardId);
-            ObjSql.ExecuteCommand("update Base_Card set RechargeTotal=@RechargeTotal," + strFieldName + "=@" + strFieldName + " where CardNum=@CardId", sqlparams);
         }
 
         private byte[] GetRePublishCardId()

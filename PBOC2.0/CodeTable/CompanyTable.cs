@@ -19,7 +19,7 @@ namespace CodeTable
         private List<SuperiorCodeTable> m_lstSuperiorCode = new List<SuperiorCodeTable>();
         private SqlConnectInfo m_DBInfo = new SqlConnectInfo();
         private int m_nAuthority = 0;
-
+        private Dictionary<Guid, string> m_DirtyData = new Dictionary<Guid, string>();
 
         public CompanyCode()
         {
@@ -97,6 +97,7 @@ namespace CodeTable
                     SaveSuperiorCodeDataToDb();
                 }
             }
+            m_DirtyData.Clear();
             SuperiorView.Dispose();
             m_lstSuperiorCode.Clear();
             if (m_ObjSql != null)
@@ -119,6 +120,7 @@ namespace CodeTable
                     {
                         int index = SuperiorView.Rows.Add();
                         SuperiorCodeTable SuperiorVal = new SuperiorCodeTable();
+                        SuperiorVal.guidCode = Guid.NewGuid();
                         SuperiorVal.eDbState = DbStateFlag.eDbOK;
                         SuperiorVal.nDataGridViewRowIndex = index;
                         SuperiorVal.strSuperiorName = (string)dataReader["CompanyName"];
@@ -187,6 +189,7 @@ namespace CodeTable
                     if (bAdd)
                     {
                         SuperiorCodeTable newVal = new SuperiorCodeTable();
+                        newVal.guidCode = Guid.NewGuid();
                         newVal.eDbState = DbStateFlag.eDbAdd;
                         newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strSuperiorName = strInput;
@@ -197,9 +200,17 @@ namespace CodeTable
                 }
                 else if (strInput != m_lstSuperiorCode[nListIndex].strSuperiorName)
                 {
+                    string strSuperiorName = m_lstSuperiorCode[nListIndex].strSuperiorName;
                     m_lstSuperiorCode[nListIndex].strSuperiorName = strInput;
                     if (m_lstSuperiorCode[nListIndex].eDbState == DbStateFlag.eDbOK)
+                    {
                         m_lstSuperiorCode[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                        string strDirtyData = strSuperiorName + "|" + BitConverter.ToString(m_lstSuperiorCode[nListIndex].SuperiorCode).Replace("-", "");
+                        if (m_DirtyData.ContainsKey(m_lstSuperiorCode[nListIndex].guidCode))
+                            m_DirtyData[m_lstSuperiorCode[nListIndex].guidCode] = strDirtyData;
+                        else
+                            m_DirtyData.Add(m_lstSuperiorCode[nListIndex].guidCode, strDirtyData);
+                    }
                 }
             }
             else if (nItem == 1)
@@ -236,6 +247,7 @@ namespace CodeTable
                     if (bAdd)
                     {
                         SuperiorCodeTable newVal = new SuperiorCodeTable();
+                        newVal.guidCode = Guid.NewGuid();
                         newVal.eDbState = DbStateFlag.eDbAdd;
                         newVal.nDataGridViewRowIndex = nRowIndex;
                         newVal.strSuperiorName = "";
@@ -246,10 +258,18 @@ namespace CodeTable
                 }
                 else if ((codebyte[0] != m_lstSuperiorCode[nListIndex].SuperiorCode[0]) || (codebyte[1] != m_lstSuperiorCode[nListIndex].SuperiorCode[1]))
                 {
+                    string strSuperiorCode = BitConverter.ToString(m_lstSuperiorCode[nListIndex].SuperiorCode).Replace("-", "");
                     m_lstSuperiorCode[nListIndex].SuperiorCode[0] = codebyte[0];
                     m_lstSuperiorCode[nListIndex].SuperiorCode[1] = codebyte[1];
                     if (m_lstSuperiorCode[nListIndex].eDbState == DbStateFlag.eDbOK)
+                    {
                         m_lstSuperiorCode[nListIndex].eDbState = DbStateFlag.eDbDirty;
+                        string strDirtyData = m_lstSuperiorCode[nListIndex].strSuperiorName + "|" + strSuperiorCode;
+                        if (m_DirtyData.ContainsKey(m_lstSuperiorCode[nListIndex].guidCode))
+                            m_DirtyData[m_lstSuperiorCode[nListIndex].guidCode] = strDirtyData;
+                        else
+                            m_DirtyData.Add(m_lstSuperiorCode[nListIndex].guidCode, strDirtyData);
+                    }
                 }
             }
         }
@@ -305,8 +325,13 @@ namespace CodeTable
                     deleteLst.Add(value);
                 }
                 else if (value.eDbState == DbStateFlag.eDbDirty)
-                {
-                    m_ObjSql.ExecuteCommand("update Data_Superior set CompanyCode = @Code, CompanyName = @Name", sqlparams);
+                {                    
+                    SqlParameter[] sqlDirtyParams = new SqlParameter[2];
+                    string strDirty = m_DirtyData[value.guidCode];
+                    sqlDirtyParams[0] = m_ObjSql.MakeParam("DirtyCode", SqlDbType.VarChar, 4, ParameterDirection.Input, strDirty.Substring(strDirty.IndexOf("|") + 1));
+                    sqlDirtyParams[1] = m_ObjSql.MakeParam("DirtyName", SqlDbType.NVarChar, 50, ParameterDirection.Input, strDirty.Substring(0, strDirty.IndexOf("|")));
+                    m_ObjSql.ExecuteCommand("delete from Data_Superior where CompanyCode = @DirtyCode and CompanyName = @DirtyName", sqlDirtyParams);
+                    m_ObjSql.ExecuteCommand("insert into Data_Superior values(@Code,@Name)", sqlparams);
                     value.eDbState = DbStateFlag.eDbOK;
                 }
                 m_lstSuperiorCode[i] = value;
