@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorizeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AuthorizeForm.Designer.cs">
+      <DependentUpon>AuthorizeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FntAboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +92,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AuthorizeForm.resx">
+      <DependentUpon>AuthorizeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FntAboutBox.resx">
       <DependentUpon>FntAboutBox.cs</DependentUpon>
     </EmbeddedResource>

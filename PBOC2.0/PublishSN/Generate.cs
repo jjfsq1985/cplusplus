@@ -75,5 +75,28 @@ namespace PublishSN
             return BitConverter.ToString(EncryptData).Replace("-","");
         }
 
+        private void btnGenerate_Click(object sender, EventArgs e)
+        {
+            string strData = "";
+            Random dataRand = new Random();
+            for (int i = 0; i < 8; i++)
+            {
+                int nVal = dataRand.Next(0, 16);
+                strData += nVal.ToString("X");
+            }
+
+            string strToday = DateTime.Today.ToString("yyyyMMdd");
+            byte[] byteRand = new byte[4];
+            byte[] byteToday = new byte[4];
+            for (int i = 0; i < 4; i++)
+            {
+                byteRand[i] = Convert.ToByte(strData.Substring(i * 2, 2), 16);
+                byteToday[i] = Convert.ToByte(strToday.Substring(i * 2, 2), 16);
+                byteToday[i] += 0x06;
+                byteToday[i] = Convert.ToByte(byteToday[i] ^ byteRand[i]);
+            }
+            textAuthorize.Text = strData.Substring(0, 4) + BitConverter.ToString(byteToday).Replace("-","") + strData.Substring(4, 4);            
+        }
+
     }
 }

@@ -14,6 +14,7 @@ using SqlServerHelper;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using RePublish;
+using System.Xml;
 
 namespace FNTMain
 {
@@ -43,6 +44,7 @@ namespace FNTMain
         private const int CardState_Item_Index = 8;   //查询结果卡状态栏索引
         private int KeyManageMenuCount = 0;   //密钥管理菜单数
         private string[] KeyManageMenu = new string[4];
+        private bool m_bAuthorized = false;
 
         public Main(int nLoginId,SqlConnectInfo DbInfo)
         {
@@ -95,7 +97,7 @@ namespace FNTMain
                 return false;
             if ((m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) != GrobalVariable.CardOp_KeyManage_Authority)
                 return false;
-            return true;
+            return m_bAuthorized;         
         }
 
         void InsertToMainForm(object pluginObj,Type t)
@@ -709,6 +711,25 @@ namespace FNTMain
 
         private void Main_Load(object sender, EventArgs e)
         {
+            //检查授权
+            string strAuthorizeKey = LicenseCalc.GetAuthorize();
+            int nRet = LicenseCalc.AuthorizeVerify(strAuthorizeKey);
+            if (nRet == 1)
+            {
+                m_bAuthorized = true;
+            }
+            else
+            {
+                m_bAuthorized = false;
+                if (m_nLoginID == 0)
+                {
+                    if (nRet == 2)
+                        MessageBox.Show("授权码已过期。如需制卡，请重新申请。");
+                    else
+                        MessageBox.Show("本账户的制卡功能已关闭。如需制卡，请先进行授权。");
+                }
+            }
+
             this.Cursor = Cursors.WaitCursor;
             
             GetUserAndAuthority(m_nLoginID);
@@ -740,6 +761,9 @@ namespace FNTMain
             wt.Start();
             LoadPlugin();
             wt.Stop();
+
+            if (!m_bAuthorized && m_nLoginID == 0)
+                HelpMenuItem.DropDownItems.Add("制卡功能授权", null, new EventHandler(OnAuthorize_Click));
 
             this.Cursor = Cursors.Default;
 
@@ -1472,6 +1496,13 @@ namespace FNTMain
             if (CardSetting.ShowDialog(this) != DialogResult.OK)
                 return;
             selectCard.SubItems[CardState_Item_Index].Text = "已退卡";
+        }
+
+        //制卡功能授权
+        private void OnAuthorize_Click(object sender, EventArgs e)
+        {
+            AuthorizeForm Auth = new AuthorizeForm();
+            Auth.ShowDialog();
         }
 
     }

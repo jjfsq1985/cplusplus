@@ -60,4 +60,7 @@ insert into Funnett_Version values('1.07.11.10','2015-11-10 16:26:50', '1.0.0.6'
 insert into Funnett_Version values('1.08.12.02','2015-12-02 10:06:50', '1.0.0.7','2015-12-02 10:06:50', '存储过程PROC_PublishPsamCard修改,否则重制PSAM卡会覆盖所有PSAM卡的参数');
 insert into Funnett_Version values('1.08.12.02','2015-12-02 10:06:50', '1.0.0.8','2015-12-03 13:53:50', '站控SC_ConsumerDetail表,主键修改为FTradeDateTime和FGunNo');
 insert into Funnett_Version values('1.08.12.18','2015-12-18 09:15:00', '1.0.0.9','2015-12-18 09:16:50', '站控增加SC_SalesMainCard表和T_INSERT_Sale触发器');
+insert into Funnett_Version values('1.08.12.28','2015-12-28 09:15:00', '1.0.0.10','2015-12-28 09:16:50', '挂失、补卡时PROC_UpdateCardState修改黑名单版本号');
+insert into Funnett_Version values('1.09.01.05','2016-01-05 15:29:00', '1.0.0.11','2016-01-05 15:29:00', '增加V_ConsumerDetail视图，修改灰卡记录读取PROC_GetGrayRecord,表SC_MenuItem增加FPlate字段');
+insert into Funnett_Version values('1.09.01.05','2016-01-05 15:29:00', '1.0.0.12','2016-01-06 09:26:00', '存储过程CustomReport_Proc修改');
 GO
