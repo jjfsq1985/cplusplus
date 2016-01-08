@@ -314,6 +314,7 @@
             this.btnDisconnect.Size = new System.Drawing.Size(55, 23);
             this.btnDisconnect.TabIndex = 10;
             this.btnDisconnect.Text = "断开";
+            this.btnDisconnect.Enabled = false;
             this.btnDisconnect.UseVisualStyleBackColor = true;
             this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
             // 

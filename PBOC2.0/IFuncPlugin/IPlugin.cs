@@ -166,6 +166,7 @@ namespace IFuncPlugin
         eRechargeList,   //充值记录        
         eCardOperating,      //制卡操作
         eOneKeyMadeCard,  //一键制卡
+        eSinopecCard,       //制中石化卡片
         eCardPublish,      //卡信息读写
         eOrgKeyManage, //初始卡密钥
         ePsamKeyManage,  //PSAM卡密钥

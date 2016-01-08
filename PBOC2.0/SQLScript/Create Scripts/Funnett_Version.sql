@@ -62,5 +62,6 @@ insert into Funnett_Version values('1.08.12.02','2015-12-02 10:06:50', '1.0.0.8'
 insert into Funnett_Version values('1.08.12.18','2015-12-18 09:15:00', '1.0.0.9','2015-12-18 09:16:50', '站控增加SC_SalesMainCard表和T_INSERT_Sale触发器');
 insert into Funnett_Version values('1.08.12.28','2015-12-28 09:15:00', '1.0.0.10','2015-12-28 09:16:50', '挂失、补卡时PROC_UpdateCardState修改黑名单版本号');
 insert into Funnett_Version values('1.09.01.05','2016-01-05 15:29:00', '1.0.0.11','2016-01-05 15:29:00', '增加V_ConsumerDetail视图，修改灰卡记录读取PROC_GetGrayRecord,表SC_MenuItem增加FPlate字段');
-insert into Funnett_Version values('1.09.01.05','2016-01-05 15:29:00', '1.0.0.12','2016-01-06 09:26:00', '存储过程CustomReport_Proc修改');
+insert into Funnett_Version values('1.09.01.05','2016-01-05 15:29:00', '1.0.0.12','2016-01-06 09:26:00', '站控存储过程CustomReport_Proc修改');
+insert into Funnett_Version values('1.09.01.08','2016-01-08 15:06:00', '1.0.0.13','2016-01-08 15:06:00', '站控存储过程checkData_Proc修改');
 GO

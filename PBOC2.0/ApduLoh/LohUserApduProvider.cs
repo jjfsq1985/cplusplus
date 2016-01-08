@@ -340,7 +340,10 @@ namespace ApduLoh
                 m_Data[i] = 0xFF;
             }
 
-            m_Data[0] = (byte)cardInfo.UserCardType;//卡类型
+            if (cardInfo.m_bSinopec)
+                m_Data[0] = 0x01;
+            else
+                m_Data[0] = (byte)cardInfo.UserCardType;//卡类型
             m_Data[1] = 0x00;//职工标识
             //持卡人姓名
             int nOffset = 2;
@@ -354,32 +357,53 @@ namespace ApduLoh
             }
             nOffset += 20;
             //身份证号
-            string strIdentity = "12345678901234567F";            
-            if (!string.IsNullOrEmpty(cardInfo.UserIdentity))
-               strIdentity = cardInfo.UserIdentity.Replace('X','F');
-            byte[] byteIdentity = StringToBCD(strIdentity);
-            if (byteIdentity != null)
+            if (cardInfo.m_bSinopec)
             {
+                byte[] byteIdentity = null;
+                if (!string.IsNullOrEmpty(cardInfo.UserIdentity))
+                    byteIdentity = Encoding.ASCII.GetBytes(cardInfo.UserIdentity);
+                else
+                    byteIdentity = Encoding.ASCII.GetBytes("12345678901234567X");//默认值
                 for (int i = 0; i < byteIdentity.Length; i++)
                 {
                     m_Data[nOffset + i] = byteIdentity[i];
                 }
+                nOffset += 18;
+                //nOffset = 40
             }
-            nOffset += 9;
-            //nOffset = 31
+            else
+            {
+                string strIdentity = "12345678901234567F";
+                if (!string.IsNullOrEmpty(cardInfo.UserIdentity))
+                    strIdentity = cardInfo.UserIdentity.Replace('X', 'F');
+                byte[] byteIdentity = StringToBCD(strIdentity);
+                if (byteIdentity != null)
+                {
+                    for (int i = 0; i < byteIdentity.Length; i++)
+                    {
+                        m_Data[nOffset + i] = byteIdentity[i];
+                    }
+                }
+                nOffset += 9;
+                //nOffset = 31
+            }
+            
             m_Data[nOffset] = (byte)(cardInfo.IdType);//证件类型
             nOffset += 1;
-            //折扣率
-            byte[] byteRate = StringToBCD(cardInfo.DiscountRate.ToString("D4"));
-            Buffer.BlockCopy(byteRate, 0, m_Data, nOffset, 2);
-            byte[] bcdDate = GetBCDDate(cardInfo.DiscountRateEnd);//启用日期
-            //折扣有效期,BCD码
-            Buffer.BlockCopy(bcdDate, 0, m_Data, 34, 4);
-            nOffset += 6;
+            if (!cardInfo.m_bSinopec)
+            {
+                //折扣率
+                byte[] byteRate = StringToBCD(cardInfo.DiscountRate.ToString("D4"));
+                Buffer.BlockCopy(byteRate, 0, m_Data, nOffset, 2);
+                byte[] bcdDate = GetBCDDate(cardInfo.DiscountRateEnd);//启用日期
+                //折扣有效期,BCD码
+                Buffer.BlockCopy(bcdDate, 0, m_Data, 34, 4);
+                nOffset += 6;
 
-            m_Data[nOffset] = cardInfo.PriceLevel; //价格等级
-            m_Data[39] = 0;//当前等级
-            m_Data[40] = 0x00;  //备用
+                m_Data[nOffset] = cardInfo.PriceLevel; //价格等级
+                m_Data[39] = 0;//当前等级
+                m_Data[40] = 0x00;  //备用
+            }
             m_le = 0;
 
             m_nTotalLen = 46;
@@ -475,37 +499,75 @@ namespace ApduLoh
                 if (byteLimitAreaCode != null)
                     Buffer.BlockCopy(byteLimitAreaCode, 0, m_Data, 3, byteLimitAreaCode.Length);
             }
-            if (cardInfo.LimitCarNo && !string.IsNullOrEmpty(cardInfo.CarNo))
+
+            if (cardInfo.m_bSinopec)
             {
-                byte[] carNo = PublicFunc.GetBytesFormEncoding(cardInfo.CarNo);
-                for (int i = 0; i < 16; i++)
+                //限每次加油量
+                m_Data[43] = 0xFF;
+                m_Data[44] = 0xFF;
+                //
+                if (cardInfo.LimitGasFillAmount > 0 && cardInfo.LimitGasFillAmount < 10000000 && cardInfo.LimitGasFillCount == 0xFF)
+                    m_Data[45] =  0x09;//限每日加油总量后就要限制每日加油次数
+                else
+                    m_Data[45] = cardInfo.LimitGasFillCount;//每天次数
+                if (cardInfo.LimitGasFillAmount != 0xFFFFFFFF)
                 {
-                    if (i < carNo.Length)
-                        m_Data[43 + i] = carNo[i];
-                    else
-                        m_Data[43 + i] = 0x00;                    
+                    byte[] byteAmount = BitConverter.GetBytes(cardInfo.LimitGasFillAmount);
+                    m_Data[46] = byteAmount[3];
+                    m_Data[47] = byteAmount[2];
+                    m_Data[48] = byteAmount[1];
+                    m_Data[49] = byteAmount[0];
+                }
+
+                if (cardInfo.LimitCarNo && !string.IsNullOrEmpty(cardInfo.CarNo))
+                {
+                    byte[] carNo = PublicFunc.GetBytesFormEncoding(cardInfo.CarNo);
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (i < carNo.Length)
+                            m_Data[50 + i] = carNo[i];
+                        else
+                            m_Data[50 + i] = 0x00;
+                    }
                 }
             }
-                
-            byte[] fixData = BitConverter.GetBytes(cardInfo.LimitFixDepartment);//定点单位标识
-            m_Data[59] = fixData[3];
-            m_Data[60] = fixData[2];
-            m_Data[61] = fixData[1];
-            m_Data[62] = fixData[0];
-            
-            m_Data[63] = cardInfo.LimitGasFillCount;
-            byte[] byteAmount = BitConverter.GetBytes(cardInfo.LimitGasFillAmount);
-            m_Data[64] = byteAmount[3];
-            m_Data[65] = byteAmount[2];
-            m_Data[66] = byteAmount[1];
-            m_Data[67] = byteAmount[0];
-
-            //保留字段 占用8字节作为子卡的关联母卡 卡号
-            if (cardInfo.UserCardType == CardType.CompanySubCard)
+            else
             {
-                byte[] motherCard = cardInfo.GetRelatedMotherCardID();
-                if (motherCard != null)
-                    Buffer.BlockCopy(motherCard, 0, m_Data, 75, 8);
+                if (cardInfo.LimitCarNo && !string.IsNullOrEmpty(cardInfo.CarNo))
+                {
+                    byte[] carNo = PublicFunc.GetBytesFormEncoding(cardInfo.CarNo);
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (i < carNo.Length)
+                            m_Data[43 + i] = carNo[i];
+                        else
+                            m_Data[43 + i] = 0x00;
+                    }
+                }
+
+                byte[] fixData = BitConverter.GetBytes(cardInfo.LimitFixDepartment);//定点单位标识
+                m_Data[59] = fixData[3];
+                m_Data[60] = fixData[2];
+                m_Data[61] = fixData[1];
+                m_Data[62] = fixData[0];
+
+                m_Data[63] = cardInfo.LimitGasFillCount;
+                if (cardInfo.LimitGasFillAmount != 0xFFFFFFFF)
+                {
+                    byte[] byteAmount = BitConverter.GetBytes(cardInfo.LimitGasFillAmount);
+                    m_Data[64] = byteAmount[3];
+                    m_Data[65] = byteAmount[2];
+                    m_Data[66] = byteAmount[1];
+                    m_Data[67] = byteAmount[0];
+                }
+
+                //保留字段 占用8字节作为子卡的关联母卡 卡号
+                if (cardInfo.UserCardType == CardType.CompanySubCard)
+                {
+                    byte[] motherCard = cardInfo.GetRelatedMotherCardID();
+                    if (motherCard != null)
+                        Buffer.BlockCopy(motherCard, 0, m_Data, 75, 8);
+                }
             }
 
             m_le = 0;

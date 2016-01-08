@@ -30,6 +30,8 @@ namespace ApduParam
     {
         public const byte CardGroup = 0x02; //卡种类：CPU卡
 
+        public bool m_bSinopec = false; //是否中石化卡
+
         private int m_nClientId;
         public int ClientID
         {
@@ -233,7 +235,14 @@ namespace ApduParam
         public uint LimitGasFillAmount
         {
             get { return m_nLimitGasFillAmount; }
-            set { m_nLimitGasFillAmount = value; }//大于0，小于100,000,000
+            set 
+            {
+                //大于0，小于100,000,000
+                if (value > 0 && value < 10000000)
+                    m_nLimitGasFillAmount = value;
+                else
+                    m_nLimitGasFillAmount = 0xFFFFFFFF; 
+            }
         }
 
         private string m_strBoalId;             //钢瓶编号
@@ -302,6 +311,7 @@ namespace ApduParam
 
         public UserCardInfoParam()
         {
+            m_bSinopec = false;
             m_nClientId = 0;
             m_strCardId = "";
             m_strMotherCardId = "";
@@ -347,7 +357,17 @@ namespace ApduParam
                 return;            
             m_strCompanyId = strCompanyId;
             byte nCardType = (byte)m_eCardType;
-            m_strCardId = m_strCompanyId + "02" + nCardType.ToString("X2") + "00" + m_strCardIndex;
+            m_strCardId = m_strCompanyId + CardGroup.ToString("X2") + nCardType.ToString("X2") + "00" + m_strCardIndex;
+            m_UserAccount = m_strCardId;//客户账号，与序列号相同
+        }
+
+        public void SetCardId_Sinopec(string strCardId)
+        {
+            if (strCardId.Length < 16 || strCardId.Length > 20)
+                return;
+            m_bSinopec = true;
+            m_strCompanyId = "";//中石化卡无公司代码
+            m_strCardId = strCardId.Substring(strCardId.Length-16, 16);
             m_UserAccount = m_strCardId;//客户账号，与序列号相同
         }
 

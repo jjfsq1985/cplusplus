@@ -1324,7 +1324,7 @@ namespace DaHuaApduCtrl
                 if (!(nRecvLen >= 2 && RecvData[nRecvLen - 2] == 0x90 && RecvData[nRecvLen - 1] == 0x00))
                     return null;
                 byte[] PsamAsn = new byte[8];
-                Buffer.BlockCopy(RecvData, 2, PsamAsn, 0, 8);//实际10个字节，前两个字节为0，跳过
+                Buffer.BlockCopy(RecvData, 2, PsamAsn, 0, 8);//实际10个字节，前两个字节跳过
                 if (bMessage)
                     OnTextOutput(new MsgOutEvent(0, "读取到卡号：" + BitConverter.ToString(PsamAsn)));
                 return PsamAsn;

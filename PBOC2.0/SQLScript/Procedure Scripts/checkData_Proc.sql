@@ -16,12 +16,15 @@ GO
 CREATE PROCEDURE  Pro_checkData With Encryption
 As
 BEGIN
-  declare @SerialNo int,@curCount int,@i Int,@FGuno int,@Gun int
+   declare @SerialNo int,@curCount int,@i Int,@FGuno int,@Gun int
   set @curCount = 0
   SET @Gun = 0
   truncate table SC_OmissiveData
   DECLARE My_Cursor CURSOR 
-	FOR select FSerialNo,FGunno from SC_ConsumerDetail order by FGunno,FSerialNo  
+	FOR select FSerialNo,FGunno from (select FSerialNo,FGunno 
+										from  SC_ConsumerDetail 
+										union all select FSerialNo,FGunno from SC_Shift)D
+    order by FGunno,FSerialNo  
 	OPEN My_Cursor; 
 	FETCH NEXT FROM My_Cursor into @SerialNo,@FGuno; 
 	WHILE @@FETCH_STATUS = 0

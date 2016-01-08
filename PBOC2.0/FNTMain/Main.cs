@@ -134,6 +134,12 @@ namespace FNTMain
                         CardOperatingMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnOneKeyCard_Click));
                     }  
                     break;
+                case MenuType.eSinopecCard:
+                    if (HaveManagementCardAuthority())
+                    {
+                        CardOperatingMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnSinopecCard_Click));
+                    }
+                    break;
                 case MenuType.eCardPublish:
                     CardOperatingMenuItem.DropDownItems.Add(strMenu, null, new EventHandler(OnCardPublish_Click));
                     break;
@@ -244,6 +250,20 @@ namespace FNTMain
             return false;
         }
 
+        private bool CloseChildForm(string strFormName)
+        {
+            foreach (Control children in this.MainPanel.Controls)
+            {
+                if (children.Name == strFormName)
+                {
+                    Form ChildForm = (Form)children;
+                    ChildForm.Close();
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void OnAccountManage_Click(object sender, EventArgs e)
         {
             Guid account = new Guid("9A91172D-C36D-42f1-9320-78F3461FE0CD");
@@ -313,14 +333,54 @@ namespace FNTMain
             ShowPluginForm.Invoke(RechargeInfoObj, new object[] { MainPanel, m_dbConnectInfo });    
         }
 
+        //中石化制卡
+        private void OnSinopecCard_Click(object sender, EventArgs e)
+        {
+            if (!HaveManagementCardAuthority())
+                return;
+            Guid SinopecCard = new Guid("59CF2101-1747-44e4-B095-B3D37CF26DE8");//制中石化卡
+
+            Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");//维护界面
+            Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");//逐步制卡
+            Guid OneKeyCard = new Guid("467991AA-6FD8-4bcb-93F5-3931434469B6");//一键制卡
+            if (!m_Plugins.ContainsKey(SinopecCard))
+                return;
+            if (FindChildForm(m_Plugins[SinopecCard].strPluginName))
+                return;
+
+            if (m_Plugins.ContainsKey(CardPublish) && FindChildForm(m_Plugins[CardPublish].strPluginName))
+            {
+                CloseChildForm(m_Plugins[CardPublish].strPluginName);                
+            }
+            else if (m_Plugins.ContainsKey(CardOperating) && FindChildForm(m_Plugins[CardOperating].strPluginName))
+            {
+                CloseChildForm(m_Plugins[CardOperating].strPluginName);
+            }
+            else if (m_Plugins.ContainsKey(OneKeyCard) && FindChildForm(m_Plugins[OneKeyCard].strPluginName))
+            {
+                CloseChildForm(m_Plugins[OneKeyCard].strPluginName);
+            }
+
+            object SinopecObj = GetObject(SinopecCard, m_Plugins[SinopecCard].strPluginPath);
+            if (SinopecObj == null)
+                return;
+            Type t = SinopecObj.GetType();
+            MethodInfo ShowPluginForm = t.GetMethod("ShowPluginForm");
+            MethodInfo SetAuthority = t.GetMethod("SetAuthority");
+            SetAuthority.Invoke(SinopecObj, new object[] { m_nLoginID, (m_nLoginAuthority & GrobalVariable.CardOp_KeyManage_Authority) });
+            ShowPluginForm.Invoke(SinopecObj, new object[] { MainPanel, m_dbConnectInfo });    
+
+        }
+
         private void OnOneKeyCard_Click(object sender, EventArgs e)
         {
             if (!HaveManagementCardAuthority())
                 return;
-
-            Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");//逐步制卡
             Guid OneKeyCard = new Guid("467991AA-6FD8-4bcb-93F5-3931434469B6");//一键制卡
-            Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");
+
+            Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");//维护界面
+            Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");//逐步制卡
+            Guid SinopecCard = new Guid("59CF2101-1747-44e4-B095-B3D37CF26DE8");//制中石化卡
             if (!m_Plugins.ContainsKey(OneKeyCard))
                 return;
             if (FindChildForm(m_Plugins[OneKeyCard].strPluginName))
@@ -328,13 +388,15 @@ namespace FNTMain
 
             if (m_Plugins.ContainsKey(CardPublish) && FindChildForm(m_Plugins[CardPublish].strPluginName))
             {
-                MessageBox.Show("请先关闭卡信息维护界面，然后才能打开一键制卡界面", "注意");
-                return;
+                CloseChildForm(m_Plugins[CardPublish].strPluginName);
             }
             else if (m_Plugins.ContainsKey(CardOperating) && FindChildForm(m_Plugins[CardOperating].strPluginName))
             {
-                MessageBox.Show("请先关闭逐步制卡界面，然后才能打开一键制卡界面", "注意");
-                return;
+                CloseChildForm(m_Plugins[CardOperating].strPluginName);
+            }
+            else if (m_Plugins.ContainsKey(SinopecCard) && FindChildForm(m_Plugins[SinopecCard].strPluginName))
+            {
+                CloseChildForm(m_Plugins[SinopecCard].strPluginName);
             }
 
             object OneKeyObj = GetObject(OneKeyCard, m_Plugins[OneKeyCard].strPluginPath);
@@ -352,10 +414,11 @@ namespace FNTMain
         {
             if (!HaveManagementCardAuthority())
                 return;
-
             Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");//逐步制卡
+
+            Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");//维护界面
             Guid OneKeyCard = new Guid("467991AA-6FD8-4bcb-93F5-3931434469B6");//一键制卡
-            Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");
+            Guid SinopecCard = new Guid("59CF2101-1747-44e4-B095-B3D37CF26DE8");//制中石化卡
             if (!m_Plugins.ContainsKey(CardOperating))
                 return;
             if (FindChildForm(m_Plugins[CardOperating].strPluginName))
@@ -363,13 +426,15 @@ namespace FNTMain
 
             if (m_Plugins.ContainsKey(CardPublish) && FindChildForm(m_Plugins[CardPublish].strPluginName))
             {
-                MessageBox.Show("请先关闭卡信息维护界面，然后才能打开逐步制卡界面", "注意");
-                return;
+                CloseChildForm(m_Plugins[CardPublish].strPluginName);
             }
             else if (m_Plugins.ContainsKey(OneKeyCard) && FindChildForm(m_Plugins[OneKeyCard].strPluginName))
             {
-                MessageBox.Show("请先关闭一键制卡界面，然后才能打开逐步制卡界面", "注意");
-                return;
+                CloseChildForm(m_Plugins[OneKeyCard].strPluginName);
+            }
+            else if (m_Plugins.ContainsKey(SinopecCard) && FindChildForm(m_Plugins[SinopecCard].strPluginName))
+            {
+                CloseChildForm(m_Plugins[SinopecCard].strPluginName);
             }
 
             object CardOperatingObj = GetObject(CardOperating, m_Plugins[CardOperating].strPluginPath);
@@ -384,9 +449,11 @@ namespace FNTMain
 
         private void OnCardPublish_Click(object sender, EventArgs e)
         {
+            Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");//维护界面
+
             Guid CardOperating = new Guid("1AFEA8C6-5026-4bf7-9C77-573D8C10E4A8");//逐步制卡
             Guid OneKeyCard = new Guid("467991AA-6FD8-4bcb-93F5-3931434469B6");//一键制卡
-            Guid CardPublish = new Guid("4F0D50FF-AAE0-4504-9B20-701417840786");
+            Guid SinopecCard = new Guid("59CF2101-1747-44e4-B095-B3D37CF26DE8");//制中石化卡
             if (!m_Plugins.ContainsKey(CardPublish))
                 return;
             if (FindChildForm(m_Plugins[CardPublish].strPluginName))
@@ -394,13 +461,15 @@ namespace FNTMain
 
             if (m_Plugins.ContainsKey(CardOperating) && FindChildForm(m_Plugins[CardOperating].strPluginName))
             {
-                MessageBox.Show("请先关闭逐步制卡界面，然后才能打开卡信息维护界面", "注意");
-                return;
+                CloseChildForm(m_Plugins[CardOperating].strPluginName);
             }
             else if(m_Plugins.ContainsKey(OneKeyCard) && FindChildForm(m_Plugins[OneKeyCard].strPluginName))
             {
-                MessageBox.Show("请先关闭一键制卡界面，然后才能打开卡信息维护界面", "注意");
-                return;
+                CloseChildForm(m_Plugins[OneKeyCard].strPluginName);
+            }
+            else if (m_Plugins.ContainsKey(SinopecCard) && FindChildForm(m_Plugins[SinopecCard].strPluginName))
+            {
+                CloseChildForm(m_Plugins[SinopecCard].strPluginName);
             }
 
             object CardPublishObj = GetObject(CardPublish, m_Plugins[CardPublish].strPluginPath);
