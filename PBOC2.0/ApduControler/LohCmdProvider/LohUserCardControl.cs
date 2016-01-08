@@ -1655,9 +1655,16 @@ namespace LohApduCtrl
             if (byteAsn == null)
                 return;
             CardInfo.CardOrderNo = BitConverter.ToString(byteAsn, 5, 3).Replace("-", "");
-            CardInfo.UserCardType = (CardType)byteAsn[3];
-            Trace.Assert(byteAsn[2] == 0x02);
-            CardInfo.SetCardId(BitConverter.ToString(byteAsn, 0, 2).Replace("-", ""));
+            if (byteAsn[2] != 0x02)
+            {
+                CardInfo.UserCardType = (CardType)byteAsn[0];
+                CardInfo.SetCardId_Sinopec(BitConverter.ToString(byteAsn, 0, 8).Replace("-", ""));//中石化卡
+            }
+            else
+            {
+                CardInfo.UserCardType = (CardType)byteAsn[3];
+                CardInfo.SetCardId(BitConverter.ToString(byteAsn, 0, 2).Replace("-", ""));
+            }
             CardInfo.ValidCardBegin = cardStart;
             CardInfo.ValidCardEnd = cardEnd;
 
@@ -1748,7 +1755,8 @@ namespace LohApduCtrl
                 return;
             try
             {
-                Trace.Assert(CardInfo.UserCardType == (CardType)RecvData[0]);
+                if(!CardInfo.m_bSinopec)
+                    Trace.Assert(CardInfo.UserCardType == (CardType)RecvData[0]);
                 int nCount = 0;
                 for (int i = 0; i < 20; i++)
                 {
@@ -1759,14 +1767,22 @@ namespace LohApduCtrl
                 }
                 if (nCount > 0)
                     CardInfo.UserName = PublicFunc.GetStringFromEncoding(RecvData, 2, nCount);
-                string strIdentity = BitConverter.ToString(RecvData, 22, 9).Replace("-", "");
-                CardInfo.UserIdentity = strIdentity.Replace('F', 'X');
-                CardInfo.IdType = (UserCardInfoParam.IdentityType)(RecvData[31]);//证件类型
-                string strValue = BitConverter.ToString(RecvData, 32, 2).Replace("-", "");
-                int nDiscountRate = Convert.ToInt32(strValue);
-                DateTime RateExprieValid = DateTime.ParseExact(BitConverter.ToString(RecvData, 34, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
-                CardInfo.setDiscountRate(nDiscountRate * 1.0 / 100.0, RateExprieValid);
-                CardInfo.PriceLevel = RecvData[38];  //价格等级
+                if (CardInfo.m_bSinopec)
+                {
+                    CardInfo.UserIdentity = Encoding.ASCII.GetString(RecvData, 22, 18);
+                    CardInfo.IdType = (UserCardInfoParam.IdentityType)(RecvData[40]);//证件类型
+                }
+                else
+                {
+                    string strIdentity = BitConverter.ToString(RecvData, 22, 9).Replace("-", "");
+                    CardInfo.UserIdentity = strIdentity.Replace('F', 'X');
+                    CardInfo.IdType = (UserCardInfoParam.IdentityType)(RecvData[31]);//证件类型
+                    string strValue = BitConverter.ToString(RecvData, 32, 2).Replace("-", "");
+                    int nDiscountRate = Convert.ToInt32(strValue);
+                    DateTime RateExprieValid = DateTime.ParseExact(BitConverter.ToString(RecvData, 34, 4).Replace("-", ""), "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+                    CardInfo.setDiscountRate(nDiscountRate * 1.0 / 100.0, RateExprieValid);
+                    CardInfo.PriceLevel = RecvData[38];  //价格等级
+                }
             }
             catch
             {
@@ -1791,30 +1807,56 @@ namespace LohApduCtrl
             {
                 CardInfo.LimitGasType = (ushort)((RecvData[0] << 8) + RecvData[1]);
                 CardInfo.setLimitArea(RecvData[2], BitConverter.ToString(RecvData, 3, 40).Replace("-", ""));
-                int nCount = 0;
-                for (int i = 0; i < 16; i++)
+                if (CardInfo.m_bSinopec)
                 {
-                    if (RecvData[43 + i] != 0xFF)
-                        nCount++;
+                    CardInfo.LimitGasFillCount = RecvData[45];
+                    CardInfo.LimitGasFillAmount = (uint)((RecvData[46] << 24) + (RecvData[47] << 16) + (RecvData[48] << 8) + RecvData[49]);
+                    int nCount = 0;
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (RecvData[50 + i] != 0xFF)
+                            nCount++;
+                        else
+                            break;
+                    }
+                    if (nCount > 0)
+                    {
+                        CardInfo.LimitCarNo = true;
+                        CardInfo.CarNo = PublicFunc.GetStringFromEncoding(RecvData, 50, nCount);
+                    }
                     else
-                        break;
-                }
-                if (nCount > 0)
-                {
-                    CardInfo.LimitCarNo = true;
-                    CardInfo.CarNo = PublicFunc.GetStringFromEncoding(RecvData, 43, nCount);
+                    {
+                        CardInfo.LimitCarNo = false;
+                        CardInfo.CarNo = "";
+                    }
                 }
                 else
                 {
-                    CardInfo.LimitCarNo = false;
-                    CardInfo.CarNo = "";
-                }
-                CardInfo.LimitGasFillCount = RecvData[63];
-                CardInfo.LimitGasFillAmount = (uint)((RecvData[64] << 24) + (RecvData[65] << 16) + (RecvData[66] << 8) + RecvData[67]);
-                if (CardInfo.UserCardType == CardType.CompanySubCard)
-                {
-                    string strMotherCard = BitConverter.ToString(RecvData, 75, 8).Replace("-", "");
-                    CardInfo.SetMotherCard(strMotherCard);
+                    int nCount = 0;
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (RecvData[43 + i] != 0xFF)
+                            nCount++;
+                        else
+                            break;
+                    }
+                    if (nCount > 0)
+                    {
+                        CardInfo.LimitCarNo = true;
+                        CardInfo.CarNo = PublicFunc.GetStringFromEncoding(RecvData, 43, nCount);
+                    }
+                    else
+                    {
+                        CardInfo.LimitCarNo = false;
+                        CardInfo.CarNo = "";
+                    }
+                    CardInfo.LimitGasFillCount = RecvData[63];
+                    CardInfo.LimitGasFillAmount = (uint)((RecvData[64] << 24) + (RecvData[65] << 16) + (RecvData[66] << 8) + RecvData[67]);
+                    if (CardInfo.UserCardType == CardType.CompanySubCard)
+                    {
+                        string strMotherCard = BitConverter.ToString(RecvData, 75, 8).Replace("-", "");
+                        CardInfo.SetMotherCard(strMotherCard);
+                    }
                 }
             }
             catch
