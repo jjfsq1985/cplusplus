@@ -194,10 +194,12 @@ namespace PublishCardOperator
         {
             CpuKeyGridView.Rows.Clear();
             SqlDataReader dataReader = null;
-            SqlParameter[] sqlparams = new SqlParameter[2];
+            SqlParameter[] sqlparams = new SqlParameter[1];
             sqlparams[0] = m_ObjSql.MakeParam("KeyIdStart", SqlDbType.Int, 4, ParameterDirection.Input, m_nCurPage * m_nRowsPerPage);
-            sqlparams[1] = m_ObjSql.MakeParam("KeyIdEnd", SqlDbType.Int, 4, ParameterDirection.Input, (m_nCurPage + 1) * m_nRowsPerPage);
-            m_ObjSql.ExecuteCommand("select * from Key_CpuCard where KeyId > @KeyIdStart and KeyId <= @KeyIdEnd", sqlparams, out dataReader);
+            //KeyId可能不连续
+            //sqlparams[1] = m_ObjSql.MakeParam("KeyIdEnd", SqlDbType.Int, 4, ParameterDirection.Input, (m_nCurPage + 1) * m_nRowsPerPage);
+            string strCmd = string.Format("select top {0} * from Key_CpuCard where KeyId > @KeyIdStart", m_nRowsPerPage);
+            m_ObjSql.ExecuteCommand(strCmd, sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows)

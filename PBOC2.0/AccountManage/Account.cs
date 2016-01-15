@@ -140,10 +140,12 @@ namespace AccountManage
         {
             UserGridView.Rows.Clear();
             SqlDataReader dataReader = null;
-            SqlParameter[] sqlparams = new SqlParameter[2];
+            SqlParameter[] sqlparams = new SqlParameter[1];
             sqlparams[0] = m_ObjSql.MakeParam("IdStart", SqlDbType.Int, 4, ParameterDirection.Input, m_nCurPage * m_nRowsPerPage);
-            sqlparams[1] = m_ObjSql.MakeParam("IdEnd", SqlDbType.Int, 4, ParameterDirection.Input, (m_nCurPage + 1) * m_nRowsPerPage);
-            m_ObjSql.ExecuteCommand("select * from UserDb where UserId > @IdStart and UserId <= @IdEnd", sqlparams, out dataReader);
+            //UserId可能不连续
+            //sqlparams[1] = m_ObjSql.MakeParam("IdEnd", SqlDbType.Int, 4, ParameterDirection.Input, (m_nCurPage + 1) * m_nRowsPerPage);
+            string strCmd = string.Format("select top {0} * from UserDb where UserId > @IdStart",m_nRowsPerPage);
+            m_ObjSql.ExecuteCommand(strCmd, sqlparams, out dataReader);
             if (dataReader != null)
             {
                 if (dataReader.HasRows)
