@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph Layout="Sugiyama" ZoomLevel="-1" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="(@10)" Category="CodeSchema_Assembly" Visibility="Hidden" />
+    <Node Id="(@5)" Category="CodeSchema_Assembly" Visibility="Hidden" />
+    <Node Id="@12" Category="CodeSchema_Interface" Bounds="386.093333333333,115,122.23,25" CodeSchemaProperty_IsAbstract="True" CodeSchemaProperty_IsPublic="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="IApduBase" UseManualLocation="True" />
+    <Node Id="@13" Category="CodeSchema_Interface" Bounds="283.914999999999,-30.6668056722005,168.626666666667,25" CodeSchemaProperty_IsAbstract="True" CodeSchemaProperty_IsPublic="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="ISamApduProvider" UseManualLocation="True" />
+    <Node Id="@15" Category="CodeSchema_Interface" Bounds="302.363333333333,265.337597298177,169.73,25.0000000000001" CodeSchemaProperty_IsAbstract="True" CodeSchemaProperty_IsPublic="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="IUserApduProvider" UseManualLocation="True" />
+    <Node Id="@18" Category="CodeSchema_Class" Bounds="-114.941666666664,-103.397472519341,192.246666666666,25" CodeSchemaProperty_IsPublic="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="LohPsamApduProvider" UseManualLocation="True" />
+    <Node Id="@20" Category="CodeSchema_Class" Bounds="-110.508333333336,44.3850515939231,187.380000000001,25" CodeSchemaProperty_IsPublic="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="LohUserApduProvider" UseManualLocation="True" />
+    <Node Id="@22" Category="CodeSchema_Class" Bounds="-115.999999999999,155.22191826059,204.363333333333,25" CodeSchemaProperty_IsPublic="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="PSAMCardAPDUProvider" UseManualLocation="True" />
+    <Node Id="@23" Category="CodeSchema_Class" Bounds="-113.72512496,294.308833230876,195.813583253333,25" CodeSchemaProperty_IsPublic="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="UserCardAPDUProvider" UseManualLocation="True" />
+    <Node Id="@4" Category="CodeSchema_Class" Bounds="-28.6450727540787,237.308785390788,157.774541653333,25" CodeSchemaProperty_IsPublic="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="ApduDaHuaBase" UseManualLocation="True" />
+    <Node Id="@6" Category="CodeSchema_Class" Bounds="0.675833994547489,-11.5606058526738,142.59,25" CodeSchemaProperty_IsPublic="True" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="APDULohBase" UseManualLocation="True" />
+    <Node Id="APDU命令组装" Category="Comment" Bounds="367.425410563151,320.337697298177,137.886666666667,25.8366666666667" Label="用户卡APDU命令组装" UseManualLocation="True" />
+    <Node Id="PSAM卡APDU命令组装" Category="Comment" Bounds="355.307907307943,-86.5035723388671,148.323333333333,25.8366666666666" Label="PSAM卡APDU命令组装" UseManualLocation="True" />
+    <Node Id="卡商1PSAM卡APDU命令" Category="Comment" Bounds="-184.684166005453,-48.3973734792074,155.36,25.8366666666667" UseManualLocation="True" />
+    <Node Id="卡商1用户卡APDU命令" Category="Comment" Bounds="-147.508331858317,99.3851515939231,144.923333333333,25.8366666666666" UseManualLocation="True" />
+    <Node Id="卡商2PSAM卡APDU命令" Category="Comment" Bounds="-214.005072754079,210.22201826059,155.36,25.8366666666667" UseManualLocation="True" />
+    <Node Id="卡商2用户卡APDU命令" Category="Comment" Bounds="-175.725126825968,349.308933230876,144.923333333333,25.8366666666666" UseManualLocation="True" />
+  </Nodes>
+  <Links>
+    <Link Source="@13" Target="@12" Category="Implements" Bounds="375.005786820036,-5.66680567220054,60.8969838213833,112.315385013074" Weight="1" />
+    <Link Source="@15" Target="@12" Category="Implements" Bounds="392.215442436274,148.823662866356,46.4854162419512,116.513934431821" Weight="1" />
+    <Link Source="@18" Target="@12" Category="Implements" Bounds="7.85474701936141,-78.3974725193405,404.07827348673,189.36614563433" Weight="1" />
+    <Link Source="@18" Target="@13" Category="Implements" Bounds="47.7022080429997,-78.3974725193405,244.668995430624,45.976210950848" Weight="1" />
+    <Link Source="@18" Target="@6" Category="InheritsFrom" Bounds="-6.46093664951759,-78.3974725193405,59.3955068597673,60.0809260027718" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="172">
+      <Category Ref="CodeSchema_Calls" />
+      <Category Ref="CodeSchema_FieldRead" />
+      <Category Ref="CodeSchema_FieldWrite" />
+    </Link>
+    <Link Source="@20" Target="@12" Category="Implements" Bounds="65.321970727754,69.3850515939231,311.696545172605,47.4335572432241" Weight="1" />
+    <Link Source="@20" Target="@15" Category="Implements" Bounds="6.03989315704126,69.3850515939231,349.995096892641,191.394494800359" Weight="1" />
+    <Link Source="@20" Target="@6" Category="InheritsFrom" Bounds="3.01992833438987,18.5038015342478,41.0751208777345,25.8812500596752" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="457">
+      <Category Ref="CodeSchema_Calls" />
+      <Category Ref="CodeSchema_FieldRead" />
+      <Category Ref="CodeSchema_FieldWrite" />
+    </Link>
+    <Link Source="@22" Target="@12" Category="Implements" Bounds="88.1640970183701,133.657615152091,288.465186111729,25.1669241189485" Weight="1" />
+    <Link Source="@22" Target="@13" Category="Implements" Bounds="11.8722154654206,-1.51037177614332,322.123083642323,156.732290036733" Weight="1" />
+    <Link Source="@22" Target="@4" Category="InheritsFrom" Bounds="-4.0633424246906,180.22191826059,38.7058885156449,49.5975456027262" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="213">
+      <Category Ref="CodeSchema_Calls" />
+      <Category Ref="CodeSchema_FieldRead" />
+      <Category Ref="CodeSchema_FieldWrite" />
+    </Link>
+    <Link Source="@23" Target="@12" Category="Implements" Bounds="25.9219436645508,143.897506713867,384.836723327637,150.411331176758" Weight="1" />
+    <Link Source="@23" Target="@15" Category="Implements" Bounds="82.0884582933329,284.618852732666,210.799322740642,15.1523816437442" Weight="1" />
+    <Link Source="@23" Target="@4" Category="InheritsFrom" Bounds="-1.33138685057524,268.514916291843,29.894007542119,25.7939169390331" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="529">
+      <Category Ref="CodeSchema_Calls" />
+      <Category Ref="CodeSchema_FieldRead" />
+      <Category Ref="CodeSchema_FieldWrite" />
+    </Link>
+    <Link Source="@4" Target="@12" Category="Implements" Bounds="90.8162204271935,142.797298428892,306.74365819073,94.5114869618959" Weight="1" />
+    <Link Source="@6" Target="@12" Category="Implements" Bounds="109.031882415846,13.4393941473262,292.113629634605,98.5244758573571" Weight="1" />
+    <Link Source="APDU命令组装" Target="@15" Bounds="404.283367339022,297.071544334196,20.6304629686021,23.2661648129392" />
+    <Link Source="PSAM卡APDU命令组装" Target="@13" Bounds="388.715003221128,-60.6669056722005,26.4789098810003,23.9612993893287" />
+    <Link Source="卡商1PSAM卡APDU命令" Target="@18" Bounds="-86.4475762040878,-73.6087129347094,40.1181135489396,25.2113394555021" />
+    <Link Source="卡商1用户卡APDU命令" Target="@20" Bounds="-61.4733294774267,75.5897684442701,25.0018880613202,23.795383149653" />
+    <Link Source="卡商2PSAM卡APDU命令" Target="@22" Bounds="-107.768096307307,183.931357849461,58.1175412306048,26.2906604111292" />
+    <Link Source="卡商2用户卡APDU命令" Target="@23" Bounds="-82.8795332099631,324.126567659292,39.7354277039905,25.1823655715843" />
+  </Links>
+  <Categories>
+    <Category Id="CodeSchema_Assembly" Label="程序集" BasedOn="File" CanBeDataDriven="True" DefaultAction="Microsoft.Contains" Icon="CodeSchema_Assembly" NavigationActionLabel="程序集" />
+    <Category Id="CodeSchema_Calls" Label="调用" CanBeDataDriven="True" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="调用者" OutgoingActionLabel="调用" />
+    <Category Id="CodeSchema_Class" Label="类" BasedOn="CodeSchema_Type" CanBeDataDriven="True" DefaultAction="Node:Both:CodeSchema_Member" Icon="CodeSchema_Class" NavigationActionLabel="类" />
+    <Category Id="CodeSchema_FieldRead" Label="字段读取" BasedOn="CodeSchema_FieldReference" CanBeDataDriven="True" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="读取方" OutgoingActionLabel="读取字段" />
+    <Category Id="CodeSchema_FieldReference" Label="字段引用" CanBeDataDriven="True" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="引用方" OutgoingActionLabel="引用字段" />
+    <Category Id="CodeSchema_FieldWrite" Label="字段写入" BasedOn="CodeSchema_FieldReference" CanBeDataDriven="True" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="写入方" OutgoingActionLabel="写入字段" />
+    <Category Id="CodeSchema_Interface" Label="接口" BasedOn="CodeSchema_Type" CanBeDataDriven="True" DefaultAction="Node:Both:CodeSchema_Member" Icon="CodeSchema_Interface" NavigationActionLabel="接口" />
+    <Category Id="CodeSchema_Type" Label="类型" CanBeDataDriven="True" DefaultAction="Node:Both:CodeSchema_Member" Icon="CodeSchema_Class" NavigationActionLabel="类型" />
+    <Category Id="Comment" Label="注释" Description="表示在图表中用户定义的注释" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="注释" />
+    <Category Id="File" Label="文件" CanBeDataDriven="True" DefaultAction="Microsoft.Contains" Icon="File" NavigationActionLabel="文件" />
+    <Category Id="Implements" Label="实现" CanBeDataDriven="True" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="实现者" OutgoingActionLabel="实现" />
+    <Category Id="InheritsFrom" Label="继承自" CanBeDataDriven="True" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="继承者" OutgoingActionLabel="继承自" />
+  </Categories>
+  <Properties>
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
+    <Property Id="CodeSchemaProperty_IsAbstract" Label="是抽象的" Description="一个标志，用于指示该成员是“抽象”成员且不提供完整实现" DataType="System.Boolean" />
+    <Property Id="CodeSchemaProperty_IsPublic" Label="是公共的" Description="一个标志，用于指示该范围是“公共”范围" DataType="System.Boolean" />
+    <Property Id="DefaultAction" Label="DefaultAction" Description="DefaultAction" DataType="System.String" />
+    <Property Id="DelayedChildNodesState" Label="延迟的子节点状态" Description="如果未指定延迟的子节点状态，则为 Unspecified。如果尚未将组包含的子节点提取到关系图中，则为 NotFetched。如果已提取组内的所有延迟的子节点，则为 Fetched。" DataType="Microsoft.VisualStudio.GraphModel.DelayedDataState" />
+    <Property Id="DelayedCrossGroupLinksState" Label="延迟的跨组链接状态" Description="如果未指定延迟的跨组链接状态，则为 Unspecified。如果尚未将此节点上延迟的跨组链接提取到关系图中，则为 NotFetched。如果已提取所有延迟的跨组链接，则为 Fetched。" DataType="Microsoft.VisualStudio.GraphModel.DelayedDataState" />
+    <Property Id="Expression" DataType="System.String" />
+    <Property Id="Group" Label="组" Description="将节点显示为组" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
+    <Property Id="GroupLabel" DataType="System.String" />
+    <Property Id="Icon" Label="图标" Description="图标" DataType="System.String" />
+    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
+    <Property Id="IsEnabled" DataType="System.Boolean" />
+    <Property Id="IsProviderRoot" Label="IsProviderRoot" Description="IsProviderRoot" DataType="System.Boolean" />
+    <Property Id="IsSourceVirtualized" Label="已虚拟化链接源" Description="如果为 true，则链接源端包含虚拟化节点/链接(即，不在图中实际创建)的数据。" DataType="System.Boolean" />
+    <Property Id="IsTargetVirtualized" Label="已虚拟化链接目标" Description="如果为 true，则链接目标端包含虚拟化节点/链接(即，不在图中实际创建)的数据。" DataType="System.Boolean" />
+    <Property Id="Label" Label="标签" Description="可批注对象的可显示标签" DataType="System.String" />
+    <Property Id="Layout" DataType="System.String" />
+    <Property Id="NavigationActionLabel" Label="NavigationActionLabel" Description="NavigationActionLabel" DataType="System.String" />
+    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
+    <Property Id="TargetType" DataType="System.Type" />
+    <Property Id="UseManualLocation" DataType="System.Boolean" />
+    <Property Id="Value" DataType="System.String" />
+    <Property Id="ValueLabel" DataType="System.String" />
+    <Property Id="Visibility" Label="Visibility" Description="Defines whether a node in the graph is visible or not" DataType="System.Windows.Visibility" />
+    <Property Id="Weight" Label="粗细" Description="粗细" DataType="System.Double" />
+    <Property Id="ZoomLevel" DataType="System.String" />
+  </Properties>
+  <QualifiedNames>
+    <Name Id="Assembly" Label="程序集" ValueType="Uri" />
+    <Name Id="Namespace" Label="命名空间" ValueType="System.String" />
+    <Name Id="Type" Label="类型" ValueType="System.Object" />
+  </QualifiedNames>
+  <IdentifierAliases>
+    <Alias n="3" Uri="Assembly=$(27eac653-4040-412a-a2f9-4b3c7bd6dfb5.OutputPathUri)" />
+    <Alias n="4" Id="(@3 Namespace=ApduDaHua Type=ApduDaHuaBase)" />
+    <Alias n="5" Uri="Assembly=$(d81c0acc-24f9-4d16-87a2-0ed1be39e8de.OutputPathUri)" />
+    <Alias n="6" Id="(@5 Namespace=ApduLoh Type=APDULohBase)" />
+    <Alias n="10" Uri="Assembly=$(eda49ece-f7e8-4189-8895-23cbb017610e.OutputPathUri)" />
+    <Alias n="11" Id="Namespace=ApduInterface" />
+    <Alias n="12" Id="(@10 @11 Type=IApduBase)" />
+    <Alias n="13" Id="(@10 @11 Type=ISamApduProvider)" />
+    <Alias n="15" Id="(@10 @11 Type=IUserApduProvider)" />
+    <Alias n="18" Id="(@5 Namespace=ApduLoh Type=LohPsamApduProvider)" />
+    <Alias n="20" Id="(@5 Namespace=ApduLoh Type=LohUserApduProvider)" />
+    <Alias n="22" Id="(@3 Namespace=ApduDaHua Type=PSAMCardAPDUProvider)" />
+    <Alias n="23" Id="(@3 Namespace=ApduDaHua Type=UserCardAPDUProvider)" />
+  </IdentifierAliases>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="类别 1" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('Category1')" />
+      <Setter Property="Background" Value="#FFE51400" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="结果" ValueLabel="True">
+      <Condition Expression="HasCategory('QueryResult')" />
+      <Setter Property="Background" Value="#FFBCFFBE" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="程序集" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Assembly')" />
+      <Setter Property="Background" Value="#FF094167" />
+      <Setter Property="Stroke" Value="#FF094167" />
+      <Setter Property="Icon" Value="CodeSchema_Assembly" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="命名空间" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Namespace')" />
+      <Setter Property="Background" Value="#FF0E619A" />
+      <Setter Property="Stroke" Value="#FF0E619A" />
+      <Setter Property="Icon" Value="CodeSchema_Namespace" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="接口" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Interface')" />
+      <Setter Property="Background" Value="#FF1382CE" />
+      <Setter Property="Stroke" Value="#FF1382CE" />
+      <Setter Property="Icon" Value="CodeSchema_Interface" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="结构" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Struct')" />
+      <Setter Property="Background" Value="#FF1382CE" />
+      <Setter Property="Stroke" Value="#FF1382CE" />
+      <Setter Property="Icon" Value="CodeSchema_Struct" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="枚举" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Enum')" />
+      <Setter Property="Background" Value="#FF1382CE" />
+      <Setter Property="Stroke" Value="#FF1382CE" />
+      <Setter Property="Icon" Value="CodeSchema_Enum" />
+      <Setter Property="LayoutSettings" Value="List" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="委托" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Delegate')" />
+      <Setter Property="Background" Value="#FF1382CE" />
+      <Setter Property="Stroke" Value="#FF1382CE" />
+      <Setter Property="Icon" Value="CodeSchema_Delegate" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="类" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Type')" />
+      <Setter Property="Background" Value="#FF1382CE" />
+      <Setter Property="Stroke" Value="#FF1382CE" />
+      <Setter Property="Icon" Value="CodeSchema_Class" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="属性" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Property')" />
+      <Setter Property="Background" Value="#FFE0E0E0" />
+      <Setter Property="Stroke" Value="#FFE0E0E0" />
+      <Setter Property="Icon" Value="CodeSchema_Property" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="方法" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Method') Or HasCategory('CodeSchema_CallStackUnresolvedMethod')" />
+      <Setter Property="Background" Value="#FFE0E0E0" />
+      <Setter Property="Stroke" Value="#FFE0E0E0" />
+      <Setter Property="Icon" Value="CodeSchema_Method" />
+      <Setter Property="LayoutSettings" Value="List" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="事件" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Event')" />
+      <Setter Property="Background" Value="#FFE0E0E0" />
+      <Setter Property="Stroke" Value="#FFE0E0E0" />
+      <Setter Property="Icon" Value="CodeSchema_Event" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="字段" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Field')" />
+      <Setter Property="Background" Value="#FFE0E0E0" />
+      <Setter Property="Stroke" Value="#FFE0E0E0" />
+      <Setter Property="Icon" Value="CodeSchema_Field" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Out 参数" ValueLabel="具有类别">
+      <Condition Expression="CodeSchemaProperty_IsOut = 'True'" />
+      <Setter Property="Icon" Value="CodeSchema_OutParameter" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="参数" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Parameter')" />
+      <Setter Property="Icon" Value="CodeSchema_Parameter" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="局部变量" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_LocalExpression')" />
+      <Setter Property="Icon" Value="CodeSchema_LocalExpression" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="外部" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('Externals')" />
+      <Setter Property="Background" Value="#FF424242" />
+      <Setter Property="Stroke" Value="#FF424242" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="继承自" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('InheritsFrom')" />
+      <Setter Property="Stroke" Value="#FF00A600" />
+      <Setter Property="StrokeDashArray" Value="2 0" />
+      <Setter Property="DrawArrow" Value="true" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="实现" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('Implements')" />
+      <Setter Property="Stroke" Value="#8000A600" />
+      <Setter Property="StrokeDashArray" Value="2 2" />
+      <Setter Property="DrawArrow" Value="true" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="调用" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_Calls')" />
+      <Setter Property="Stroke" Value="#FFFF00FF" />
+      <Setter Property="StrokeDashArray" Value="2 0" />
+      <Setter Property="DrawArrow" Value="true" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="函数指针" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_FunctionPointer')" />
+      <Setter Property="Stroke" Value="#FFFF00FF" />
+      <Setter Property="StrokeDashArray" Value="2 2" />
+      <Setter Property="DrawArrow" Value="true" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="字段引用" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('CodeSchema_FieldReference')" />
+      <Setter Property="Stroke" Value="#FF00AEEF" />
+      <Setter Property="DrawArrow" Value="true" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="Inherits From" ValueLabel="True" Visibility="Hidden">
+      <Condition Expression="HasCategory('InheritsFrom') And Target.HasCategory('CodeSchema_Class')" />
+      <Setter Property="TargetDecorator" Value="OpenArrow" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="Implements" ValueLabel="True" Visibility="Hidden">
+      <Condition Expression="HasCategory('Implements') And Target.HasCategory('CodeSchema_Interface')" />
+      <Setter Property="TargetDecorator" Value="OpenArrow" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="Field Read" ValueLabel="True" Visibility="Hidden">
+      <Condition Expression="Target.HasCategory('CodeSchema_Field') And HasCategory('CodeSchema_FieldRead')" />
+      <Setter Property="StrokeDashArray" Value="2 2" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="Comment Link" ValueLabel="True" Visibility="Hidden">
+      <Condition Expression="Source.HasCategory('Comment')" />
+      <Setter Property="Stroke" Value="#FFE5C365" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Cursor Location Changed" ValueLabel="True" Visibility="Hidden">
+      <Condition Expression="IsCursorLocation" />
+      <Setter Property="IndicatorWest" Value="WestIndicator" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Disabled Breakpoint Location Changed" ValueLabel="True" Visibility="Hidden">
+      <Condition Expression="DisabledBreakpointCount" />
+      <Setter Property="IndicatorWest" Value="WestIndicator" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Enabled Breakpoint Location Changed" ValueLabel="True" Visibility="Hidden">
+      <Condition Expression="EnabledBreakpointCount" />
+      <Setter Property="IndicatorWest" Value="WestIndicator" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Instruction Pointer Location Changed" ValueLabel="True" Visibility="Hidden">
+      <Condition Expression="IsInstructionPointerLocation" />
+      <Setter Property="IndicatorWest" Value="WestIndicator" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Current Callstack Changed" ValueLabel="True" Visibility="Hidden">
+      <Condition Expression="IsCurrentCallstackFrame" />
+      <Setter Property="IndicatorWest" Value="WestIndicator" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="注释" ValueLabel="包含注释">
+      <Condition Expression="HasCategory('Comment')" />
+      <Setter Property="Background" Value="#FFFFFACD" />
+      <Setter Property="Stroke" Value="#FFE5C365" />
+      <Setter Property="StrokeThickness" Value="1" />
+      <Setter Property="NodeRadius" Value="2" />
+      <Setter Property="MaxWidth" Value="250" />
+    </Style>
+  </Styles>
+  <Paths>
+    <Path Id="27eac653-4040-412a-a2f9-4b3c7bd6dfb5.OutputPath" Value="F:\SVN_PROJECT\CPUCardV010R010C000\trunk\FNTMain\bin\Debug\plugins\ApduDaHua.dll" />
+    <Path Id="27eac653-4040-412a-a2f9-4b3c7bd6dfb5.OutputPathUri" Value="file:///F:/SVN_PROJECT/CPUCardV010R010C000/trunk/FNTMain/bin/Debug/plugins/ApduDaHua.dll" />
+    <Path Id="d81c0acc-24f9-4d16-87a2-0ed1be39e8de.OutputPath" Value="F:\SVN_PROJECT\CPUCardV010R010C000\trunk\FNTMain\bin\Debug\plugins\ApduLoh.dll" />
+    <Path Id="d81c0acc-24f9-4d16-87a2-0ed1be39e8de.OutputPathUri" Value="file:///F:/SVN_PROJECT/CPUCardV010R010C000/trunk/FNTMain/bin/Debug/plugins/ApduLoh.dll" />
+    <Path Id="eda49ece-f7e8-4189-8895-23cbb017610e.OutputPath" Value="F:\SVN_PROJECT\CPUCardV010R010C000\trunk\FNTMain\bin\Debug\plugins\ApduInterface.dll" />
+    <Path Id="eda49ece-f7e8-4189-8895-23cbb017610e.OutputPathUri" Value="file:///F:/SVN_PROJECT/CPUCardV010R010C000/trunk/FNTMain/bin/Debug/plugins/ApduInterface.dll" />
+  </Paths>
+</DirectedGraph>

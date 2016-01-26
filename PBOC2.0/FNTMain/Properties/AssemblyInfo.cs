@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      内部版本号
 //      修订号
 //
-[assembly: AssemblyVersion("1.09.01.14")]
-[assembly: AssemblyFileVersion("1.09.01.14")]
+[assembly: AssemblyVersion("1.09.01.26")]
+[assembly: AssemblyFileVersion("1.09.01.26")]

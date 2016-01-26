@@ -775,6 +775,12 @@ namespace FNTMain
                         }
                     }
                     break;
+                case 6:
+                    SearchByText("Plate", strText, nSel);
+                    break;
+                case 7:
+                    SearchByText("SteelCylinderId", strText, nSel);
+                    break;
             }
         }
 
@@ -810,7 +816,9 @@ namespace FNTMain
             cmbCondition.Items.Add("身份证号码");
             cmbCondition.Items.Add("所属单位");
             cmbCondition.Items.Add("失效卡号");
-            cmbCondition.Items.Add("补卡卡号");            
+            cmbCondition.Items.Add("补卡卡号");
+            cmbCondition.Items.Add("车牌号");
+            cmbCondition.Items.Add("气瓶号");            
             cmbCondition.SelectedIndex = 0;
 
             listSearchResult.Items.Clear();
@@ -822,6 +830,9 @@ namespace FNTMain
             listSearchResult.Columns.Add("身份证号", 120);
             listSearchResult.Columns.Add("用户姓名", 100);
             listSearchResult.Columns.Add("联系电话", 100);
+            listSearchResult.Columns.Add("车牌号", 100);
+            listSearchResult.Columns.Add("气瓶号", 100);            
+            listSearchResult.Columns.Add("气瓶有效期", 100);
             listSearchResult.Columns.Add("卡余额", 60);
             listSearchResult.Columns.Add("卡状态", 60);
 
@@ -875,11 +886,16 @@ namespace FNTMain
                         listSearchResult.Columns.Add("身份证号", 120);
                         listSearchResult.Columns.Add("用户姓名", 100);
                         listSearchResult.Columns.Add("联系电话", 100);
+                        listSearchResult.Columns.Add("车牌号", 100);
+                        listSearchResult.Columns.Add("气瓶号", 100);
+                        listSearchResult.Columns.Add("气瓶有效期", 100);
                         listSearchResult.Columns.Add("卡余额", 60);
                         listSearchResult.Columns.Add("卡状态", 60);
                     }
                     break;
                 case 1:
+                case 6:
+                case 7:
                     textSearchContent.MaxLength = 16;
                     ChkSearchPsam.Visible = false;
                     ChkSearchPsam.Enabled = false;
@@ -890,6 +906,9 @@ namespace FNTMain
                     listSearchResult.Columns.Add("身份证号", 120);
                     listSearchResult.Columns.Add("用户姓名", 100);
                     listSearchResult.Columns.Add("联系电话", 100);
+                    listSearchResult.Columns.Add("车牌号", 100);
+                    listSearchResult.Columns.Add("气瓶号", 100);
+                    listSearchResult.Columns.Add("气瓶有效期", 100);
                     listSearchResult.Columns.Add("卡余额", 60);
                     listSearchResult.Columns.Add("卡状态", 60);
                     break;
@@ -904,6 +923,9 @@ namespace FNTMain
                     listSearchResult.Columns.Add("身份证号", 120);
                     listSearchResult.Columns.Add("用户姓名", 100);
                     listSearchResult.Columns.Add("联系电话", 100);
+                    listSearchResult.Columns.Add("车牌号", 100);
+                    listSearchResult.Columns.Add("气瓶号", 100);
+                    listSearchResult.Columns.Add("气瓶有效期", 100);
                     listSearchResult.Columns.Add("卡余额", 60);
                     listSearchResult.Columns.Add("卡状态", 60);
                     break;
@@ -929,6 +951,9 @@ namespace FNTMain
                         listSearchResult.Columns.Add("身份证号", 120);
                         listSearchResult.Columns.Add("用户姓名", 100);
                         listSearchResult.Columns.Add("联系电话", 100);
+                        listSearchResult.Columns.Add("车牌号", 100);
+                        listSearchResult.Columns.Add("气瓶号", 100);
+                        listSearchResult.Columns.Add("气瓶有效期", 100);
                         listSearchResult.Columns.Add("卡余额", 60);
                         listSearchResult.Columns.Add("卡状态", 60);
                     }
@@ -944,6 +969,9 @@ namespace FNTMain
                     listSearchResult.Columns.Add("身份证号", 120);
                     listSearchResult.Columns.Add("用户姓名", 100);
                     listSearchResult.Columns.Add("联系电话", 100);
+                    listSearchResult.Columns.Add("车牌号", 100);
+                    listSearchResult.Columns.Add("气瓶号", 100);
+                    listSearchResult.Columns.Add("气瓶有效期", 100);
                     listSearchResult.Columns.Add("卡余额", 60);
                     listSearchResult.Columns.Add("操作", 60);
                     listSearchResult.Columns.Add("客户姓名", 100);
@@ -961,6 +989,9 @@ namespace FNTMain
                     listSearchResult.Columns.Add("身份证号", 120);
                     listSearchResult.Columns.Add("用户姓名", 100);
                     listSearchResult.Columns.Add("联系电话", 100);
+                    listSearchResult.Columns.Add("车牌号", 100);
+                    listSearchResult.Columns.Add("气瓶号", 100);
+                    listSearchResult.Columns.Add("气瓶有效期", 100);
                     listSearchResult.Columns.Add("卡余额", 60);
                     listSearchResult.Columns.Add("补卡卡号", 120);
                     listSearchResult.Columns.Add("补卡人", 100);
@@ -1104,6 +1135,32 @@ namespace FNTMain
                         {
                             ItemCard.SubItems.Add("");
                         }
+
+                        //车牌号
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("Plate")))
+                        {
+                            string strPlate = (string)dataReader["Plate"];
+                            ItemCard.SubItems.Add(strPlate);
+                        }
+                        else
+                        {
+                            ItemCard.SubItems.Add("");
+                        }
+
+                        //气瓶号
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("SteelCylinderId")))
+                        {
+                            string strCylinderId = (string)dataReader["SteelCylinderId"];
+                            ItemCard.SubItems.Add(strCylinderId);
+                        }
+                        else
+                        {
+                            ItemCard.SubItems.Add("");
+                        }
+
+                        //气瓶有效期                        
+                        DateTime DateCylinderEnd = (DateTime)dataReader["CylinderTestDate"];
+                        ItemCard.SubItems.Add(DateCylinderEnd.ToString("yyyyMMdd"));
 
                         if (strCardType == "单位母卡")
                         {
@@ -1251,6 +1308,32 @@ namespace FNTMain
                             ItemCard.SubItems.Add("");
                         }
 
+                        //车牌号
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("Plate")))
+                        {
+                            string strPlate = (string)dataReader["Plate"];
+                            ItemCard.SubItems.Add(strPlate);
+                        }
+                        else
+                        {
+                            ItemCard.SubItems.Add("");
+                        }
+
+                        //气瓶号
+                        if (!dataReader.IsDBNull(dataReader.GetOrdinal("SteelCylinderId")))
+                        {
+                            string strCylinderId = (string)dataReader["SteelCylinderId"];
+                            ItemCard.SubItems.Add(strCylinderId);
+                        }
+                        else
+                        {
+                            ItemCard.SubItems.Add("");
+                        }
+
+                        //气瓶有效期                        
+                        DateTime DateCylinderEnd = (DateTime)dataReader["CylinderTestDate"];
+                        ItemCard.SubItems.Add(DateCylinderEnd.ToString("yyyyMMdd"));
+
                         if (strCardType == "单位母卡")
                         {
                             decimal balance = (decimal)dataReader["AccountBalance"];
@@ -1335,7 +1418,13 @@ namespace FNTMain
                 SearchPsam("PsamId", strCardId);
             else
                 SearchCommon("CardNum", strCardId,0);
-        }   
+        }
+
+        private void SearchByText(string strParamName,string strText,int nSel)
+        {
+            listSearchResult.Items.Clear();
+            SearchCommon(strParamName, strText, nSel);
+        }
 
         private void ChkSearchPsam_CheckedChanged(object sender, EventArgs e)
         {
@@ -1360,6 +1449,9 @@ namespace FNTMain
                 listSearchResult.Columns.Add("身份证号", 120);
                 listSearchResult.Columns.Add("用户姓名", 100);
                 listSearchResult.Columns.Add("联系电话", 100);
+                listSearchResult.Columns.Add("车牌号", 100);
+                listSearchResult.Columns.Add("气瓶号", 100);
+                listSearchResult.Columns.Add("气瓶有效期", 100);
                 listSearchResult.Columns.Add("卡余额", 60);
                 listSearchResult.Columns.Add("卡状态", 60);
             }
