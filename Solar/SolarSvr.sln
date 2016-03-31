@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SolarSvr", "SolarSvr\SolarSvr.vcxproj", "{82FA27AC-9DF1-4B7B-9275-9EAE8621CAC0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SawClient", "SawClient\SawClient.vcxproj", "{547B71B9-D122-4166-B7DC-CACFCA41599C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82FA27AC-9DF1-4B7B-9275-9EAE8621CAC0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{82FA27AC-9DF1-4B7B-9275-9EAE8621CAC0}.Debug|Win32.Build.0 = Debug|Win32
+		{82FA27AC-9DF1-4B7B-9275-9EAE8621CAC0}.Release|Win32.ActiveCfg = Release|Win32
+		{82FA27AC-9DF1-4B7B-9275-9EAE8621CAC0}.Release|Win32.Build.0 = Release|Win32
+		{547B71B9-D122-4166-B7DC-CACFCA41599C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{547B71B9-D122-4166-B7DC-CACFCA41599C}.Debug|Win32.Build.0 = Debug|Win32
+		{547B71B9-D122-4166-B7DC-CACFCA41599C}.Release|Win32.ActiveCfg = Release|Win32
+		{547B71B9-D122-4166-B7DC-CACFCA41599C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
