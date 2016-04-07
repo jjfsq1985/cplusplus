@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SolarSvr", "SolarSvr\SolarS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SawClient", "SawClient\SawClient.vcxproj", "{547B71B9-D122-4166-B7DC-CACFCA41599C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BowClient", "BowClient\BowClient.vcxproj", "{ADACD6A8-3273-4C1C-8FD2-593F9F397785}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EdgeClient", "EdgeClient\EdgeClient.vcxproj", "{ADACD6A8-3273-4C1C-8FD2-593F9F397785}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

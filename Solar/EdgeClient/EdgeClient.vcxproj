@@ -13,7 +13,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ADACD6A8-3273-4C1C-8FD2-593F9F397785}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>BowClient</RootNamespace>
+    <RootNamespace>EdgeClient</RootNamespace>
+    <ProjectName>EdgeClient</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -85,22 +86,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BowClient.cpp" />
+    <ClCompile Include="EdgeClient.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BowClient.h" />
+    <ClInclude Include="EdgeClient.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="BowClient.ico" />
+    <Image Include="EdgeClient.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="BowClient.rc" />
+    <ResourceCompile Include="EdgeClient.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

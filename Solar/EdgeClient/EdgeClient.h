@@ -6,20 +6,20 @@ using namespace Halcon;
 
 #define MAX_LOADSTRING 256
 
-class BowClient
+class EdgeClient
 {
 public:
-    BowClient(HINSTANCE hInstance);
-    ~BowClient();
+    EdgeClient(HINSTANCE hInstance);
+    ~EdgeClient();
 
 public:
-    LRESULT BowClientWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    LRESULT EdgeClientWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     void Initialize(int nCmdShow);
     int Run();
 
 private:
-    void InitBowClient();
-    bool BowPaint();
+    void InitEdgeClient();
+    bool EdgePaint();
     void RegisterWindowClass();
     void CreateWindowInstance(int nCmdShow);
     HWND CreateImageWnd(HWND parent, RECT rcWnd);

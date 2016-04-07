@@ -2,15 +2,15 @@
 //
 
 #include "stdafx.h"
-#include "BowClient.h"
+#include "EdgeClient.h"
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LONG_PTR DataPtr = GetWindowLongPtr(hWnd, GWLP_USERDATA);
     if (DataPtr != NULL)
     {
-        BowClient *pClient = reinterpret_cast<BowClient *>(DataPtr);
-        pClient->BowClientWndProc(hWnd, message, wParam, lParam);
+        EdgeClient *pClient = reinterpret_cast<EdgeClient *>(DataPtr);
+        pClient->EdgeClientWndProc(hWnd, message, wParam, lParam);
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -35,27 +35,27 @@ static INT_PTR CALLBACK AboutProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
     return (INT_PTR)FALSE;
 }
 
-BowClient::BowClient(HINSTANCE hInstance)
+EdgeClient::EdgeClient(HINSTANCE hInstance)
     :hInst(hInstance)
     , hWnd(NULL)
     , classAtom(0)
 {
 }
 
-BowClient::~BowClient()
+EdgeClient::~EdgeClient()
 {
 }
 
-void BowClient::Initialize(int nCmdShow)
+void EdgeClient::Initialize(int nCmdShow)
 {
     LoadString(hInst, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadString(hInst, IDC_BOWCLIENT, szWindowClass, MAX_LOADSTRING);
+    LoadString(hInst, IDC_EDGECLIENT, szWindowClass, MAX_LOADSTRING);
 
     RegisterWindowClass();
     CreateWindowInstance(nCmdShow);
 }
 
-void BowClient::CreateWindowInstance(int nCmdShow)
+void EdgeClient::CreateWindowInstance(int nCmdShow)
 {
     hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW | WS_MAXIMIZE,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInst, NULL);
@@ -69,13 +69,13 @@ void BowClient::CreateWindowInstance(int nCmdShow)
     SetScrollPos(hWnd, SB_VERT, 0, TRUE);
 }
 
-HWND BowClient::CreateImageWnd(HWND parent,RECT rcWnd)
+HWND EdgeClient::CreateImageWnd(HWND parent, RECT rcWnd)
 {
     return CreateWindow(szWindowClass, szTitle, WS_CHILD|WS_VISIBLE,
         rcWnd.left, rcWnd.top, rcWnd.right - rcWnd.left, rcWnd.bottom - rcWnd.top, parent, NULL, hInst, NULL);
 }
 
-void BowClient::RegisterWindowClass()
+void EdgeClient::RegisterWindowClass()
 {
     WNDCLASSEX wcex;
 
@@ -86,21 +86,21 @@ void BowClient::RegisterWindowClass()
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInst;
-    wcex.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_BOWCLIENT));
+    wcex.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_EDGECLIENT));
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);  // no background drawing, please
-    wcex.lpszMenuName = MAKEINTRESOURCE(IDC_BOWCLIENT);
+    wcex.lpszMenuName = MAKEINTRESOURCE(IDC_EDGECLIENT);
     wcex.lpszClassName = szWindowClass;
     wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
     classAtom = RegisterClassEx(&wcex);
 }
 
-int BowClient::Run()
+int EdgeClient::Run()
 {
     MSG msg;
-    HACCEL hAccelTable = LoadAccelerators(hInst, MAKEINTRESOURCE(IDC_BOWCLIENT));
-    InitBowClient();
+    HACCEL hAccelTable = LoadAccelerators(hInst, MAKEINTRESOURCE(IDC_EDGECLIENT));
+    InitEdgeClient();
 
     // 主消息循环: 
     while (GetMessage(&msg, NULL, 0, 0))
@@ -114,7 +114,7 @@ int BowClient::Run()
     return (int)msg.wParam;
 }
 
-LRESULT BowClient::BowClientWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT EdgeClient::EdgeClientWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     bool bRet = false;
     int wmId, wmEvent;
@@ -140,7 +140,7 @@ LRESULT BowClient::BowClientWndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
     case WM_MENUSELECT:
         break;
     case WM_PAINT:
-        bRet = BowPaint();
+        bRet = EdgePaint();
         break;
     case WM_DESTROY:
         m_bCapture = false;
@@ -165,7 +165,7 @@ LRESULT BowClient::BowClientWndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
     return bRet ? 0 : 1;
 }
 
-bool BowClient::BowPaint()
+bool EdgeClient::EdgePaint()
 {
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(hWnd, &ps);
@@ -174,7 +174,7 @@ bool BowClient::BowPaint()
     return true;;
 }
 
-void BowClient::InitBowClient()
+void EdgeClient::InitEdgeClient()
 {
     set_system("do_low_error", "false");
     DWORD threadid;
@@ -182,9 +182,9 @@ void BowClient::InitBowClient()
     m_hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&CameraAction, this, 0, &threadid);
 }
 
-UINT BowClient::CameraAction(LPVOID pParam)
+UINT EdgeClient::CameraAction(LPVOID pParam)
 {
-    BowClient *pWnd = (BowClient*)pParam;
+    EdgeClient *pWnd = (EdgeClient*)pParam;
     const long ImageHeight = 480;
     const long ImageWidth = 640;
 
@@ -258,7 +258,7 @@ UINT BowClient::CameraAction(LPVOID pParam)
     return 0;
 }
 
-void BowClient::DealImage(const Hobject &Image, const HTuple& hWndHandle)
+void EdgeClient::DealImage(const Hobject &Image, const HTuple& hWndHandle)
 {
     //将处理后的图像在另一部分显示
     disp_image(Image, hWndHandle);
@@ -278,7 +278,7 @@ void BowClient::DealImage(const Hobject &Image, const HTuple& hWndHandle)
     Hobject Errors;
     skeleton(RegionDilation, &Skeleton);
     connection(Skeleton, &Errors);
-    Hobject Scratches;   //划痕
+    Hobject Scratches;   //划痕/裂缝
     Hobject Dots;  //孔洞
     select_shape(Errors, &Scratches, "area", "and", 50, 10000);
     select_shape(Errors, &Dots, "area", "and", 10, 50);

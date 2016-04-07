@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "BowClient.h"
+#include "EdgeClient.h"
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -9,7 +9,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    BowClient ClientFrm(hInstance);
+    EdgeClient ClientFrm(hInstance);
     ClientFrm.Initialize(nCmdShow);
     return ClientFrm.Run();
 }
