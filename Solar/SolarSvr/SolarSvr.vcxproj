@@ -70,6 +70,20 @@
     <ProjectReference>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>regsvr32 /s /c "..\lib\OPCDAAuto.dll"</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Registering ActiveX Control...</Message>
+      <Outputs>
+      </Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -96,14 +110,28 @@
     <ProjectReference>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>regsvr32 /s /c "..\lib\OPCDAAuto.dll"</Command>
+      <Message>Registering ActiveX Control...</Message>
+      <Outputs>
+      </Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IniFile.h" />
+    <ClInclude Include="OpcCtrl.h" />
     <ClInclude Include="OraDbOperator.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="OPCGroupEventSink.h" />
     <ClInclude Include="SolarSvr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -111,7 +139,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IniFile.cpp" />
+    <ClCompile Include="OpcCtrl.cpp" />
     <ClCompile Include="OraDbOperator.cpp" />
+    <ClCompile Include="OPCGroupEventSink.cpp" />
     <ClCompile Include="SolarSvr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
