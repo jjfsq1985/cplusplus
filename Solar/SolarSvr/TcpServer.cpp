@@ -67,7 +67,7 @@ void TcpServer::ListenThread(void *pParam)
         return;
     }
 
-    Tprintf("Server Port %d Listening...\n",pSvr->m_nListenPort);
+    Tprintf(L"Server Port %d Listening...\n",pSvr->m_nListenPort);
     
 
     evutil_make_socket_nonblocking(listener);
@@ -104,7 +104,7 @@ void TcpServer::do_accept(evutil_socket_t listener, short eventVal, void *arg)
         return;
     }
 
-    Tprintf("ACCEPT: fd = %u\n", fd);
+    Tprintf(L"ACCEPT: fd = %u\n", fd);
     
     struct bufferevent *bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE);
     m_VecBev.push_back(bev);
@@ -146,20 +146,20 @@ void TcpServer::event_cb(struct bufferevent *bev, short event, void *arg)
 {
     TcpServer *pSvr = (TcpServer*)arg;
     evutil_socket_t fd = bufferevent_getfd(bev);
-    Tprintf("fd = %u, ", fd);
+    Tprintf(L"fd = %u, ", fd);
     if (event & BEV_EVENT_TIMEOUT)
     {
-        Tprintf("Timed out\n"); //if bufferevent_set_timeouts() called
+        Tprintf(L"Timed out\n"); //if bufferevent_set_timeouts() called
     }
     else if (event & BEV_EVENT_EOF) 
     {
-        Tprintf("connection closed\n");
+        Tprintf(L"connection closed\n");
         pSvr->RemoveFromVec(bev);
         bufferevent_free(bev);
     }
     else if (event & BEV_EVENT_ERROR)
     {
-        Tprintf("some other error\n");
+        Tprintf(L"some other error\n");
         pSvr->RemoveFromVec(bev);
         bufferevent_free(bev);
     }

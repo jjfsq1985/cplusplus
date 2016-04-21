@@ -23,4 +23,4 @@
 
 
 // TODO:  在此处引用程序需要的其他头文件
-void __cdecl Tprintf(const char *format, ...);
+void __cdecl Tprintf(const wchar_t *format, ...);

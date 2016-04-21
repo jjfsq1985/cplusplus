@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "OraDbOperator.h"
+#include <sstream>
+using namespace std;
 
 
 Connection OraDbOperator::m_con;
@@ -41,7 +43,9 @@ int OraDbOperator::ExecuteCmd(const char* cSql)
     }
     catch (Exception &ex)
     {
-            Tprintf(ex.what());
+        wstringstream wss;
+        wss << ex.what();
+        Tprintf(wss.str().c_str());
             nRet = 0;
     }
     m_con.Commit();
@@ -60,7 +64,9 @@ int OraDbOperator::ExecuteCmd(const char* cSql, Resultset& outResult)
     }
     catch (Exception &ex)
     {
-        Tprintf(ex.what());
+        wstringstream wss;
+        wss << ex.what();
+        Tprintf(wss.str().c_str());
         nRet = 0;
     }
     m_con.Commit();
@@ -117,7 +123,9 @@ int OraDbOperator::ExecuteCmd(const char* cSql, DbParam* param, int nCount)
     }
     catch (Exception &ex)
     {
-        Tprintf(ex.what());
+        wstringstream wss;
+        wss << ex.what();
+        Tprintf(wss.str().c_str());
         nRet = 0;
     }
     m_con.Commit();
@@ -139,7 +147,9 @@ int OraDbOperator::ExecuteCmd(const char* cSql, DbParam* param, int nCount, Resu
     }
     catch (Exception &ex)
     {
-        Tprintf(ex.what());
+        wstringstream wss;
+        wss << ex.what();
+        Tprintf(wss.str().c_str());
         nRet = 0;
     }
     m_con.Commit();
@@ -159,7 +169,9 @@ int OraDbOperator::ExecuteProc(const char* cProcName)
     }
     catch (Exception &ex)
     {
-        Tprintf(ex.what());
+        wstringstream wss;
+        wss << ex.what();
+        Tprintf(wss.str().c_str());
         nRet = 0;
     }
     m_con.Commit();
@@ -179,7 +191,9 @@ int OraDbOperator::ExecuteProc(const char* cProcName, Resultset& outResult)
     }
     catch (Exception &ex)
     {
-        Tprintf(ex.what());
+        wstringstream wss;
+        wss << ex.what();
+        Tprintf(wss.str().c_str());
         nRet = 0;
     }
     m_con.Commit();
@@ -215,7 +229,9 @@ int OraDbOperator::ExecuteProc(const char* cProcName, DbParam* param, int nCount
     }
     catch (Exception &ex)
     {
-        Tprintf(ex.what());
+        wstringstream wss;
+        wss << ex.what();
+        Tprintf(wss.str().c_str());
         nRet = 0;
     }
     m_con.Commit();
@@ -239,7 +255,9 @@ int OraDbOperator::ExecuteProc(const char* cProcName, DbParam* param, int nCount
     }
     catch (Exception &ex)
     {
-        Tprintf(ex.what());
+        wstringstream wss;
+        wss << ex.what();
+        Tprintf(wss.str().c_str());
         nRet = 0;
     }
     m_con.Commit();

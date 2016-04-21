@@ -66,7 +66,7 @@ void TcpSaw::ConnectThread(void *pParam)
             Sleep(1000);
             continue;
         }
-        Tprintf("Connecting\n");
+        Tprintf(L"Connecting\n");
         nCycle = 0;
         struct event_base *base = event_base_new();
         assert(base != NULL);
@@ -108,23 +108,23 @@ void TcpSaw::read_cb(struct bufferevent *bev, void *arg)
 void TcpSaw::event_cb(struct bufferevent *bev, short event, void *arg)
 {
     evutil_socket_t fd = bufferevent_getfd(bev);
-    Tprintf("fd = %u, ", fd);
+    Tprintf(L"fd = %u, ", fd);
     if (event & BEV_EVENT_TIMEOUT)
     {
-        Tprintf("Timed out\n"); //if bufferevent_set_timeouts() called
+        Tprintf(L"Timed out\n"); //if bufferevent_set_timeouts() called
     }
     else if (event & BEV_EVENT_CONNECTED)
     {
-        Tprintf("Connect okay.\n");
+        Tprintf(L"Connect okay.\n");
     }
     else if (event & BEV_EVENT_EOF)
     {
-        Tprintf("connection closed\n");
+        Tprintf(L"connection closed\n");
         bufferevent_free(bev);
     }
     else if (event & BEV_EVENT_ERROR)
     {
-        Tprintf("some other error\n");
+        Tprintf(L"some other error\n");
         bufferevent_free(bev);
     }
 }

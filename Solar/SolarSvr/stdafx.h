@@ -24,4 +24,7 @@
 // TODO:  在此处引用程序需要的其他头文件
 #define OCI_CHARSET_ANSI
 
-void __cdecl Tprintf(const char *format, ...);
+extern HINSTANCE g_hInstDLL;
+
+void __cdecl Tprintf(const wchar_t *format, ...);
+void __cdecl Aprintf(const char *format, ...);

@@ -41,7 +41,7 @@ namespace inifile
         char *p = buf;
 
         if (buf == NULL) {
-            Tprintf("no enough memory!exit!\n");
+            Aprintf("no enough memory!exit!\n");
             exit(-1);
         }
 
@@ -58,7 +58,7 @@ namespace inifile
 
                 if (pbuf == NULL) {
                     free(buf);
-                    Tprintf("no enough memory!exit!\n");
+                    Aprintf("no enough memory!exit!\n");
                     exit(-1);
                 }
 
@@ -190,7 +190,7 @@ namespace inifile
                 int len = line.find("=(");
                 if (len <= 0)
                 {
-                    Tprintf("group/section为空\n");
+                    Aprintf("group/section为空\n");
                     current_ = IniToken::GroupSkip;
                     nBraceCount++;
                     continue;
@@ -202,7 +202,7 @@ namespace inifile
                 int nResult = ParseTokenName(s, strgroup, current_,comment);
                 if (nResult == 2 || nResult == 4)
                 {
-                    Tprintf("此group/section已存在:%s\n", s.c_str());
+                    Aprintf("此group/section已存在:%s\n", s.c_str());
                     nBraceCount++;
                     continue;
                 }
@@ -235,7 +235,7 @@ namespace inifile
                 }
                 else
                 {
-                    Tprintf("解析参数失败:Group %s Section %s: [%s]\n",strgroup, strsection, line.c_str());
+                    Aprintf("解析参数失败:Group %s Section %s: [%s]\n",strgroup, strsection, line.c_str());
                 }
 
                 comment = "";
@@ -551,14 +551,14 @@ namespace inifile
             groupFind = new IniGroup();
             if (groupFind == NULL)
             {
-                Tprintf("no enough memory!\n");
+                Aprintf("no enough memory!\n");
                 exit(-1);
             }
             groupFind->group = group;
             groups_.push_back(groupFind);
             sect = new IniSection();
             if (sect == NULL) {
-                Tprintf("no enough memory!\n");
+                Aprintf("no enough memory!\n");
                 exit(-1);
             }
             sect->name = section;            
@@ -571,7 +571,7 @@ namespace inifile
             {
                 sect = new IniSection();
                 if (sect == NULL) {
-                    Tprintf("no enough memory!\n");
+                    Aprintf("no enough memory!\n");
                     exit(-1);
                 }
                 sect->name = section;
@@ -729,7 +729,7 @@ namespace inifile
     //for debug
     void IniFile::print()
     {
-        Tprintf("filename:[%s]\n", fname_.c_str());
+        Aprintf("filename:[%s]\n", fname_.c_str());
 
         string strflag = "";
 
@@ -738,23 +738,23 @@ namespace inifile
             strflag += " " + flags_[i] + " ";
         }
 
-        Tprintf("flags_:[ %s ]\n", strflag.c_str());
+        Aprintf("flags_:[ %s ]\n", strflag.c_str());
 
         for (iterator it = groups_.begin(); it != groups_.end(); ++it)
         {
-            Tprintf("group:[%s]\n", (*it)->group.c_str());
-            Tprintf("groupcomment:[%s]\n", (*it)->groupcomment.c_str());
+            Aprintf("group:[%s]\n", (*it)->group.c_str());
+            Aprintf("groupcomment:[%s]\n", (*it)->groupcomment.c_str());
 
             list<IniSection*>& lstData = (*it)->sectionsItems;
             for (IniGroup::iterator itsect = lstData.begin(); itsect != lstData.end(); ++itsect)
             {
-                Tprintf("section:[%s]\n", (*itsect)->name.c_str());
-                Tprintf("comment:[%s]\n", (*itsect)->comment.c_str());
+                Aprintf("section:[%s]\n", (*itsect)->name.c_str());
+                Aprintf("comment:[%s]\n", (*itsect)->comment.c_str());
 
                 for (IniSection::iterator iKV = (*itsect)->items.begin(); iKV != (*itsect)->items.end(); ++iKV)
                 {
-                    Tprintf("    comment:%s\n", iKV->comment.c_str());
-                    Tprintf("    parm   :%s=%s\n", iKV->key.c_str(), iKV->value.c_str());
+                    Aprintf("    comment:%s\n", iKV->comment.c_str());
+                    Aprintf("    parm   :%s=%s\n", iKV->key.c_str(), iKV->value.c_str());
                 }
             }
         }
