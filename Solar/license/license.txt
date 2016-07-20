@@ -1,0 +1,11 @@
+%HALCONROOT%\license\license.dat
+//运行软件需要halcon的库，该库需要此授权文件
+//HALCONROOT环境变量需要设置
+相关其他文件
+%HALCONROOT%\help\operators_en_US.idx
+%HALCONROOT%\help\operators_en_US.key
+%HALCONROOT%\help\operators_en_US.num
+%HALCONROOT%\help\operators_en_US.ref
+%HALCONROOT%\help\operators_en_US.sta
+
+HALCON总共6个依赖文件

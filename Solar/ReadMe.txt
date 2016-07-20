@@ -1,0 +1,1 @@
+help目录和license目录是HALCON机器视觉库必须的依赖目录
