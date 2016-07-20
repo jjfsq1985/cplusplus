@@ -3,6 +3,8 @@
 
 #include "stdafx.h"
 #include "SawClient.h"
+#include <math.h>
+#include "kfft.h"
 
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -42,12 +44,16 @@ SawClient::SawClient(HINSTANCE hInstance)
     , classAtom(0)
     , m_pCfgParam(NULL)
 {
+	m_nIndex = 0;
+	m_pDataY = new float[2048];
+	m_pDataX = new float[2048];
     InitSawClient();
 }
 
 SawClient::~SawClient()
 {
-
+	delete[] m_pDataY;
+	delete[] m_pDataX;
 }
 
 void SawClient::Initialize(int nCmdShow)
@@ -71,6 +77,7 @@ void SawClient::CreateWindowInstance(int nCmdShow)
     UpdateWindow(hWnd);
     SetScrollPos(hWnd, SB_HORZ, 0, TRUE);
     SetScrollPos(hWnd, SB_VERT, 0, TRUE);
+	SetTimer(hWnd, 1, 500, TimeRefresh);
 }
 
 void SawClient::RegisterWindowClass()
@@ -164,8 +171,69 @@ bool SawClient::SawPaint()
 {
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(hWnd, &ps);
+	POINT a = POINT{ ps.rcPaint.left, ps.rcPaint.top };
+	ClientToScreen(hWnd, &a);
     //»æÍ¼
-    EndPaint(hWnd, &ps);
+	float fltScope = 100.0f;
+	float nSampleFreq = 10240.0f;
+	float nSignalFreq = 400.0f;	
+	int yTime = ps.rcPaint.top + 6 + (ps.rcPaint.bottom - ps.rcPaint.top - 12) / 4;
+	int ySpec = ps.rcPaint.bottom - 6;
+	int x = ps.rcPaint.left + 5;
+	Rectangle(hdc, ps.rcPaint.left + 5, ps.rcPaint.top + 5, ps.rcPaint.right - 5, ps.rcPaint.bottom - 5);
+	double nXRadio = (ps.rcPaint.right - ps.rcPaint.left - 12)*1.0 / 2048;
+	double nYTimeRadio = (ps.rcPaint.bottom - ps.rcPaint.top - 12)*1.0 / (fltScope+50) / 4;
+
+	HPEN penLine = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
+	HPEN oldpen = (HPEN)SelectObject(hdc, penLine);
+
+	MoveToEx(hdc, x, yTime, NULL);
+	for (int i = 0; i < 2048; i++)
+	{
+		int nIndex = i + m_nIndex;
+		m_pDataY[i] = 100 * sin(2 * M_PI * 1.1f * nIndex * nSignalFreq / nSampleFreq);
+		//m_pDataY[i] += 30 * cos(2 * M_PI * 1.1f * nIndex * 100.0f / nSampleFreq);//ÔëÉù
+		LineTo(hdc, x + i*nXRadio, yTime - m_pDataY[i] * nYTimeRadio);
+	}
+	m_nIndex += 2048;
+
+	float *pImage = new float[2048];
+	float *pFftReal = new float[2048];
+	float *pFftImage = new float[2048];
+	for (int i = 0; i < 2048; i++)
+	{
+		pImage[i] = 0.0f;
+		pFftReal[i] = 0.0f;
+		pFftImage[i] = 0.0f;
+	}
+	FourierTransform::kfft(m_pDataY, pImage, 2048, 11, pFftReal, pFftImage, 0, 1);
+
+	double dbMax = 0.0;
+	int nPos = 0;
+	for (int i = 0; i < 1024; i++)
+	{
+		if (m_pDataY[i] > dbMax)
+		{
+			dbMax = m_pDataY[i];
+			nPos = i;
+		}
+	}
+	int nCalcPos = 2048 * nSignalFreq / nSampleFreq;
+
+	double nYSpecRadio = (ps.rcPaint.bottom - ps.rcPaint.top - 12)*1.0 / dbMax  / 2;
+	char cText[32];
+	sprintf_s(cText, 32, "POS: %d, Calc Pos: %d", nPos, nCalcPos);
+	TextOutA(hdc, x, ySpec - (ps.rcPaint.bottom - ps.rcPaint.top - 12) / 2, cText, strlen(cText));
+	MoveToEx(hdc, x, ySpec, NULL);
+	for (int i = 0; i < 1024; i++)
+	{
+		LineTo(hdc, x + i*nXRadio*2, ySpec - m_pDataY[i] * nYSpecRadio);
+	}
+
+	SelectObject(hdc, oldpen);
+	DeleteObject(penLine);
+    
+	EndPaint(hWnd, &ps);
     return true;;
 }
 
@@ -180,4 +248,9 @@ void SawClient::InitSawClient()
     int nPort = atoi(strPort.c_str());
     
     saw.Init(strHost.c_str(), nPort);
+}
+
+void CALLBACK SawClient::TimeRefresh(HWND hwnd, UINT message, UINT iTimerID, DWORD dwTime)
+{
+	InvalidateRect(hwnd, NULL, FALSE);
 }

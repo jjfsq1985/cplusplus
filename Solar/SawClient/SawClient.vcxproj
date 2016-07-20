@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IniFile.h" />
+    <ClInclude Include="kfft.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SawClient.h" />
     <ClInclude Include="stdafx.h" />
@@ -96,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IniFile.cpp" />
+    <ClCompile Include="kfft.cpp" />
     <ClCompile Include="SawClient.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -24,7 +24,12 @@ private:
     void RegisterWindowClass();
     void CreateWindowInstance(int nCmdShow);
 
+	static void CALLBACK TimeRefresh(HWND hwnd, UINT message, UINT iTimerID, DWORD dwTime);
+
 private:
+	int m_nIndex;
+	float *m_pDataY;
+	float *m_pDataX;
     class IniFile *m_pCfgParam;
     TcpSaw saw;
     // Windows interface stuff

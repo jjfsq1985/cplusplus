@@ -36,6 +36,9 @@
     <ClInclude Include="IniFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="kfft.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -51,6 +54,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="IniFile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="kfft.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
