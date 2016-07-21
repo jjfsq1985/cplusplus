@@ -58,7 +58,7 @@ void EdgeClient::Initialize(int nCmdShow)
 
 void EdgeClient::CreateWindowInstance(int nCmdShow)
 {
-    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW | WS_MAXIMIZE,
+    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInst, NULL);
 
     if (!hWnd)
@@ -189,24 +189,12 @@ UINT EdgeClient::CameraAction(LPVOID pParam)
     const long ImageHeight = 480;
     const long ImageWidth = 640;
 
-    RECT rcClient;
-    GetClientRect(pWnd->hWnd, &rcClient);
+	Hlong x1 = 0, y1 = 0, x2 = ImageWidth, y2 = ImageHeight;
 
-    Hlong nWidth = (rcClient.right - rcClient.left) /2;
-    Hlong nClientCenter = nWidth;
-    Hlong nHeight = rcClient.bottom - rcClient.top;
-    nHeight = nHeight > 480 ? 480 : nHeight;
-
-    Hlong x1, y1, x2, y2;
-    x1 = nWidth > 640 ? 0 : (640 - nWidth) / 2;
-    y1 = nHeight > 480 ? 0 : (480 - nHeight) / 2;
-    x2 = nWidth > 640 ? 640 : (640 + nWidth) / 2;
-    y2 = nHeight > 480 ? 480 : (480 + nHeight) / 2;
-
-    RECT rcCaptureClient = { 0, 0, nWidth, nHeight };
+	RECT rcCaptureClient = { 0, 0, ImageWidth, ImageHeight };
     HWND hCaptureWnd = pWnd->CreateImageWnd(pWnd->hWnd, rcCaptureClient);
     HTuple hWindowHandle;
-    open_window(0, 0, nWidth, nHeight, (Hlong)hCaptureWnd, "visible", "", &hWindowHandle);
+	open_window(0, 0, ImageWidth, ImageHeight, (Hlong)hCaptureWnd, "visible", "", &hWindowHandle);
 
     set_colored(hWindowHandle, 12);
     set_draw(hWindowHandle, "margin");
@@ -217,10 +205,10 @@ UINT EdgeClient::CameraAction(LPVOID pParam)
 
     set_part(hWindowHandle, y1, x1, y2, x2);//很重要，否则显示图片不完整，Row为Y, column为X
 
-    RECT rcScratchClient = { nClientCenter, 0, nClientCenter + nWidth, nHeight };
+	RECT rcScratchClient = { ImageWidth, 0, ImageWidth + ImageWidth, ImageHeight };
     HWND hScratchWnd = pWnd->CreateImageWnd(pWnd->hWnd, rcScratchClient);
     HTuple hDestWndHandle;
-    open_window(0, 0, nWidth, nHeight, (Hlong)hScratchWnd, "visible", "", &hDestWndHandle);
+	open_window(0, 0, ImageWidth, ImageHeight, (Hlong)hScratchWnd, "visible", "", &hDestWndHandle);
 
     set_colored(hDestWndHandle, 12);
     set_draw(hDestWndHandle, "margin");
@@ -251,9 +239,18 @@ UINT EdgeClient::CameraAction(LPVOID pParam)
         //mirror_image(Image, &MirrorImage, "column");//镜面图像
         //write_image(MirrorImage, "bmp", 16711680, "D:\\12.bmp"); //存文件
         //disp_image(MirrorImage, hWindowHandle);//黑白图像
+
+		//窗口大小会改变
+		RECT rcClient;
+		GetClientRect(pWnd->hWnd, &rcClient);
+		Hlong nWidth = (rcClient.right - rcClient.left) / 2;
+		Hlong nHeight = rcClient.bottom - rcClient.top;
+
         disp_color(Image, hWindowHandle);
+		SetWindowPos(hCaptureWnd, HWND_TOP, 0, 0, nWidth, nHeight, SWP_SHOWWINDOW);
         pWnd->DealImage(Image, hDestWndHandle);
-        Sleep(50);
+		SetWindowPos(hScratchWnd, HWND_TOP, nWidth, 0, nWidth, nHeight, SWP_SHOWWINDOW);
+        Sleep(100);
     }
     close_framegrabber(AcqHandle);
     return 0;
