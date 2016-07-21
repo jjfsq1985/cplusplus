@@ -10,7 +10,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     if (DataPtr != NULL)
     {
         EdgeClient *pClient = reinterpret_cast<EdgeClient *>(DataPtr);
-        pClient->EdgeClientWndProc(hWnd, message, wParam, lParam);
+		//进入消息循环GetMessage后必须从此return,否则消息响应和绘图异常
+        return pClient->EdgeClientWndProc(hWnd, message, wParam, lParam);
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }

@@ -15,7 +15,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     if (DataPtr != NULL)
     {
         SolarSvr *pSvr = reinterpret_cast<SolarSvr *>(DataPtr);
-        pSvr->SolarSvrWndProc(hWnd, message, wParam, lParam);
+		//进入消息循环GetMessage后必须从此return,否则消息响应和绘图异常
+        return pSvr->SolarSvrWndProc(hWnd, message, wParam, lParam);
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }

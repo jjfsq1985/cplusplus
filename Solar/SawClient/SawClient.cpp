@@ -13,7 +13,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     if (DataPtr != NULL)
     {
         SawClient *pClient = reinterpret_cast<SawClient *>(DataPtr);
-        pClient->SawClientWndProc(hWnd, message, wParam, lParam);
+		//进入消息循环GetMessage后必须从此return,否则消息响应和绘图异常
+        return pClient->SawClientWndProc(hWnd, message, wParam, lParam);
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -67,7 +68,7 @@ void SawClient::Initialize(int nCmdShow)
 void SawClient::CreateWindowInstance(int nCmdShow)
 {
     hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInst, NULL);
+        CW_USEDEFAULT, 0, 900, 400, NULL, NULL, hInst, NULL);
 
     if (!hWnd)
         return;
