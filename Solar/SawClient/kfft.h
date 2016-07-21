@@ -60,6 +60,17 @@ public:
         return *this;
     }
 
+public:
+    inline float Real()
+    {
+        return re;
+    }
+
+    inline float Image()
+    {
+        return im;
+    }
+
 private:
     float re;
     float im;
@@ -67,6 +78,7 @@ private:
 
 class FourierTransform
 {
+public:
     FourierTransform();
     ~FourierTransform();
 
@@ -75,8 +87,9 @@ public:
 
 private:
     bool InitFft(int nCount);
-    int NumberOfBits(int powerofTwo);
+    void ReleaseFft();
     unsigned BitReverisee(unsigned int x, int log2n);
+    static int NumberOfBits(int powerofTwo);
 
 private:
     int m_nCount;
@@ -85,7 +98,5 @@ private:
     complex_f *m_pwt;
 
 public:
-    static void kfft(float *pReal, float *pImage, int nCount, int k, float *fr, float *fi, int Inverse, int il);
+    static void kfft(float *pReal, float *pImage, int nCount, float *fr, float *fi, int Inverse, int il);
 };
-
-static void kfft(float *pReal, float *pImage, int nCount, int k, float *fr, float *fi, int Inverse, int il);

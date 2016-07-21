@@ -27,9 +27,9 @@ private:
 	static void CALLBACK TimeRefresh(HWND hwnd, UINT message, UINT iTimerID, DWORD dwTime);
 
 private:
+    int m_nPntPerScreen;
 	int m_nIndex;
-	float *m_pDataY;
-	float *m_pDataX;
+	float *m_pData;
     class IniFile *m_pCfgParam;
     TcpSaw saw;
     // Windows interface stuff

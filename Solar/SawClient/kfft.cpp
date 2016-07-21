@@ -6,7 +6,8 @@
 FourierTransform::FourierTransform()
     :m_nWindow(1)
 {
-
+    m_pwin = NULL;
+    m_pwt = NULL;
 }
 
 FourierTransform::~FourierTransform()
@@ -19,8 +20,11 @@ FourierTransform::~FourierTransform()
 //fr、fi是FFT的实部和虚部
 //il==1则pReal,pImage为频域输出值(模和幅角)
 //Inverse=0正变换 FFT，Inverse=1逆变换 IFFT
-void FourierTransform::kfft(float *pReal, float *pImage, int nCount, int k, float *fr, float *fi, int Inverse, int il)
+void FourierTransform::kfft(float *pReal, float *pImage, int nCount, float *fr, float *fi, int Inverse, int il)
 {
+    int k = NumberOfBits(nCount);
+    if (k == -1)
+        return;
     int it, m, is, i, j, nv, ll;
     float p, q, s;
     float vr, vi, poddr, poddi;
@@ -148,7 +152,7 @@ unsigned FourierTransform::BitReverisee(unsigned int x, int log2n)
 bool FourierTransform::InitFft(int nCount)
 {
     //不是整数幂，或数据量超过2^20
-    if (NumberOfBits(nCount) == -1)
+    if (FourierTransform::NumberOfBits(nCount) == -1)
         return false;
     m_nCount = nCount;
     int i = 0;
@@ -167,12 +171,22 @@ bool FourierTransform::InitFft(int nCount)
     return true;
 }
 
+void FourierTransform::ReleaseFft()
+{
+    if (m_pwin != NULL)
+        delete[] m_pwin;
+    m_pwin = NULL;
+    if (m_pwt != NULL)
+        delete[] m_pwt;
+    m_pwt = NULL;
+}
+
 bool FourierTransform::FFT(complex_f *data, int nCount)
 {
     if (!InitFft(nCount))
         return false;
     int i, j, k, butterfly, p;
-    int power = NumberOfBits(nCount);
+    int power = FourierTransform::NumberOfBits(nCount);
     for (k = 0; k < power; k++)
     {
         int powerk = 1 << k;
@@ -184,7 +198,7 @@ bool FourierTransform::FFT(complex_f *data, int nCount)
             for (i = 0; i < butterfly / 2; i++)
             {
                 complex_f t = data[i + p] + data[i + s];
-                data[i + s] = (data[i + p] - data[i + s]) * complex_f(m_pwin[i*powerk],0.0f);
+                data[i + s] = (data[i + p] - data[i + s]) * m_pwt[i*powerk];
                 data[i + p] = t;
             }
         }
@@ -199,5 +213,6 @@ bool FourierTransform::FFT(complex_f *data, int nCount)
             data[r] = t;
         }
     }
+    ReleaseFft();
     return true;
 }

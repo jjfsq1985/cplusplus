@@ -45,15 +45,14 @@ SawClient::SawClient(HINSTANCE hInstance)
     , m_pCfgParam(NULL)
 {
 	m_nIndex = 0;
-	m_pDataY = new float[2048];
-	m_pDataX = new float[2048];
+    m_nPntPerScreen = 2048;
+    m_pData = new float[m_nPntPerScreen];
     InitSawClient();
 }
 
 SawClient::~SawClient()
 {
-	delete[] m_pDataY;
-	delete[] m_pDataX;
+    delete[] m_pData;
 }
 
 void SawClient::Initialize(int nCmdShow)
@@ -174,60 +173,81 @@ bool SawClient::SawPaint()
 	POINT a = POINT{ ps.rcPaint.left, ps.rcPaint.top };
 	ClientToScreen(hWnd, &a);
     //绘图
-	float fltScope = 100.0f;
-	float nSampleFreq = 10240.0f;
-	float nSignalFreq = 400.0f;	
+	float fltScope = 250.0f;
+	float nSampleFreq = 4000.0f;
+	float nSignalFreq = 100.0f;	
 	int yTime = ps.rcPaint.top + 6 + (ps.rcPaint.bottom - ps.rcPaint.top - 12) / 4;
 	int ySpec = ps.rcPaint.bottom - 6;
 	int x = ps.rcPaint.left + 5;
 	Rectangle(hdc, ps.rcPaint.left + 5, ps.rcPaint.top + 5, ps.rcPaint.right - 5, ps.rcPaint.bottom - 5);
-	double nXRadio = (ps.rcPaint.right - ps.rcPaint.left - 12)*1.0 / 2048;
-	double nYTimeRadio = (ps.rcPaint.bottom - ps.rcPaint.top - 12)*1.0 / (fltScope+50) / 4;
+    double nXRadio = (ps.rcPaint.right - ps.rcPaint.left - 12)*1.0 / m_nPntPerScreen;
+	double nYTimeRadio = (ps.rcPaint.bottom - ps.rcPaint.top - 12)*1.0 / fltScope / 4;
 
 	HPEN penLine = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 	HPEN oldpen = (HPEN)SelectObject(hdc, penLine);
 
 	MoveToEx(hdc, x, yTime, NULL);
-	for (int i = 0; i < 2048; i++)
+    for (int i = 0; i < m_nPntPerScreen; i++)
 	{
 		int nIndex = i + m_nIndex;
-		m_pDataY[i] = 100 * sin(2 * M_PI * 1.1f * nIndex * nSignalFreq / nSampleFreq);
-		//m_pDataY[i] += 30 * cos(2 * M_PI * 1.1f * nIndex * 100.0f / nSampleFreq);//噪声
-		LineTo(hdc, x + i*nXRadio, yTime - m_pDataY[i] * nYTimeRadio);
+        m_pData[i] = fltScope * sin(2 * M_PI * 1.1f * nIndex * nSignalFreq / nSampleFreq);
+        LineTo(hdc, x + i*nXRadio, yTime - m_pData[i] * nYTimeRadio);
 	}
-	m_nIndex += 2048;
+    m_nIndex += m_nPntPerScreen;
 
-	float *pImage = new float[2048];
-	float *pFftReal = new float[2048];
-	float *pFftImage = new float[2048];
-	for (int i = 0; i < 2048; i++)
+    float *pImage = new float[m_nPntPerScreen];
+    float *pFftReal = new float[m_nPntPerScreen];
+    float *pFftImage = new float[m_nPntPerScreen];
+    for (int i = 0; i < m_nPntPerScreen; i++)
 	{
 		pImage[i] = 0.0f;
 		pFftReal[i] = 0.0f;
 		pFftImage[i] = 0.0f;
 	}
-	FourierTransform::kfft(m_pDataY, pImage, 2048, 11, pFftReal, pFftImage, 0, 1);
 
-	double dbMax = 0.0;
-	int nPos = 0;
-	for (int i = 0; i < 1024; i++)
-	{
-		if (m_pDataY[i] > dbMax)
-		{
-			dbMax = m_pDataY[i];
-			nPos = i;
-		}
-	}
-	int nCalcPos = 2048 * nSignalFreq / nSampleFreq;
 
-	double nYSpecRadio = (ps.rcPaint.bottom - ps.rcPaint.top - 12)*1.0 / dbMax  / 2;
-	char cText[32];
-	sprintf_s(cText, 32, "POS: %d, Calc Pos: %d", nPos, nCalcPos);
+    FourierTransform fftTrans;
+    complex_f *pComplexData = new complex_f[m_nPntPerScreen];
+    for (int i = 0; i < m_nPntPerScreen; i++)
+    {
+        pComplexData[i] = complex_f(m_pData[i], 0.0f);
+    }
+    fftTrans.FFT(pComplexData, m_nPntPerScreen);
+
+    //最后参数il为1时m_pData输出为模 ，pImage输出为幅角（角度制）。
+    //FourierTransform::kfft(m_pData, pImage, m_nPntPerScreen, pFftReal, pFftImage, 0, 0);
+
+    int nFFTCount = m_nPntPerScreen / 2;//FFT是对称的
+    double dbMax = 0.0;
+    int nPos = 0;
+    for (int i = 0; i < nFFTCount; i++)
+    {
+        //幅值 = 模 * 2 / 点数;
+        //m_pData[i] = sqrt(pFftReal[i] * pFftReal[i] + pFftImage[i] * pFftImage[i]) * 2 / m_nPntPerScreen;//幅值
+         float fR = pComplexData[i].Real();
+         float fI = pComplexData[i].Image();
+         m_pData[i] =sqrt(fR*fR + fI*fI) * 2 / m_nPntPerScreen;//幅值
+        if (m_pData[i] > dbMax)
+        {
+            dbMax = m_pData[i];
+            nPos = i;
+        }
+    }
+    //有1.1的抽点比例，故实际位置有不同
+    int nCalcPos = nSignalFreq * m_nPntPerScreen / nSampleFreq + 1;
+    //信号频率在FFT上的数据位置计算公式
+    //SignalFreq = SampleFreq*(Pos - 1)/m_nPntPerScreen
+
+    double nXSpecRadio = (ps.rcPaint.right - ps.rcPaint.left - 12)*1.0 / nFFTCount;
+    double nYSpecRadio = (ps.rcPaint.bottom - ps.rcPaint.top - 12)*1.0 / dbMax / 2;
+
+	char cText[64];
+    sprintf_s(cText, 64, "Value:%.5f, POS: %d, Calc Pos: %d", dbMax, nPos, nCalcPos);
 	TextOutA(hdc, x, ySpec - (ps.rcPaint.bottom - ps.rcPaint.top - 12) / 2, cText, strlen(cText));
 	MoveToEx(hdc, x, ySpec, NULL);
-	for (int i = 0; i < 1024; i++)
+    for (int i = 0; i < nFFTCount; i++)
 	{
-		LineTo(hdc, x + i*nXRadio*2, ySpec - m_pDataY[i] * nYSpecRadio);
+        LineTo(hdc, x + i*nXSpecRadio, ySpec - m_pData[i] * nYSpecRadio);
 	}
 
 	SelectObject(hdc, oldpen);
