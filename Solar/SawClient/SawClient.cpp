@@ -170,28 +170,38 @@ bool SawClient::SawPaint()
 {
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(hWnd, &ps);
-	POINT a = POINT{ ps.rcPaint.left, ps.rcPaint.top };
-	ClientToScreen(hWnd, &a);
-    //绘图
+    RECT rcPaint = ps.rcPaint;
+    
+    HDC hdcMemory = CreateCompatibleDC(hdc);
+
+    int width = rcPaint.right - rcPaint.left;
+    int height = rcPaint.bottom - rcPaint.top;
+    HBITMAP hbitmap = CreateCompatibleBitmap(hdc, width, height);
+    SelectObject(hdcMemory, hbitmap);
+    //FillSolidRect
+    SetBkColor(hdcMemory, RGB(255, 255, 255));
+    ExtTextOut(hdcMemory, 0, 0, ETO_OPAQUE, &rcPaint, NULL, 0, NULL);    
+
+        //绘图
 	float fltScope = 250.0f;
 	float nSampleFreq = 4000.0f;
 	float nSignalFreq = 100.0f;	
-	int yTime = ps.rcPaint.top + 6 + (ps.rcPaint.bottom - ps.rcPaint.top - 12) / 4;
-	int ySpec = ps.rcPaint.bottom - 6;
-	int x = ps.rcPaint.left + 5;
-	Rectangle(hdc, ps.rcPaint.left + 5, ps.rcPaint.top + 5, ps.rcPaint.right - 5, ps.rcPaint.bottom - 5);
-    double nXRadio = (ps.rcPaint.right - ps.rcPaint.left - 12)*1.0 / m_nPntPerScreen;
-	double nYTimeRadio = (ps.rcPaint.bottom - ps.rcPaint.top - 12)*1.0 / fltScope / 4;
+    int yTime = 6 + (height - 12) / 4;
+    int ySpec = height - 6;
+    int x = 5;
+    Rectangle(hdcMemory, 5, 5, width - 5, height - 5);
+    double nXRadio = (width - 12)*1.0 / m_nPntPerScreen;
+    double nYTimeRadio = (height - 12)*1.0 / fltScope / 4;
 
 	HPEN penLine = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
-	HPEN oldpen = (HPEN)SelectObject(hdc, penLine);
+    HPEN oldpen = (HPEN)SelectObject(hdcMemory, penLine);
 
-	MoveToEx(hdc, x, yTime, NULL);
+    MoveToEx(hdcMemory, x, yTime, NULL);
     for (int i = 0; i < m_nPntPerScreen; i++)
 	{
 		int nIndex = i + m_nIndex;
         m_pData[i] = fltScope * sin(2 * M_PI * 1.1f * nIndex * nSignalFreq / nSampleFreq);
-        LineTo(hdc, x + i*nXRadio, yTime - m_pData[i] * nYTimeRadio);
+        LineTo(hdcMemory, x + i*nXRadio, yTime - m_pData[i] * nYTimeRadio);
 	}
     m_nIndex += m_nPntPerScreen;
 
@@ -238,23 +248,27 @@ bool SawClient::SawPaint()
     //信号频率在FFT上的数据位置计算公式
     //SignalFreq = SampleFreq*(Pos - 1)/m_nPntPerScreen
 
-    double nXSpecRadio = (ps.rcPaint.right - ps.rcPaint.left - 12)*1.0 / nFFTCount;
-    double nYSpecRadio = (ps.rcPaint.bottom - ps.rcPaint.top - 12)*1.0 / dbMax / 2;
+    double nXSpecRadio = (width- 12)*1.0 / nFFTCount;
+    double nYSpecRadio = (height - 12)*1.0 / dbMax / 2;
 
 	char cText[64];
     sprintf_s(cText, 64, "Value:%.5f, POS: %d, Calc Pos: %d", dbMax, nPos, nCalcPos);
-	TextOutA(hdc, x, ySpec - (ps.rcPaint.bottom - ps.rcPaint.top - 12) / 2, cText, strlen(cText));
-	MoveToEx(hdc, x, ySpec, NULL);
+    TextOutA(hdcMemory, x + 1, ySpec - (height - 12) / 2, cText, strlen(cText));
+    MoveToEx(hdcMemory, x, ySpec, NULL);
     for (int i = 0; i < nFFTCount; i++)
 	{
-        LineTo(hdc, x + i*nXSpecRadio, ySpec - m_pData[i] * nYSpecRadio);
+        LineTo(hdcMemory, x + i*nXSpecRadio, ySpec - m_pData[i] * nYSpecRadio);
 	}
 
-	SelectObject(hdc, oldpen);
+    SelectObject(hdcMemory, oldpen);
 	DeleteObject(penLine);
     
+    StretchBlt(hdc, 0, 0, width, height, hdcMemory, 0, 0, width, height, SRCCOPY);
+    
+    DeleteObject(hbitmap);
+    DeleteObject(hdcMemory);
 	EndPaint(hWnd, &ps);
-    return true;;
+    return true;
 }
 
 void SawClient::InitSawClient()
