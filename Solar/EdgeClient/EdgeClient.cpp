@@ -244,7 +244,7 @@ UINT EdgeClient::CameraAction(LPVOID pParam)
 		//窗口大小会改变
 		RECT rcClient;
         GetClientRect(pCtrl->hWnd, &rcClient);
-		Hlong nWidth = (rcClient.right - rcClient.left) / 2;
+        Hlong nWidth = (rcClient.right - rcClient.left) / 2;
 		Hlong nHeight = rcClient.bottom - rcClient.top;
 
         disp_color(Image, hWindowHandle);

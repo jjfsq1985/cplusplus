@@ -68,7 +68,7 @@ void SawClient::Initialize(int nCmdShow)
 void SawClient::CreateWindowInstance(int nCmdShow)
 {
     hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, 0, 900, 400, NULL, NULL, hInst, NULL);
+		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInst, NULL);
 
     if (!hWnd)
         return;
