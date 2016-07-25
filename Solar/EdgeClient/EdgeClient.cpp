@@ -231,7 +231,7 @@ UINT EdgeClient::CameraAction(LPVOID pParam)
     //Attention: The initialization may fail in case parameters need to
     //be set in a specific order (e.g., image resolution vs. offset).
     open_framegrabber("DirectShow", 1, 1, 0, 0, 0, 0, "default", 8, "rgb", -1, "false",
-        "default", "Lenovo EasyCamera", 0, -1, &AcqHandle);
+        "default", "1.3M HD WebCam", 0, -1, &AcqHandle);
 
     grab_image_start(AcqHandle, -1);
     while (pCtrl->m_bCapture)
@@ -251,7 +251,7 @@ UINT EdgeClient::CameraAction(LPVOID pParam)
 		SetWindowPos(hCaptureWnd, HWND_TOP, 0, 0, nWidth, nHeight, SWP_SHOWWINDOW);
         pCtrl->DealImage(Image, hDestWndHandle);
 		SetWindowPos(hScratchWnd, HWND_TOP, nWidth, 0, nWidth, nHeight, SWP_SHOWWINDOW);
-        Sleep(50);
+        Sleep(100);
     }
     close_framegrabber(AcqHandle);
     return 0;
