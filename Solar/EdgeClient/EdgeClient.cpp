@@ -58,7 +58,7 @@ void EdgeClient::Initialize(int nCmdShow)
 
 void EdgeClient::CreateWindowInstance(int nCmdShow)
 {
-    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW | WS_MAXIMIZE,
+    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInst, NULL);
 
     if (!hWnd)
@@ -72,7 +72,7 @@ void EdgeClient::CreateWindowInstance(int nCmdShow)
 
 HWND EdgeClient::CreateImageWnd(HWND parent, RECT rcWnd)
 {
-    return CreateWindow(szWindowClass, szTitle, WS_CHILD|WS_VISIBLE,
+    return CreateWindow(szWindowClass, szTitle, WS_CHILD,
         rcWnd.left, rcWnd.top, rcWnd.right - rcWnd.left, rcWnd.bottom - rcWnd.top, parent, NULL, hInst, NULL);
 }
 
@@ -160,6 +160,7 @@ LRESULT EdgeClient::EdgeClientWndProc(HWND hWnd, UINT message, WPARAM wParam, LP
     case WM_SIZING:
         break;
     default:
+        Tprintf(L"%d\n", message);
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
 
@@ -185,28 +186,16 @@ void EdgeClient::InitEdgeClient()
 
 UINT EdgeClient::CameraAction(LPVOID pParam)
 {
-    EdgeClient *pWnd = (EdgeClient*)pParam;
+    EdgeClient *pCtrl = (EdgeClient*)pParam;
     const long ImageHeight = 480;
     const long ImageWidth = 640;
 
-    RECT rcClient;
-    GetClientRect(pWnd->hWnd, &rcClient);
+	Hlong x1 = 0, y1 = 0, x2 = ImageWidth, y2 = ImageHeight;
 
-    Hlong nWidth = (rcClient.right - rcClient.left) /2;
-    Hlong nClientCenter = nWidth;
-    Hlong nHeight = rcClient.bottom - rcClient.top;
-    nHeight = nHeight > 480 ? 480 : nHeight;
-
-    Hlong x1, y1, x2, y2;
-    x1 = nWidth > 640 ? 0 : (640 - nWidth) / 2;
-    y1 = nHeight > 480 ? 0 : (480 - nHeight) / 2;
-    x2 = nWidth > 640 ? 640 : (640 + nWidth) / 2;
-    y2 = nHeight > 480 ? 480 : (480 + nHeight) / 2;
-
-    RECT rcCaptureClient = { 0, 0, nWidth, nHeight };
-    HWND hCaptureWnd = pWnd->CreateImageWnd(pWnd->hWnd, rcCaptureClient);
+	RECT rcCaptureClient = { 0, 0, ImageWidth, ImageHeight };
+    HWND hCaptureWnd = pCtrl->CreateImageWnd(pCtrl->hWnd, rcCaptureClient);
     HTuple hWindowHandle;
-    open_window(0, 0, nWidth, nHeight, (Hlong)hCaptureWnd, "visible", "", &hWindowHandle);
+	open_window(0, 0, ImageWidth, ImageHeight, (Hlong)hCaptureWnd, "visible", "", &hWindowHandle);
 
     set_colored(hWindowHandle, 12);
     set_draw(hWindowHandle, "margin");
@@ -217,10 +206,10 @@ UINT EdgeClient::CameraAction(LPVOID pParam)
 
     set_part(hWindowHandle, y1, x1, y2, x2);//很重要，否则显示图片不完整，Row为Y, column为X
 
-    RECT rcScratchClient = { nClientCenter, 0, nClientCenter + nWidth, nHeight };
-    HWND hScratchWnd = pWnd->CreateImageWnd(pWnd->hWnd, rcScratchClient);
+	RECT rcScratchClient = { ImageWidth, 0, ImageWidth + ImageWidth, ImageHeight };
+    HWND hScratchWnd = pCtrl->CreateImageWnd(pCtrl->hWnd, rcScratchClient);
     HTuple hDestWndHandle;
-    open_window(0, 0, nWidth, nHeight, (Hlong)hScratchWnd, "visible", "", &hDestWndHandle);
+	open_window(0, 0, ImageWidth, ImageHeight, (Hlong)hScratchWnd, "visible", "", &hDestWndHandle);
 
     set_colored(hDestWndHandle, 12);
     set_draw(hDestWndHandle, "margin");
@@ -245,14 +234,23 @@ UINT EdgeClient::CameraAction(LPVOID pParam)
         "default", "Lenovo EasyCamera", 0, -1, &AcqHandle);
 
     grab_image_start(AcqHandle, -1);
-    while (pWnd->m_bCapture)
+    while (pCtrl->m_bCapture)
     {
         grab_image_async(&Image, AcqHandle, -1);//异步
         //mirror_image(Image, &MirrorImage, "column");//镜面图像
         //write_image(MirrorImage, "bmp", 16711680, "D:\\12.bmp"); //存文件
         //disp_image(MirrorImage, hWindowHandle);//黑白图像
+
+		//窗口大小会改变
+		RECT rcClient;
+        GetClientRect(pCtrl->hWnd, &rcClient);
+		Hlong nWidth = (rcClient.right - rcClient.left) / 2;
+		Hlong nHeight = rcClient.bottom - rcClient.top;
+
         disp_color(Image, hWindowHandle);
-        pWnd->DealImage(Image, hDestWndHandle);
+		SetWindowPos(hCaptureWnd, HWND_TOP, 0, 0, nWidth, nHeight, SWP_SHOWWINDOW);
+        pCtrl->DealImage(Image, hDestWndHandle);
+		SetWindowPos(hScratchWnd, HWND_TOP, nWidth, 0, nWidth, nHeight, SWP_SHOWWINDOW);
         Sleep(50);
     }
     close_framegrabber(AcqHandle);
