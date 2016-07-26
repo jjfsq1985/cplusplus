@@ -231,27 +231,38 @@ UINT EdgeClient::CameraAction(LPVOID pParam)
     //Attention: The initialization may fail in case parameters need to
     //be set in a specific order (e.g., image resolution vs. offset).
     open_framegrabber("DirectShow", 1, 1, 0, 0, 0, 0, "default", 8, "rgb", -1, "false",
-        "default", "1.3M HD WebCam", 0, -1, &AcqHandle);
+        "default", "Lenovo EasyCamera", 0, -1, &AcqHandle);
 
+    MSG msg;
+    Hobject ImageWnd;
     grab_image_start(AcqHandle, -1);
     while (pCtrl->m_bCapture)
     {
         grab_image_async(&Image, AcqHandle, -1);//异步
-        //mirror_image(Image, &MirrorImage, "column");//镜面图像
+        //窗口大小会改变
+        RECT rcClient;
+        GetClientRect(pCtrl->hWnd, &rcClient);
+        Hlong nWidth = (rcClient.right - rcClient.left) / 2;
+        Hlong nHeight = rcClient.bottom - rcClient.top;
+        Hlong nXcrop = ImageWidth > nWidth ? (ImageWidth - nWidth) / 2 : 0;
+        Hlong nYcrop = ImageHeight > nHeight ? (ImageHeight - nHeight) / 2 : 0;
+        //只取中间部分图像
+        crop_domain_rel(Image, &ImageWnd, nYcrop, nXcrop, nYcrop, nXcrop);
+        //mirror_image(ImageWnd, &MirrorImage, "column");//镜面图像
         //write_image(MirrorImage, "bmp", 16711680, "D:\\12.bmp"); //存文件
         //disp_image(MirrorImage, hWindowHandle);//黑白图像
 
-		//窗口大小会改变
-		RECT rcClient;
-        GetClientRect(pCtrl->hWnd, &rcClient);
-        Hlong nWidth = (rcClient.right - rcClient.left) / 2;
-		Hlong nHeight = rcClient.bottom - rcClient.top;
-
-        disp_color(Image, hWindowHandle);
+        disp_color(ImageWnd, hWindowHandle);
 		SetWindowPos(hCaptureWnd, HWND_TOP, 0, 0, nWidth, nHeight, SWP_SHOWWINDOW);
-        pCtrl->DealImage(Image, hDestWndHandle);
+        pCtrl->DealImage(ImageWnd, hDestWndHandle);
 		SetWindowPos(hScratchWnd, HWND_TOP, nWidth, 0, nWidth, nHeight, SWP_SHOWWINDOW);
-        Sleep(100);
+
+        //必须处理消息，否则主线程失去响应
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }        
     }
     close_framegrabber(AcqHandle);
     return 0;
