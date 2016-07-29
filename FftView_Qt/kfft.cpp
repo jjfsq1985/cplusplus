@@ -5,13 +5,13 @@
 FourierTransform::FourierTransform()
     :m_nWindow(1)
 {
-    m_pwin = 0;
-    m_pwt = 0;
+    m_pwin = nullptr;
+    m_pwt = nullptr;
 }
 
 FourierTransform::~FourierTransform()
 {
-
+    ReleaseFft();
 }
 
 //nCount == 2^k ,要求整数幂，kfft会修改原始时域输入数据
@@ -172,12 +172,12 @@ bool FourierTransform::InitFft(int nCount)
 
 void FourierTransform::ReleaseFft()
 {
-    if (m_pwin != 0)
+    if (m_pwin != nullptr)
         delete[] m_pwin;
-    m_pwin = 0;
-    if (m_pwt != 0)
+    m_pwin = nullptr;
+    if (m_pwt != nullptr)
         delete[] m_pwt;
-    m_pwt = 0;
+    m_pwt = nullptr;
 }
 
 bool FourierTransform::FFT(complex_f *data, int nCount)
