@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6819CBEA-A0CB-40AC-B029-E329962DAE7B}</ProjectGuid>
+    <RootNamespace>log4cplus</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LOG4CPLUS_BUILD_DLL;INSIDE_LOG4CPLUS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <ImportLibrary>lib\$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LOG4CPLUS_BUILD_DLL;INSIDE_LOG4CPLUS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImportLibrary>lib\$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\appender.cpp" />
+    <ClCompile Include="src\appenderattachableimpl.cpp" />
+    <ClCompile Include="src\configurator.cpp" />
+    <ClCompile Include="src\consoleappender.cpp" />
+    <ClCompile Include="src\customappender.cpp" />
+    <ClCompile Include="src\environment.cpp" />
+    <ClCompile Include="src\factory.cpp" />
+    <ClCompile Include="src\fileappender.cpp" />
+    <ClCompile Include="src\filter.cpp" />
+    <ClCompile Include="src\global-init.cpp" />
+    <ClCompile Include="src\hierarchy.cpp" />
+    <ClCompile Include="src\layout.cpp" />
+    <ClCompile Include="src\logger.cpp" />
+    <ClCompile Include="src\loggerimpl.cpp" />
+    <ClCompile Include="src\loggingevent.cpp" />
+    <ClCompile Include="src\loggingmacros.cpp" />
+    <ClCompile Include="src\loglevel.cpp" />
+    <ClCompile Include="src\loglog.cpp" />
+    <ClCompile Include="src\logloguser.cpp" />
+    <ClCompile Include="src\Mutex.cpp" />
+    <ClCompile Include="src\nullappender.cpp" />
+    <ClCompile Include="src\objectregistry.cpp" />
+    <ClCompile Include="src\patternlayout.cpp" />
+    <ClCompile Include="src\property.cpp" />
+    <ClCompile Include="src\rootlogger.cpp" />
+    <ClCompile Include="src\stringhelper.cpp" />
+    <ClCompile Include="src\timehelper.cpp" />
+    <ClCompile Include="src\version.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\log4cplus\appender.h" />
+    <ClInclude Include="include\log4cplus\appenderattachable.h" />
+    <ClInclude Include="include\log4cplus\appenderattachableimpl.h" />
+    <ClInclude Include="include\log4cplus\configurator.h" />
+    <ClInclude Include="include\log4cplus\consoleappender.h" />
+    <ClInclude Include="include\log4cplus\customappender.h" />
+    <ClInclude Include="include\log4cplus\environment.h" />
+    <ClInclude Include="include\log4cplus\factory.h" />
+    <ClInclude Include="include\log4cplus\fileappender.h" />
+    <ClInclude Include="include\log4cplus\filter.h" />
+    <ClInclude Include="include\log4cplus\hierarchy.h" />
+    <ClInclude Include="include\log4cplus\layout.h" />
+    <ClInclude Include="include\log4cplus\logger.h" />
+    <ClInclude Include="include\log4cplus\loggerfactory.h" />
+    <ClInclude Include="include\log4cplus\loggerimpl.h" />
+    <ClInclude Include="include\log4cplus\loggingevent.h" />
+    <ClInclude Include="include\log4cplus\loggingmacros.h" />
+    <ClInclude Include="include\log4cplus\loglevel.h" />
+    <ClInclude Include="include\log4cplus\loglog.h" />
+    <ClInclude Include="include\log4cplus\logloguser.h" />
+    <ClInclude Include="include\log4cplus\mutex.h" />
+    <ClInclude Include="include\log4cplus\nullappender.h" />
+    <ClInclude Include="include\log4cplus\objectregistry.h" />
+    <ClInclude Include="include\log4cplus\platform.h" />
+    <ClInclude Include="include\log4cplus\property.h" />
+    <ClInclude Include="include\log4cplus\rootlogger.h" />
+    <ClInclude Include="include\log4cplus\sharedptr.h" />
+    <ClInclude Include="include\log4cplus\stringhelper.h" />
+    <ClInclude Include="include\log4cplus\timehelper.h" />
+    <ClInclude Include="include\log4cplus\tls.h" />
+    <ClInclude Include="include\log4cplus\version.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

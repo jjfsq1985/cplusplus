@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\appender.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\appenderattachableimpl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\configurator.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\consoleappender.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\customappender.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\environment.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\factory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fileappender.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\global-init.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hierarchy.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\layout.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\logger.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loggerimpl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loggingevent.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loggingmacros.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loglevel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loglog.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\logloguser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mutex.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\nullappender.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objectregistry.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\patternlayout.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\property.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rootlogger.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stringhelper.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\timehelper.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\version.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\log4cplus\appender.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\appenderattachable.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\appenderattachableimpl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\configurator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\consoleappender.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\customappender.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\environment.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\factory.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\fileappender.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\filter.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\hierarchy.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\layout.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\logger.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\loggerfactory.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\loggerimpl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\loggingevent.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\loggingmacros.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\loglevel.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\loglog.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\logloguser.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\mutex.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\nullappender.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\objectregistry.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\platform.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\property.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\rootlogger.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\sharedptr.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\stringhelper.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\timehelper.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\tls.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log4cplus\version.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

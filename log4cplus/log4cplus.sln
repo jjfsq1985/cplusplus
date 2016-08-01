@@ -1,23 +1,15 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cplus", "log4cplus.vcproj", "{6819CBEA-A0CB-40AC-B029-E329962DAE7B}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cplus", "log4cplus.vcxproj", "{6819CBEA-A0CB-40AC-B029-E329962DAE7B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cplus_wapper", "log4cplus_wapper\log4cplus_wapper.vcproj", "{14F65916-C357-4168-B014-737689EA5522}"
-	ProjectSection(ProjectDependencies) = postProject
-		{6819CBEA-A0CB-40AC-B029-E329962DAE7B} = {6819CBEA-A0CB-40AC-B029-E329962DAE7B}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cplus_wapper", "log4cplus_wapper\log4cplus_wapper.vcxproj", "{14F65916-C357-4168-B014-737689EA5522}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cplus_demo", "demos\log4cplus_demo.vcproj", "{760B4A63-6C84-40BC-B28D-10A67101A1B7}"
-	ProjectSection(ProjectDependencies) = postProject
-		{6819CBEA-A0CB-40AC-B029-E329962DAE7B} = {6819CBEA-A0CB-40AC-B029-E329962DAE7B}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cplus_demo", "demos\log4cplus_demo.vcxproj", "{760B4A63-6C84-40BC-B28D-10A67101A1B7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cpluswapper_demo", "demos\log4cpluswapper_demo.vcproj", "{F9265E16-9B1B-4AA5-98D6-251225D4325F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{14F65916-C357-4168-B014-737689EA5522} = {14F65916-C357-4168-B014-737689EA5522}
-		{6819CBEA-A0CB-40AC-B029-E329962DAE7B} = {6819CBEA-A0CB-40AC-B029-E329962DAE7B}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "log4cpluswapper_demo", "demos\log4cpluswapper_demo.vcxproj", "{F9265E16-9B1B-4AA5-98D6-251225D4325F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
