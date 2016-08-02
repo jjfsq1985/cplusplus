@@ -369,7 +369,9 @@
     <ClInclude Include="include\internal\cygwin-win32.h">
       <Filter>include\internal</Filter>
     </ClInclude>
-    <ClInclude Include="include\config\macosx.h" />
+    <ClInclude Include="include\config\macosx.h">
+      <Filter>include\config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
