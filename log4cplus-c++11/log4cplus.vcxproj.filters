@@ -4,9 +4,6 @@
     <ClCompile Include="src\appender.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\appenderattachableimpl.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\asyncappender.cxx">
       <Filter>src</Filter>
     </ClCompile>
@@ -19,25 +16,10 @@
     <ClCompile Include="src\configurator.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\connectorthread.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\consoleappender.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\env.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\factory.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\fileappender.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\fileinfo.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\filter.cxx">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\global-init.cxx">
@@ -52,19 +34,10 @@
     <ClCompile Include="src\log4judpappender.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\lockfile.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\layout.cxx">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\logger.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\loggerimpl.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\loggingevent.cxx">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\loggingmacros.cxx">
@@ -82,64 +55,10 @@
     <ClCompile Include="src\nullappender.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\objectregistry.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\patternlayout.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\pointer.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\property.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\queue.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rootlogger.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\snprintf.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\socket.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\socketappender.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\socketbuffer.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\socket-win32.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\stringhelper.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\stringhelper-clocale.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\stringhelper-cxxlocale.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\stringhelper-iconv.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\syncprims.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\syslogappender.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\threads.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\timehelper.cxx">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tls.cxx">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\version.cxx">
@@ -148,19 +67,100 @@
     <ClCompile Include="src\loglevel.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\loglog.cxx">
+    <ClCompile Include="src\helpers\appenderattachableimpl.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\socket-unix.cxx">
+    <ClCompile Include="src\helpers\connectorthread.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\cygwin-win32.cxx">
+    <ClCompile Include="src\helpers\fileinfo.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\win32consoleappender.cxx">
+    <ClCompile Include="src\internal\cygwin-win32.cxx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\win32debugappender.cxx">
+    <ClCompile Include="src\internal\env.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spi\factory.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spi\filter.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\lockfile.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spi\loggerimpl.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spi\loggingevent.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\loglog.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spi\objectregistry.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\pointer.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\property.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\stringhelper.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\queue.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spi\rootlogger.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\snprintf.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\socket-exp.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\internal\socket-unix.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\internal\socket-win32.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\socketbuffer.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\stringhelper-clocale.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\stringhelper-cxxlocale.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\stringhelper-iconv.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\thread\syncprims.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpers\timehelper.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\thread\threads.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\thread\tls.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\socketappender.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config\win32consoleappender.cxx">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config\win32debugappender.cxx">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
