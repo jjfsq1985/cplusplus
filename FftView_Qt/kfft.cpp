@@ -31,7 +31,7 @@ void FourierTransform::kfft(float *pReal, float *pImage, int nCount, float *fr, 
     {
         m = it;
         is = 0;
-        for (i = 0; i <= k - 1; i++)
+        for (i = 0; i <= k - 1; ++i)
         {
             j = m / 2; 
             is = 2 * is + (m - 2 * j); 
@@ -50,7 +50,7 @@ void FourierTransform::kfft(float *pReal, float *pImage, int nCount, float *fr, 
         pImage[1] = -pImage[1];//逆变换
     }
     //权值运算
-    for (i = 2; i <= nCount - 1; i++)
+    for (i = 2; i <= nCount - 1; ++i)
     {
         p = pReal[i - 1] * pReal[1]; 
         q = pImage[i - 1] * pImage[1];
@@ -93,7 +93,7 @@ void FourierTransform::kfft(float *pReal, float *pImage, int nCount, float *fr, 
     if (Inverse != 0)
     {
         //逆变换要乘以系数1/nCount
-        for (i = 0; i <= nCount - 1; i++)
+        for (i = 0; i <= nCount - 1; ++i)
         {
             fr[i] = fr[i] / (1.0f*nCount);
             fi[i] = fi[i] / (1.0f*nCount);
@@ -101,7 +101,7 @@ void FourierTransform::kfft(float *pReal, float *pImage, int nCount, float *fr, 
     }
     if (il != 0)
     {
-        for (i = 0; i <= nCount - 1; i++)
+        for (i = 0; i <= nCount - 1; ++i)
         {
            //模和幅角（角度制）
             pReal[i] = sqrt(fr[i] * fr[i] + fi[i] * fi[i]);
@@ -126,7 +126,7 @@ void FourierTransform::kfft(float *pReal, float *pImage, int nCount, float *fr, 
 
 int FourierTransform::NumberOfBits(int powerofTwo)
 {
-    for (int i = 0; i <= 20; i++)
+    for (int i = 0; i <= 20; ++i)
     {
        if ( (powerofTwo & (1 << i)) != 0)
             return i;
@@ -138,7 +138,7 @@ int FourierTransform::NumberOfBits(int powerofTwo)
 unsigned FourierTransform::BitReverisee(unsigned int x, int log2n)
 {
     unsigned int n = 0;
-    for (int i = 0; i < log2n; i++)
+    for (int i = 0; i < log2n; ++i)
     {
         n <<= 1;
         n |= (x & 1);
@@ -156,12 +156,12 @@ bool FourierTransform::InitFft(int nCount)
     int i = 0;
     m_pwin = new float[m_nCount];
     m_pwt = new complex_f[m_nCount];
-    for (i = 0; i < m_nCount; i++)
+    for (i = 0; i < m_nCount; ++i)
     {
         m_pwin[i] = float(0.5 - 0.5*cos(2*FFT_PI *i/(m_nCount-1))); //汉宁窗
     }
 
-    for (i = 0; i < m_nCount; i++)
+    for (i = 0; i < m_nCount; ++i)
     {
         float angle = -i*FFT_PI * 2 / m_nCount;
         m_pwt[i] = complex_f(cos(angle), sin(angle));
@@ -193,7 +193,7 @@ bool FourierTransform::FFT(complex_f *data, int nCount)
             butterfly = 1 << (power - k);
             p = j*butterfly;
             int s = p + butterfly / 2;
-            for (i = 0; i < butterfly / 2; i++)
+            for (i = 0; i < butterfly / 2; ++i)
             {
                 complex_f t = data[i + p] + data[i + s];
                 data[i + s] = (data[i + p] - data[i + s]) * m_pwt[i*powerk];

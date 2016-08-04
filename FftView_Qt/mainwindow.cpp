@@ -56,10 +56,10 @@ void MainWindow::draw(QPainter *painter)
     painter->setPen(QPen(Qt::blue,1,Qt::SolidLine,Qt::RoundCap));
 
     QPointF *pPntLine = new QPointF[m_nPntPerScreen];
-    for (int i = 0; i < m_nPntPerScreen; i++)
+    for (int i = 0; i < m_nPntPerScreen; ++i)
      {
         int nIndex = i + m_nIndex;
-        m_pData[i] = fltScope * sin(2 * FFT_PI * 1.1f * nIndex * nSignalFreq / nSampleFreq);
+        m_pData[i] = fltScope * sin(2 * M_PI * 1.1f * nIndex * nSignalFreq / nSampleFreq);
         pPntLine[i] =QPointF(x + i*nXRadio,yTime - m_pData[i] * nYTimeRadio);
      }
     painter->drawPolyline(pPntLine,m_nPntPerScreen);
@@ -70,7 +70,7 @@ void MainWindow::draw(QPainter *painter)
     float *pImage = new float[m_nPntPerScreen];
     float *pFftReal = new float[m_nPntPerScreen];
     float *pFftImage = new float[m_nPntPerScreen];
-    for (int i = 0; i < m_nPntPerScreen; i++)
+    for (int i = 0; i < m_nPntPerScreen; ++i)
      {
         pImage[i] = 0.0f;
         pFftReal[i] = 0.0f;
@@ -92,7 +92,7 @@ void MainWindow::draw(QPainter *painter)
     int nFFTCount = m_nPntPerScreen / 2;//FFT是对称的
     double dbMax = 0.0;
     int nPos = 0;
-    for (int i = 0; i < nFFTCount; i++)
+    for (int i = 0; i < nFFTCount; ++i)
      {
          //幅值 = 模 * 2 / 点数;
        //m_pData[i] = sqrt(pFftReal[i] * pFftReal[i] + pFftImage[i] * pFftImage[i]) * 2 / m_nPntPerScreen;//幅值
@@ -121,7 +121,7 @@ void MainWindow::draw(QPainter *painter)
     //QVector<QPoint> vecFftLine;
     //vecFftLine.push_back(QPoint(x,ySpec));
     QPointF *pFftLine = new QPointF[nFFTCount];
-    for (int i = 0; i < nFFTCount; i++)
+    for (int i = 0; i < nFFTCount; ++i)
     {
         //vecFftLine.push_back(QPoint(x + i*nXSpecRadio,ySpec - m_pData[i] * nYSpecRadio));
         //vecFftLine.push_back(QPoint(x + i*nXSpecRadio,ySpec - m_pData[i] * nYSpecRadio));
