@@ -1,7 +1,7 @@
 #ifndef KFFT_H
 #define KFFT_H
 
-const double M_PI = 3.141592653589793;
+const double FFT_PI = 3.141592653589793;
 
 class complex_f
 {

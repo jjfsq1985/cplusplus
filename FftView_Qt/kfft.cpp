@@ -1,6 +1,5 @@
-#include "math.h"  
 #include "kfft.h"
-
+#include <math.h>
 
 FourierTransform::FourierTransform()
     :m_nWindow(1)
@@ -43,7 +42,7 @@ void FourierTransform::kfft(float *pReal, float *pImage, int nCount, float *fr, 
     }
     pReal[0] = 1.0f;
     pImage[0] = 0.0f;
-    p = 2.0f * M_PI / (1.0f*nCount);
+    p = 2.0f * FFT_PI / (1.0f*nCount);
     pReal[1] = cos(p);
     pImage[1] = -sin(p);
     if (Inverse != 0)
@@ -119,7 +118,7 @@ void FourierTransform::kfft(float *pReal, float *pImage, int nCount, float *fr, 
             }
             else
             {
-                pImage[i] = atan(fi[i] / fr[i])*180.0f / M_PI;
+                pImage[i] = atan(fi[i] / fr[i])*180.0f / FFT_PI;
             }
         }
     }
@@ -159,12 +158,12 @@ bool FourierTransform::InitFft(int nCount)
     m_pwt = new complex_f[m_nCount];
     for (i = 0; i < m_nCount; i++)
     {
-        m_pwin[i] = float(0.5 - 0.5*cos(2*M_PI *i/(m_nCount-1))); //ººÄþ´°
+        m_pwin[i] = float(0.5 - 0.5*cos(2*FFT_PI *i/(m_nCount-1))); //ººÄþ´°
     }
 
     for (i = 0; i < m_nCount; i++)
     {
-        float angle = -i*M_PI * 2 / m_nCount;
+        float angle = -i*FFT_PI * 2 / m_nCount;
         m_pwt[i] = complex_f(cos(angle), sin(angle));
     }
     return true;
