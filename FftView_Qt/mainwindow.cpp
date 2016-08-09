@@ -59,7 +59,7 @@ void MainWindow::draw(QPainter *painter)
     for (int i = 0; i < m_nPntPerScreen; ++i)
      {
         int nIndex = i + m_nIndex;
-        m_pData[i] = fltScope * sin(2 * M_PI * 1.1f * nIndex * nSignalFreq / nSampleFreq);
+        m_pData[i] = fltScope * sin(2 * FFT_PI * 1.1f * nIndex * nSignalFreq / nSampleFreq);
         pPntLine[i] =QPointF(x + i*nXRadio,yTime - m_pData[i] * nYTimeRadio);
      }
     painter->drawPolyline(pPntLine,m_nPntPerScreen);
