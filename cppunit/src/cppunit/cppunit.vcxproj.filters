@@ -1,0 +1,447 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\portability">
+      <UniqueIdentifier>{c4a43277-2245-419a-9d34-9a5b120e49c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\config">
+      <UniqueIdentifier>{64322b02-c912-48c4-8fd1-faed9ddbbc85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\tools">
+      <UniqueIdentifier>{1cdd0d3e-b056-44c1-aacd-68e21a6b3c10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\extensions">
+      <UniqueIdentifier>{2220ee10-805e-4a03-bb13-34bc23ad6126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\plugin">
+      <UniqueIdentifier>{2dbff0f6-4d44-4b61-824a-a0bd02ef9588}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\ui">
+      <UniqueIdentifier>{61957fab-714a-40f7-9b74-da45992e4205}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\protector">
+      <UniqueIdentifier>{2294fd84-0510-47d8-966a-fb481490a888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\helper">
+      <UniqueIdentifier>{11e0e283-3135-4216-8636-6f34b26c3bc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\listener">
+      <UniqueIdentifier>{cb33c400-64c0-4644-af3f-cc1a3819e7ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\output">
+      <UniqueIdentifier>{b564c9ae-1210-4e10-a940-4ee52b148306}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\listener">
+      <UniqueIdentifier>{5652dc83-1180-42df-a5c2-afe2e6da71fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\plugin">
+      <UniqueIdentifier>{78380d22-dc18-4676-82af-837d8040942e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\output">
+      <UniqueIdentifier>{4f4dd37a-91c6-4b77-9aae-094985afd282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\tools">
+      <UniqueIdentifier>{2f76272c-1cbe-4c47-8486-e35dfd616310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\protector">
+      <UniqueIdentifier>{4d65b332-a061-43a7-b745-8985dc234a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\extensions">
+      <UniqueIdentifier>{36de54e9-0bb3-4969-a444-89e32b5a5577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\helper">
+      <UniqueIdentifier>{59df36e2-9ad6-4204-9147-ff335dccc0ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ui">
+      <UniqueIdentifier>{d1ca3b53-b1a1-4e34-917b-8e54235670ef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AdditionalMessage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Asserter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Exception.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SynchronizedObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPath.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestAssert.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestLeaf.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DllMain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestComposite.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestFailure.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestNamer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestRunner.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestSuite.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BeOsDynamicLibraryManager.cpp">
+      <Filter>源文件\listener</Filter>
+    </ClCompile>
+    <ClCompile Include="BriefTestProgressListener.cpp">
+      <Filter>源文件\listener</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicLibraryManager.cpp">
+      <Filter>源文件\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicLibraryManagerException.cpp">
+      <Filter>源文件\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="PlugInManager.cpp">
+      <Filter>源文件\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="PlugInParameters.cpp">
+      <Filter>源文件\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPlugInDefaultImpl.cpp">
+      <Filter>源文件\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="TestSuccessListener.cpp">
+      <Filter>源文件\listener</Filter>
+    </ClCompile>
+    <ClCompile Include="TextTestProgressListener.cpp">
+      <Filter>源文件\listener</Filter>
+    </ClCompile>
+    <ClCompile Include="CompilerOutputter.cpp">
+      <Filter>源文件\output</Filter>
+    </ClCompile>
+    <ClCompile Include="TestResult.cpp">
+      <Filter>源文件\output</Filter>
+    </ClCompile>
+    <ClCompile Include="TestResultCollector.cpp">
+      <Filter>源文件\output</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlOutputter.cpp">
+      <Filter>源文件\output</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlOutputterHook.cpp">
+      <Filter>源文件\output</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlElement.cpp">
+      <Filter>源文件\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlDocument.cpp">
+      <Filter>源文件\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="StringTools.cpp">
+      <Filter>源文件\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Protector.cpp">
+      <Filter>源文件\protector</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtectorChain.cpp">
+      <Filter>源文件\protector</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultProtector.cpp">
+      <Filter>源文件\protector</Filter>
+    </ClCompile>
+    <ClCompile Include="ShlDynamicLibraryManager.cpp">
+      <Filter>源文件\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseDecorator.cpp">
+      <Filter>源文件\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="RepeatedTest.cpp">
+      <Filter>源文件\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="TestDecorator.cpp">
+      <Filter>源文件\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="TestFactoryRegistry.cpp">
+      <Filter>源文件\helper</Filter>
+    </ClCompile>
+    <ClCompile Include="TestSetUp.cpp">
+      <Filter>源文件\extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="TestSuiteBuilderContext.cpp">
+      <Filter>源文件\helper</Filter>
+    </ClCompile>
+    <ClCompile Include="TextOutputter.cpp">
+      <Filter>源文件\output</Filter>
+    </ClCompile>
+    <ClCompile Include="TextTestResult.cpp">
+      <Filter>源文件\output</Filter>
+    </ClCompile>
+    <ClCompile Include="TextTestRunner.cpp">
+      <Filter>源文件\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="TypeInfoHelper.cpp">
+      <Filter>源文件\helper</Filter>
+    </ClCompile>
+    <ClCompile Include="UnixDynamicLibraryManager.cpp">
+      <Filter>源文件\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="Win32DynamicLibraryManager.cpp">
+      <Filter>源文件\plugin</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\cppunit\AdditionalMessage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\Asserter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\Exception.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\Message.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\SourceLine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\SynchronizedObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\Test.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestPath.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestAssert.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestCase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestComposite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestFailure.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestLeaf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\portability\FloatingPoint.h">
+      <Filter>头文件\portability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\portability\CppUnitDeque.h">
+      <Filter>头文件\portability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\portability\CppUnitMap.h">
+      <Filter>头文件\portability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\portability\CppUnitSet.h">
+      <Filter>头文件\portability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\portability\CppUnitStack.h">
+      <Filter>头文件\portability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\portability\CppUnitVector.h">
+      <Filter>头文件\portability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\config-auto.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\config\config-evc4.h">
+      <Filter>头文件\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\config\config-msvc6.h">
+      <Filter>头文件\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\config\CppUnitApi.h">
+      <Filter>头文件\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\tools\Algorithm.h">
+      <Filter>头文件\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\tools\StringTools.h">
+      <Filter>头文件\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\tools\XmlDocument.h">
+      <Filter>头文件\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\tools\XmlElement.h">
+      <Filter>头文件\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestFixture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\extensions\ExceptionTestCaseDecorator.h">
+      <Filter>头文件\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\extensions\Orthodox.h">
+      <Filter>头文件\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\extensions\RepeatedTest.h">
+      <Filter>头文件\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\extensions\TestCaseDecorator.h">
+      <Filter>头文件\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\extensions\TestDecorator.h">
+      <Filter>头文件\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\extensions\TestSetUp.h">
+      <Filter>头文件\extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestRunner.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestSuite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\plugin\DynamicLibraryManager.h">
+      <Filter>头文件\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\plugin\DynamicLibraryManagerException.h">
+      <Filter>头文件\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\plugin\PlugInManager.h">
+      <Filter>头文件\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\plugin\PlugInParameters.h">
+      <Filter>头文件\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\plugin\TestPlugIn.h">
+      <Filter>头文件\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\plugin\TestPlugInDefaultImpl.h">
+      <Filter>头文件\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\ui\TextTestRunner.h">
+      <Filter>头文件\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\ui\TestRunner.h">
+      <Filter>头文件\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\protector\DefaultProtector.h">
+      <Filter>头文件\protector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\protector\Protector.h">
+      <Filter>头文件\protector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\protector\ProtectorChain.h">
+      <Filter>头文件\protector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\protector\ProtectorContext.h">
+      <Filter>头文件\protector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\helper\AutoRegisterSuite.h">
+      <Filter>头文件\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\helper\HelperMacros.h">
+      <Filter>头文件\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\helper\TestFactory.h">
+      <Filter>头文件\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\helper\TestFactoryRegistry.h">
+      <Filter>头文件\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\helper\TestFixtureFactory.h">
+      <Filter>头文件\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\helper\TestSuiteBuilderContext.h">
+      <Filter>头文件\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\helper\TestSuiteFactory.h">
+      <Filter>头文件\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\helper\TypeInfoHelper.h">
+      <Filter>头文件\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\listener\BriefTestProgressListener.h">
+      <Filter>头文件\listener</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\listener\TestSuccessListener.h">
+      <Filter>头文件\listener</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\listener\TextTestProgressListener.h">
+      <Filter>头文件\listener</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\listener\TestListener.h">
+      <Filter>头文件\listener</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\output\CompilerOutputter.h">
+      <Filter>头文件\output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\output\Outputter.h">
+      <Filter>头文件\output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\output\TestResult.h">
+      <Filter>头文件\output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\output\TestResultCollector.h">
+      <Filter>头文件\output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\output\TextOutputter.h">
+      <Filter>头文件\output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\output\XmlOutputter.h">
+      <Filter>头文件\output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\output\XmlOutputterHook.h">
+      <Filter>头文件\output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\output\TextTestResult.h">
+      <Filter>头文件\output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\portability\SelectDllLoader.h">
+      <Filter>头文件\portability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\portability\SourcePrefix.h">
+      <Filter>头文件\portability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\tools\Stream.h">
+      <Filter>头文件\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\Portability.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestNamer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cppunit\TestCaller.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
